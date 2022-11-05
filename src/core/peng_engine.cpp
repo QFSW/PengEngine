@@ -74,7 +74,6 @@ void PengEngine::start_opengl()
 	if (!glfwInit())
 	{
 		printf("GLFW initialization failed\n");
-		shutdown();
 		return;
 	}
 
@@ -87,7 +86,6 @@ void PengEngine::start_opengl()
 	if (!_glfw_window)
 	{
 		printf("GLFW window creation failed\n");
-		shutdown();
 		return;
 	}
 
@@ -100,7 +98,6 @@ void PengEngine::start_opengl()
 	if (glewInit() != GLEW_OK)
 	{
 		printf("GLEW initialization failed\n");
-		shutdown();
 		return;
 	}
 
