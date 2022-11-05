@@ -34,14 +34,6 @@ namespace strtools
 		return catf("\033[1;%dm%s\033[0m", col, str.c_str());
 	}
 
-	std::string to_lower(const std::string& str)
-	{
-		std::string cpy = str;
-		std::ranges::transform(cpy, cpy.begin(), std::tolower);
-
-		return cpy;
-	}
-
 	bool replace_substr(std::string& str, const std::string& to_find, const std::string& to_replace)
 	{
 		size_t pos = str.find(to_find);

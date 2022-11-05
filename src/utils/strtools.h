@@ -64,7 +64,6 @@ namespace strtools
 	};
 
 	std::string colorize(const std::string& str, AnsiColor col);
-	std::string to_lower(const std::string& str);
 
 	bool replace_substr(std::string& str, const std::string& to_find, const std::string& to_replace);
 	void replace_substr_all(std::string& str, const std::string& to_find, const std::string& to_replace);
