@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "core/peng_engine.h"
+#include <core/peng_engine.h>
 
 int main()
 {

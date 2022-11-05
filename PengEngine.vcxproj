@@ -99,6 +99,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,6 +120,7 @@
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +138,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +159,7 @@
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,9 +171,36 @@
   <ItemGroup>
     <ClCompile Include="src\core\peng_engine.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\threading\job.cpp" />
+    <ClCompile Include="src\threading\thread_pool.cpp" />
+    <ClCompile Include="src\threading\worker_thread.cpp" />
+    <ClCompile Include="src\utils\strtools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\core\peng_engine.h" />
+    <ClInclude Include="src\libs\moodycamel\atomicops.h" />
+    <ClInclude Include="src\libs\moodycamel\blockingconcurrentqueue.h" />
+    <ClInclude Include="src\libs\moodycamel\concurrentqueue.h" />
+    <ClInclude Include="src\libs\moodycamel\lightweightsemaphore.h" />
+    <ClInclude Include="src\libs\moodycamel\readerwriterqueue.h" />
+    <ClInclude Include="src\libs\tsl\robin_growth_policy.h" />
+    <ClInclude Include="src\libs\tsl\robin_hash.h" />
+    <ClInclude Include="src\libs\tsl\robin_map.h" />
+    <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\threading\job.h" />
+    <ClInclude Include="src\threading\thread_pool.h" />
+    <ClInclude Include="src\threading\worker_thread.h" />
+    <ClInclude Include="src\utils\benchmark.h" />
+    <ClInclude Include="src\utils\detail\final_act.h" />
+    <ClInclude Include="src\utils\functional.h" />
+    <ClInclude Include="src\utils\strtools.h" />
+    <ClInclude Include="src\utils\traits.h" />
+    <ClInclude Include="src\utils\utils.h" />
+    <ClInclude Include="src\utils\variadic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\libs\moodycamel\LICENSE.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
