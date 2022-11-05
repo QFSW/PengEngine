@@ -41,6 +41,11 @@ void PengEngine::request_shutdown()
 	_executing = false;
 }
 
+void PengEngine::set_target_fps(double fps) noexcept
+{
+	set_target_frametime(1000 / fps);
+}
+
 void PengEngine::set_target_frametime(double frametime_ms) noexcept
 {
 	_target_frametime = frametime_ms;
@@ -120,8 +125,6 @@ void PengEngine::shutdown_opengl()
 
 void PengEngine::tick_main()
 {
-	tick_opengl();
-
 	// TODO: Move render ticking to its own thread
 	tick_render();
 }
@@ -138,4 +141,6 @@ void PengEngine::tick_opengl()
 
 void PengEngine::tick_render()
 {
+	// TODO: we could pipeline the OpenGL tick as its own thread potentially
+	tick_opengl();
 }
