@@ -31,7 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -46,7 +46,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -191,10 +191,10 @@
     <ClInclude Include="src\threading\job.h" />
     <ClInclude Include="src\threading\thread_pool.h" />
     <ClInclude Include="src\threading\worker_thread.h" />
-    <ClInclude Include="src\utils\benchmark.h" />
     <ClInclude Include="src\utils\detail\final_act.h" />
     <ClInclude Include="src\utils\functional.h" />
     <ClInclude Include="src\utils\strtools.h" />
+    <ClInclude Include="src\utils\timing.h" />
     <ClInclude Include="src\utils\traits.h" />
     <ClInclude Include="src\utils\utils.h" />
     <ClInclude Include="src\utils\variadic.h" />
