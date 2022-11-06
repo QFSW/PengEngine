@@ -144,7 +144,7 @@ void PengEngine::tick_opengl()
 		static double time = 0;
 		time += _target_frametime;
 
-		glClearColor(0.5f, 0.75 + static_cast<GLclampf>(std::sin(time / 500)) / 4, 0.5f, 1.0f);
+		glClearColor(0.5f, 0.75f + static_cast<GLclampf>(std::sin(time / 500)) / 4, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	});
 }
