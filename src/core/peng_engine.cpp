@@ -23,6 +23,8 @@ void PengEngine::start()
 	_executing = true;
 	start_opengl();
 
+	_on_engine_initialized();
+
 	while (!shutting_down())
 	{
 		_last_frametime = timing::measure_ms([this] {
@@ -66,6 +68,16 @@ bool PengEngine::shutting_down() const
 	}
 
 	return false;
+}
+
+utils::EventInterface<>& PengEngine::get_on_engine_initialized() noexcept
+{
+	return _on_engine_initialized;
+}
+
+utils::EventInterface<>& PengEngine::get_on_frame_start() noexcept
+{
+	return _on_frame_start;
 }
 
 void PengEngine::start_opengl()
@@ -125,7 +137,7 @@ void PengEngine::shutdown_opengl()
 void PengEngine::tick_main()
 {
 	_last_main_frametime = timing::measure_ms([this] {
-
+		_on_frame_start();
 	});
 }
 

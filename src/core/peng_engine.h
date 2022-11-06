@@ -1,8 +1,8 @@
 #pragma once
 
 #include <threading/worker_thread.h>
-
 #include <utils/timing.h>
+#include <utils/event.h>
 
 class PengEngine
 {
@@ -16,6 +16,9 @@ public:
 	void set_target_frametime(double frametime_ms) noexcept;
 
 	bool shutting_down() const;
+
+	utils::EventInterface<>& get_on_engine_initialized() noexcept;
+	utils::EventInterface<>& get_on_frame_start() noexcept;
 
 private:
 	void start_opengl();
@@ -39,4 +42,7 @@ private:
 
 	struct GLFWwindow* _glfw_window;
 	threading::WorkerThread _render_thread;
+
+	utils::Event<> _on_engine_initialized;
+	utils::Event<> _on_frame_start;
 };
