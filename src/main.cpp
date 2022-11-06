@@ -11,6 +11,11 @@ int main()
         std::cout << "PengEngine started!" << std::endl;
     });
 
+    engine.get_on_frame_start().subscribe([&] {
+        std::cout << "PengEngine frame 0!" << std::endl;
+        engine.get_on_frame_start().unsubscribe("test");
+    }, "test");
+
     engine.set_target_fps(60);
     engine.start();
 }
