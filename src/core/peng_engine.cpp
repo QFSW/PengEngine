@@ -9,6 +9,11 @@
 
 PengEngine::PengEngine()
 	: _target_frametime(1000 / 60.0)
+	, _last_frametime(0)
+	, _last_main_frametime(0)
+	, _last_render_frametime(0)
+	, _last_opengl_frametime(0)
+	, _last_draw_time(timing::clock::now())
 	, _render_thread("RenderThread")
 	, _glfw_window(nullptr)
 { }
@@ -20,17 +25,14 @@ void PengEngine::start()
 
 	while (!shutting_down())
 	{
-		const double frametime = timing::measure_ms([this] {
+		_last_frametime = timing::measure_ms([this] {
 			tick_main();
+			tick_render();
+			tick_opengl();
+			finalize_frame();
 		});
 
-		if (frametime < _target_frametime)
-		{
-			const double sleep_time = _target_frametime - frametime;
-			timing::sleep_for_precise(timing::duration_ms(sleep_time));
-		}
-
-		printf("Frametime = %.02fms\n", frametime);
+		printf("Frametime = %.02fms\n", _last_frametime);
 	}
 
 	shutdown();
@@ -122,22 +124,36 @@ void PengEngine::shutdown_opengl()
 
 void PengEngine::tick_main()
 {
-	// TODO: Move render ticking to its own thread
-	tick_render();
-}
+	_last_main_frametime = timing::measure_ms([this] {
 
-void PengEngine::tick_opengl()
-{
-	glfwPollEvents();
-
-	glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glfwSwapBuffers(_glfw_window);
+	});
 }
 
 void PengEngine::tick_render()
 {
-	// TODO: we could pipeline the OpenGL tick as its own thread potentially
-	tick_opengl();
+	_last_render_frametime = timing::measure_ms([this] {
+
+	});
+}
+
+void PengEngine::tick_opengl()
+{
+	_last_opengl_frametime = timing::measure_ms([this] {
+		glfwPollEvents();
+
+		glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+	});
+}
+
+void PengEngine::finalize_frame()
+{
+	timing::clock::time_point sync_point = 
+		_last_draw_time 
+		+ std::chrono::duration_cast<timing::clock::duration>(timing::duration_ms(_target_frametime));
+
+	timing::sleep_until_precise(sync_point);
+
+	_last_draw_time = sync_point;
+	glfwSwapBuffers(_glfw_window);
 }

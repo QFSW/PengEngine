@@ -193,6 +193,7 @@
     <ClCompile Include="src\threading\thread_pool.cpp" />
     <ClCompile Include="src\threading\worker_thread.cpp" />
     <ClCompile Include="src\utils\strtools.cpp" />
+    <ClCompile Include="src\utils\timing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\common.h" />

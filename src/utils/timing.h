@@ -4,6 +4,7 @@
 
 namespace timing
 {
+    using clock = std::chrono::high_resolution_clock;
     using duration_ms = std::chrono::duration<double, std::milli>;
 
     template <typename F>
@@ -23,15 +24,6 @@ namespace timing
         return std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(duration).count();
     }
 
-    void sleep_for_precise(duration_ms duration)
-    {
-        static constexpr duration_ms min_sleep_duration(0);
-        using clock = std::chrono::high_resolution_clock;
-
-        clock::time_point start = clock::now();
-        while (duration_ms(clock::now() - start) < duration)
-        {
-            std::this_thread::sleep_for(min_sleep_duration);
-        }
-    }
+    void sleep_for_precise(duration_ms duration);
+    void sleep_until_precise(clock::time_point time_point);
 }

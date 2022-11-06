@@ -2,6 +2,8 @@
 
 #include <threading/worker_thread.h>
 
+#include <utils/timing.h>
+
 class PengEngine
 {
 public:
@@ -24,8 +26,16 @@ private:
 	void tick_render();
 	void tick_opengl();
 
+	void finalize_frame();
+
 	bool _executing;
 	double _target_frametime;
+
+	double _last_frametime;
+	double _last_main_frametime;
+	double _last_render_frametime;
+	double _last_opengl_frametime;
+	timing::clock::time_point _last_draw_time;
 
 	struct GLFWwindow* _glfw_window;
 	threading::WorkerThread _render_thread;
