@@ -11,10 +11,10 @@ int main()
         std::cout << "PengEngine started!" << std::endl;
     });
 
-    engine.get_on_frame_start().subscribe([&] {
+    int32_t handle = engine.get_on_frame_start().subscribe([&] {
         std::cout << "PengEngine frame 0!" << std::endl;
-        engine.get_on_frame_start().unsubscribe("test");
-    }, "test");
+        engine.get_on_frame_start().unsubscribe(handle);
+    });
 
     engine.set_target_fps(60);
     engine.start();
