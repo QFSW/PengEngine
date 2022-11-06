@@ -141,7 +141,10 @@ void PengEngine::tick_opengl()
 	_last_opengl_frametime = timing::measure_ms([this] {
 		glfwPollEvents();
 
-		glClearColor(0.5f, 1.0f, 0.5f, 1.0f);
+		static double time = 0;
+		time += _target_frametime;
+
+		glClearColor(0.5f, 0.75 + static_cast<GLclampf>(std::sin(time / 500)) / 4, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	});
 }
