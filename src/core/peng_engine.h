@@ -1,6 +1,7 @@
 #pragma once
 
 #include <threading/worker_thread.h>
+#include <entities/entity_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
 
@@ -19,6 +20,7 @@ public:
 
 	utils::EventInterface<>& get_on_engine_initialized() noexcept;
 	utils::EventInterface<>& get_on_frame_start() noexcept;
+	EntityManager& get_entity_manager() noexcept;
 
 private:
 	void start_opengl();
@@ -42,6 +44,8 @@ private:
 
 	struct GLFWwindow* _glfw_window;
 	threading::WorkerThread _render_thread;
+
+	EntityManager _entity_manager;
 
 	utils::Event<> _on_engine_initialized;
 	utils::Event<> _on_frame_start;

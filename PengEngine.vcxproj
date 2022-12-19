@@ -188,6 +188,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\peng_engine.cpp" />
+    <ClCompile Include="src\entities\entity.cpp" />
+    <ClCompile Include="src\entities\entity_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\threading\job.cpp" />
     <ClCompile Include="src\threading\thread_pool.cpp" />
@@ -198,6 +200,8 @@
   <ItemGroup>
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\core\peng_engine.h" />
+    <ClInclude Include="src\entities\entity.h" />
+    <ClInclude Include="src\entities\entity_manager.h" />
     <ClInclude Include="src\libs\moodycamel\atomicops.h" />
     <ClInclude Include="src\libs\moodycamel\blockingconcurrentqueue.h" />
     <ClInclude Include="src\libs\moodycamel\concurrentqueue.h" />

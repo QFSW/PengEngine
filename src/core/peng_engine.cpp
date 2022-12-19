@@ -9,7 +9,7 @@
 
 PengEngine::PengEngine()
 	: _target_frametime(1000 / 60.0)
-	, _last_frametime(0)
+	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
 	, _last_render_frametime(0)
 	, _last_opengl_frametime(0)
@@ -80,6 +80,11 @@ utils::EventInterface<>& PengEngine::get_on_frame_start() noexcept
 	return _on_frame_start;
 }
 
+EntityManager& PengEngine::get_entity_manager() noexcept
+{
+	return _entity_manager;
+}
+
 void PengEngine::start_opengl()
 {
 	const GLint Width = 800;
@@ -138,6 +143,9 @@ void PengEngine::tick_main()
 {
 	_last_main_frametime = timing::measure_ms([this] {
 		_on_frame_start();
+
+		_entity_manager.tick_entities(_last_frametime);
+		_entity_manager.cleanup_entities();
 	});
 }
 
@@ -152,11 +160,6 @@ void PengEngine::tick_opengl()
 {
 	_last_opengl_frametime = timing::measure_ms([this] {
 		glfwPollEvents();
-
-		static double time = 0;
-		time += _target_frametime;
-
-		glClearColor(0.5f, 0.75f + static_cast<GLclampf>(std::sin(time / 500)) / 4, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	});
 }
