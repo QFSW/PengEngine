@@ -15,3 +15,11 @@ public:
 protected:
 	bool _can_tick;
 };
+
+enum class EntityState
+{
+	Invalid,
+	Valid,
+	PendingAdd,
+	PendingKill
+};

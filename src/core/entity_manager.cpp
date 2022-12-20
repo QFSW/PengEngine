@@ -4,8 +4,9 @@
 
 void EntityManager::tick(double delta_time)
 {
+	flush_pending_adds();
 	tick_entities(delta_time);
-	cleanup_entities();
+	flush_pending_kills();
 }
 
 void EntityManager::tick_entities(double delta_time)
@@ -19,7 +20,17 @@ void EntityManager::tick_entities(double delta_time)
 	}
 }
 
-void EntityManager::cleanup_entities()
+void EntityManager::flush_pending_adds()
+{
+	for (std::shared_ptr<Entity>& entity : _pending_adds)
+	{
+		_entities.push_back(entity);
+	}
+
+	_pending_adds.clear();
+}
+
+void EntityManager::flush_pending_kills()
 {
 	vectools::remove_all<std::shared_ptr<Entity>>(_entities, [this](const std::shared_ptr<Entity>& entity) {
 		for (const std::weak_ptr<Entity>& pending_kill : _pending_kills)

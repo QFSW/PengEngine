@@ -190,6 +190,8 @@
     <ClCompile Include="src\core\peng_engine.cpp" />
     <ClCompile Include="src\core\entity.cpp" />
     <ClCompile Include="src\core\entity_manager.cpp" />
+    <ClCompile Include="src\demo\blob_entity.cpp" />
+    <ClCompile Include="src\demo\demo_main.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\threading\job.cpp" />
     <ClCompile Include="src\threading\thread_pool.cpp" />
@@ -202,6 +204,8 @@
     <ClInclude Include="src\core\peng_engine.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\entity_manager.h" />
+    <ClInclude Include="src\demo\blob_entity.h" />
+    <ClInclude Include="src\demo\demo_main.h" />
     <ClInclude Include="src\libs\moodycamel\atomicops.h" />
     <ClInclude Include="src\libs\moodycamel\blockingconcurrentqueue.h" />
     <ClInclude Include="src\libs\moodycamel\concurrentqueue.h" />
