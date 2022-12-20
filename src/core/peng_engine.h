@@ -12,7 +12,7 @@ class PengEngine
 	DEFINE_EVENT(on_frame_start);
 
 public:
-	PengEngine();
+	static PengEngine& get();
 
 	void start();
 	void request_shutdown();
@@ -25,6 +25,14 @@ public:
 	EntityManager& entity_manager() noexcept;
 
 private:
+	PengEngine();
+
+	PengEngine(const PengEngine&) = delete;
+	PengEngine(PengEngine&&) = delete;
+
+	PengEngine& operator=(const PengEngine&) = delete;
+	PengEngine& operator=(PengEngine&&) = delete;
+
 	void start_opengl();
 	void shutdown();
 	void shutdown_opengl();

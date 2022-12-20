@@ -18,6 +18,12 @@ PengEngine::PengEngine()
 	, _glfw_window(nullptr)
 { }
 
+PengEngine& PengEngine::get()
+{
+	static PengEngine peng_engine;
+	return peng_engine;
+}
+
 void PengEngine::start()
 {
 	_executing = true;

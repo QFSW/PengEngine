@@ -70,14 +70,13 @@ int main()
     std::weak_ptr<FadeEntity> green_entity;
     std::weak_ptr<FadeEntity> red_entity;
 
-    PengEngine engine;
-    engine.entity_manager().create_entity<FPSEntity>();
-    engine.on_engine_initialized().subscribe([&] {
+    PengEngine::get().entity_manager().create_entity<FPSEntity>();
+    PengEngine::get().on_engine_initialized().subscribe([&] {
         std::cout << "PengEngine started!" << std::endl;
     });
 
-    engine.on_frame_start().subscribe([&] {
-        EntityManager& entity_manager = engine.entity_manager();
+    PengEngine::get().on_frame_start().subscribe([&] {
+        EntityManager& entity_manager = PengEngine::get().entity_manager();
 
         if (green_entity.expired() && red_entity.expired())
         {
@@ -97,6 +96,6 @@ int main()
         }
     });
 
-    engine.set_target_fps(60);
-    engine.start();
+    PengEngine::get().set_target_fps(60);
+    PengEngine::get().start();
 }
