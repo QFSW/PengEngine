@@ -1,12 +1,16 @@
 #pragma once
 
 #include <threading/worker_thread.h>
-#include <entities/entity_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
 
+#include "entity_manager.h"
+
 class PengEngine
 {
+	DEFINE_EVENT(on_engine_initialized);
+	DEFINE_EVENT(on_frame_start);
+
 public:
 	PengEngine();
 
@@ -18,9 +22,7 @@ public:
 
 	bool shutting_down() const;
 
-	utils::EventInterface<>& get_on_engine_initialized() noexcept;
-	utils::EventInterface<>& get_on_frame_start() noexcept;
-	EntityManager& get_entity_manager() noexcept;
+	EntityManager& entity_manager() noexcept;
 
 private:
 	void start_opengl();
@@ -46,7 +48,4 @@ private:
 	threading::WorkerThread _render_thread;
 
 	EntityManager _entity_manager;
-
-	utils::Event<> _on_engine_initialized;
-	utils::Event<> _on_frame_start;
 };

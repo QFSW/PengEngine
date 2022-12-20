@@ -148,3 +148,9 @@ namespace utils
 		invoke(std::forward(args)...);
 	}
 }
+
+#define DEFINE_EVENT(name, ...) \
+public: \
+	utils::EventInterface<__VA_ARGS__>& ##name() noexcept { return _##name; } \
+private: \
+	utils::Event<__VA_ARGS__> _##name; \

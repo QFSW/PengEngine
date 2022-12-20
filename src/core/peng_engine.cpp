@@ -33,8 +33,6 @@ void PengEngine::start()
 			tick_opengl();
 			finalize_frame();
 		});
-
-		printf("Frametime = %.02fms\n", _last_frametime);
 	}
 
 	shutdown();
@@ -70,17 +68,7 @@ bool PengEngine::shutting_down() const
 	return false;
 }
 
-utils::EventInterface<>& PengEngine::get_on_engine_initialized() noexcept
-{
-	return _on_engine_initialized;
-}
-
-utils::EventInterface<>& PengEngine::get_on_frame_start() noexcept
-{
-	return _on_frame_start;
-}
-
-EntityManager& PengEngine::get_entity_manager() noexcept
+EntityManager& PengEngine::entity_manager() noexcept
 {
 	return _entity_manager;
 }
@@ -142,10 +130,10 @@ void PengEngine::shutdown_opengl()
 void PengEngine::tick_main()
 {
 	_last_main_frametime = timing::measure_ms([this] {
+		const double delta_time = _last_frametime / 1000.0;
+		
 		_on_frame_start();
-
-		_entity_manager.tick_entities(_last_frametime);
-		_entity_manager.cleanup_entities();
+		_entity_manager.tick(delta_time);
 	});
 }
 

@@ -21,7 +21,7 @@ public:
     {
         _time += delta_time;
 
-        const float ratio = 0.5f + static_cast<float>(std::cos(_time / 500)) / -2.0f;
+        const float ratio = 0.5f + static_cast<float>(std::cos(_time / 0.5)) / -2.0f;
         const float ratio_inv = 1 - ratio;
 
         GLclampf color[4];
@@ -45,6 +45,15 @@ private:
     double _time;
 };
 
+class FPSEntity : public Entity
+{
+public:
+    virtual void tick(double delta_time) override
+    {
+        printf("Frametime = %.02fms\n", delta_time * 1000);
+    }
+};
+
 int main()
 {
     std::cout << "PengEngine starting..." << std::endl;
@@ -57,25 +66,26 @@ int main()
     std::weak_ptr<FadeEntity> red_entity;
 
     PengEngine engine;
-    engine.get_on_engine_initialized().subscribe([&] {
+    engine.entity_manager().create_entity<FPSEntity>();
+    engine.on_engine_initialized().subscribe([&] {
         std::cout << "PengEngine started!" << std::endl;
     });
 
-    engine.get_on_frame_start().subscribe([&] {
-        EntityManager& entity_manager = engine.get_entity_manager();
+    engine.on_frame_start().subscribe([&] {
+        EntityManager& entity_manager = engine.entity_manager();
 
         if (green_entity.expired() && red_entity.expired())
         {
             green_entity = entity_manager.create_entity<FadeEntity>(gray, green);
         }
 
-        if (!green_entity.expired() && green_entity.lock()->get_age() >= 5000)
+        if (!green_entity.expired() && green_entity.lock()->get_age() >= 5)
         {
             entity_manager.destroy_entity(green_entity);
             red_entity = entity_manager.create_entity<FadeEntity>(gray, red);
         }
 
-        if (!red_entity.expired() && red_entity.lock()->get_age() >= 5000)
+        if (!red_entity.expired() && red_entity.lock()->get_age() >= 5)
         {
             entity_manager.destroy_entity(red_entity);
             green_entity = entity_manager.create_entity<FadeEntity>(gray, green);

@@ -2,6 +2,12 @@
 
 #include <utils/vectools.h>
 
+void EntityManager::tick(double delta_time)
+{
+	tick_entities(delta_time);
+	cleanup_entities();
+}
+
 void EntityManager::tick_entities(double delta_time)
 {
 	for (std::shared_ptr<Entity>& entity : _entities)

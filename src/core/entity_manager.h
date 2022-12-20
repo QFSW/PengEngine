@@ -11,8 +11,7 @@ class EntityManager
 {
 public:
 	// ----------- Engine API -----------
-	void tick_entities(double delta_time);
-	void cleanup_entities();
+	void tick(double delta_time);
 	// ----------------------------------
 
 	// ------------ User API ------------
@@ -26,6 +25,9 @@ public:
 	// ----------------------------------
 
 private:
+	void tick_entities(double delta_time);
+	void cleanup_entities();
+
 	std::vector<std::shared_ptr<Entity>> _entities;
 	std::vector<std::weak_ptr<Entity>> _pending_kills;
 };
