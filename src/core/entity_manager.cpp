@@ -12,7 +12,10 @@ void EntityManager::tick_entities(double delta_time)
 {
 	for (std::shared_ptr<Entity>& entity : _entities)
 	{
-		entity->tick(delta_time);
+		if (entity->can_tick())
+		{
+			entity->tick(delta_time);
+		}
 	}
 }
 

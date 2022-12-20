@@ -8,7 +8,8 @@ class FadeEntity : public Entity
 {
 public:
     FadeEntity(float from[4], float to[4])
-        : _time(0)
+        : Entity(true)
+        , _time(0)
     {
         for (uint8_t i = 0; i < 4; i++)
         {
@@ -48,6 +49,10 @@ private:
 class FPSEntity : public Entity
 {
 public:
+    FPSEntity()
+        : Entity(true)
+    { }
+
     virtual void tick(double delta_time) override
     {
         printf("Frametime = %.02fms\n", delta_time * 1000);
