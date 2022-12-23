@@ -71,8 +71,8 @@ namespace demo
         float green[4] = { 0.0, 1, 0.0, 1.0 };
         float red[4] = { 1.0, 0.0, 0.0, 1.0 };
 
-        std::weak_ptr<FadeEntity> green_entity;
-        std::weak_ptr<FadeEntity> red_entity;
+        peng::weak_ptr<FadeEntity> green_entity;
+        peng::weak_ptr<FadeEntity> red_entity;
 
         PengEngine::get().entity_manager().create_entity<FPSEntity>();
         PengEngine::get().entity_manager().create_entity<BlobEntity>(100, 100, 10);
@@ -84,18 +84,18 @@ namespace demo
         PengEngine::get().on_frame_start().subscribe([&] {
             EntityManager& entity_manager = PengEngine::get().entity_manager();
 
-            if (green_entity.expired() && red_entity.expired())
+            if (!green_entity && !red_entity)
             {
                 green_entity = entity_manager.create_entity<FadeEntity>(gray, green);
             }
 
-            if (!green_entity.expired() && green_entity.lock()->get_age() >= 5)
+            if (green_entity && green_entity->get_age() >= 5)
             {
                 entity_manager.destroy_entity(green_entity);
                 red_entity = entity_manager.create_entity<FadeEntity>(gray, red);
             }
 
-            if (!red_entity.expired() && red_entity.lock()->get_age() >= 5)
+            if (red_entity && red_entity->get_age() >= 5)
             {
                 entity_manager.destroy_entity(red_entity);
                 green_entity = entity_manager.create_entity<FadeEntity>(gray, green);

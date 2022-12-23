@@ -215,6 +215,9 @@
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\memory\shared_ptr.h" />
+    <ClInclude Include="src\memory\shared_ref.h" />
+    <ClInclude Include="src\memory\weak_ptr.h" />
     <ClInclude Include="src\threading\job.h" />
     <ClInclude Include="src\threading\thread_pool.h" />
     <ClInclude Include="src\threading\worker_thread.h" />
