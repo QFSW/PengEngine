@@ -4,6 +4,8 @@
 #include <GL/glew.h>
 
 #include <core/entity.h>
+#include <rendering/shader.h>
+#include <rendering/mesh.h>
 
 class BlobEntity : public Entity
 {
@@ -13,35 +15,16 @@ public:
 	virtual void tick(double delta_time) override;
 
 private:
-	void validate_shader_compile(GLuint shader);
-	void validate_shader_link(GLuint shader);
-
 	int32_t _pos_x;
 	int32_t _pos_y;
 	int32_t _radius;
 
-	float _vertices[12] =
-	{
-		 0.5f,  0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
+	rendering::Shader _shader;
+	rendering::Mesh _mesh;
 
-	unsigned int _indices[6] =
-	{
-		0, 1, 3,
-		1, 2, 3
-	};
+	static std::vector<float> _vertices;
+	static std::vector<GLuint> _indices;
 
-	GLuint _ebo;
-	GLuint _vbo;
-	GLuint _vao;
-
-	GLuint _vertShader;
-	GLuint _fragShader;
-	GLuint _shaderProg;
-
-	static const char* _vertShaderSrc;
-	static const char* _fragShaderSrc;
+	static std::string _vertShaderSrc;
+	static std::string _fragShaderSrc;
 };

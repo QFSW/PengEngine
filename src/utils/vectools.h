@@ -20,4 +20,10 @@ namespace vectools
     {
         return std::find(v.begin(), v.end(), item) != v.end();
     }
+
+    template <typename T>
+    size_t buffer_size(const std::vector<T>& v)
+    {
+        return v.size() * sizeof(T);
+    }
 }
