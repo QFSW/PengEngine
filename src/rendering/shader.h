@@ -9,7 +9,7 @@ namespace rendering
 	class Shader
 	{
 	public:
-		Shader(const std::string& vertShaderSrc, const std::string& fragShaderSrc);
+		Shader(const std::string& vertShaderPath, const std::string& fragShaderPath);
 		~Shader();
 
 		void use() const;

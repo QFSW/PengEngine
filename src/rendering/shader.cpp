@@ -1,9 +1,14 @@
 #include "shader.h"
 
+#include <utils/io.h>
+
 using namespace rendering;
 
-Shader::Shader(const std::string& vertShaderSrc, const std::string& fragShaderSrc)
+Shader::Shader(const std::string& vertShaderPath, const std::string& fragShaderPath)
 {
+	const std::string vertShaderSrc = io::read_text_file(vertShaderPath);
+	const std::string fragShaderSrc = io::read_text_file(fragShaderPath);
+
 	const char* shaderSrc;
 
 	const GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);

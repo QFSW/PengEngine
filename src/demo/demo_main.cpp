@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include <core/peng_engine.h>
-#include <utils/io.h>
 
 #include "blob_entity.h"
 
@@ -50,10 +49,7 @@ namespace demo
         PengEngine::get().on_engine_initialized().subscribe([&] {
             std::cout << "PengEngine started!" << std::endl;
 
-            const std::string vertShaderSrc = io::read_text_file("shaders/demo/blob_v.glsl");
-            const std::string fragShaderSrc = io::read_text_file("shaders/demo/blob_f.glsl");
-
-            const auto shader = peng::make_shared<Shader>(vertShaderSrc, fragShaderSrc);
+            const auto shader = peng::make_shared<Shader>("shaders/demo/blob_v.glsl", "shaders/demo/blob_f.glsl");
             const auto mesh = peng::make_shared<Mesh>(vertices, indices, colors);
 
             PengEngine::get().entity_manager().create_entity<BlobEntity>(shader, mesh, 100, 100, 10);
