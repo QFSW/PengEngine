@@ -13,6 +13,7 @@ namespace rendering
 		~Shader();
 
 		void use() const;
+		GLint get_uniform_location(const std::string& name) const;
 
 	private:
 		void validate_shader_compile(GLuint shader);

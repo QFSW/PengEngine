@@ -158,10 +158,11 @@
     <ClInclude Include="src\utils\io.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
-    <None Include="src\shaders\demo\blob_v.glsl" />
-    <None Include="src\shaders\demo\blob_f.glsl" />
   </ItemGroup>
 </Project>

@@ -5,20 +5,27 @@
 
 #include "blob_entity.h"
 
+using namespace math;
+
 namespace demo
 {
-    std::vector<float> vertices =
+    std::vector<Vector3f> vertices =
     {
-         0.5f,  0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+        { -0.5f, -0.5f, 0.0f },
+        {  0.5f, -0.5f, 0.0f },
+        {  0.0f,  0.5f, 0.0f },
     };
 
-    std::vector<GLuint> indices =
+    std::vector<Vector3f> colors =
     {
-        0, 1, 3,
-        1, 2, 3
+        { 1, 0, 0 },
+        { 0, 1, 0 },
+        { 0, 0, 1 },
+    };
+
+    std::vector<Vector3u> indices =
+    {
+        { 0, 1, 2 }
     };
 
     class FPSEntity : public Entity
@@ -47,7 +54,7 @@ namespace demo
             const std::string fragShaderSrc = io::read_text_file("shaders/demo/blob_f.glsl");
 
             const auto shader = peng::make_shared<Shader>(vertShaderSrc, fragShaderSrc);
-            const auto mesh = peng::make_shared<Mesh>(vertices, indices);
+            const auto mesh = peng::make_shared<Mesh>(vertices, indices, colors);
 
             PengEngine::get().entity_manager().create_entity<BlobEntity>(shader, mesh, 100, 100, 10);
         });

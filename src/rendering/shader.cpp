@@ -38,6 +38,11 @@ void Shader::use() const
 	glUseProgram(_shaderProg);
 }
 
+GLint Shader::get_uniform_location(const std::string& name) const
+{
+	return glGetUniformLocation(_shaderProg, name.c_str());
+}
+
 void Shader::validate_shader_compile(GLuint shader)
 {
 	GLint success;

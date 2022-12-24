@@ -3,21 +3,26 @@
 #include <vector>
 
 #include <GL/glew.h>
+#include <math/vector3.h>
 
 namespace rendering
 {
 	class Mesh
 	{
 	public:
-		Mesh(std::vector<float>&& vertices, std::vector<GLuint>&& indices);
-		Mesh(const std::vector<float>& vertices, const std::vector<GLuint>& indices);
+		Mesh(
+			const std::vector<math::Vector3f>& vertices,
+			const std::vector<math::Vector3u>& indices,
+			const std::vector<math::Vector3f>& colors
+		);
+
 		~Mesh();
 
 		void render() const;
 
 	private:
-		std::vector<float> _vertices;
-		std::vector<GLuint> _indices;
+		std::vector<math::Vector3f> _vertexBuffer;
+		std::vector<math::Vector3u> _indexBuffer;
 
 		GLuint _ebo;
 		GLuint _vbo;
