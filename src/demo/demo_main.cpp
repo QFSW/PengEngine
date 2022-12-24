@@ -1,8 +1,7 @@
 #include <iostream>
 
 #include <core/peng_engine.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <utils/io.h>
 
 #include "blob_entity.h"
 
@@ -21,28 +20,6 @@ namespace demo
         0, 1, 3,
         1, 2, 3
     };
-
-    std::string vertShaderSrc =
-        "\n#version 330 core"
-        "\nlayout(location = 0) in vec3 aPos;"
-        "\n"
-        "\nout vec4 vertexColor;"
-        "\n"
-        "\nvoid main()"
-        "\n{"
-        "\n	gl_Position = vec4(aPos, 1.0);"
-        "\n vertexColor = vec4(0.5, 0.0, 0.0, 1.0);"
-        "\n}\0";
-
-    std::string fragShaderSrc =
-        "\n#version 330 core"
-        "\nout vec4 FragColor;"
-        "\nin vec4 vertexColor;"
-        "\n"
-        "\nvoid main()"
-        "\n{"
-        "\n	FragColor = vertexColor;"
-        "\n}\0";
 
     class FPSEntity : public Entity
     {
@@ -66,8 +43,11 @@ namespace demo
         PengEngine::get().on_engine_initialized().subscribe([&] {
             std::cout << "PengEngine started!" << std::endl;
 
-            auto shader = peng::make_shared<Shader>(vertShaderSrc, fragShaderSrc);
-            auto mesh = peng::make_shared<Mesh>(vertices, indices);
+            const std::string vertShaderSrc = io::read_text_file("shaders/demo/blob_v.glsl");
+            const std::string fragShaderSrc = io::read_text_file("shaders/demo/blob_f.glsl");
+
+            const auto shader = peng::make_shared<Shader>(vertShaderSrc, fragShaderSrc);
+            const auto mesh = peng::make_shared<Mesh>(vertices, indices);
 
             PengEngine::get().entity_manager().create_entity<BlobEntity>(shader, mesh, 100, 100, 10);
         });
