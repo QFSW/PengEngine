@@ -34,9 +34,9 @@ void PengEngine::start()
 	while (!shutting_down())
 	{
 		_last_frametime = timing::measure_ms([this] {
+			tick_opengl();
 			tick_main();
 			tick_render();
-			tick_opengl();
 			finalize_frame();
 		});
 	}

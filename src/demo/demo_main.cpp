@@ -74,12 +74,11 @@ namespace demo
         peng::weak_ptr<FadeEntity> green_entity;
         peng::weak_ptr<FadeEntity> red_entity;
 
-        PengEngine::get().entity_manager().create_entity<FPSEntity>();
-        PengEngine::get().entity_manager().create_entity<BlobEntity>(100, 100, 10);
-
         PengEngine::get().on_engine_initialized().subscribe([&] {
             std::cout << "PengEngine started!" << std::endl;
-            });
+
+            PengEngine::get().entity_manager().create_entity<BlobEntity>(100, 100, 10);
+        });
 
         PengEngine::get().on_frame_start().subscribe([&] {
             EntityManager& entity_manager = PengEngine::get().entity_manager();
