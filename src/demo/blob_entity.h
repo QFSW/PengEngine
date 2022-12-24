@@ -20,12 +20,21 @@ private:
 	int32_t _pos_y;
 	int32_t _radius;
 
-	float _vertices[9] = {
+	float _vertices[12] =
+	{
+		 0.5f,  0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f
+		-0.5f,  0.5f, 0.0f
 	};
 
+	unsigned int _indices[6] =
+	{
+		0, 1, 3,
+		1, 2, 3
+	};
+
+	GLuint _ebo;
 	GLuint _vbo;
 	GLuint _vao;
 
