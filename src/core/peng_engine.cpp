@@ -160,6 +160,15 @@ void PengEngine::tick_opengl()
 	_last_opengl_frametime = timing::measure_ms([this] {
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		if (glfwGetKey(_glfw_window, GLFW_KEY_1) == GLFW_PRESS)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		else if (glfwGetKey(_glfw_window, GLFW_KEY_2) == GLFW_PRESS)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
 	});
 }
 

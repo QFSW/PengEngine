@@ -58,9 +58,6 @@ BlobEntity::BlobEntity(int32_t pos_x, int32_t pos_y, int32_t radius)
 
 void BlobEntity::tick(double)
 {
-	// glRasterPos2i(_pos_x - _radius, _pos_y - _radius);
-	// glDrawPixels(_radius * 2, _radius * 2, GL_RGB, GL_UNSIGNED_BYTE, _pixel_buffer.data());
-
 	glUseProgram(_shaderProg);
 	glBindVertexArray(_vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
