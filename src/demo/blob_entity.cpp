@@ -16,7 +16,7 @@ BlobEntity::BlobEntity(
 {
 	const Vector2f resolution = PengEngine::get().resolution();
 
-	_position = Vector3f(pos_px / (resolution / 2.0f), -0.5f);
+	_position = Vector3f(pos_px / (resolution / 2.0f), 0.5f);
 	_scale = Vector3f(radius_px / resolution.x, radius_px / resolution.y, radius_px / resolution.x);
 }
 
@@ -24,7 +24,7 @@ void BlobEntity::tick(double delta_time)
 {
 	_angle += static_cast<float>(delta_time);
 
-	const Vector3f rotation = Vector3f(0.5f, 1, 0) * _angle;
+	const Vector3f rotation = Vector3f(0.5, 1, 0) * _angle;
 
 	const Matrix4x4f transform =
 		Matrix4x4f::identity()

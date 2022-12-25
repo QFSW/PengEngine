@@ -14,6 +14,7 @@ Mesh::Mesh(
 	const std::vector<Vector2f>& tex_coords
 )
 	: _index_buffer(indices)
+	, _num_indices(static_cast<GLuint>(indices.size() * 3))
 {
 	_vertex_buffer.resize(8 * vertices.size());
 	for (size_t vert_index = 0; vert_index < vertices.size(); vert_index++)
@@ -71,6 +72,6 @@ Mesh::~Mesh()
 void Mesh::render() const
 {
 	glBindVertexArray(_vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

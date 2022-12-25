@@ -12,24 +12,38 @@ namespace demo
 {
     std::vector<Vector3f> vertices =
     {
-        { 1, 1, 0 },
-        { 1, -1, 0 },
-        { -1, -1, 0 },
-        { -1, 1, 0 },
+        Vector3f(-1, -1, -1) * 0.5f,
+	    Vector3f(1, -1, -1) * 0.5f,
+	    Vector3f(1, 1, -1) * 0.5f,
+	    Vector3f(-1, 1, -1) * 0.5f,
+	    Vector3f(-1, -1, 1) * 0.5f,
+	    Vector3f(1, -1, 1) * 0.5f,
+	    Vector3f(1, 1, 1) * 0.5f,
+	    Vector3f(-1, 1, 1) * 0.5f
     };
 
     std::vector<Vector3u> indices =
     {
-        { 0, 1, 2 },
-        { 2, 3, 0 }
+        Vector3f(0, 1, 3),
+    	Vector3f(3, 1, 2),
+	    Vector3f(1, 5, 2),
+    	Vector3f(2, 5, 6),
+	    Vector3f(5, 4, 6),
+    	Vector3f(6, 4, 7),
+	    Vector3f(4, 0, 7),
+    	Vector3f(7, 0, 3),
+	    Vector3f(3, 2, 7),
+    	Vector3f(7, 2, 6),
+	    Vector3f(4, 5, 0),
+    	Vector3f(0, 5, 1)
     };
 
     std::vector<Vector2f> tex_coords =
     {
-        { 1, 1 },
-        { 1, 0 },
-        { 0, 0 },
-        { 0, 1 }
+        Vector2f(0, 0),
+	    Vector2f(1, 0),
+	    Vector2f(1, 1),
+	    Vector2f(0, 1)
     };
 
     class FPSEntity : public Entity
@@ -66,7 +80,7 @@ namespace demo
 
             const auto mesh = peng::make_shared<Mesh>(vertices, indices, std::vector<Vector3f>(), tex_coords);
 
-            const Vector2i blob_grid(10, 8);
+            const Vector2i blob_grid(1, 1);
 
             for (int32_t blob_x = 0; blob_x < blob_grid.x ; blob_x++)
             {
@@ -75,7 +89,7 @@ namespace demo
                     const auto material_copy = peng::copy_shared(material);
                     const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f) * 100;
 
-                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material_copy, pos, 70.0f);
+                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material_copy, pos, 2 * 70.0f);
                 }
             }
         });

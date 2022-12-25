@@ -112,8 +112,7 @@ void PengEngine::start_opengl()
 	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", nullptr, nullptr);
 	if (!_glfw_window)
 	{
-		printf("GLFW window creation failed\n");
-		return;
+		throw std::logic_error("GLFW window creation failed");
 	}
 
 	int32_t buffer_width;
@@ -124,11 +123,11 @@ void PengEngine::start_opengl()
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
 	{
-		printf("GLEW initialization failed\n");
-		return;
+		throw std::logic_error("GLEW initialization failed");
 	}
 
 	glViewport(0, 0, buffer_width, buffer_height);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void PengEngine::shutdown()
@@ -168,7 +167,7 @@ void PengEngine::tick_opengl()
 {
 	_last_opengl_frametime = timing::measure_ms([this] {
 		glfwPollEvents();
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (glfwGetKey(_glfw_window, GLFW_KEY_1) == GLFW_PRESS)
 		{

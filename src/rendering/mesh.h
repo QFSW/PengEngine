@@ -27,6 +27,8 @@ namespace rendering
 		std::vector<float> _vertex_buffer;
 		std::vector<math::Vector3u> _index_buffer;
 
+		GLuint _num_indices;
+
 		GLuint _ebo;
 		GLuint _vbo;
 		GLuint _vao;
