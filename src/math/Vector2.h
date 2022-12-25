@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include "number.h"
 
 namespace math
@@ -27,6 +29,9 @@ namespace math
 
 #pragma endregion
 
+		T min() const noexcept;
+		T max() const noexcept;
+
 		Vector2& operator+=(const Vector2& other);
 		Vector2& operator-=(const Vector2& other);
 		Vector2& operator*=(const Vector2& other);
@@ -41,8 +46,8 @@ namespace math
 		Vector2 operator*(const T& scalar) const;
 		Vector2 operator/(const T& scalar) const;
 
-		static consteval Vector2 zero() { return Vector2(0, 0); }
-		static consteval Vector2 one() { return Vector2(1, 1); }
+		static constexpr Vector2 zero() { return Vector2(0, 0); }
+		static constexpr Vector2 one() { return Vector2(1, 1); }
 	};
 
 	using Vector2f = Vector2<float>;
@@ -69,6 +74,18 @@ namespace math
 		: x(static_cast<T>(other.x))
 		, y(static_cast<T>(other.y))
 	{ }
+
+	template <number T>
+	T Vector2<T>::min() const noexcept
+	{
+		return std::min(x, y);
+	}
+
+	template <number T>
+	T Vector2<T>::max() const noexcept
+	{
+		return std::max(x, y);
+	}
 
 	template <number T>
 	Vector2<T>& Vector2<T>::operator+=(const Vector2& other)

@@ -59,6 +59,9 @@ namespace math
 
 #pragma endregion
 
+		T min() const noexcept;
+		T max() const noexcept;
+
 		Vector3& operator+=(const Vector3& other);
 		Vector3& operator-=(const Vector3& other);
 		Vector3& operator*=(const Vector3& other);
@@ -73,8 +76,8 @@ namespace math
 		Vector3 operator*(const T& scalar) const;
 		Vector3 operator/(const T& scalar) const;
 
-		static consteval Vector3 zero() { return Vector3(0, 0, 0); }
-		static consteval Vector3 one() { return Vector3(1, 1, 1); }
+		static constexpr Vector3 zero() { return Vector3(0, 0, 0); }
+		static constexpr Vector3 one() { return Vector3(1, 1, 1); }
 	};
 
 	using Vector3f = Vector3<float>;
@@ -104,6 +107,18 @@ namespace math
 		, y(static_cast<T>(other.y))
 		, z(static_cast<T>(other.z))
 	{ }
+
+	template <number T>
+	T Vector3<T>::min() const noexcept
+	{
+		return std::min(x, y, z);
+	}
+
+	template <number T>
+	T Vector3<T>::max() const noexcept
+	{
+		return std::max(x, y, z);
+	}
 
 	template <number T>
 	Vector3<T>& Vector3<T>::operator+=(const Vector3& other)
