@@ -7,6 +7,7 @@ using namespace math;
 
 Material::Material(const peng::shared_ref<Shader>& shader)
 	: _shader(shader)
+	, _num_bound_textures(0)
 { }
 
 void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
@@ -26,12 +27,14 @@ void Material::set_parameter(const std::string& parameter_name, const Parameter&
 	set_parameter(parameter_index, parameter);
 }
 
-void Material::use() const
+void Material::use()
 {
+	_num_bound_textures = 0;
+
 	for (const auto& [location, parameter] : _set_parameters)
 	{
 		std::visit(functional::overload{
-			[&](const auto& x) { set_uniform(location, x); }
+			[&](const auto& x) { apply_parameter(location, x); }
 		}, parameter);
 	}
 
@@ -43,27 +46,41 @@ peng::shared_ref<Shader> Material::shader() const
 	return _shader;
 }
 
-void Material::set_uniform(GLint location, float value) const
+void Material::apply_parameter(GLint location, float value)
 {
 	glUniform1f(location, value);
 }
 
-void Material::set_uniform(GLint location, const Vector2f& value) const
+void Material::apply_parameter(GLint location, const Vector2f& value)
 {
 	glUniform2f(location, value.x, value.y);
 }
 
-void Material::set_uniform(GLint location, const Vector3f& value) const
+void Material::apply_parameter(GLint location, const Vector3f& value)
 {
 	glUniform3f(location, value.x, value.y, value.z);
 }
 
-void Material::set_uniform(GLint location, const Vector4f& value) const
+void Material::apply_parameter(GLint location, const Vector4f& value)
 {
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
-void Material::set_uniform(GLint location, const Matrix4x4f& value) const
+void Material::apply_parameter(GLint location, const Matrix4x4f& value)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, value.elements.data());
+}
+
+void Material::apply_parameter(GLint location, const peng::shared_ref<Texture>& texture)
+{
+	if (_num_bound_textures >= 16)
+	{
+		throw std::runtime_error("Cannot bind more than 16 textures to a material");
+	}
+
+	const GLuint texture_slot = GL_TEXTURE0 + _num_bound_textures;
+	_num_bound_textures++;
+
+	glUniform1i(location, texture_slot);
+	texture->use(texture_slot);
 }

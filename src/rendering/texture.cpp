@@ -28,7 +28,7 @@ Texture::Texture(const std::string& texture_path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(texture_data);
@@ -37,4 +37,10 @@ Texture::Texture(const std::string& texture_path)
 Texture::~Texture()
 {
 	glDeleteTextures(1, &_tex);
+}
+
+void Texture::use(GLenum slot) const
+{
+	glActiveTexture(slot);
+	glBindTexture(GL_TEXTURE_2D, _tex);
 }

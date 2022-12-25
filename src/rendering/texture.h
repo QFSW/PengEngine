@@ -15,6 +15,8 @@ namespace rendering
 		Texture(Texture&&) = delete;
 		~Texture();
 
+		void use(GLenum slot) const;
+
 	private:
 		GLuint _tex;
 		math::Vector2i _resolution;
