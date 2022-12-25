@@ -4,48 +4,48 @@
 
 using namespace rendering;
 
-Shader::Shader(const std::string& vertShaderPath, const std::string& fragShaderPath)
+Shader::Shader(const std::string& vert_shader_path, const std::string& frag_shader_path)
 {
-	const std::string vertShaderSrc = io::read_text_file(vertShaderPath);
-	const std::string fragShaderSrc = io::read_text_file(fragShaderPath);
+	const std::string vert_shader_src = io::read_text_file(vert_shader_path);
+	const std::string frag_shader_src = io::read_text_file(frag_shader_path);
 
-	const char* shaderSrc;
+	const char* shader_src;
 
-	const GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
-	shaderSrc = vertShaderSrc.c_str();
-	glShaderSource(vertShader, 1, &shaderSrc, NULL);
-	glCompileShader(vertShader);
-	validate_shader_compile(vertShader);
+	const GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER);
+	shader_src = vert_shader_src.c_str();
+	glShaderSource(vert_shader, 1, &shader_src, nullptr);
+	glCompileShader(vert_shader);
+	validate_shader_compile(vert_shader);
 
-	const GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-	shaderSrc = fragShaderSrc.c_str();
-	glShaderSource(fragShader, 1, &shaderSrc, NULL);
-	glCompileShader(fragShader);
-	validate_shader_compile(fragShader);
+	const GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	shader_src = frag_shader_src.c_str();
+	glShaderSource(frag_shader, 1, &shader_src, nullptr);
+	glCompileShader(frag_shader);
+	validate_shader_compile(frag_shader);
 
-	_shaderProg = glCreateProgram();
-	glAttachShader(_shaderProg, vertShader);
-	glAttachShader(_shaderProg, fragShader);
-	glLinkProgram(_shaderProg);
-	validate_shader_link(_shaderProg);
+	_shader_prog = glCreateProgram();
+	glAttachShader(_shader_prog, vert_shader);
+	glAttachShader(_shader_prog, frag_shader);
+	glLinkProgram(_shader_prog);
+	validate_shader_link(_shader_prog);
 
-	glDeleteShader(vertShader);
-	glDeleteShader(fragShader);
+	glDeleteShader(vert_shader);
+	glDeleteShader(frag_shader);
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram(_shaderProg);
+	glDeleteProgram(_shader_prog);
 }
 
 void Shader::use() const
 {
-	glUseProgram(_shaderProg);
+	glUseProgram(_shader_prog);
 }
 
 GLint Shader::get_uniform_location(const std::string& name) const
 {
-	return glGetUniformLocation(_shaderProg, name.c_str());
+	return glGetUniformLocation(_shader_prog, name.c_str());
 }
 
 void Shader::validate_shader_compile(GLuint shader)
@@ -55,9 +55,9 @@ void Shader::validate_shader_compile(GLuint shader)
 
 	if (!success)
 	{
-		char infoLog[512];
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("ERROR::SHADER::COMPILATION_FAILED\n%s", infoLog);
+		char info_log[512];
+		glGetShaderInfoLog(shader, 512, nullptr, info_log);
+		printf("ERROR::SHADER::COMPILATION_FAILED\n%s", info_log);
 	}
 }
 
@@ -68,8 +68,8 @@ void Shader::validate_shader_link(GLuint shader)
 
 	if (!success)
 	{
-		char infoLog[512];
-		glGetProgramInfoLog(shader, 512, NULL, infoLog);
-		printf("ERROR::SHADER::LINK_FAILED\n%s", infoLog);
+		char info_log[512];
+		glGetProgramInfoLog(shader, 512, nullptr, info_log);
+		printf("ERROR::SHADER::LINK_FAILED\n%s", info_log);
 	}
 }

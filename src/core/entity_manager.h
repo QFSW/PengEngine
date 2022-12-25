@@ -4,9 +4,7 @@
 
 #include <vector>
 #include <concepts>
-#include <cassert>
 
-#include <memory/shared_ptr.h>
 #include <memory/shared_ref.h>
 #include <memory/weak_ptr.h>
 #include <utils/vectools.h>

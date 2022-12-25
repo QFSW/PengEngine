@@ -8,22 +8,22 @@ using namespace rendering;
 using namespace math;
 
 Mesh::Mesh(
-	const std::vector<math::Vector3f>& vertices,
-	const std::vector<math::Vector3u>& indices,
-	const std::vector<math::Vector3f>& colors
+	const std::vector<Vector3f>& vertices,
+	const std::vector<Vector3u>& indices,
+	const std::vector<Vector3f>& colors
 )
 	: _indexBuffer(indices)
 {
 	_vertexBuffer.resize(2 * vertices.size());
-	for (size_t vertIndex = 0; vertIndex < vertices.size(); vertIndex++)
+	for (size_t vert_index = 0; vert_index < vertices.size(); vert_index++)
 	{
-		const Vector3f vertColor =
-			vertIndex < colors.size()
-			? colors[vertIndex]
+		const Vector3f vert_color =
+			vert_index < colors.size()
+			? colors[vert_index]
 			: Vector3f(1, 1, 1);
 
-		_vertexBuffer[vertIndex * 2 + 0] = vertices[vertIndex];
-		_vertexBuffer[vertIndex * 2 + 1] = vertColor;
+		_vertexBuffer[vert_index * 2 + 0] = vertices[vert_index];
+		_vertexBuffer[vert_index * 2 + 1] = vert_color;
 	}
 
 	glGenBuffers(1, &_vbo);

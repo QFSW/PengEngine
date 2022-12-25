@@ -16,10 +16,10 @@ namespace math
 
 #pragma region Swizzling
 
-		Vector2 xx() const noexcept { return Vector2<T>(x, x); }
-		Vector2 xy() const noexcept { return Vector2<T>(x, y); }
-		Vector2 yx() const noexcept { return Vector2<T>(y, x); }
-		Vector2 yy() const noexcept { return Vector2<T>(y, y); }
+		[[nodiscard]] Vector2 xx() const noexcept { return Vector2<T>(x, x); }
+		[[nodiscard]] Vector2 xy() const noexcept { return Vector2<T>(x, y); }
+		[[nodiscard]] Vector2 yx() const noexcept { return Vector2<T>(y, x); }
+		[[nodiscard]] Vector2 yy() const noexcept { return Vector2<T>(y, y); }
 
 #pragma endregion
 

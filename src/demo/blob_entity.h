@@ -14,9 +14,8 @@ public:
 	BlobEntity(
 		const peng::shared_ref<rendering::Mesh>& mesh,
 		const peng::shared_ref<rendering::Material>& material,
-		int32_t pos_x,
-		int32_t pos_y,
-		int32_t radius
+		const math::Vector2f& pos,
+		const math::Vector2f& scale
 	);
 
 	virtual void tick(double delta_time) override;
@@ -25,7 +24,6 @@ private:
 	peng::shared_ref<rendering::Mesh> _mesh;
 	peng::shared_ref<rendering::Material> _material;
 
-	int32_t _pos_x;
-	int32_t _pos_y;
-	int32_t _radius;
+	math::Vector2f _pos;
+	math::Vector2f _scale;
 };

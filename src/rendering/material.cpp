@@ -17,7 +17,7 @@ void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 	}
 
 	_existing_parameters[uniform_location] = _set_parameters.size();
-	_set_parameters.push_back(std::make_tuple(uniform_location, parameter));
+	_set_parameters.emplace_back(uniform_location, parameter);
 }
 
 void Material::set_parameter(const std::string& parameter_name, const Parameter& parameter)

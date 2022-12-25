@@ -16,7 +16,7 @@ namespace threading
         explicit ThreadPool(size_t worker_count = get_auto_thread_count());
         ThreadPool(const ThreadPool&) = delete;
         ThreadPool(ThreadPool&&) = delete;
-        ~ThreadPool();
+        virtual ~ThreadPool();
 
         void schedule_job(Job&& job);
         void shutdown();

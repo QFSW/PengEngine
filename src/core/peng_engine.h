@@ -26,6 +26,7 @@ public:
 
 private:
 	PengEngine();
+	~PengEngine() = default;
 
 	PengEngine(const PengEngine&) = delete;
 	PengEngine(PengEngine&&) = delete;

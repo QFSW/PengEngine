@@ -1,5 +1,6 @@
 #include "entity_manager.h"
 
+#include <cassert>
 #include <utils/vectools.h>
 
 void EntityManager::tick(double delta_time)
@@ -23,8 +24,7 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 		return EntityState::PendingKill;
 	}
 
-	const peng::shared_ptr<Entity> strong_entity = entity.lock();
-	if (strong_entity)
+	if (const peng::shared_ptr<Entity> strong_entity = entity.lock())
 	{
 		const peng::shared_ref<Entity> entity_ref = strong_entity.to_shared_ref();
 		if (vectools::contains(_entities, entity_ref))

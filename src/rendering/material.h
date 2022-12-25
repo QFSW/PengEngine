@@ -22,7 +22,7 @@ namespace rendering
 			math::Vector4f
 		>;
 
-		Material(const peng::shared_ref<Shader>& shader);
+		explicit Material(const peng::shared_ref<Shader>& shader);
 
 		void set_parameter(GLint uniform_location, const Parameter& parameter);
 		void set_parameter(const std::string& parameter_name, const Parameter& parameter);

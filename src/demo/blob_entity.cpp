@@ -3,17 +3,18 @@
 BlobEntity::BlobEntity(
 	const peng::shared_ref<rendering::Mesh>& mesh,
 	const peng::shared_ref<rendering::Material>& material,
-	int32_t pos_x,
-	int32_t pos_y,
-	int32_t radius
+	const math::Vector2f& pos,
+	const math::Vector2f& scale
 )
 	: Entity(true)
 	, _mesh(mesh)
 	, _material(material)
-	, _pos_x(pos_x)
-	, _pos_y(pos_y)
-	, _radius(radius)
-{ }
+	, _pos(pos)
+	, _scale(scale)
+{
+	_material->set_parameter("pos", math::Vector3f(_pos, 0));
+	_material->set_parameter("scale", math::Vector3f(_scale, 1));
+}
 
 void BlobEntity::tick(double)
 {

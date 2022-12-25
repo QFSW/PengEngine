@@ -38,9 +38,15 @@ namespace peng
 	};
 
 	template <typename T, typename...Args>
-	shared_ref<T> make_shared(Args&&...args)
+	[[nodiscard]] shared_ref<T> make_shared(Args&&...args)
 	{
 		return shared_ref<T>(std::make_shared<T>(std::forward<Args>(args)...));
+	}
+
+	template <std::copyable T>
+	[[nodiscard]] shared_ref<T> copy_shared(const shared_ref<T> ref)
+	{
+		return make_shared<T>(*ref.get());
 	}
 
 #pragma region Comparison Operators

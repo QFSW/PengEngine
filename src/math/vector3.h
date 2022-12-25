@@ -17,38 +17,41 @@ namespace math
 
 #pragma region Swizzling
 
-		Vector2<T> xx() const noexcept { return Vector2<T>(x, x); }
-		Vector2<T> xy() const noexcept { return Vector2<T>(x, y); }
-		Vector2<T> yx() const noexcept { return Vector2<T>(y, x); }
-		Vector2<T> yy() const noexcept { return Vector2<T>(y, y); }
+		Vector3(T x, const Vector2<T>& yz) : x(x), y(yz.x), z(yz.y) { }
+		Vector3(const Vector2<T>& xy, T z) : x(xy.x), y(xy.y), z(z) { }
 
-		Vector3 xxx() const noexcept { return Vector3<T>(x, x, x); }
-		Vector3 xxy() const noexcept { return Vector3<T>(x, x, y); }
-		Vector3 xxz() const noexcept { return Vector3<T>(x, x, z); }
-		Vector3 xyx() const noexcept { return Vector3<T>(x, y, x); }
-		Vector3 xyy() const noexcept { return Vector3<T>(x, y, y); }
-		Vector3 xyz() const noexcept { return Vector3<T>(x, y, z); }
-		Vector3 xzx() const noexcept { return Vector3<T>(x, z, x); }
-		Vector3 xzy() const noexcept { return Vector3<T>(x, z, y); }
-		Vector3 xzz() const noexcept { return Vector3<T>(x, z, z); }
-		Vector3 yxx() const noexcept { return Vector3<T>(y, x, x); }
-		Vector3 yxy() const noexcept { return Vector3<T>(y, x, y); }
-		Vector3 yxz() const noexcept { return Vector3<T>(y, x, z); }
-		Vector3 yyx() const noexcept { return Vector3<T>(y, y, x); }
-		Vector3 yyy() const noexcept { return Vector3<T>(y, y, y); }
-		Vector3 yyz() const noexcept { return Vector3<T>(y, y, z); }
-		Vector3 yzx() const noexcept { return Vector3<T>(y, z, x); }
-		Vector3 yzy() const noexcept { return Vector3<T>(y, z, y); }
-		Vector3 yzz() const noexcept { return Vector3<T>(y, z, z); }
-		Vector3 zxx() const noexcept { return Vector3<T>(z, x, x); }
-		Vector3 zxy() const noexcept { return Vector3<T>(z, x, y); }
-		Vector3 zxz() const noexcept { return Vector3<T>(z, x, z); }
-		Vector3 zyx() const noexcept { return Vector3<T>(z, y, x); }
-		Vector3 zyy() const noexcept { return Vector3<T>(z, y, y); }
-		Vector3 zyz() const noexcept { return Vector3<T>(z, y, z); }
-		Vector3 zzx() const noexcept { return Vector3<T>(z, z, x); }
-		Vector3 zzy() const noexcept { return Vector3<T>(z, z, y); }
-		Vector3 zzz() const noexcept { return Vector3<T>(z, z, z); }
+		[[nodiscard]] Vector2<T> xx() const noexcept { return Vector2<T>(x, x); }
+		[[nodiscard]] Vector2<T> xy() const noexcept { return Vector2<T>(x, y); }
+		[[nodiscard]] Vector2<T> yx() const noexcept { return Vector2<T>(y, x); }
+		[[nodiscard]] Vector2<T> yy() const noexcept { return Vector2<T>(y, y); }
+
+		[[nodiscard]] Vector3 xxx() const noexcept { return Vector3<T>(x, x, x); }
+		[[nodiscard]] Vector3 xxy() const noexcept { return Vector3<T>(x, x, y); }
+		[[nodiscard]] Vector3 xxz() const noexcept { return Vector3<T>(x, x, z); }
+		[[nodiscard]] Vector3 xyx() const noexcept { return Vector3<T>(x, y, x); }
+		[[nodiscard]] Vector3 xyy() const noexcept { return Vector3<T>(x, y, y); }
+		[[nodiscard]] Vector3 xyz() const noexcept { return Vector3<T>(x, y, z); }
+		[[nodiscard]] Vector3 xzx() const noexcept { return Vector3<T>(x, z, x); }
+		[[nodiscard]] Vector3 xzy() const noexcept { return Vector3<T>(x, z, y); }
+		[[nodiscard]] Vector3 xzz() const noexcept { return Vector3<T>(x, z, z); }
+		[[nodiscard]] Vector3 yxx() const noexcept { return Vector3<T>(y, x, x); }
+		[[nodiscard]] Vector3 yxy() const noexcept { return Vector3<T>(y, x, y); }
+		[[nodiscard]] Vector3 yxz() const noexcept { return Vector3<T>(y, x, z); }
+		[[nodiscard]] Vector3 yyx() const noexcept { return Vector3<T>(y, y, x); }
+		[[nodiscard]] Vector3 yyy() const noexcept { return Vector3<T>(y, y, y); }
+		[[nodiscard]] Vector3 yyz() const noexcept { return Vector3<T>(y, y, z); }
+		[[nodiscard]] Vector3 yzx() const noexcept { return Vector3<T>(y, z, x); }
+		[[nodiscard]] Vector3 yzy() const noexcept { return Vector3<T>(y, z, y); }
+		[[nodiscard]] Vector3 yzz() const noexcept { return Vector3<T>(y, z, z); }
+		[[nodiscard]] Vector3 zxx() const noexcept { return Vector3<T>(z, x, x); }
+		[[nodiscard]] Vector3 zxy() const noexcept { return Vector3<T>(z, x, y); }
+		[[nodiscard]] Vector3 zxz() const noexcept { return Vector3<T>(z, x, z); }
+		[[nodiscard]] Vector3 zyx() const noexcept { return Vector3<T>(z, y, x); }
+		[[nodiscard]] Vector3 zyy() const noexcept { return Vector3<T>(z, y, y); }
+		[[nodiscard]] Vector3 zyz() const noexcept { return Vector3<T>(z, y, z); }
+		[[nodiscard]] Vector3 zzx() const noexcept { return Vector3<T>(z, z, x); }
+		[[nodiscard]] Vector3 zzy() const noexcept { return Vector3<T>(z, z, y); }
+		[[nodiscard]] Vector3 zzz() const noexcept { return Vector3<T>(z, z, z); }
 
 #pragma endregion
 

@@ -7,7 +7,7 @@ namespace threading
 	class WorkerThread : public ThreadPool
 	{
 	public:
-		WorkerThread(std::string&& thread_name);
+		explicit WorkerThread(std::string&& thread_name);
 
 		virtual std::string get_thread_name() const noexcept override;
 

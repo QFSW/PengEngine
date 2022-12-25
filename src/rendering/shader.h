@@ -9,7 +9,7 @@ namespace rendering
 	class Shader
 	{
 	public:
-		Shader(const std::string& vertShaderPath, const std::string& fragShaderPath);
+		Shader(const std::string& vert_shader_path, const std::string& frag_shader_path);
 		~Shader();
 
 		void use() const;
@@ -19,6 +19,6 @@ namespace rendering
 		void validate_shader_compile(GLuint shader);
 		void validate_shader_link(GLuint shader);
 
-		GLuint _shaderProg;
+		GLuint _shader_prog;
 	};
 }

@@ -8,14 +8,15 @@
 #include <utils/timing.h>
 
 PengEngine::PengEngine()
-	: _target_frametime(1000 / 60.0)
+	: _executing(false)
+	, _target_frametime(1000 / 60.0)
 	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
 	, _last_render_frametime(0)
 	, _last_opengl_frametime(0)
 	, _last_draw_time(timing::clock::now())
-	, _render_thread("RenderThread")
 	, _glfw_window(nullptr)
+	, _render_thread("RenderThread")
 { }
 
 PengEngine& PengEngine::get()
@@ -81,8 +82,8 @@ EntityManager& PengEngine::entity_manager() noexcept
 
 void PengEngine::start_opengl()
 {
-	const GLint Width = 800;
-	const GLint Height = 600;
+	constexpr GLint width = 800;
+	constexpr GLint height = 600;
 
 	if (!glfwInit())
 	{
@@ -100,16 +101,16 @@ void PengEngine::start_opengl()
     glfwWindowHint(GLFW_GREEN_BITS, 8);
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
 
-	_glfw_window = glfwCreateWindow(Width, Height, "PengEngine", nullptr, nullptr);
+	_glfw_window = glfwCreateWindow(width, height, "PengEngine", nullptr, nullptr);
 	if (!_glfw_window)
 	{
 		printf("GLFW window creation failed\n");
 		return;
 	}
 
-	int32_t bufferWidth;
-	int32_t bufferHeight;
-	glfwGetFramebufferSize(_glfw_window, &bufferWidth, &bufferHeight);
+	int32_t buffer_width;
+	int32_t buffer_height;
+	glfwGetFramebufferSize(_glfw_window, &buffer_width, &buffer_height);
 	glfwMakeContextCurrent(_glfw_window);
 
 	glewExperimental = GL_TRUE;
@@ -119,7 +120,7 @@ void PengEngine::start_opengl()
 		return;
 	}
 
-	glViewport(0, 0, bufferWidth, bufferHeight);
+	glViewport(0, 0, buffer_width, buffer_height);
 }
 
 void PengEngine::shutdown()
@@ -174,7 +175,7 @@ void PengEngine::tick_opengl()
 
 void PengEngine::finalize_frame()
 {
-	timing::clock::time_point sync_point = 
+	const timing::clock::time_point sync_point = 
 		_last_draw_time 
 		+ std::chrono::duration_cast<timing::clock::duration>(timing::duration_ms(_target_frametime));
 
