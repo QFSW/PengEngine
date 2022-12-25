@@ -14,6 +14,10 @@ namespace math
 		Vector2();
 		Vector2(T x, T y);
 
+		template <number U>
+		requires std::convertible_to<U, T>
+		Vector2(const Vector2<U>& other);
+
 #pragma region Swizzling
 
 		[[nodiscard]] Vector2 xx() const noexcept { return Vector2<T>(x, x); }
@@ -25,8 +29,17 @@ namespace math
 
 		Vector2& operator+=(const Vector2& other);
 		Vector2& operator-=(const Vector2& other);
-		Vector2 operator+(const Vector2& other);
-		Vector2 operator-(const Vector2& other);
+		Vector2& operator*=(const Vector2& other);
+		Vector2& operator/=(const Vector2& other);
+		Vector2 operator+(const Vector2& other) const;
+		Vector2 operator-(const Vector2& other) const;
+		Vector2 operator*(const Vector2& other) const;
+		Vector2 operator/(const Vector2& other) const;
+
+		Vector2& operator*=(const T& scalar);
+		Vector2& operator/=(const T& scalar);
+		Vector2 operator*(const T& scalar) const;
+		Vector2 operator/(const T& scalar) const;
 	};
 
 	using Vector2f = Vector2<float>;
@@ -44,6 +57,14 @@ namespace math
 	Vector2<T>::Vector2(T x, T y)
 		: x(x)
 		, y(y)
+	{ }
+
+	template <number T>
+	template <number U>
+	requires std::convertible_to<U, T>
+	Vector2<T>::Vector2(const Vector2<U>& other)
+		: x(other.x)
+		, y(other.y)
 	{ }
 
 	template <number T>
@@ -65,16 +86,80 @@ namespace math
 	}
 
 	template <number T>
-	Vector2<T> Vector2<T>::operator+(const Vector2& other)
+	Vector2<T>& Vector2<T>::operator*=(const Vector2& other)
+	{
+		x *= other.x;
+		y *= other.y;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector2<T>& Vector2<T>::operator/=(const Vector2& other)
+	{
+		x /= other.x;
+		y /= other.y;
+
+		return* this;
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::operator+(const Vector2& other) const
 	{
 		Vector2 result = *this;
 		return result += other;
 	}
 
 	template <number T>
-	Vector2<T> Vector2<T>::operator-(const Vector2& other)
+	Vector2<T> Vector2<T>::operator-(const Vector2& other) const
 	{
 		Vector2 result = *this;
 		return result -= other;
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::operator*(const Vector2& other) const
+	{
+		Vector2 result = *this;
+		return result *= other;
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::operator/(const Vector2& other) const
+	{
+		Vector2 result = *this;
+		return result /= other;
+	}
+
+	template <number T>
+	Vector2<T>& Vector2<T>::operator*=(const T& scalar)
+	{
+		x *= scalar;
+		y *= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector2<T>& Vector2<T>::operator/=(const T& scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::operator*(const T& scalar) const
+	{
+		Vector2 result = *this;
+		return result *= scalar;
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::operator/(const T& scalar) const
+	{
+		Vector2 result = *this;
+		return result /= scalar;
 	}
 }

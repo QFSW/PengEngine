@@ -31,7 +31,12 @@ namespace peng
 			return shared_ptr<T>(_ptr.lock());
 		}
 
-		[[nodiscard]] T* operator->() const noexcept 
+		[[nodiscard]] T* operator->() noexcept
+		{
+			return lock().get();
+		}
+
+		[[nodiscard]] const T* operator->() const noexcept 
 		{
 			return lock().get();
 		}

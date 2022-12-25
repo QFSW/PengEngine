@@ -10,6 +10,7 @@
 PengEngine::PengEngine()
 	: _executing(false)
 	, _target_frametime(1000 / 60.0)
+	, _resolution(800, 600)
 	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
 	, _last_render_frametime(0)
@@ -60,6 +61,11 @@ void PengEngine::set_target_frametime(double frametime_ms) noexcept
 	_target_frametime = frametime_ms;
 }
 
+void PengEngine::set_resolution(const math::Vector2u& resolution) noexcept
+{
+	_resolution = resolution;
+}
+
 bool PengEngine::shutting_down() const
 {
 	if (!_executing)
@@ -75,6 +81,11 @@ bool PengEngine::shutting_down() const
 	return false;
 }
 
+const math::Vector2u& PengEngine::resolution() const noexcept
+{
+	return _resolution;
+}
+
 EntityManager& PengEngine::entity_manager() noexcept
 {
 	return _entity_manager;
@@ -82,9 +93,6 @@ EntityManager& PengEngine::entity_manager() noexcept
 
 void PengEngine::start_opengl()
 {
-	constexpr GLint width = 800;
-	constexpr GLint height = 600;
-
 	if (!glfwInit())
 	{
 		printf("GLFW initialization failed\n");
@@ -101,7 +109,7 @@ void PengEngine::start_opengl()
     glfwWindowHint(GLFW_GREEN_BITS, 8);
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
 
-	_glfw_window = glfwCreateWindow(width, height, "PengEngine", nullptr, nullptr);
+	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", nullptr, nullptr);
 	if (!_glfw_window)
 	{
 		printf("GLFW window creation failed\n");

@@ -15,6 +15,10 @@ namespace math
 		Vector3();
 		Vector3(T x, T y, T z);
 
+		template <number U>
+		requires std::convertible_to<U, T>
+		Vector3(const Vector3<U>& other);
+
 #pragma region Swizzling
 
 		Vector3(T x, const Vector2<T>& yz) : x(x), y(yz.x), z(yz.y) { }
@@ -57,8 +61,17 @@ namespace math
 
 		Vector3& operator+=(const Vector3& other);
 		Vector3& operator-=(const Vector3& other);
-		Vector3 operator+(const Vector3& other);
-		Vector3 operator-(const Vector3& other);
+		Vector3& operator*=(const Vector3& other);
+		Vector3& operator/=(const Vector3& other);
+		Vector3 operator+(const Vector3& other) const;
+		Vector3 operator-(const Vector3& other) const;
+		Vector3 operator*(const Vector3& other) const;
+		Vector3 operator/(const Vector3& other) const;
+
+		Vector3& operator*=(const T& scalar);
+		Vector3& operator/=(const T& scalar);
+		Vector3 operator*(const T& scalar) const;
+		Vector3 operator/(const T& scalar) const;
 	};
 
 	using Vector3f = Vector3<float>;
@@ -78,6 +91,15 @@ namespace math
 		: x(x)
 		, y(y)
 		, z(z)
+	{ }
+
+	template <number T>
+	template <number U>
+	requires std::convertible_to<U, T>
+	Vector3<T>::Vector3(const Vector3<U>& other)
+		: x(other.x)
+		, y(other.y)
+		, z(other.z)
 	{ }
 
 	template <number T>
@@ -101,16 +123,84 @@ namespace math
 	}
 
 	template <number T>
-	Vector3<T> Vector3<T>::operator+(const Vector3& other)
+	Vector3<T>& Vector3<T>::operator*=(const Vector3& other)
+	{
+		x *= other.x;
+		y *= other.y;
+		z *= other.z;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector3<T>& Vector3<T>::operator/=(const Vector3& other)
+	{
+		x /= other.x;
+		y /= other.y;
+		z /= other.z;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator+(const Vector3& other) const
 	{
 		Vector3 result = *this;
 		return result += other;
 	}
 
 	template <number T>
-	Vector3<T> Vector3<T>::operator-(const Vector3& other)
+	Vector3<T> Vector3<T>::operator-(const Vector3& other) const
 	{
 		Vector3 result = *this;
 		return result -= other;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator*(const Vector3& other) const
+	{
+		Vector3 result = *this;
+		return result *= other;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator/(const Vector3& other) const
+	{
+		Vector3 result = *this;
+		return result /= other;
+	}
+
+	template <number T>
+	Vector3<T>& Vector3<T>::operator*=(const T& scalar)
+	{
+		x *= scalar;
+		y *= scalar;
+		z *= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector3<T>& Vector3<T>::operator/=(const T& scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		z /= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator*(const T& scalar) const
+	{
+		Vector3 result = *this;
+		return result *= scalar;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator/(const T& scalar) const
+	{
+		Vector3 result = *this;
+		return result /= scalar;
 	}
 }

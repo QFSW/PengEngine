@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <GL/glew.h>
-
 #include <core/entity.h>
 #include <memory/shared_ref.h>
 #include <rendering/material.h>
@@ -14,8 +11,8 @@ public:
 	BlobEntity(
 		const peng::shared_ref<rendering::Mesh>& mesh,
 		const peng::shared_ref<rendering::Material>& material,
-		const math::Vector2f& pos,
-		const math::Vector2f& scale
+		const math::Vector2f& pos_px,
+		float radius_px
 	);
 
 	virtual void tick(double delta_time) override;

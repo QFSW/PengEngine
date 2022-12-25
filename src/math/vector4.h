@@ -16,6 +16,10 @@ namespace math
 		Vector4();
 		Vector4(T x, T y, T z, T w);
 
+		template <number U>
+		requires std::convertible_to<U, T>
+		Vector4(const Vector4<U>& other);
+
 #pragma region Swizzling
 
 		Vector4(T x, const Vector3<T>& yzw) : x(x), y(yzw.x), z(yzw.y), w(yzw.z) { }
@@ -321,8 +325,17 @@ namespace math
 
 		Vector4& operator+=(const Vector4& other);
 		Vector4& operator-=(const Vector4& other);
-		Vector4 operator+(const Vector4& other);
-		Vector4 operator-(const Vector4& other);
+		Vector4& operator*=(const Vector4& other);
+		Vector4& operator/=(const Vector4& other);
+		Vector4 operator+(const Vector4& other) const;
+		Vector4 operator-(const Vector4& other) const;
+		Vector4 operator*(const Vector4& other) const;
+		Vector4 operator/(const Vector4& other) const;
+
+		Vector4& operator*=(const T& scalar);
+		Vector4& operator/=(const T& scalar);
+		Vector4 operator*(const T& scalar) const;
+		Vector4 operator/(const T& scalar) const;
 	};
 
 	using Vector4f = Vector4<float>;
@@ -344,6 +357,16 @@ namespace math
 		, y(y)
 		, z(z)
 		, w(w)
+	{ }
+
+	template <number T>
+	template <number U>
+	requires std::convertible_to<U, T>
+	Vector4<T>::Vector4(const Vector4<U>& other)
+		: x(other.x)
+		, y(other.y)
+		, z(other.z)
+		, w(other.w)
 	{ }
 
 	template <number T>
@@ -369,16 +392,88 @@ namespace math
 	}
 
 	template <number T>
-	Vector4<T> Vector4<T>::operator+(const Vector4& other)
+	Vector4<T>& Vector4<T>::operator*=(const Vector4& other)
+	{
+		x *= other.x;
+		y *= other.y;
+		z *= other.z;
+		w *= other.w;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector4<T>& Vector4<T>::operator/=(const Vector4& other)
+	{
+		x /= other.x;
+		y /= other.y;
+		z /= other.z;
+		w /= other.w;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator+(const Vector4& other) const
 	{
 		Vector4 result = *this;
 		return result += other;
 	}
 
 	template <number T>
-	Vector4<T> Vector4<T>::operator-(const Vector4& other)
+	Vector4<T> Vector4<T>::operator-(const Vector4& other) const
 	{
 		Vector4 result = *this;
 		return result -= other;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator*(const Vector4& other) const
+	{
+		Vector4 result = *this;
+		return result *= other;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator/(const Vector4& other) const
+	{
+		Vector4 result = *this;
+		return result /= other;
+	}
+
+	template <number T>
+	Vector4<T>& Vector4<T>::operator*=(const T& scalar)
+	{
+		x *= scalar;
+		y *= scalar;
+		z *= scalar;
+		w *= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector4<T>& Vector4<T>::operator/=(const T& scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		z /= scalar;
+		w /= scalar;
+
+		return *this;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator*(const T& scalar) const
+	{
+		Vector4 result = *this;
+		return result *= scalar;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator/(const T& scalar) const
+	{
+		Vector4 result = *this;
+		return result /= scalar;
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math/vector2.h>
 #include <threading/worker_thread.h>
 #include <utils/timing.h>
 #include <utils/event.h>
@@ -19,8 +20,10 @@ public:
 
 	void set_target_fps(double fps) noexcept;
 	void set_target_frametime(double frametime_ms) noexcept;
+	void set_resolution(const math::Vector2u& resolution) noexcept;
 
 	bool shutting_down() const;
+	const math::Vector2u& resolution() const noexcept;
 
 	EntityManager& entity_manager() noexcept;
 
@@ -46,6 +49,8 @@ private:
 
 	bool _executing;
 	double _target_frametime;
+
+	math::Vector2u _resolution;
 
 	double _last_frametime;
 	double _last_main_frametime;
