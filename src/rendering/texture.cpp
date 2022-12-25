@@ -28,7 +28,26 @@ Texture::Texture(const std::string& texture_path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+	GLenum texture_format;
+	switch (_num_channels)
+	{
+		case 3:
+		{
+			texture_format = GL_RGB;
+			break;
+		}
+		case 4:
+	    {
+			texture_format = GL_RGBA;
+			break;
+		}
+		default:
+		{
+			throw std::runtime_error(strtools::catf("Cannot load texture with %d color channels", _num_channels));
+		}
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(texture_data);
