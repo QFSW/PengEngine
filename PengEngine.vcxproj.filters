@@ -57,6 +57,9 @@
     <ClCompile Include="src\utils\io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -159,6 +162,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\vector4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

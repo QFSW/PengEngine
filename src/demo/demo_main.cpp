@@ -50,9 +50,10 @@ namespace demo
             std::cout << "PengEngine started!" << std::endl;
 
             const auto shader = peng::make_shared<Shader>("shaders/demo/blob_v.glsl", "shaders/demo/blob_f.glsl");
+            const auto material = peng::make_shared<Material>(shader);
             const auto mesh = peng::make_shared<Mesh>(vertices, indices, colors);
 
-            PengEngine::get().entity_manager().create_entity<BlobEntity>(shader, mesh, 100, 100, 10);
+            PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material, 100, 100, 10);
         });
 
         PengEngine::get().set_target_fps(60);

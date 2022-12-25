@@ -195,6 +195,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClCompile Include="src\demo\blob_entity.cpp" />
     <ClCompile Include="src\demo\demo_main.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\threading\job.cpp" />
@@ -220,10 +221,13 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\math\number.h" />
     <ClInclude Include="src\math\vector3.h" />
+    <ClInclude Include="src\math\vector4.h" />
     <ClInclude Include="src\memory\shared_ptr.h" />
     <ClInclude Include="src\memory\shared_ref.h" />
     <ClInclude Include="src\memory\weak_ptr.h" />
+    <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
     <ClInclude Include="src\rendering\shader.h" />
     <ClInclude Include="src\threading\job.h" />
