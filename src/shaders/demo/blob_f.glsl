@@ -12,13 +12,13 @@ void main()
 	vec2 pos = tex_coord * 2 - vec2(1, 1);
 	float mag_sqr = pos.x * pos.x + pos.y * pos.y;
 
-	if (mag_sqr < 1 - feather / 2)
+	if (mag_sqr < 1 - feather)
 	{
 		frag_color = vertex_color;
 	}
-	else if (mag_sqr < 1 + feather / 2)
+	else if (mag_sqr < 1)
 	{
-		frag_color = mix(vertex_color, vec4(0, 0, 0, 0), (mag_sqr - (1 - feather / 2)) / feather);
+		frag_color = mix(vertex_color, vec4(0, 0, 0, 0), (mag_sqr - (1 - feather)) / feather);
 	}
 	else
 	{

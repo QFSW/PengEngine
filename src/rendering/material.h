@@ -6,7 +6,7 @@
 
 #include <common/common.h>
 #include <memory/shared_ref.h>
-#include <math/vector4.h>
+#include <math/matrix4x4.h>
 
 #include "shader.h"
 
@@ -19,7 +19,8 @@ namespace rendering
 			float,
 			math::Vector2f,
 			math::Vector3f,
-			math::Vector4f
+			math::Vector4f,
+			math::Matrix4x4f
 		>;
 
 		explicit Material(const peng::shared_ref<Shader>& shader);
@@ -32,9 +33,10 @@ namespace rendering
 
 	private:
 		void set_uniform(GLint location, float value) const;
-		void set_uniform(GLint location, math::Vector2f value) const;
-		void set_uniform(GLint location, math::Vector3f value) const;
-		void set_uniform(GLint location, math::Vector4f value) const;
+		void set_uniform(GLint location, const math::Vector2f& value) const;
+		void set_uniform(GLint location, const math::Vector3f& value) const;
+		void set_uniform(GLint location, const math::Vector4f& value) const;
+		void set_uniform(GLint location, const math::Matrix4x4f& value) const;
 
 		peng::shared_ref<Shader> _shader;
 
