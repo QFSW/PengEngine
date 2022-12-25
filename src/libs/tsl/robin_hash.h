@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 #ifndef TSL_ROBIN_HASH_H
-#define TSL_ROBIN_HASH_H 
-#pragma warning(disable: 4127 26495)
+#define TSL_ROBIN_HASH_H
 
 #include <algorithm>
 #include <cassert>

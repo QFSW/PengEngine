@@ -173,6 +173,9 @@
     <ClInclude Include="src\math\number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />

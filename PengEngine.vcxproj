@@ -222,6 +222,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
     <ClInclude Include="src\math\number.h" />
+    <ClInclude Include="src\math\vector2.h" />
     <ClInclude Include="src\math\vector3.h" />
     <ClInclude Include="src\math\vector4.h" />
     <ClInclude Include="src\memory\shared_ptr.h" />

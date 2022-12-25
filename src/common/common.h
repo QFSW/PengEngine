@@ -1,10 +1,12 @@
 #pragma once
 
+#pragma warning( push, 0)
 #include <libs/tsl/robin_map.h>
 #include <libs/tsl/robin_set.h>
 #include <libs/moodycamel/concurrentqueue.h>
 #include <libs/moodycamel/blockingconcurrentqueue.h>
 #include <libs/moodycamel/readerwriterqueue.h>
+#pragma warning( pop )
 
 namespace common
 {
@@ -25,6 +27,4 @@ namespace common
 
     template <typename T>
     using blocking_spsc_queue = moodycamel::BlockingReaderWriterQueue<T>;
-
-
 }

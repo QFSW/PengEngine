@@ -23,7 +23,6 @@
  */
 #ifndef TSL_ROBIN_SET_H
 #define TSL_ROBIN_SET_H
-#pragma warning(disable: 4127)
 
 #include <cstddef>
 #include <functional>

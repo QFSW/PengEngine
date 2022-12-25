@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 #ifndef TSL_ROBIN_MAP_H
-#define TSL_ROBIN_MAP_H 
-#pragma warning(disable: 4127)
+#define TSL_ROBIN_MAP_H
 
 #include <cstddef>
 #include <functional>

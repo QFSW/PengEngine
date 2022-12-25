@@ -6,7 +6,6 @@
 
 #include <common/common.h>
 #include <memory/shared_ref.h>
-#include <math/vector3.h>
 #include <math/vector4.h>
 
 #include "shader.h"
@@ -18,6 +17,7 @@ namespace rendering
 	public:
 		using Parameter = std::variant<
 			float,
+			math::Vector2f,
 			math::Vector3f,
 			math::Vector4f
 		>;
@@ -32,6 +32,7 @@ namespace rendering
 
 	private:
 		void set_uniform(GLint location, float value) const;
+		void set_uniform(GLint location, math::Vector2f value) const;
 		void set_uniform(GLint location, math::Vector3f value) const;
 		void set_uniform(GLint location, math::Vector4f value) const;
 

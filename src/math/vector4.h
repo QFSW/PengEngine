@@ -1,6 +1,5 @@
 #pragma once
 
-#include "number.h"
 #include "vector3.h"
 
 namespace math
@@ -18,6 +17,11 @@ namespace math
 		Vector4(T x, T y, T z, T w);
 
 #pragma region Swizzling
+
+		Vector2<T> xx() const noexcept { return Vector2<T>(x, x); }
+		Vector2<T> xy() const noexcept { return Vector2<T>(x, y); }
+		Vector2<T> yx() const noexcept { return Vector2<T>(y, x); }
+		Vector2<T> yy() const noexcept { return Vector2<T>(y, y); }
 
 		Vector3<T> xxx() const noexcept { return Vector3<T>(x, x, x); }
 		Vector3<T> xxy() const noexcept { return Vector3<T>(x, x, y); }

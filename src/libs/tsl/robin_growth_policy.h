@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 #ifndef TSL_ROBIN_GROWTH_POLICY_H
-#define TSL_ROBIN_GROWTH_POLICY_H 
-#pragma warning(disable: 4127)
-#pragma warning(disable: 4100)
+#define TSL_ROBIN_GROWTH_POLICY_H
 
 #include <algorithm>
 #include <array>

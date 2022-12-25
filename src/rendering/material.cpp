@@ -48,12 +48,17 @@ void Material::set_uniform(GLint location, float value) const
 	glUniform1f(location, value);
 }
 
-void Material::set_uniform(GLint location, math::Vector3f value) const
+void Material::set_uniform(GLint location, Vector2f value) const
+{
+	glUniform2f(location, value.x, value.y);
+}
+
+void Material::set_uniform(GLint location, Vector3f value) const
 {
 	glUniform3f(location, value.x, value.y, value.z);
 }
 
-void Material::set_uniform(GLint location, math::Vector4f value) const
+void Material::set_uniform(GLint location, Vector4f value) const
 {
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
