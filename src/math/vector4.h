@@ -323,8 +323,8 @@ namespace math
 
 #pragma endregion
 
-		T min() const noexcept;
-		T max() const noexcept;
+		[[nodiscard]] T min() const noexcept;
+		[[nodiscard]] T max() const noexcept;
 
 		Vector4& operator+=(const Vector4& other);
 		Vector4& operator-=(const Vector4& other);

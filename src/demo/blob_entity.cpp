@@ -13,11 +13,14 @@ BlobEntity::BlobEntity(
 	: Entity(true)
 	, _mesh(mesh)
 	, _material(material)
+	, _position(pos_px, 0)
+	, _scale(radius_px, radius_px, radius_px)
 {
 	const Vector2f resolution = PengEngine::get().resolution();
 
-	_position = Vector3f(pos_px / (resolution / 2.0f), 0.5f);
-	_scale = Vector3f(radius_px / resolution.x, radius_px / resolution.y, radius_px / resolution.x);
+	_view_matrix =
+		Matrix4x4f::identity()
+		.scaled(Vector3f(1 / resolution.x, 1 / resolution.y, 1 / resolution.max()));
 }
 
 void BlobEntity::tick(double delta_time)
@@ -32,7 +35,7 @@ void BlobEntity::tick(double delta_time)
 		.scaled(_scale)
 		.translated(_position);
 
-	_material->set_parameter("transform", transform);
+	_material->set_parameter("transform",  _view_matrix * transform);
 
 	_material->use();
 	_mesh->render();
