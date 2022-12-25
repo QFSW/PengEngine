@@ -142,7 +142,7 @@ namespace math
 			const Matrix4x4 m_y({
 				cos(r.y), 0, -sin(r.y), 0,
 				0,        1, 0,         0,
-				sin(r.x), 0, cos(r.x),  0,
+				sin(r.y), 0, cos(r.y),  0,
 				0,        0, 0,         1
 			});
 
