@@ -336,6 +336,9 @@ namespace math
 		Vector4& operator/=(const T& scalar);
 		Vector4 operator*(const T& scalar) const;
 		Vector4 operator/(const T& scalar) const;
+
+		static consteval Vector4 zero() { return Vector4(0, 0, 0, 0); }
+		static consteval Vector4 one() { return Vector4(1, 1, 1, 1); }
 	};
 
 	using Vector4f = Vector4<float>;
@@ -363,10 +366,10 @@ namespace math
 	template <number U>
 	requires std::convertible_to<U, T>
 	Vector4<T>::Vector4(const Vector4<U>& other)
-		: x(other.x)
-		, y(other.y)
-		, z(other.z)
-		, w(other.w)
+		: x(static_cast<T>(other.x))
+		, y(static_cast<T>(other.y))
+		, z(static_cast<T>(other.z))
+		, w(static_cast<T>(other.w))
 	{ }
 
 	template <number T>

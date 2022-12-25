@@ -72,6 +72,9 @@ namespace math
 		Vector3& operator/=(const T& scalar);
 		Vector3 operator*(const T& scalar) const;
 		Vector3 operator/(const T& scalar) const;
+
+		static consteval Vector3 zero() { return Vector3(0, 0, 0); }
+		static consteval Vector3 one() { return Vector3(1, 1, 1); }
 	};
 
 	using Vector3f = Vector3<float>;
@@ -97,9 +100,9 @@ namespace math
 	template <number U>
 	requires std::convertible_to<U, T>
 	Vector3<T>::Vector3(const Vector3<U>& other)
-		: x(other.x)
-		, y(other.y)
-		, z(other.z)
+		: x(static_cast<T>(other.x))
+		, y(static_cast<T>(other.y))
+		, z(static_cast<T>(other.z))
 	{ }
 
 	template <number T>

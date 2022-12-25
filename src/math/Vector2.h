@@ -40,6 +40,9 @@ namespace math
 		Vector2& operator/=(const T& scalar);
 		Vector2 operator*(const T& scalar) const;
 		Vector2 operator/(const T& scalar) const;
+
+		static consteval Vector2 zero() { return Vector2(0, 0); }
+		static consteval Vector2 one() { return Vector2(1, 1); }
 	};
 
 	using Vector2f = Vector2<float>;
@@ -63,8 +66,8 @@ namespace math
 	template <number U>
 	requires std::convertible_to<U, T>
 	Vector2<T>::Vector2(const Vector2<U>& other)
-		: x(other.x)
-		, y(other.y)
+		: x(static_cast<T>(other.x))
+		, y(static_cast<T>(other.y))
 	{ }
 
 	template <number T>
