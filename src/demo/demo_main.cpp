@@ -51,7 +51,11 @@ namespace demo
         PengEngine::get().on_engine_initialized().subscribe([&] {
             std::cout << "PengEngine started!" << std::endl;
 
-            const auto shader = peng::make_shared<Shader>("shaders/demo/blob_v.glsl", "shaders/demo/blob_f.glsl");
+            const auto shader = peng::make_shared<Shader>(
+				"resources/shaders/demo/blob_v.glsl",
+				"resources/shaders/demo/blob_f.glsl"
+            );
+
             const auto material = peng::make_shared<Material>(shader);
             const auto mesh = peng::make_shared<Mesh>(vertices, indices, std::vector<Vector3f>(), tex_coords);
 

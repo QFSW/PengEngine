@@ -10,6 +10,8 @@ namespace rendering
 	{
 	public:
 		Shader(const std::string& vert_shader_path, const std::string& frag_shader_path);
+		Shader(const Shader&) = delete;
+		Shader(Shader&&) = delete;
 		~Shader();
 
 		void use() const;

@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma warning( push, 0)
+#pragma warning( push, 0 )
 #include <libs/tsl/robin_map.h>
 #include <libs/tsl/robin_set.h>
 #include <libs/moodycamel/concurrentqueue.h>

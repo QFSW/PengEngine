@@ -17,6 +17,8 @@ namespace rendering
 			const std::vector<math::Vector2f>& tex_coords
 		);
 
+		Mesh(const Mesh&) = delete;
+		Mesh(Mesh&&) = delete;
 		~Mesh();
 
 		void render() const;

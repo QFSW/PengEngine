@@ -154,7 +154,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d $(SolutionDir)src\libs\glew\bin\Release\x64\glew32.dll $(OutDir)
-xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
+xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
       <Message>Copying glew32.dll and shaders</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -184,7 +184,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d $(SolutionDir)src\libs\glew\bin\Release\x64\glew32.dll $(OutDir)
-xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
+xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
       <Message>Copying glew32.dll and shaders</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -198,6 +198,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
+    <ClCompile Include="src\rendering\texture.cpp" />
     <ClCompile Include="src\threading\job.cpp" />
     <ClCompile Include="src\threading\thread_pool.cpp" />
     <ClCompile Include="src\threading\worker_thread.cpp" />
@@ -217,6 +218,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClInclude Include="src\libs\moodycamel\concurrentqueue.h" />
     <ClInclude Include="src\libs\moodycamel\lightweightsemaphore.h" />
     <ClInclude Include="src\libs\moodycamel\readerwriterqueue.h" />
+    <ClInclude Include="src\libs\stb\stb_image.h" />
     <ClInclude Include="src\libs\tsl\robin_growth_policy.h" />
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
@@ -232,6 +234,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
     <ClInclude Include="src\rendering\shader.h" />
+    <ClInclude Include="src\rendering\texture.h" />
     <ClInclude Include="src\threading\job.h" />
     <ClInclude Include="src\threading\thread_pool.h" />
     <ClInclude Include="src\threading\worker_thread.h" />
@@ -248,7 +251,7 @@ xcopy /y /d /s $(SolutionDir)src\shaders $(OutDir)\shaders\</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
-    <UpToDateCheckInput Include="src\**\*.glsl" />
+    <UpToDateCheckInput Include="resources\**\*" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
