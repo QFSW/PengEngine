@@ -23,6 +23,7 @@ namespace math
 		[[nodiscard]] const T& get(uint8_t row, uint8_t col) const;
 
 		[[nodiscard]] Matrix4x4 transposed() const noexcept;
+		[[nodiscard]] Matrix4x4 rotated(const Vector3<T>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
 
@@ -106,6 +107,61 @@ namespace math
 		}
 
 		return result;
+	}
+
+	template <number T>
+	Matrix4x4<T> Matrix4x4<T>::rotated(const Vector3<T>& rotation) const noexcept
+	{
+		auto sin = [](T x) -> T
+		{
+			return static_cast<T>(std::sin(x));
+		};
+
+		auto cos = [](T x) -> T
+		{
+			return static_cast<T>(std::cos(x));
+		};
+
+		const Vector3<T>& r = rotation;
+		Matrix4x4 m = identity();
+
+		if (rotation.x != 0)
+		{
+			const Matrix4x4 m_x({
+				1,   0,		    0,		  0,
+				0,   cos(r.x),  sin(r.x), 0,
+				0,   -sin(r.x), cos(r.x), 0,
+				0,   0,		    0,		  1
+			});
+
+			m *= m_x;
+		}
+
+		if (rotation.y != 0)
+		{
+			const Matrix4x4 m_y({
+				cos(r.y), 0, -sin(r.y), 0,
+				0,        1, 0,         0,
+				sin(r.x), 0, cos(r.x),  0,
+				0,        0, 0,         1
+			});
+
+			m *= m_y;
+		}
+
+		if (rotation.z != 0)
+		{
+			const Matrix4x4 m_z({
+				cos(r.z),  sin(r.z), 0, 0,
+				-sin(r.z), cos(r.z), 0, 0,
+				0,         0,        1, 0,
+				0,         0,		 0,	1
+			});
+
+			m *= m_z;
+		}
+
+		return m * (*this);
 	}
 
 	template <number T>

@@ -14,6 +14,7 @@ using namespace rendering;
 
 Texture::Texture(const std::string& texture_path)
 {
+	stbi_set_flip_vertically_on_load(true);
 	stbi_uc* texture_data = stbi_load(texture_path.c_str(), &_resolution.x, &_resolution.y, &_num_channels, 0);
 	if (!texture_data)
 	{

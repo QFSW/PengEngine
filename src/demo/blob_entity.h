@@ -21,5 +21,7 @@ private:
 	peng::shared_ref<rendering::Mesh> _mesh;
 	peng::shared_ref<rendering::Material> _material;
 
-	math::Matrix4x4f _transform;
+	float _angle = 0;
+	math::Vector3f _position;
+	math::Vector3f _scale;
 };

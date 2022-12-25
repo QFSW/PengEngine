@@ -13,9 +13,9 @@ namespace demo
     std::vector<Vector3f> vertices =
     {
         { 1, 1, 0 },
-        { 1, -1, 0},
+        { 1, -1, 0 },
         { -1, -1, 0 },
-        { -1, 1, 0 }
+        { -1, 1, 0 },
     };
 
     std::vector<Vector3u> indices =
@@ -58,7 +58,7 @@ namespace demo
             );
 
             const auto texture = peng::make_shared<Texture>(
-                "resources/textures/demo/disc.png"
+                "resources/textures/demo/wall.jpg"
             );
 
         	auto material = peng::make_shared<Material>(shader);
@@ -75,7 +75,7 @@ namespace demo
                     const auto material_copy = peng::copy_shared(material);
                     const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f) * 100;
 
-                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material_copy, pos, 80.0f);
+                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material_copy, pos, 70.0f);
                 }
             }
         });
