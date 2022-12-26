@@ -14,6 +14,7 @@ class EntityManager
 public:
 	// ----------- Engine API -----------
 	void tick(double delta_time);
+	void shutdown();
 	// ----------------------------------
 
 	// ------------ User API ------------

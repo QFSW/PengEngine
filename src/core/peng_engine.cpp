@@ -139,6 +139,7 @@ void PengEngine::start_opengl()
 
 void PengEngine::shutdown()
 {
+	_entity_manager.shutdown();
 	shutdown_opengl();
 
 	Logger::get().log(LogVerbosity::Success, "PengEngine shutdown");

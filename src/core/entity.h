@@ -7,6 +7,8 @@ public:
 	virtual ~Entity() = default;
 
 	virtual void tick(double delta_time);
+	virtual void post_create() { }
+	virtual void pre_destroy() { }
 
 	[[nodiscard]] bool can_tick() const noexcept
 	{

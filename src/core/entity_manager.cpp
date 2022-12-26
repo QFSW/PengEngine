@@ -3,6 +3,8 @@
 #include <cassert>
 #include <utils/vectools.h>
 
+#include "logger.h"
+
 void EntityManager::tick(double delta_time)
 {
 	flush_pending_adds();
@@ -10,10 +12,25 @@ void EntityManager::tick(double delta_time)
 	flush_pending_kills();
 }
 
+void EntityManager::shutdown()
+{
+	Logger::get().log(LogVerbosity::Log, "Destroying all entities");
+
+	for (peng::shared_ref<Entity>& entity : _entities)
+	{
+		// TODO: add a destroy reason (explicit / shutdown)
+		entity->pre_destroy();
+	}
+
+	_pending_adds.clear();
+	_entities.clear();
+}
+
 void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
 {
 	assert(entity.valid());
 
+	// TODO: check if entity is already queued for destruction
 	_pending_kills.push_back(entity);
 }
 
@@ -58,23 +75,27 @@ void EntityManager::flush_pending_adds()
 		_entities.push_back(entity);
 	}
 
+	for (peng::shared_ref<Entity>& entity : _pending_adds)
+	{
+		entity->post_create();
+	}
+
 	_pending_adds.clear();
 }
 
 void EntityManager::flush_pending_kills()
 {
-	vectools::remove_all<peng::shared_ref<Entity>>(_entities, [this](const peng::shared_ref<Entity>& entity) {
-		for (const peng::weak_ptr<Entity>& pending_kill : _pending_kills)
-		{
-			if (pending_kill == entity)
-			{
-				assert(entity.use_count() == 1);
-				return true;
-			}
-		}
+	for (int32_t entity_index = _entities.size() - 1; entity_index >= 0; entity_index--)
+	{
+		peng::shared_ref<Entity>& entity = _entities[entity_index];
+		peng::weak_ptr<Entity> weak_entity = entity;
 
-		return false;
-	});
+		if (vectools::contains(_pending_kills, weak_entity))
+		{
+			entity->pre_destroy();
+			_entities.erase(_entities.begin() + entity_index);
+		}
+	}
 
 	_pending_kills.clear();
 }
