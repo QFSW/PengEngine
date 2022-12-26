@@ -50,8 +50,8 @@ namespace demo
 	    const int32_t handle = PengEngine::get().on_engine_initialized().subscribe([&]
 	    {
 		    const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
-			    "resources/shaders/demo/blob.vert",
-			    "resources/shaders/demo/blob.frag"
+			    "resources/shaders/core/projection.vert",
+			    "resources/shaders/core/unlit.frag"
 		    );
 
 		    const peng::shared_ref<const Texture> texture = peng::make_shared<Texture>("wall",
@@ -71,7 +71,7 @@ namespace demo
 				    PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos, 175.0f);
 			    }
 		    }
-	    }, "demo_start");
+	    });
 
         PengEngine::get().set_target_fps(60);
         PengEngine::get().start();

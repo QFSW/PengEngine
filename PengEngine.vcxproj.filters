@@ -212,5 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
+    <None Include="resources\shaders\core\projection.vert" />
+    <None Include="resources\shaders\core\unlit.frag" />
   </ItemGroup>
 </Project>

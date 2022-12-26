@@ -257,6 +257,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\utils\vectools.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\shaders\core\projection.vert" />
+    <None Include="resources\shaders\core\unlit.frag" />
     <None Include="src\libs\moodycamel\LICENSE.md" />
     <UpToDateCheckInput Include="resources\**\*" />
   </ItemGroup>
