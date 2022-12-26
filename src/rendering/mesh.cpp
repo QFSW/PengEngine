@@ -18,17 +18,16 @@ Mesh::Mesh(
 	: _name(name)
 	, _index_buffer(indices)
 	, _num_indices(static_cast<GLuint>(indices.size() * 3))
-	, _valid(true)
 {
 	if constexpr (Logger::enabled())
 	{
-		Logger::get().logf(LogVerbosity::Log, "Building mesh '%s'", _name.c_str());
+		Logger::get().logf(LogVerbosity::Log, "Building mesh '%s'", name.c_str());
 
 		if (!colors.empty() && colors.size() != vertices.size())
 		{
 			Logger::get().logf(LogVerbosity::Warning,
 				"Mesh '%s' has %d vertices but %d vertex colors",
-				_name.c_str(), vertices.size(), colors.size()
+				name.c_str(), vertices.size(), colors.size()
 			);
 		}
 
@@ -36,7 +35,7 @@ Mesh::Mesh(
 		{
 			Logger::get().logf(LogVerbosity::Warning,
 				"Mesh '%s' has %d vertices but %d texture coordinates",
-				_name.c_str(), vertices.size(), tex_coords.size()
+				name.c_str(), vertices.size(), tex_coords.size()
 			);
 		}
 	}
@@ -57,57 +56,6 @@ Mesh::Mesh(
 		}
 	}
 
-	allocate_opengl();
-}
-
-Mesh::Mesh(const Mesh& other)
-	: _name(other._name)
-	, _vertex_buffer(other._vertex_buffer)
-	, _index_buffer(other._index_buffer)
-	, _num_indices(other._num_indices)
-	, _valid(true)
-{
-	Logger::get().logf(LogVerbosity::Log, "Copying mesh '%s'", _name.c_str());
-	allocate_opengl();
-}
-
-Mesh::Mesh(Mesh&& other) noexcept
-	: _name(std::move(other._name))
-    , _vertex_buffer(std::move(other._vertex_buffer))
-    , _index_buffer(std::move(other._index_buffer))
-    , _num_indices(other._num_indices)
-    , _ebo(other._ebo)
-    , _vbo(other._vbo)
-    , _vao(other._vao)
-    , _valid(true)
-{
-	other._ebo = 0;
-	other._vbo = 0;
-	other._vao = 0;
-	other._valid = false;
-}
-
-Mesh::~Mesh()
-{
-	if (_valid)
-	{
-		Logger::get().logf(LogVerbosity::Log, "Destroying mesh '%s'", _name.c_str());
-
-		glDeleteBuffers(1, &_vbo);
-		glDeleteBuffers(1, &_ebo);
-		glDeleteVertexArrays(1, &_vao);
-	}
-}
-
-void Mesh::render() const
-{
-	glBindVertexArray(_vao);
-	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-}
-
-void Mesh::allocate_opengl()
-{
 	glGenBuffers(1, &_vbo);
 	glGenBuffers(1, &_ebo);
 	glGenVertexArrays(1, &_vao);
@@ -128,3 +76,20 @@ void Mesh::allocate_opengl()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
 	glEnableVertexAttribArray(2);
 }
+
+Mesh::~Mesh()
+{
+	Logger::get().logf(LogVerbosity::Log, "Destroying mesh '%s'", _name.c_str());
+
+	glDeleteBuffers(1, &_vbo);
+	glDeleteBuffers(1, &_ebo);
+	glDeleteVertexArrays(1, &_vao);
+}
+
+void Mesh::render() const
+{
+	glBindVertexArray(_vao);
+	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
