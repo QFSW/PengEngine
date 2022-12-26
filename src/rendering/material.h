@@ -31,7 +31,8 @@ namespace rendering
 		void set_parameter(const std::string& parameter_name, const Parameter& parameter);
 
 		void use();
-		peng::shared_ref<const Shader> shader() const;
+
+		[[nodiscard]] peng::shared_ref<const Shader> shader() const;
 
 	private:
 		void apply_parameter(GLint location, float value);
