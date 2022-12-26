@@ -8,7 +8,8 @@ enum class LogVerbosity
 {
 	Log,
 	Warning,
-	Error
+	Error,
+	Success
 };
 
 class Logger
@@ -24,7 +25,7 @@ public:
 	template <typename...Args>
 	void logf(LogVerbosity verbosity, const char* format, Args&&...args);
 
-	consteval static bool enabled() { return true; };
+	consteval static bool enabled() { return true; }
 
 private:
 	Logger() = default;
@@ -33,5 +34,8 @@ private:
 template <typename...Args>
 void Logger::logf(LogVerbosity verbosity, const char* format, Args&&... args)
 {
-	log(verbosity, strtools::catf(format, std::forward<Args>(args)...));
+	if constexpr (enabled())
+	{
+		log(verbosity, strtools::catf(format, std::forward<Args>(args)...));
+	}
 }

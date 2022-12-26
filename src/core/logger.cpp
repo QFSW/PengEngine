@@ -25,7 +25,13 @@ void Logger::log(LogVerbosity verbosity, const std::string& message)
 		}
 		case LogVerbosity::Error:
 		{
-			std::cout << "\033[1:31m";
+			std::cout << "\033[1;31m";
+			break;
+		}
+		case LogVerbosity::Success:
+		{
+			std::cout << "\033[1;32m";
+			break;
 		}
 	}
 
@@ -36,6 +42,7 @@ void Logger::log(LogVerbosity verbosity, const std::string& message)
 		case LogVerbosity::Log: break;
 		case LogVerbosity::Warning:
 		case LogVerbosity::Error:
+		case LogVerbosity::Success:
 		{
 			std::cout << "\033[0m";
 			break;

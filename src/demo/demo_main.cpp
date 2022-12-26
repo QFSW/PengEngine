@@ -78,11 +78,7 @@ namespace demo
 
     int demo_main()
     {
-        std::cout << "PengEngine starting..." << std::endl;
-
         PengEngine::get().on_engine_initialized().subscribe([&] {
-            std::cout << "PengEngine started!" << std::endl;
-
             const auto shader = peng::make_shared<Shader>(
 				"resources/shaders/demo/blob_v.glsl",
 				"resources/shaders/demo/blob_f.glsl"

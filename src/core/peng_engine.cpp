@@ -7,6 +7,8 @@
 
 #include <utils/timing.h>
 
+#include "logger.h"
+
 PengEngine::PengEngine()
 	: _executing(false)
 	, _target_frametime(1000 / 60.0)
@@ -29,8 +31,11 @@ PengEngine& PengEngine::get()
 void PengEngine::start()
 {
 	_executing = true;
+	Logger::get().log(LogVerbosity::Log, "PengEngine starting...");
+
 	start_opengl();
 
+	Logger::get().log(LogVerbosity::Success, "PengEngine started");
 	_on_engine_initialized();
 
 	while (!shutting_down())
@@ -43,11 +48,13 @@ void PengEngine::start()
 		});
 	}
 
+	Logger::get().log(LogVerbosity::Log, "PengEngine shutting down...");
 	shutdown();
 }
 
 void PengEngine::request_shutdown()
 {
+	Logger::get().log(LogVerbosity::Log, "PengEngine shutdown requested");
 	_executing = false;
 }
 
@@ -133,6 +140,8 @@ void PengEngine::start_opengl()
 void PengEngine::shutdown()
 {
 	shutdown_opengl();
+
+	Logger::get().log(LogVerbosity::Success, "PengEngine shutdown");
 }
 
 void PengEngine::shutdown_opengl()
