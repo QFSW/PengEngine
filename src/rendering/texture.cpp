@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+#include <core/logger.h>
 #include <utils/strtools.h>
 #include <common/common.h>
 
@@ -14,6 +15,7 @@ using namespace rendering;
 
 Texture::Texture(const std::string& texture_path)
 {
+	Logger::get().logf(LogVerbosity::Log, "Loading texture '%s'", texture_path.c_str());
 	stbi_set_flip_vertically_on_load(true);
 	stbi_uc* texture_data = stbi_load(texture_path.c_str(), &_resolution.x, &_resolution.y, &_num_channels, 0);
 	if (!texture_data)

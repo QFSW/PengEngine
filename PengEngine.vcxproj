@@ -189,6 +189,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\logger.cpp" />
     <ClCompile Include="src\core\peng_engine.cpp" />
     <ClCompile Include="src\core\entity.cpp" />
     <ClCompile Include="src\core\entity_manager.cpp" />
@@ -208,6 +209,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\common.h" />
+    <ClInclude Include="src\core\logger.h" />
     <ClInclude Include="src\core\peng_engine.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\entity_manager.h" />

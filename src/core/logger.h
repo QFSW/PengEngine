@@ -1,0 +1,35 @@
+#pragma once
+
+#include <string>
+
+#include <utils/strtools.h>
+
+enum class LogVerbosity
+{
+	Log,
+	Warning,
+	Error
+};
+
+class Logger
+{
+public:
+	static Logger& get();
+
+	Logger(const Logger&) = delete;
+	Logger(Logger&&) = delete;
+
+	void log(LogVerbosity verbosity, const std::string& message);
+
+	template <typename...Args>
+	void logf(LogVerbosity verbosity, const char* format, Args&&...args);
+
+private:
+	Logger() = default;
+};
+
+template <typename...Args>
+void Logger::logf(LogVerbosity verbosity, const char* format, Args&&... args)
+{
+	log(verbosity, strtools::catf(format, std::forward<Args>(args)...));
+}
