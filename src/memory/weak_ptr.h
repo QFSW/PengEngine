@@ -21,22 +21,41 @@ namespace peng
 		{ }
 
 		template <typename U>
-		requires std::derived_from<U, T>
+		requires std::convertible_to<U*, T*>
 		weak_ptr(const weak_ptr<U>& other)
 			: _ptr(std::static_pointer_cast<T>(other.lock().get_impl()))
 		{ }
+
+		template <typename U>
+		requires std::convertible_to<U*, T*>
+		weak_ptr& operator=(const shared_ref<U>& other)
+		{
+			_ptr = other.get_impl();
+			return *this;
+		}
+
+		template <typename U>
+		requires std::convertible_to<U*, T*>
+		weak_ptr& operator=(const shared_ptr<U>& other)
+		{
+			_ptr = other.get_impl();
+			return *this;
+		}
+
+		template <typename U>
+		requires std::convertible_to<U*, T*>
+		weak_ptr& operator=(const weak_ptr<U>& other)
+		{
+			_ptr = std::static_pointer_cast<T>(other.lock().get_impl());
+			return *this;
+		}
 
 		[[nodiscard]] shared_ptr<T> lock() const noexcept
 		{
 			return shared_ptr<T>(_ptr.lock());
 		}
 
-		[[nodiscard]] T* operator->() noexcept
-		{
-			return lock().get();
-		}
-
-		[[nodiscard]] const T* operator->() const noexcept 
+		[[nodiscard]] T* operator->() const noexcept
 		{
 			return lock().get();
 		}
@@ -58,35 +77,35 @@ namespace peng
 #pragma region Comparison Operators
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const weak_ptr<T>& a, const weak_ptr<U>& b)
 	{
 		return a.lock().get() == b.lock().get();
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const weak_ptr<T>& a, const shared_ptr<U>& b)
 	{
 		return a == weak_ptr<T>(b);
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const shared_ptr<T>& a, const weak_ptr<U>& b)
 	{
 		return weak_ptr<T>(a) == b;
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const weak_ptr<T>& a, const shared_ref<U>& b)
 	{
 		return a == weak_ptr<T>(b);
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const shared_ref<T>& a, const weak_ptr<U>& b)
 	{
 		return weak_ptr<T>(a) == b;

@@ -21,16 +21,29 @@ namespace peng
 		{ }
 
 		template <typename U>
-		requires std::derived_from<U, T> || std::same_as<T, U>
+		requires std::convertible_to<U*, T*>
 		shared_ptr(const shared_ptr<U>& other)
 			: _ptr(other.get_impl())
 		{ }
 
-		[[nodiscard]] T* get() noexcept { return _ptr.get(); }
-		[[nodiscard]] T* operator->() noexcept { return get(); }
+		template <typename U>
+		requires std::convertible_to<U*, T*>
+		shared_ptr& operator=(const shared_ref<U>& other)
+		{
+			_ptr = other.get_impl();
+			return *this;
+		}
 
-		[[nodiscard]] const T* get() const noexcept { return _ptr.get(); }
-		[[nodiscard]] const T* operator->() const noexcept { return get(); }
+		template <typename U>
+		requires std::convertible_to<U*, T*>
+		shared_ptr& operator=(const shared_ptr<U>& other)
+		{
+			_ptr = other.get_impl();
+			return *this;
+		}
+
+		[[nodiscard]] T* get() const noexcept { return _ptr.get(); }
+		[[nodiscard]] T* operator->() const noexcept { return get(); }
 		[[nodiscard]] size_t use_count() const noexcept { return _ptr.use_count(); }
 
 		[[nodiscard]] const std::shared_ptr<T>& get_impl() const noexcept
@@ -55,21 +68,21 @@ namespace peng
 #pragma region Comparison Operators
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const shared_ptr<T>& a, const shared_ptr<U>& b)
 	{
 		return a.get() == b.get();
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const shared_ref<T>& a, const shared_ptr<U>& b)
 	{
 		return a.get() == b.get();
 	}
 
 	template <typename T, typename U>
-	requires std::derived_from<T, U> || std::same_as<T, U>
+	requires std::equality_comparable_with<T*, U*>
 	[[nodiscard]] bool operator==(const shared_ptr<T>& a, const shared_ref<U>& b)
 	{
 		return a.get() == b.get();
