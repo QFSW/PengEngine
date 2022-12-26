@@ -95,7 +95,7 @@ namespace demo
         	auto material = peng::make_shared<Material>(shader);
             material->set_parameter("color_tex", texture);
 
-            const auto mesh = peng::make_shared<Mesh>(vertices, indices, colors, tex_coords);
+            const auto mesh = peng::make_shared<Mesh>("cube", vertices, indices, colors, tex_coords);
 
             const Vector2i blob_grid(5, 4);
 

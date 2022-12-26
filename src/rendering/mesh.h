@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include <GL/glew.h>
@@ -11,6 +12,7 @@ namespace rendering
 	{
 	public:
 		Mesh(
+			const std::string& name,
 			const std::vector<math::Vector3f>& vertices,
 			const std::vector<math::Vector3u>& indices,
 			const std::vector<math::Vector3f>& colors,
@@ -24,6 +26,7 @@ namespace rendering
 		void render() const;
 
 	private:
+		std::string _name;
 		std::vector<float> _vertex_buffer;
 		std::vector<math::Vector3u> _index_buffer;
 

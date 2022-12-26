@@ -3,19 +3,43 @@
 #include <utils/utils.h>
 #include <utils/strtools.h>
 #include <utils/vectools.h>
+#include <core/logger.h>
 
 using namespace rendering;
 using namespace math;
 
 Mesh::Mesh(
+	const std::string& name,
 	const std::vector<Vector3f>& vertices,
 	const std::vector<Vector3u>& indices,
 	const std::vector<Vector3f>& colors,
 	const std::vector<Vector2f>& tex_coords
 )
-	: _index_buffer(indices)
+	: _name(name)
+	, _index_buffer(indices)
 	, _num_indices(static_cast<GLuint>(indices.size() * 3))
 {
+	if constexpr (Logger::enabled())
+	{
+		Logger::get().logf(LogVerbosity::Log, "Building mesh '%s'", name.c_str());
+
+		if (!colors.empty() && colors.size() != vertices.size())
+		{
+			Logger::get().logf(LogVerbosity::Warning,
+				"Mesh '%s' has %d vertices but %d vertex colors",
+				name.c_str(), vertices.size(), colors.size()
+			);
+		}
+
+		if (!tex_coords.empty() && tex_coords.size() != vertices.size())
+		{
+			Logger::get().logf(LogVerbosity::Warning,
+				"Mesh '%s' has %d vertices but %d texture coordinates",
+				name.c_str(), vertices.size(), tex_coords.size()
+			);
+		}
+	}
+
 	_vertex_buffer.resize(8 * vertices.size());
 	for (size_t vert_index = 0; vert_index < vertices.size(); vert_index++)
 	{
@@ -64,6 +88,8 @@ Mesh::Mesh(
 
 Mesh::~Mesh()
 {
+	Logger::get().logf(LogVerbosity::Log, "Destroying mesh '%s'", _name.c_str());
+
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);
 	glDeleteVertexArrays(1, &_vao);

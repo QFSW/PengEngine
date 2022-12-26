@@ -24,6 +24,8 @@ public:
 	template <typename...Args>
 	void logf(LogVerbosity verbosity, const char* format, Args&&...args);
 
+	consteval static bool enabled() { return true; };
+
 private:
 	Logger() = default;
 };
