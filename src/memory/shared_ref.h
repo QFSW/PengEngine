@@ -51,10 +51,10 @@ namespace peng
 		return shared_ref<T>(std::make_shared<T>(std::forward<Args>(args)...));
 	}
 
-	template <std::copyable T>
-	[[nodiscard]] shared_ref<std::remove_const<T>> copy_shared(const shared_ref<T> ref)
+	template <std::copy_constructible T>
+	[[nodiscard]] shared_ref<std::remove_const_t<T>> copy_shared(const shared_ref<T> ref)
 	{
-		return make_shared<std::remove_const<T>>(*ref.get());
+		return make_shared<std::remove_const_t<T>>(*ref.get());
 	}
 
 #pragma region Comparison Operators
