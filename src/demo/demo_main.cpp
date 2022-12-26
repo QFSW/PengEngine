@@ -84,7 +84,7 @@ namespace demo
 				"resources/shaders/demo/blob_f.glsl"
             );
 
-            const auto texture = peng::make_shared<Texture> (
+            const auto texture = peng::make_shared<Texture> ("wall",
                 "resources/textures/demo/wall.jpg"
             );
 

@@ -7,10 +7,10 @@ using namespace rendering;
 
 Shader::Shader(const std::string& vert_shader_path, const std::string& frag_shader_path)
 {
-	Logger::get().logf(LogVerbosity::Log, "Loading shader '%s'", vert_shader_path.c_str());
+	Logger::get().logf(LogVerbosity::Log, "Loading vertex shader '%s'", vert_shader_path.c_str());
 	const std::string vert_shader_src = io::read_text_file(vert_shader_path);
 
-	Logger::get().logf(LogVerbosity::Log, "Loading shader '%s'", frag_shader_path.c_str());
+	Logger::get().logf(LogVerbosity::Log, "Loading fragment shader '%s'", frag_shader_path.c_str());
 	const std::string frag_shader_src = io::read_text_file(frag_shader_path);
 
 	const char* shader_src;

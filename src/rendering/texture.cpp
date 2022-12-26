@@ -13,9 +13,11 @@
 
 using namespace rendering;
 
-Texture::Texture(const std::string& texture_path)
+Texture::Texture(const std::string& name, const std::string& texture_path)
+	: _name(name)
 {
-	Logger::get().logf(LogVerbosity::Log, "Loading texture '%s'", texture_path.c_str());
+	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
+	Logger::get().logf(LogVerbosity::Log, "Loading texture data '%s'", texture_path.c_str());
 	stbi_set_flip_vertically_on_load(true);
 	stbi_uc* texture_data = stbi_load(texture_path.c_str(), &_resolution.x, &_resolution.y, &_num_channels, 0);
 	if (!texture_data)
@@ -58,6 +60,7 @@ Texture::Texture(const std::string& texture_path)
 
 Texture::~Texture()
 {
+	Logger::get().logf(LogVerbosity::Log, "Destroying texture '%s'", _name.c_str());
 	glDeleteTextures(1, &_tex);
 }
 
