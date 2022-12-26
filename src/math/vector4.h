@@ -33,36 +33,85 @@ namespace math
 
 		[[nodiscard]] Vector2<T> xx() const noexcept { return Vector2<T>(x, x); }
 		[[nodiscard]] Vector2<T> xy() const noexcept { return Vector2<T>(x, y); }
+		[[nodiscard]] Vector2<T> xz() const noexcept { return Vector2<T>(x, z); }
+		[[nodiscard]] Vector2<T> xw() const noexcept { return Vector2<T>(x, w); }
 		[[nodiscard]] Vector2<T> yx() const noexcept { return Vector2<T>(y, x); }
 		[[nodiscard]] Vector2<T> yy() const noexcept { return Vector2<T>(y, y); }
+		[[nodiscard]] Vector2<T> yz() const noexcept { return Vector2<T>(y, z); }
+		[[nodiscard]] Vector2<T> yw() const noexcept { return Vector2<T>(y, w); }
+		[[nodiscard]] Vector2<T> zx() const noexcept { return Vector2<T>(z, x); }
+		[[nodiscard]] Vector2<T> zy() const noexcept { return Vector2<T>(z, y); }
+		[[nodiscard]] Vector2<T> zz() const noexcept { return Vector2<T>(z, z); }
+		[[nodiscard]] Vector2<T> zw() const noexcept { return Vector2<T>(z, w); }
+		[[nodiscard]] Vector2<T> wx() const noexcept { return Vector2<T>(w, x); }
+		[[nodiscard]] Vector2<T> wy() const noexcept { return Vector2<T>(w, y); }
+		[[nodiscard]] Vector2<T> wz() const noexcept { return Vector2<T>(w, z); }
+		[[nodiscard]] Vector2<T> ww() const noexcept { return Vector2<T>(w, w); }
 
 		[[nodiscard]] Vector3<T> xxx() const noexcept { return Vector3<T>(x, x, x); }
 		[[nodiscard]] Vector3<T> xxy() const noexcept { return Vector3<T>(x, x, y); }
 		[[nodiscard]] Vector3<T> xxz() const noexcept { return Vector3<T>(x, x, z); }
+		[[nodiscard]] Vector3<T> xxw() const noexcept { return Vector3<T>(x, x, w); }
 		[[nodiscard]] Vector3<T> xyx() const noexcept { return Vector3<T>(x, y, x); }
 		[[nodiscard]] Vector3<T> xyy() const noexcept { return Vector3<T>(x, y, y); }
 		[[nodiscard]] Vector3<T> xyz() const noexcept { return Vector3<T>(x, y, z); }
+		[[nodiscard]] Vector3<T> xyw() const noexcept { return Vector3<T>(x, y, w); }
 		[[nodiscard]] Vector3<T> xzx() const noexcept { return Vector3<T>(x, z, x); }
 		[[nodiscard]] Vector3<T> xzy() const noexcept { return Vector3<T>(x, z, y); }
 		[[nodiscard]] Vector3<T> xzz() const noexcept { return Vector3<T>(x, z, z); }
+		[[nodiscard]] Vector3<T> xzw() const noexcept { return Vector3<T>(x, z, w); }
+		[[nodiscard]] Vector3<T> xwx() const noexcept { return Vector3<T>(x, w, x); }
+		[[nodiscard]] Vector3<T> xwy() const noexcept { return Vector3<T>(x, w, y); }
+		[[nodiscard]] Vector3<T> xwz() const noexcept { return Vector3<T>(x, w, z); }
+		[[nodiscard]] Vector3<T> xww() const noexcept { return Vector3<T>(x, w, w); }
 		[[nodiscard]] Vector3<T> yxx() const noexcept { return Vector3<T>(y, x, x); }
 		[[nodiscard]] Vector3<T> yxy() const noexcept { return Vector3<T>(y, x, y); }
 		[[nodiscard]] Vector3<T> yxz() const noexcept { return Vector3<T>(y, x, z); }
+		[[nodiscard]] Vector3<T> yxw() const noexcept { return Vector3<T>(y, x, w); }
 		[[nodiscard]] Vector3<T> yyx() const noexcept { return Vector3<T>(y, y, x); }
 		[[nodiscard]] Vector3<T> yyy() const noexcept { return Vector3<T>(y, y, y); }
 		[[nodiscard]] Vector3<T> yyz() const noexcept { return Vector3<T>(y, y, z); }
+		[[nodiscard]] Vector3<T> yyw() const noexcept { return Vector3<T>(y, y, w); }
 		[[nodiscard]] Vector3<T> yzx() const noexcept { return Vector3<T>(y, z, x); }
 		[[nodiscard]] Vector3<T> yzy() const noexcept { return Vector3<T>(y, z, y); }
 		[[nodiscard]] Vector3<T> yzz() const noexcept { return Vector3<T>(y, z, z); }
+		[[nodiscard]] Vector3<T> yzw() const noexcept { return Vector3<T>(y, z, w); }
+		[[nodiscard]] Vector3<T> ywx() const noexcept { return Vector3<T>(y, w, x); }
+		[[nodiscard]] Vector3<T> ywy() const noexcept { return Vector3<T>(y, w, y); }
+		[[nodiscard]] Vector3<T> ywz() const noexcept { return Vector3<T>(y, w, z); }
+		[[nodiscard]] Vector3<T> yww() const noexcept { return Vector3<T>(y, w, w); }
 		[[nodiscard]] Vector3<T> zxx() const noexcept { return Vector3<T>(z, x, x); }
 		[[nodiscard]] Vector3<T> zxy() const noexcept { return Vector3<T>(z, x, y); }
 		[[nodiscard]] Vector3<T> zxz() const noexcept { return Vector3<T>(z, x, z); }
+		[[nodiscard]] Vector3<T> zxw() const noexcept { return Vector3<T>(z, x, w); }
 		[[nodiscard]] Vector3<T> zyx() const noexcept { return Vector3<T>(z, y, x); }
 		[[nodiscard]] Vector3<T> zyy() const noexcept { return Vector3<T>(z, y, y); }
 		[[nodiscard]] Vector3<T> zyz() const noexcept { return Vector3<T>(z, y, z); }
+		[[nodiscard]] Vector3<T> zyw() const noexcept { return Vector3<T>(z, y, w); }
 		[[nodiscard]] Vector3<T> zzx() const noexcept { return Vector3<T>(z, z, x); }
 		[[nodiscard]] Vector3<T> zzy() const noexcept { return Vector3<T>(z, z, y); }
 		[[nodiscard]] Vector3<T> zzz() const noexcept { return Vector3<T>(z, z, z); }
+		[[nodiscard]] Vector3<T> zzw() const noexcept { return Vector3<T>(z, z, w); }
+		[[nodiscard]] Vector3<T> zwx() const noexcept { return Vector3<T>(z, w, x); }
+		[[nodiscard]] Vector3<T> zwy() const noexcept { return Vector3<T>(z, w, y); }
+		[[nodiscard]] Vector3<T> zwz() const noexcept { return Vector3<T>(z, w, z); }
+		[[nodiscard]] Vector3<T> zww() const noexcept { return Vector3<T>(z, w, w); }
+		[[nodiscard]] Vector3<T> wxx() const noexcept { return Vector3<T>(w, x, x); }
+		[[nodiscard]] Vector3<T> wxy() const noexcept { return Vector3<T>(w, x, y); }
+		[[nodiscard]] Vector3<T> wxz() const noexcept { return Vector3<T>(w, x, z); }
+		[[nodiscard]] Vector3<T> wxw() const noexcept { return Vector3<T>(w, x, w); }
+		[[nodiscard]] Vector3<T> wyx() const noexcept { return Vector3<T>(w, y, x); }
+		[[nodiscard]] Vector3<T> wyy() const noexcept { return Vector3<T>(w, y, y); }
+		[[nodiscard]] Vector3<T> wyz() const noexcept { return Vector3<T>(w, y, z); }
+		[[nodiscard]] Vector3<T> wyw() const noexcept { return Vector3<T>(w, y, w); }
+		[[nodiscard]] Vector3<T> wzx() const noexcept { return Vector3<T>(w, z, x); }
+		[[nodiscard]] Vector3<T> wzy() const noexcept { return Vector3<T>(w, z, y); }
+		[[nodiscard]] Vector3<T> wzz() const noexcept { return Vector3<T>(w, z, z); }
+		[[nodiscard]] Vector3<T> wzw() const noexcept { return Vector3<T>(w, z, w); }
+		[[nodiscard]] Vector3<T> wwx() const noexcept { return Vector3<T>(w, w, x); }
+		[[nodiscard]] Vector3<T> wwy() const noexcept { return Vector3<T>(w, w, y); }
+		[[nodiscard]] Vector3<T> wwz() const noexcept { return Vector3<T>(w, w, z); }
+		[[nodiscard]] Vector3<T> www() const noexcept { return Vector3<T>(w, w, w); }
 
 		[[nodiscard]] Vector4 xxxx() const noexcept { return Vector4<T>(x, x, x, x); }
 		[[nodiscard]] Vector4 xxxy() const noexcept { return Vector4<T>(x, x, x, y); }

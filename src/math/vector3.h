@@ -26,8 +26,13 @@ namespace math
 
 		[[nodiscard]] Vector2<T> xx() const noexcept { return Vector2<T>(x, x); }
 		[[nodiscard]] Vector2<T> xy() const noexcept { return Vector2<T>(x, y); }
+		[[nodiscard]] Vector2<T> xz() const noexcept { return Vector2<T>(x, z); }
 		[[nodiscard]] Vector2<T> yx() const noexcept { return Vector2<T>(y, x); }
 		[[nodiscard]] Vector2<T> yy() const noexcept { return Vector2<T>(y, y); }
+		[[nodiscard]] Vector2<T> yz() const noexcept { return Vector2<T>(y, z); }
+		[[nodiscard]] Vector2<T> zx() const noexcept { return Vector2<T>(z, x); }
+		[[nodiscard]] Vector2<T> zy() const noexcept { return Vector2<T>(z, y); }
+		[[nodiscard]] Vector2<T> zz() const noexcept { return Vector2<T>(z, z); }
 
 		[[nodiscard]] Vector3 xxx() const noexcept { return Vector3<T>(x, x, x); }
 		[[nodiscard]] Vector3 xxy() const noexcept { return Vector3<T>(x, x, y); }
