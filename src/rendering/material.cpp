@@ -15,6 +15,7 @@ void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 	if (const auto it = _existing_parameters.find(uniform_location); it != _existing_parameters.end())
 	{
 		std::get<Parameter>(_set_parameters[it->second]) = parameter;
+		return;
 	}
 
 	_existing_parameters[uniform_location] = _set_parameters.size();

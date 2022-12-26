@@ -97,14 +97,14 @@ namespace demo
 
             const auto mesh = peng::make_shared<Mesh>(vertices, indices, colors, tex_coords);
 
-            const Vector2i blob_grid(10, 8);
+            const Vector2i blob_grid(5, 4);
 
             for (int32_t blob_x = 0; blob_x < blob_grid.x ; blob_x++)
             {
                 for (int32_t blob_y = 0; blob_y < blob_grid.y; blob_y++)
                 {
-                    const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f) * 150;
-                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material, pos, 100.0f);
+                    const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f) * 300;
+                    PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material, pos, 175.0f);
                 }
             }
         });
