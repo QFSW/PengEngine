@@ -4,6 +4,7 @@
 #include <memory/shared_ref.h>
 #include <rendering/material.h>
 #include <rendering/mesh.h>
+#include <math/transform.h>
 
 class BlobEntity : public Entity
 {
@@ -22,7 +23,6 @@ private:
 	peng::shared_ref<rendering::Material> _material;
 
 	float _angle = 0;
+	math::Transform _transform;
 	math::Matrix4x4f _view_matrix;
-	math::Vector3f _position;
-	math::Vector3f _scale;
 };

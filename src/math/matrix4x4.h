@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 
 #include "vector4.h"
 
@@ -23,8 +24,8 @@ namespace math
 		[[nodiscard]] const T& get(uint8_t row, uint8_t col) const;
 
 		[[nodiscard]] Matrix4x4 transposed() const noexcept;
-		[[nodiscard]] Matrix4x4 rotated(const Vector3<T>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
+		[[nodiscard]] Matrix4x4 rotated(const Vector3<T>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
 
 		Matrix4x4& operator+=(const Matrix4x4& other);
@@ -110,6 +111,20 @@ namespace math
 	}
 
 	template <number T>
+	Matrix4x4<T> Matrix4x4<T>::scaled(const Vector3<T>& scale) const noexcept
+	{
+		const Vector3<T>& s = scale;
+		const Matrix4x4 m({
+			s.x, 0,   0,   0,
+			0,   s.y, 0,   0,
+			0,   0,   s.z, 0,
+			0,   0,   0,   1
+			});
+
+		return m * (*this);
+	}
+
+	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::rotated(const Vector3<T>& rotation) const noexcept
 	{
 		auto sin = [](T x) -> T
@@ -160,20 +175,6 @@ namespace math
 
 			m *= m_z;
 		}
-
-		return m * (*this);
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::scaled(const Vector3<T>& scale) const noexcept
-	{
-		const Vector3<T>& s = scale;
-		const Matrix4x4 m({
-			s.x, 0,   0,   0,
-			0,   s.y, 0,   0,
-			0,   0,   s.z, 0,
-			0,   0,   0,   1
-		});
 
 		return m * (*this);
 	}
