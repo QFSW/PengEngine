@@ -85,7 +85,7 @@ void EntityManager::flush_pending_adds()
 
 void EntityManager::flush_pending_kills()
 {
-	for (int32_t entity_index = _entities.size() - 1; entity_index >= 0; entity_index--)
+	for (int32_t entity_index = static_cast<int32_t>(_entities.size() - 1); entity_index >= 0; entity_index--)
 	{
 		peng::shared_ref<Entity>& entity = _entities[entity_index];
 		peng::weak_ptr<Entity> weak_entity = entity;

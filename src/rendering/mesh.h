@@ -4,7 +4,8 @@
 #include <vector>
 
 #include <GL/glew.h>
-#include <math/vector3.h>
+
+#include "vertex.h"
 
 namespace rendering
 {
@@ -27,7 +28,7 @@ namespace rendering
 
 	private:
 		std::string _name;
-		std::vector<float> _vertex_buffer;
+		std::vector<Vertex> _vertex_buffer;
 		std::vector<math::Vector3u> _index_buffer;
 
 		GLuint _num_indices;

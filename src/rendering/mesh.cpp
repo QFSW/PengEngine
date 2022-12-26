@@ -40,29 +40,20 @@ Mesh::Mesh(
 		}
 	}
 
-	_vertex_buffer.resize(8 * vertices.size());
+	_vertex_buffer.resize(vertices.size());
 	for (size_t vert_index = 0; vert_index < vertices.size(); vert_index++)
 	{
-		const Vector3f& vertex = vertices[vert_index];
+		_vertex_buffer[vert_index].position = vertices[vert_index];
 
-		const Vector3f vert_color =
-			vert_index < colors.size()
-			? colors[vert_index]
-			: Vector3f(1, 1, 1);
+		if (vert_index < colors.size())
+		{
+			_vertex_buffer[vert_index].color = colors[vert_index];
+		}
 
-		const Vector2f tex_coord =
-			vert_index < tex_coords.size()
-			? tex_coords[vert_index]
-			: Vector2f(0, 0);
-
-		_vertex_buffer[vert_index * 8 + 0] = vertex.x;
-		_vertex_buffer[vert_index * 8 + 1] = vertex.y;
-		_vertex_buffer[vert_index * 8 + 2] = vertex.z;
-		_vertex_buffer[vert_index * 8 + 3] = vert_color.x;
-		_vertex_buffer[vert_index * 8 + 4] = vert_color.y;
-		_vertex_buffer[vert_index * 8 + 5] = vert_color.z;
-		_vertex_buffer[vert_index * 8 + 6] = tex_coord.x;
-		_vertex_buffer[vert_index * 8 + 7] = tex_coord.y;
+		if (vert_index < colors.size())
+		{
+			_vertex_buffer[vert_index].tex_coord = tex_coords[vert_index];
+		}
 	}
 
 	glGenBuffers(1, &_vbo);
@@ -76,13 +67,13 @@ Mesh::Mesh(
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vectools::buffer_size(_index_buffer), _index_buffer.data(), GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
 	glEnableVertexAttribArray(2);
 }
 
