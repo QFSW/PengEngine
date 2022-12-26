@@ -98,6 +98,43 @@ EntityManager& PengEngine::entity_manager() noexcept
 	return _entity_manager;
 }
 
+static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, GLenum, GLsizei, const char* message, const void*)
+{
+	switch (type)
+	{
+		case GL_DEBUG_TYPE_ERROR:
+		{
+			Logger::get().logf(LogVerbosity::Error, "OpenGL Error: %s", message);
+			break;
+		}
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+		{
+			Logger::get().logf(LogVerbosity::Warning, "OpenGL Deprecation: %s", message);
+			break;
+		}
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+		{
+			Logger::get().logf(LogVerbosity::Error, "OpenGL UB: %s", message);
+			break;
+		}
+		case GL_DEBUG_TYPE_PORTABILITY:
+		{
+			Logger::get().logf(LogVerbosity::Warning, "OpenGL Portability: %s", message);
+			break;
+		}
+		case GL_DEBUG_TYPE_PERFORMANCE:
+		{
+			Logger::get().logf(LogVerbosity::Warning, "OpenGL Performance: %s", message);
+			break;
+		}
+		default:
+		{
+			Logger::get().logf(LogVerbosity::Log, "OpenGL: %s", message);
+			break;
+		}
+	}
+}
+
 void PengEngine::start_opengl()
 {
 	if (!glfwInit())
@@ -111,6 +148,11 @@ void PengEngine::start_opengl()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+	if constexpr (Logger::enabled())
+	{
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	}
+
 	glfwWindowHint(GLFW_RED_BITS,   8);
     glfwWindowHint(GLFW_BLUE_BITS,  8);
     glfwWindowHint(GLFW_GREEN_BITS, 8);
@@ -120,6 +162,17 @@ void PengEngine::start_opengl()
 	if (!_glfw_window)
 	{
 		throw std::logic_error("GLFW window creation failed");
+	}
+
+	GLint context_flags;
+	glGetIntegerv(GL_CONTEXT_FLAGS, &context_flags);
+
+	if (context_flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+	{
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+		glDebugMessageCallback(handle_gl_debug_output, nullptr);
 	}
 
 	int32_t buffer_width;

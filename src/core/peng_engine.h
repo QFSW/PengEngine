@@ -7,6 +7,7 @@
 
 #include "entity_manager.h"
 
+// TODO: move opengl code into an RHI object
 class PengEngine
 {
 	DEFINE_EVENT(on_engine_initialized);
