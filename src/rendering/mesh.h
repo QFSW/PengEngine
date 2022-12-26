@@ -20,21 +20,24 @@ namespace rendering
 			const std::vector<math::Vector2f>& tex_coords
 		);
 
-		Mesh(const Mesh&) = delete;
-		Mesh(Mesh&&) = delete;
+		Mesh(const Mesh& other);
+		Mesh(Mesh&& other) noexcept;
 		~Mesh();
 
 		void render() const;
 
 	private:
+		void allocate_opengl();
+
 		std::string _name;
 		std::vector<Vertex> _vertex_buffer;
 		std::vector<math::Vector3u> _index_buffer;
 
 		GLuint _num_indices;
 
-		GLuint _ebo;
-		GLuint _vbo;
-		GLuint _vao;
+		GLuint _ebo = 0;
+		GLuint _vbo = 0;
+		GLuint _vao = 0;
+		bool _valid = false;
 	};
 }
