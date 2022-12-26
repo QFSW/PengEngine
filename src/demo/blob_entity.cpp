@@ -5,7 +5,7 @@
 using namespace math;
 
 BlobEntity::BlobEntity(
-	const peng::shared_ref<rendering::Mesh>& mesh,
+	const peng::shared_ref<const rendering::Mesh>& mesh,
 	const peng::shared_ref<rendering::Material>& material,
 	const Vector2f& pos_px,
 	float radius_px

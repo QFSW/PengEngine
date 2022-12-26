@@ -5,7 +5,7 @@
 using namespace rendering;
 using namespace math;
 
-Material::Material(const peng::shared_ref<Shader>& shader)
+Material::Material(const peng::shared_ref<const Shader>& shader)
 	: _shader(shader)
 	, _num_bound_textures(0)
 { }
@@ -42,7 +42,7 @@ void Material::use()
 	_shader->use();
 }
 
-peng::shared_ref<Shader> Material::shader() const
+peng::shared_ref<const Shader> Material::shader() const
 {
 	return _shader;
 }
@@ -72,7 +72,7 @@ void Material::apply_parameter(GLint location, const Matrix4x4f& value)
 	glUniformMatrix4fv(location, 1, GL_FALSE, value.elements.data());
 }
 
-void Material::apply_parameter(GLint location, const peng::shared_ref<Texture>& texture)
+void Material::apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture)
 {
 	if (_num_bound_textures >= 16)
 	{

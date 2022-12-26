@@ -10,7 +10,7 @@ class BlobEntity : public Entity
 {
 public:
 	BlobEntity(
-		const peng::shared_ref<rendering::Mesh>& mesh,
+		const peng::shared_ref<const rendering::Mesh>& mesh,
 		const peng::shared_ref<rendering::Material>& material,
 		const math::Vector2f& pos_px,
 		float radius_px
@@ -19,7 +19,7 @@ public:
 	virtual void tick(double delta_time) override;
 
 private:
-	peng::shared_ref<rendering::Mesh> _mesh;
+	peng::shared_ref<const rendering::Mesh> _mesh;
 	peng::shared_ref<rendering::Material> _material;
 
 	float _angle = 0;

@@ -22,16 +22,16 @@ namespace rendering
 			math::Vector3f,
 			math::Vector4f,
 			math::Matrix4x4f,
-			peng::shared_ref<Texture>
+			peng::shared_ref<const Texture>
 		>;
 
-		explicit Material(const peng::shared_ref<Shader>& shader);
+		explicit Material(const peng::shared_ref<const Shader>& shader);
 
 		void set_parameter(GLint uniform_location, const Parameter& parameter);
 		void set_parameter(const std::string& parameter_name, const Parameter& parameter);
 
 		void use();
-		peng::shared_ref<Shader> shader() const;
+		peng::shared_ref<const Shader> shader() const;
 
 	private:
 		void apply_parameter(GLint location, float value);
@@ -39,9 +39,9 @@ namespace rendering
 		void apply_parameter(GLint location, const math::Vector3f& value);
 		void apply_parameter(GLint location, const math::Vector4f& value);
 		void apply_parameter(GLint location, const math::Matrix4x4f& value);
-		void apply_parameter(GLint location, const peng::shared_ref<Texture>& texture);
+		void apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture);
 
-		peng::shared_ref<Shader> _shader;
+		peng::shared_ref<const Shader> _shader;
 
 		std::vector<std::tuple<GLint, Parameter>> _set_parameters;
 		common::unordered_map<GLint, size_t> _existing_parameters;
