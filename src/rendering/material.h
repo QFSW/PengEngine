@@ -17,11 +17,24 @@ namespace rendering
 	{
 	public:
 		using Parameter = std::variant<
+			int32_t,
+			uint32_t,
 			float,
+			double,
+			math::Vector2i,
+			math::Vector2u,
 			math::Vector2f,
+			math::Vector2d,
+			math::Vector3i,
+			math::Vector3u,
 			math::Vector3f,
+			math::Vector3d,
+			math::Vector4i,
+			math::Vector4u,
 			math::Vector4f,
+			math::Vector4d,
 			math::Matrix4x4f,
+			math::Matrix4x4d,
 			peng::shared_ref<const Texture>
 		>;
 
@@ -35,11 +48,24 @@ namespace rendering
 		[[nodiscard]] peng::shared_ref<const Shader> shader() const;
 
 	private:
+		void apply_parameter(GLint location, int32_t value);
+		void apply_parameter(GLint location, uint32_t value);
 		void apply_parameter(GLint location, float value);
+		void apply_parameter(GLint location, double value);
+		void apply_parameter(GLint location, const math::Vector2i& value);
+		void apply_parameter(GLint location, const math::Vector2u& value);
 		void apply_parameter(GLint location, const math::Vector2f& value);
+		void apply_parameter(GLint location, const math::Vector2d& value);
+		void apply_parameter(GLint location, const math::Vector3i& value);
+		void apply_parameter(GLint location, const math::Vector3u& value);
 		void apply_parameter(GLint location, const math::Vector3f& value);
+		void apply_parameter(GLint location, const math::Vector3d& value);
+		void apply_parameter(GLint location, const math::Vector4i& value);
+		void apply_parameter(GLint location, const math::Vector4u& value);
 		void apply_parameter(GLint location, const math::Vector4f& value);
+		void apply_parameter(GLint location, const math::Vector4d& value);
 		void apply_parameter(GLint location, const math::Matrix4x4f& value);
+		void apply_parameter(GLint location, const math::Matrix4x4d& value);
 		void apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture);
 
 		peng::shared_ref<const Shader> _shader;

@@ -47,9 +47,34 @@ peng::shared_ref<const Shader> Material::shader() const
 	return _shader;
 }
 
+void Material::apply_parameter(GLint location, int32_t value)
+{
+	glUniform1i(location, value);
+}
+
+void Material::apply_parameter(GLint location, uint32_t value)
+{
+	glUniform1ui(location, value);
+}
+
 void Material::apply_parameter(GLint location, float value)
 {
 	glUniform1f(location, value);
+}
+
+void Material::apply_parameter(GLint location, double value)
+{
+	glUniform1d(location, value);
+}
+
+void Material::apply_parameter(GLint location, const Vector2i& value)
+{
+	glUniform2i(location, value.x, value.y);
+}
+
+void Material::apply_parameter(GLint location, const Vector2u& value)
+{
+	glUniform2ui(location, value.x, value.y);
 }
 
 void Material::apply_parameter(GLint location, const Vector2f& value)
@@ -57,9 +82,39 @@ void Material::apply_parameter(GLint location, const Vector2f& value)
 	glUniform2f(location, value.x, value.y);
 }
 
+void Material::apply_parameter(GLint location, const Vector2d& value)
+{
+	glUniform2d(location, value.x, value.y);
+}
+
+void Material::apply_parameter(GLint location, const Vector3i& value)
+{
+	glUniform3i(location, value.x, value.y, value.z);
+}
+
+void Material::apply_parameter(GLint location, const Vector3u& value)
+{
+	glUniform3ui(location, value.x, value.y, value.z);
+}
+
 void Material::apply_parameter(GLint location, const Vector3f& value)
 {
 	glUniform3f(location, value.x, value.y, value.z);
+}
+
+void Material::apply_parameter(GLint location, const Vector3d& value)
+{
+	glUniform3d(location, value.x, value.y, value.z);
+}
+
+void Material::apply_parameter(GLint location, const Vector4i& value)
+{
+	glUniform4i(location, value.x, value.y, value.z, value.w);
+}
+
+void Material::apply_parameter(GLint location, const Vector4u& value)
+{
+	glUniform4ui(location, value.x, value.y, value.z, value.w);
 }
 
 void Material::apply_parameter(GLint location, const Vector4f& value)
@@ -67,9 +122,19 @@ void Material::apply_parameter(GLint location, const Vector4f& value)
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
+void Material::apply_parameter(GLint location, const Vector4d& value)
+{
+	glUniform4d(location, value.x, value.y, value.z, value.w);
+}
+
 void Material::apply_parameter(GLint location, const Matrix4x4f& value)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, value.elements.data());
+}
+
+void Material::apply_parameter(GLint location, const Matrix4x4d& value)
+{
+	glUniformMatrix4dv(location, 1, GL_FALSE, value.elements.data());
 }
 
 void Material::apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture)
