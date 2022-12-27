@@ -8,27 +8,27 @@ Logger& Logger::get()
 	return logger;
 }
 
-void Logger::log(LogVerbosity verbosity, const std::string& message)
+void Logger::log(LogSeverity severity, const std::string& message)
 {
 	if constexpr (!enabled())
 	{
 		return;
 	}
 
-	switch (verbosity)
+	switch (severity)
 	{
-		case LogVerbosity::Log: break;
-		case LogVerbosity::Warning:
+		case LogSeverity::log: break;
+		case LogSeverity::warning:
 		{
 			std::cout << "\033[0;93m";
 			break;
 		}
-		case LogVerbosity::Error:
+		case LogSeverity::error:
 		{
 			std::cout << "\033[1;31m";
 			break;
 		}
-		case LogVerbosity::Success:
+		case LogSeverity::success:
 		{
 			std::cout << "\033[1;32m";
 			break;
@@ -37,12 +37,12 @@ void Logger::log(LogVerbosity verbosity, const std::string& message)
 
 	std::cout << message << "\n";
 
-	switch (verbosity)
+	switch (severity)
 	{
-		case LogVerbosity::Log: break;
-		case LogVerbosity::Warning:
-		case LogVerbosity::Error:
-		case LogVerbosity::Success:
+		case LogSeverity::log: break;
+		case LogSeverity::warning:
+		case LogSeverity::error:
+		case LogSeverity::success:
 		{
 			std::cout << "\033[0m";
 			break;

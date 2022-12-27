@@ -21,11 +21,11 @@ Mesh::Mesh(
 {
 	if constexpr (Logger::enabled())
 	{
-		Logger::get().logf(LogVerbosity::Log, "Building mesh '%s'", name.c_str());
+		Logger::get().logf(LogSeverity::log, "Building mesh '%s'", name.c_str());
 
 		if (!colors.empty() && colors.size() != vertices.size())
 		{
-			Logger::get().logf(LogVerbosity::Warning,
+			Logger::get().logf(LogSeverity::warning,
 				"Mesh '%s' has %d vertices but %d vertex colors",
 				name.c_str(), vertices.size(), colors.size()
 			);
@@ -33,7 +33,7 @@ Mesh::Mesh(
 
 		if (!tex_coords.empty() && tex_coords.size() != vertices.size())
 		{
-			Logger::get().logf(LogVerbosity::Warning,
+			Logger::get().logf(LogSeverity::warning,
 				"Mesh '%s' has %d vertices but %d texture coordinates",
 				name.c_str(), vertices.size(), tex_coords.size()
 			);
@@ -79,7 +79,7 @@ Mesh::Mesh(
 
 Mesh::~Mesh()
 {
-	Logger::get().logf(LogVerbosity::Log, "Destroying mesh '%s'", _name.c_str());
+	Logger::get().logf(LogSeverity::log, "Destroying mesh '%s'", _name.c_str());
 
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);

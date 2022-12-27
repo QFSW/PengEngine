@@ -1,7 +1,5 @@
 #include "peng_engine.h"
 
-#include <stdio.h>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -31,11 +29,12 @@ PengEngine& PengEngine::get()
 void PengEngine::start()
 {
 	_executing = true;
-	Logger::get().log(LogVerbosity::Log, "PengEngine starting...");
+	Logger::get().log(LogSeverity::log, "PengEngine starting...");
 
 	start_opengl();
+	_input_manager.start(_glfw_window);
 
-	Logger::get().log(LogVerbosity::Success, "PengEngine started");
+	Logger::get().log(LogSeverity::success, "PengEngine started");
 	_on_engine_initialized();
 
 	while (!shutting_down())
@@ -48,13 +47,13 @@ void PengEngine::start()
 		});
 	}
 
-	Logger::get().log(LogVerbosity::Log, "PengEngine shutting down...");
+	Logger::get().log(LogSeverity::log, "PengEngine shutting down...");
 	shutdown();
 }
 
 void PengEngine::request_shutdown()
 {
-	Logger::get().log(LogVerbosity::Log, "PengEngine shutdown requested");
+	Logger::get().log(LogSeverity::log, "PengEngine shutdown requested");
 	_executing = false;
 }
 
@@ -98,38 +97,43 @@ EntityManager& PengEngine::entity_manager() noexcept
 	return _entity_manager;
 }
 
+input::InputManager& PengEngine::input_manager() noexcept
+{
+	return _input_manager;
+}
+
 static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, GLenum, GLsizei, const char* message, const void*)
 {
 	switch (type)
 	{
 		case GL_DEBUG_TYPE_ERROR:
 		{
-			Logger::get().logf(LogVerbosity::Error, "OpenGL Error: %s", message);
+			Logger::get().logf(LogSeverity::error, "OpenGL Error: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
 		{
-			Logger::get().logf(LogVerbosity::Warning, "OpenGL Deprecation: %s", message);
+			Logger::get().logf(LogSeverity::warning, "OpenGL Deprecation: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
 		{
-			Logger::get().logf(LogVerbosity::Error, "OpenGL UB: %s", message);
+			Logger::get().logf(LogSeverity::error, "OpenGL UB: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_PORTABILITY:
 		{
-			Logger::get().logf(LogVerbosity::Warning, "OpenGL Portability: %s", message);
+			Logger::get().logf(LogSeverity::warning, "OpenGL Portability: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_PERFORMANCE:
 		{
-			Logger::get().logf(LogVerbosity::Warning, "OpenGL Performance: %s", message);
+			Logger::get().logf(LogSeverity::warning, "OpenGL Performance: %s", message);
 			break;
 		}
 		default:
 		{
-			Logger::get().logf(LogVerbosity::Log, "OpenGL: %s", message);
+			Logger::get().logf(LogSeverity::log, "OpenGL: %s", message);
 			break;
 		}
 	}
@@ -195,7 +199,7 @@ void PengEngine::shutdown()
 	_entity_manager.shutdown();
 	shutdown_opengl();
 
-	Logger::get().log(LogVerbosity::Success, "PengEngine shutdown");
+	Logger::get().log(LogSeverity::success, "PengEngine shutdown");
 }
 
 void PengEngine::shutdown_opengl()
@@ -215,6 +219,8 @@ void PengEngine::tick_main()
 		const double delta_time = _last_frametime / 1000.0;
 		
 		_on_frame_start();
+
+		_input_manager.tick();
 		_entity_manager.tick(delta_time);
 	});
 }
@@ -222,7 +228,15 @@ void PengEngine::tick_main()
 void PengEngine::tick_render()
 {
 	_last_render_frametime = timing::measure_ms([this] {
+		if (_input_manager[input::KeyCode::num_row_1].pressed())
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
 
+		if (_input_manager[input::KeyCode::num_row_2].pressed())
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
 	});
 }
 
@@ -231,15 +245,6 @@ void PengEngine::tick_opengl()
 	_last_opengl_frametime = timing::measure_ms([this] {
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		if (glfwGetKey(_glfw_window, GLFW_KEY_1) == GLFW_PRESS)
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-		else if (glfwGetKey(_glfw_window, GLFW_KEY_2) == GLFW_PRESS)
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
 	});
 }
 

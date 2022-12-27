@@ -16,8 +16,8 @@ using namespace rendering;
 Texture::Texture(const std::string& name, const std::string& texture_path)
 	: _name(name)
 {
-	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
-	Logger::get().logf(LogVerbosity::Log, "Loading texture data '%s'", texture_path.c_str());
+	Logger::get().logf(LogSeverity::log, "Building texture '%s'", _name.c_str());
+	Logger::get().logf(LogSeverity::log, "Loading texture data '%s'", texture_path.c_str());
 	stbi_set_flip_vertically_on_load(true);
 	stbi_uc* texture_data = stbi_load(texture_path.c_str(), &_resolution.x, &_resolution.y, &_num_channels, 0);
 	if (!texture_data)
@@ -38,7 +38,7 @@ Texture::Texture(
 	, _resolution(resolution)
 	, _num_channels(3)
 {
-	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
+	Logger::get().logf(LogSeverity::log, "Building texture '%s'", _name.c_str());
 
 	verify_resolution(resolution, static_cast<int32_t>(rgb_data.size()));
 	build_from_buffer(rgb_data.data());
@@ -53,7 +53,7 @@ Texture::Texture(
 	, _resolution(resolution)
 	, _num_channels(4)
 {
-	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
+	Logger::get().logf(LogSeverity::log, "Building texture '%s'", _name.c_str());
 
 	verify_resolution(resolution, static_cast<int32_t>(rgba_data.size()));
 	build_from_buffer(rgba_data.data());
@@ -61,7 +61,7 @@ Texture::Texture(
 
 Texture::~Texture()
 {
-	Logger::get().logf(LogVerbosity::Log, "Destroying texture '%s'", _name.c_str());
+	Logger::get().logf(LogSeverity::log, "Destroying texture '%s'", _name.c_str());
 	glDeleteTextures(1, &_tex);
 }
 
@@ -73,11 +73,11 @@ void Texture::use(GLenum slot) const
 
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
 {
-	if (_resolution.magnitude_sqr() != num_pixels)
+	if (resolution.magnitude_sqr() != num_pixels)
 	{
 		throw std::runtime_error(strtools::catf(
 			"Texture %s has a resolution of %dx%d (%dpx) but %dpx",
-			_name.c_str(), _resolution.x, _resolution.y, _resolution.magnitude_sqr(), num_pixels
+			_name.c_str(), resolution.x, resolution.y, resolution.magnitude_sqr(), num_pixels
 		));
 	}
 }

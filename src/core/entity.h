@@ -21,8 +21,8 @@ protected:
 
 enum class EntityState
 {
-	Invalid,
-	Valid,
-	PendingAdd,
-	PendingKill
+	invalid,
+	valid,
+	pending_add,
+	pending_kill
 };

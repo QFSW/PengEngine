@@ -4,12 +4,12 @@
 
 #include <utils/strtools.h>
 
-enum class LogVerbosity
+enum class LogSeverity
 {
-	Log,
-	Warning,
-	Error,
-	Success
+	log,
+	warning,
+	error,
+	success
 };
 
 class Logger
@@ -20,10 +20,10 @@ public:
 	Logger(const Logger&) = delete;
 	Logger(Logger&&) = delete;
 
-	void log(LogVerbosity verbosity, const std::string& message);
+	void log(LogSeverity severity, const std::string& message);
 
 	template <typename...Args>
-	void logf(LogVerbosity verbosity, const char* format, Args&&...args);
+	void logf(LogSeverity severity, const char* format, Args&&...args);
 
 	consteval static bool enabled() { return true; }
 
@@ -32,10 +32,10 @@ private:
 };
 
 template <typename...Args>
-void Logger::logf(LogVerbosity verbosity, const char* format, Args&&... args)
+void Logger::logf(LogSeverity severity, const char* format, Args&&... args)
 {
 	if constexpr (enabled())
 	{
-		log(verbosity, strtools::catf(format, std::forward<Args>(args)...));
+		log(severity, strtools::catf(format, std::forward<Args>(args)...));
 	}
 }

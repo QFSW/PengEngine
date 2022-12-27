@@ -2,6 +2,7 @@
 
 #include <math/vector2.h>
 #include <threading/worker_thread.h>
+#include <input/input_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
 
@@ -27,6 +28,7 @@ public:
 	const math::Vector2u& resolution() const noexcept;
 
 	EntityManager& entity_manager() noexcept;
+	input::InputManager& input_manager() noexcept;
 
 private:
 	PengEngine();
@@ -63,4 +65,5 @@ private:
 	threading::WorkerThread _render_thread;
 
 	EntityManager _entity_manager;
+	input::InputManager _input_manager;
 };

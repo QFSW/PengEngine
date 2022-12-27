@@ -14,7 +14,7 @@ void EntityManager::tick(double delta_time)
 
 void EntityManager::shutdown()
 {
-	Logger::get().log(LogVerbosity::Log, "Destroying all entities");
+	Logger::get().log(LogSeverity::log, "Destroying all entities");
 
 	for (peng::shared_ref<Entity>& entity : _entities)
 	{
@@ -38,7 +38,7 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 {
 	if (vectools::contains(_pending_kills, entity))
 	{
-		return EntityState::PendingKill;
+		return EntityState::pending_kill;
 	}
 
 	if (const peng::shared_ptr<Entity> strong_entity = entity.lock())
@@ -46,20 +46,20 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 		const peng::shared_ref<Entity> entity_ref = strong_entity.to_shared_ref();
 		if (vectools::contains(_entities, entity_ref))
 		{
-			return EntityState::Valid;
+			return EntityState::valid;
 		}
 		if (vectools::contains(_pending_adds, entity_ref))
 		{
-			return EntityState::PendingAdd;
+			return EntityState::pending_add;
 		}
 	}
 
-	return EntityState::Invalid;
+	return EntityState::invalid;
 }
 
 void EntityManager::tick_entities(double delta_time)
 {
-	for (peng::shared_ref<Entity>& entity : _entities)
+	for (const peng::shared_ref<Entity>& entity : _entities)
 	{
 		if (entity->can_tick())
 		{
@@ -70,12 +70,12 @@ void EntityManager::tick_entities(double delta_time)
 
 void EntityManager::flush_pending_adds()
 {
-	for (peng::shared_ref<Entity>& entity : _pending_adds)
+	for (const peng::shared_ref<Entity>& entity : _pending_adds)
 	{
 		_entities.push_back(entity);
 	}
 
-	for (peng::shared_ref<Entity>& entity : _pending_adds)
+	for (const peng::shared_ref<Entity>& entity : _pending_adds)
 	{
 		entity->post_create();
 	}
