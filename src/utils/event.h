@@ -153,4 +153,4 @@ namespace utils
 public: \
 	utils::EventInterface<__VA_ARGS__>& ##name() noexcept { return _##name; } \
 private: \
-	utils::Event<__VA_ARGS__> _##name; \
+	utils::Event<__VA_ARGS__> _##name;
