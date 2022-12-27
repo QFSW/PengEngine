@@ -46,6 +46,18 @@ InputManager::InputManager()
 		GLFW_KEY_X, 
 		GLFW_KEY_Y,
 		GLFW_KEY_Z,
+		GLFW_KEY_F1,
+		GLFW_KEY_F2,
+		GLFW_KEY_F3,
+		GLFW_KEY_F4,
+		GLFW_KEY_F5,
+		GLFW_KEY_F6,
+		GLFW_KEY_F7,
+		GLFW_KEY_F8,
+		GLFW_KEY_F9,
+		GLFW_KEY_F10,
+		GLFW_KEY_F11,
+		GLFW_KEY_F12,
 	}
 {
 	for (const int32_t opengl_key : _opengl_keys)
@@ -97,6 +109,12 @@ constexpr KeyCode InputManager::from_opengl(int32_t opengl_key)
 	{
 		const int32_t num_row_offset = opengl_key - GLFW_KEY_0;
 		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::num_row_0) + num_row_offset);
+	}
+
+	if (opengl_key >= GLFW_KEY_F1 && opengl_key <= GLFW_KEY_F12)
+	{
+		const int32_t function_key_offset = opengl_key - GLFW_KEY_F1;
+		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::f1) + function_key_offset);
 	}
 
 	throw std::logic_error(strtools::catf("Cannot convert OpenGL key %d", opengl_key));
