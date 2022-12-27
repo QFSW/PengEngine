@@ -58,6 +58,25 @@ InputManager::InputManager()
 		GLFW_KEY_F10,
 		GLFW_KEY_F11,
 		GLFW_KEY_F12,
+		GLFW_KEY_ESCAPE,
+		GLFW_KEY_ENTER,
+		GLFW_KEY_TAB,
+		GLFW_KEY_BACKSPACE,
+		GLFW_KEY_INSERT,
+		GLFW_KEY_DELETE,
+		GLFW_KEY_RIGHT,
+		GLFW_KEY_LEFT,
+		GLFW_KEY_DOWN,
+		GLFW_KEY_UP,
+		GLFW_KEY_PAGE_UP,
+		GLFW_KEY_PAGE_DOWN,
+		GLFW_KEY_HOME,
+		GLFW_KEY_END,
+		GLFW_KEY_CAPS_LOCK,
+		GLFW_KEY_SCROLL_LOCK,
+		GLFW_KEY_NUM_LOCK,
+		GLFW_KEY_PRINT_SCREEN,
+		GLFW_KEY_PAUSE,
 	}
 {
 	for (const int32_t opengl_key : _opengl_keys)
@@ -115,6 +134,12 @@ constexpr KeyCode InputManager::from_opengl(int32_t opengl_key)
 	{
 		const int32_t function_key_offset = opengl_key - GLFW_KEY_F1;
 		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::f1) + function_key_offset);
+	}
+
+	if (opengl_key >= GLFW_KEY_ESCAPE && opengl_key <= GLFW_KEY_PAUSE)
+	{
+		const int32_t key_offset = opengl_key - GLFW_KEY_ESCAPE;
+		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::escape) + key_offset);
 	}
 
 	throw std::logic_error(strtools::catf("Cannot convert OpenGL key %d", opengl_key));
