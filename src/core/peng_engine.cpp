@@ -69,6 +69,12 @@ void PengEngine::set_target_frametime(double frametime_ms) noexcept
 
 void PengEngine::set_resolution(const math::Vector2u& resolution) noexcept
 {
+	if (_executing)
+	{
+		Logger::get().log(LogSeverity::error, "Changing the resolution after starting PengEngine is not yet supported");
+		return;
+	}
+
 	_resolution = resolution;
 }
 
