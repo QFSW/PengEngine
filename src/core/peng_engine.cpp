@@ -244,6 +244,11 @@ void PengEngine::tick_render()
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
+
+		if (_input_manager[input::KeyCode::num_row_3].pressed())
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		}
 	});
 }
 
