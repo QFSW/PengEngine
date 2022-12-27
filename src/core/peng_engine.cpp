@@ -197,7 +197,7 @@ void PengEngine::start_opengl()
 	glViewport(0, 0, _resolution.x, _resolution.y);
 	glfwSetFramebufferSizeCallback(_glfw_window, [](GLFWwindow* window, int32_t width, int32_t height)
 	{
-		get()._resolution = math::Vector2f(width, height);
+		get()._resolution = math::Vector2i(width, height);
 		glViewport(0, 0, width, height);
 	});
 }
