@@ -11,8 +11,8 @@
 // TODO: move opengl code into an RHI object
 class PengEngine
 {
-	DEFINE_EVENT(on_engine_initialized);
-	DEFINE_EVENT(on_frame_start);
+	DEFINE_EVENT(on_engine_initialized)
+	DEFINE_EVENT(on_frame_start)
 
 public:
 	static PengEngine& get();
