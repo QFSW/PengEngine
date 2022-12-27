@@ -22,10 +22,10 @@ public:
 
 	void set_target_fps(double fps) noexcept;
 	void set_target_frametime(double frametime_ms) noexcept;
-	void set_resolution(const math::Vector2u& resolution) noexcept;
+	void set_resolution(const math::Vector2i& resolution) noexcept;
 
 	[[nodiscard]] bool shutting_down() const;
-	[[nodiscard]] const math::Vector2u& resolution() const noexcept;
+	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
 
 	EntityManager& entity_manager() noexcept;
 	input::InputManager& input_manager() noexcept;
@@ -53,7 +53,7 @@ private:
 	bool _executing;
 	double _target_frametime;
 
-	math::Vector2u _resolution;
+	math::Vector2i _resolution;
 
 	double _last_frametime;
 	double _last_main_frametime;
