@@ -13,6 +13,7 @@ class PengEngine
 {
 	DEFINE_EVENT(on_engine_initialized)
 	DEFINE_EVENT(on_frame_start)
+	DEFINE_EVENT(on_frame_end)
 
 public:
 	static PengEngine& get();

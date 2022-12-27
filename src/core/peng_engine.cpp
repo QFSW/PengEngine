@@ -228,6 +228,8 @@ void PengEngine::tick_main()
 
 		_input_manager.tick();
 		_entity_manager.tick(delta_time);
+
+		_on_frame_end();
 	});
 }
 
