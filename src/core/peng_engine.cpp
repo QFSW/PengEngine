@@ -70,7 +70,7 @@ void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
 {
 	if (_executing)
 	{
-		Logger::get().log(LogSeverity::error, "Changing the resolution after starting PengEngine is not yet supported");
+		glfwSetWindowSize(_glfw_window, resolution.x, resolution.y);
 		return;
 	}
 
@@ -195,7 +195,7 @@ void PengEngine::start_opengl()
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, _resolution.x, _resolution.y);
-	glfwSetFramebufferSizeCallback(_glfw_window, [](GLFWwindow* window, int32_t width, int32_t height)
+	glfwSetFramebufferSizeCallback(_glfw_window, [](GLFWwindow*, int32_t width, int32_t height)
 	{
 		get()._resolution = math::Vector2i(width, height);
 		glViewport(0, 0, width, height);
