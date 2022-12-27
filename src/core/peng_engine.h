@@ -1,7 +1,6 @@
 #pragma once
 
 #include <math/vector2.h>
-#include <threading/worker_thread.h>
 #include <input/input_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
@@ -25,8 +24,8 @@ public:
 	void set_target_frametime(double frametime_ms) noexcept;
 	void set_resolution(const math::Vector2u& resolution) noexcept;
 
-	bool shutting_down() const;
-	const math::Vector2u& resolution() const noexcept;
+	[[nodiscard]] bool shutting_down() const;
+	[[nodiscard]] const math::Vector2u& resolution() const noexcept;
 
 	EntityManager& entity_manager() noexcept;
 	input::InputManager& input_manager() noexcept;
@@ -63,7 +62,6 @@ private:
 	timing::clock::time_point _last_draw_time;
 
 	struct GLFWwindow* _glfw_window;
-	threading::WorkerThread _render_thread;
 
 	EntityManager _entity_manager;
 	input::InputManager _input_manager;

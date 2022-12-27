@@ -17,7 +17,6 @@ PengEngine::PengEngine()
 	, _last_opengl_frametime(0)
 	, _last_draw_time(timing::clock::now())
 	, _glfw_window(nullptr)
-	, _render_thread("RenderThread")
 { }
 
 PengEngine& PengEngine::get()
