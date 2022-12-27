@@ -9,6 +9,8 @@ using namespace math;
 peng::weak_ptr<const Mesh> Primitives::_cube;
 peng::weak_ptr<const Mesh> Primitives::_fullscreen_quad;
 
+peng::weak_ptr<const Texture> Primitives::_white_tex;
+
 peng::shared_ref<const Mesh> Primitives::cube()
 {
 	if (const peng::shared_ptr<const Mesh> strong_cube = _cube.lock())
@@ -141,4 +143,20 @@ peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
 
     _fullscreen_quad = quad;
     return quad;
+}
+
+peng::shared_ref<const Texture> Primitives::white_tex()
+{
+    if (const peng::shared_ptr<const Texture> strong_tex = _white_tex.lock())
+    {
+        return strong_tex.to_shared_ref();
+    }
+
+    const std::vector<Vector3u8> rgb_data = { Vector3u8(0xFF, 0xFF, 0xFF)};
+    peng::shared_ref<Texture> white_tex = peng::make_shared<Texture>(
+        "White 1x1px", rgb_data, Vector2i::one()
+    );
+
+    _white_tex = white_tex;
+    return white_tex;
 }

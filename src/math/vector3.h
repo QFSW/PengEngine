@@ -66,6 +66,7 @@ namespace math
 
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
+		[[nodiscard]] T magnitude_sqr() const noexcept;
 
 		Vector3& operator+=(const Vector3& other);
 		Vector3& operator-=(const Vector3& other);
@@ -89,6 +90,7 @@ namespace math
 	using Vector3d = Vector3<double>;
 	using Vector3i = Vector3<int32_t>;
 	using Vector3u = Vector3<uint32_t>;
+	using Vector3u8 = Vector3<uint8_t>;
 
 	template <number T>
 	Vector3<T>::Vector3()
@@ -123,6 +125,12 @@ namespace math
 	T Vector3<T>::max() const noexcept
 	{
 		return std::max(x, y, z);
+	}
+
+	template <number T>
+	T Vector3<T>::magnitude_sqr() const noexcept
+	{
+		return x * y * z;
 	}
 
 	template <number T>

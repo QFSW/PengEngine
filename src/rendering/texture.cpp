@@ -25,6 +25,65 @@ Texture::Texture(const std::string& name, const std::string& texture_path)
 		throw std::runtime_error(strtools::catf("Could not load texture at %s", texture_path.c_str()));
 	}
 
+	build_from_buffer(texture_data);
+	stbi_image_free(texture_data);
+}
+
+Texture::Texture(
+	const std::string& name,
+	const std::vector<math::Vector3u8>& rgb_data,
+	const math::Vector2i& resolution
+)
+	: _name(name)
+	, _resolution(resolution)
+	, _num_channels(3)
+{
+	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
+
+	verify_resolution(resolution, static_cast<int32_t>(rgb_data.size()));
+	build_from_buffer(rgb_data.data());
+}
+
+Texture::Texture(
+	const std::string& name,
+	const std::vector<math::Vector4u8>& rgba_data,
+	const math::Vector2i& resolution
+)
+	: _name(name)
+	, _resolution(resolution)
+	, _num_channels(4)
+{
+	Logger::get().logf(LogVerbosity::Log, "Building texture '%s'", _name.c_str());
+
+	verify_resolution(resolution, static_cast<int32_t>(rgba_data.size()));
+	build_from_buffer(rgba_data.data());
+}
+
+Texture::~Texture()
+{
+	Logger::get().logf(LogVerbosity::Log, "Destroying texture '%s'", _name.c_str());
+	glDeleteTextures(1, &_tex);
+}
+
+void Texture::use(GLenum slot) const
+{
+	glActiveTexture(slot);
+	glBindTexture(GL_TEXTURE_2D, _tex);
+}
+
+void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
+{
+	if (_resolution.magnitude_sqr() != num_pixels)
+	{
+		throw std::runtime_error(strtools::catf(
+			"Texture %s has a resolution of %dx%d (%dpx) but %dpx",
+			_name.c_str(), _resolution.x, _resolution.y, _resolution.magnitude_sqr(), num_pixels
+		));
+	}
+}
+
+void Texture::build_from_buffer(const void* texture_data)
+{
 	glGenTextures(1, &_tex);
 	glBindTexture(GL_TEXTURE_2D, _tex);
 
@@ -42,7 +101,7 @@ Texture::Texture(const std::string& name, const std::string& texture_path)
 			break;
 		}
 		case 4:
-	    {
+		{
 			texture_format = GL_RGBA;
 			break;
 		}
@@ -54,18 +113,4 @@ Texture::Texture(const std::string& name, const std::string& texture_path)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(texture_data);
-}
-
-Texture::~Texture()
-{
-	Logger::get().logf(LogVerbosity::Log, "Destroying texture '%s'", _name.c_str());
-	glDeleteTextures(1, &_tex);
-}
-
-void Texture::use(GLenum slot) const
-{
-	glActiveTexture(slot);
-	glBindTexture(GL_TEXTURE_2D, _tex);
 }

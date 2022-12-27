@@ -31,6 +31,7 @@ namespace math
 
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
+		[[nodiscard]] T magnitude_sqr() const noexcept;
 
 		Vector2& operator+=(const Vector2& other);
 		Vector2& operator-=(const Vector2& other);
@@ -54,6 +55,7 @@ namespace math
 	using Vector2d = Vector2<double>;
 	using Vector2i = Vector2<int32_t>;
 	using Vector2u = Vector2<uint32_t>;
+	using Vector2u8 = Vector2<uint8_t>;
 
 	template <number T>
 	Vector2<T>::Vector2()
@@ -85,6 +87,12 @@ namespace math
 	T Vector2<T>::max() const noexcept
 	{
 		return std::max(x, y);
+	}
+
+	template <number T>
+	T Vector2<T>::magnitude_sqr() const noexcept
+	{
+		return x * y;
 	}
 
 	template <number T>

@@ -374,6 +374,7 @@ namespace math
 
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
+		[[nodiscard]] T magnitude_sqr() const noexcept;
 
 		Vector4& operator+=(const Vector4& other);
 		Vector4& operator-=(const Vector4& other);
@@ -397,6 +398,7 @@ namespace math
 	using Vector4d = Vector4<double>;
 	using Vector4i = Vector4<int32_t>;
 	using Vector4u = Vector4<uint32_t>;
+	using Vector4u8 = Vector4<uint8_t>;
 
 	template <number T>
 	Vector4<T>::Vector4()
@@ -434,6 +436,12 @@ namespace math
 	T Vector4<T>::max() const noexcept
 	{
 		return std::max(x, y, z, w);
+	}
+
+	template <number T>
+	T Vector4<T>::magnitude_sqr() const noexcept
+	{
+		return x * y * z * w;
 	}
 
 	template <number T>
