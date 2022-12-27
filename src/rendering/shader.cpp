@@ -64,7 +64,7 @@ void Shader::validate_shader_compile(GLuint shader)
 	{
 		char info_log[512];
 		glGetShaderInfoLog(shader, 512, nullptr, info_log);
-		printf("ERROR::SHADER::COMPILATION_FAILED\n%s", info_log);
+		Logger::get().log(LogVerbosity::Error, info_log);
 	}
 }
 
@@ -77,6 +77,6 @@ void Shader::validate_shader_link(GLuint shader)
 	{
 		char info_log[512];
 		glGetProgramInfoLog(shader, 512, nullptr, info_log);
-		printf("ERROR::SHADER::LINK_FAILED\n%s", info_log);
+		Logger::get().log(LogVerbosity::Error, info_log);
 	}
 }
