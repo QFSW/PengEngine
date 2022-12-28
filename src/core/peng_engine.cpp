@@ -156,11 +156,7 @@ void PengEngine::start_opengl()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-	if constexpr (Logger::enabled())
-	{
-		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-	}
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, Logger::enabled());
 
 	glfwWindowHint(GLFW_RED_BITS,   8);
     glfwWindowHint(GLFW_BLUE_BITS,  8);

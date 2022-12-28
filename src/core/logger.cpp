@@ -12,6 +12,9 @@ void Logger::log(LogSeverity severity, const std::string& message)
 {
 	if constexpr (!enabled())
 	{
+		// Suppress unused warnings on parameters
+		static_cast<void>(severity);
+		static_cast<void>(message);
 		return;
 	}
 
