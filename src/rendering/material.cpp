@@ -153,9 +153,8 @@ void Material::apply_parameter(GLint location, const peng::shared_ref<const Text
 		throw std::runtime_error("Cannot bind more than 16 textures to a material");
 	}
 
-	const GLuint texture_slot = GL_TEXTURE0 + _num_bound_textures;
-	_num_bound_textures++;
+	const GLuint texture_slot = _num_bound_textures++;
 
+	texture->use(GL_TEXTURE0 + texture_slot);
 	glUniform1i(location, texture_slot);
-	texture->use(texture_slot);
 }
