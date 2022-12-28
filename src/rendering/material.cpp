@@ -42,14 +42,13 @@ void Material::use()
 {
 	_num_bound_textures = 0;
 
+	_shader->use();
 	for (const auto& [location, parameter] : _set_parameters)
 	{
 		std::visit(functional::overload{
 			[&](const auto& x) { apply_parameter(location, x); }
 		}, parameter);
 	}
-
-	_shader->use();
 }
 
 peng::shared_ref<const Shader> Material::shader() const
