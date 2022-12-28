@@ -148,8 +148,7 @@ void PengEngine::start_opengl()
 {
 	if (!glfwInit())
 	{
-		printf("GLFW initialization failed\n");
-		return;
+		throw std::logic_error("GLFW initialization failed");
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

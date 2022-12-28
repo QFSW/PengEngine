@@ -1,4 +1,7 @@
+#include "demo_main.h"
+
 #include <core/peng_engine.h>
+#include <core/logger.h>
 #include <rendering/texture.h>
 #include <rendering/primitives.h>
 
@@ -18,7 +21,7 @@ namespace demo
 
         virtual void tick(double delta_time) override
         {
-            printf("Frametime = %.02fms\n", delta_time * 1000);
+            Logger::get().logf(LogSeverity::log, "Frametime = %.02fms\n", delta_time * 1000);
         }
     };
 
