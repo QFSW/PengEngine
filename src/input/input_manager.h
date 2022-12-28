@@ -32,6 +32,7 @@ namespace input
 		GLFWwindow* _window;
 		math::Vector2i _cursor_pos;
 		std::vector<int32_t> _opengl_keys;
+		std::vector<int32_t> _opengl_mouse_buttons;
 		common::unordered_map<KeyCode, KeyState> _key_states;
 	};
 }

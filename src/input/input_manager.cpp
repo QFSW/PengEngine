@@ -79,6 +79,17 @@ InputManager::InputManager()
 		GLFW_KEY_PRINT_SCREEN,
 		GLFW_KEY_PAUSE,
 	}
+	, _opengl_mouse_buttons
+	{
+		GLFW_MOUSE_BUTTON_1,
+		GLFW_MOUSE_BUTTON_2,
+		GLFW_MOUSE_BUTTON_3,
+		GLFW_MOUSE_BUTTON_4,
+		GLFW_MOUSE_BUTTON_5,
+		GLFW_MOUSE_BUTTON_6,
+		GLFW_MOUSE_BUTTON_7,
+		GLFW_MOUSE_BUTTON_8,
+	}
 {
 	for (const int32_t opengl_key : _opengl_keys)
 	{
@@ -98,6 +109,13 @@ void InputManager::tick()
 	{
 		const KeyCode code = from_opengl(opengl_key);
 		const bool key_down = glfwGetKey(_window, opengl_key) == GLFW_PRESS;
+		_key_states[code].update(key_down);
+	}
+
+	for (const int32_t opengl_mouse_button : _opengl_mouse_buttons)
+	{
+		const KeyCode code = from_opengl(opengl_mouse_button);
+		const bool key_down = glfwGetMouseButton(_window, opengl_mouse_button) == GLFW_PRESS;
 		_key_states[code].update(key_down);
 	}
 
@@ -152,6 +170,12 @@ constexpr KeyCode InputManager::from_opengl(int32_t opengl_key)
 	{
 		const int32_t key_offset = opengl_key - GLFW_KEY_ESCAPE;
 		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::escape) + key_offset);
+	}
+
+	if (opengl_key >= GLFW_MOUSE_BUTTON_1 && opengl_key <= GLFW_MOUSE_BUTTON_8)
+	{
+		const int32_t mouse_offset = opengl_key - GLFW_MOUSE_BUTTON_1;
+		return static_cast<KeyCode>(static_cast<int32_t>(KeyCode::mouse_1) + mouse_offset);
 	}
 
 	throw std::logic_error(strtools::catf("Cannot convert OpenGL key %d", opengl_key));

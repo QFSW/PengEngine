@@ -74,5 +74,18 @@ namespace input
 		num_lock,
 		print_screen,
 		pause,
+
+		mouse_1,
+		mouse_2,
+		mouse_3,
+		mouse_4,
+		mouse_5,
+		mouse_6,
+		mouse_7,
+		mouse_8,
+
+		mouse_left = mouse_1,
+		mouse_right = mouse_2,
+		mouse_middle = mouse_3
 	};
 }
