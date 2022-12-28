@@ -151,7 +151,7 @@ void PengEngine::start_opengl()
 		throw std::logic_error("GLFW initialization failed");
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -168,6 +168,17 @@ void PengEngine::start_opengl()
 		throw std::logic_error("GLFW window creation failed");
 	}
 
+	glfwGetFramebufferSize(_glfw_window, &_resolution.x, &_resolution.y);
+	glfwMakeContextCurrent(_glfw_window);
+
+	Logger::get().logf(LogSeverity::log, "OpenGL context created - %s", glGetString(GL_VERSION));
+
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+	{
+		throw std::logic_error("GLEW initialization failed");
+	}
+
 	GLint context_flags;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &context_flags);
 
@@ -177,15 +188,6 @@ void PengEngine::start_opengl()
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 		glDebugMessageCallback(handle_gl_debug_output, nullptr);
-	}
-
-	glfwGetFramebufferSize(_glfw_window, &_resolution.x, &_resolution.y);
-	glfwMakeContextCurrent(_glfw_window);
-
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-	{
-		throw std::logic_error("GLEW initialization failed");
 	}
 
 	glEnable(GL_DEPTH_TEST);
