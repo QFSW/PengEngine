@@ -1,5 +1,6 @@
 #include "material.h"
 
+#include <core/logger.h>
 #include <utils/functional.h>
 
 using namespace rendering;
@@ -25,7 +26,16 @@ void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 void Material::set_parameter(const std::string& parameter_name, const Parameter& parameter)
 {
 	const GLint parameter_index = _shader->get_uniform_location(parameter_name);
-	set_parameter(parameter_index, parameter);
+	if (parameter_index >= 0)
+	{
+		set_parameter(parameter_index, parameter);
+	}
+	else
+	{
+		Logger::get().logf(LogSeverity::error,
+			"Could not set parameter '%s' as no matching uniform could be found in the shader", parameter_name.c_str()
+		);
+	}
 }
 
 void Material::use()
