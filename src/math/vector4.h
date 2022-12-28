@@ -8,6 +8,8 @@ namespace math
 	struct Vector4
 	{
 	public:
+		using F = make_floating_t<T>;
+
 		T x;
 		T y;
 		T z;
@@ -375,6 +377,9 @@ namespace math
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
 		[[nodiscard]] T magnitude_sqr() const noexcept;
+		[[nodiscard]] F magnitude() const noexcept;
+		[[nodiscard]] Vector4<F> normalized() const noexcept;
+		[[nodiscard]] Vector4<F> normalized_unsafe() const noexcept;
 
 		Vector4& operator+=(const Vector4& other);
 		Vector4& operator-=(const Vector4& other);
@@ -441,7 +446,31 @@ namespace math
 	template <number T>
 	T Vector4<T>::magnitude_sqr() const noexcept
 	{
-		return x * y * z * w;
+		return x * x + y * y + z * z + w * w;
+	}
+
+	template <number T>
+	make_floating_t<T> Vector4<T>::magnitude() const noexcept
+	{
+		return std::sqrt(static_cast<F>(magnitude_sqr()));
+	}
+
+	template <number T>
+	Vector4<make_floating_t<T>> Vector4<T>::normalized() const noexcept
+	{
+		const F mag = magnitude();
+		if (mag != 0)
+		{
+			return static_cast<Vector4<F>>(*this) / mag;
+		}
+
+		return *this;
+	}
+
+	template <number T>
+	Vector4<make_floating_t<T>> Vector4<T>::normalized_unsafe() const noexcept
+	{
+		return static_cast<Vector4<F>>(*this) / magnitude();
 	}
 
 	template <number T>

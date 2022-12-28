@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
 
 #include "number.h"
 
@@ -10,6 +11,8 @@ namespace math
 	struct Vector2
 	{
 	public:
+		using F = make_floating_t<T>;
+
 		T x;
 		T y;
 
@@ -32,6 +35,9 @@ namespace math
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
 		[[nodiscard]] T magnitude_sqr() const noexcept;
+		[[nodiscard]] F magnitude() const noexcept;
+		[[nodiscard]] Vector2<F> normalized() const noexcept;
+		[[nodiscard]] Vector2<F> normalized_unsafe() const noexcept;
 
 		Vector2& operator+=(const Vector2& other);
 		Vector2& operator-=(const Vector2& other);
@@ -92,7 +98,31 @@ namespace math
 	template <number T>
 	T Vector2<T>::magnitude_sqr() const noexcept
 	{
-		return x * y;
+		return x * x + y * y;
+	}
+
+	template <number T>
+	make_floating_t<T> Vector2<T>::magnitude() const noexcept
+	{
+		return std::sqrt(static_cast<F>(magnitude_sqr()));
+	}
+
+	template <number T>
+	Vector2<make_floating_t<T>> Vector2<T>::normalized() const noexcept
+	{
+		const F mag = magnitude();
+		if (mag != 0)
+		{
+			return static_cast<Vector2<F>>(*this) / mag;
+		}
+
+		return *this;
+	}
+
+	template <number T>
+	Vector2<make_floating_t<T>> Vector2<T>::normalized_unsafe() const noexcept
+	{
+		return static_cast<Vector2<F>>(*this) / magnitude();
 	}
 
 	template <number T>
