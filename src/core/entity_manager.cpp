@@ -85,17 +85,32 @@ void EntityManager::flush_pending_adds()
 
 void EntityManager::flush_pending_kills()
 {
-	for (int32_t entity_index = static_cast<int32_t>(_entities.size() - 1); entity_index >= 0; entity_index--)
+	auto kill_in_buffer = [&](std::vector<peng::shared_ref<Entity>>& entities, bool exists_yet)
 	{
-		peng::shared_ref<Entity>& entity = _entities[entity_index];
-		peng::weak_ptr<Entity> weak_entity = entity;
-
-		if (vectools::contains(_pending_kills, weak_entity))
+		for (int32_t entity_index = static_cast<int32_t>(entities.size() - 1); entity_index >= 0; entity_index--)
 		{
-			entity->pre_destroy();
-			_entities.erase(_entities.begin() + entity_index);
+			peng::shared_ref<Entity>& entity = entities[entity_index];
+			peng::weak_ptr<Entity> weak_entity = entity;
+
+			if (vectools::contains(_pending_kills, weak_entity))
+			{
+				if (exists_yet)
+				{
+					entity->pre_destroy();
+				}
+
+				entities.erase(entities.begin() + entity_index);
+
+				if (weak_entity.valid())
+				{
+					Logger::get().log(LogSeverity::warning, "Entity still exists after kill, potential leak");
+				}
+			}
 		}
-	}
+	};
+
+	kill_in_buffer(_entities, true);
+	kill_in_buffer(_pending_adds, false);
 
 	_pending_kills.clear();
 }
