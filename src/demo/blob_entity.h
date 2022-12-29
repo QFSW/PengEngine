@@ -21,6 +21,6 @@ private:
 	peng::shared_ref<const rendering::Mesh> _mesh;
 	peng::shared_ref<rendering::Material> _material;
 
-	float _angle = 0;
+	float _age;
 	math::Transform _transform;
 };

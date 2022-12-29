@@ -33,7 +33,7 @@ void DemoController::post_create()
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
 		"resources/shaders/core/projection.vert",
-		"resources/shaders/core/unlit.frag"
+		"resources/shaders/demo/rave.frag"
 	);
 
 	const peng::shared_ref<const Texture> texture = peng::make_shared<Texture>("wall",
