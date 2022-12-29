@@ -4,6 +4,7 @@
 #include <core/logger.h>
 #include <rendering/texture.h>
 #include <rendering/primitives.h>
+#include <entities/camera.h>
 
 #include "blob_entity.h"
 
@@ -50,8 +51,10 @@ namespace demo
 
     int demo_main()
     {
-	    const int32_t handle = PengEngine::get().on_engine_initialized().subscribe([&]
-	    {
+        const int32_t handle = PengEngine::get().on_engine_initialized().subscribe([&]
+        {
+            PengEngine::get().entity_manager().create_entity<entities::Camera>(7.0f, 0.001f, 10000.0f);
+
 		    const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
 			    "resources/shaders/core/projection.vert",
 			    "resources/shaders/core/unlit.frag"
@@ -64,18 +67,20 @@ namespace demo
 		    auto material = peng::make_shared<Material>(shader);
 		    material->set_parameter("color_tex", texture);
 
-		    const Vector2i blob_grid(5, 4);
-		    for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
+		    const Vector2i blob_grid(7, 4);
+            for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
 		    {
 			    for (int32_t blob_y = 0; blob_y < blob_grid.y; blob_y++)
 			    {
+				    constexpr float blob_spacing = 1.75f;
 				    const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f)
-					    * 300;
-				    PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos, 175.0f);
+					    * blob_spacing;
+				    PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos);
 			    }
 		    }
 	    });
 
+        PengEngine::get().set_resolution(Vector2i(1280, 720));
         PengEngine::get().set_target_fps(60);
         PengEngine::get().start();
         PengEngine::get().on_engine_initialized().unsubscribe(handle);

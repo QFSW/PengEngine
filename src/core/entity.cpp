@@ -8,5 +8,5 @@ Entity::Entity(bool can_tick)
 
 void Entity::tick(double)
 {
-	assert(!_can_tick);
+	assert(_can_tick);
 }

@@ -1,31 +1,27 @@
 #include "blob_entity.h"
 
-#include <core/peng_engine.h>
+#include <entities/camera.h>
 
 using namespace math;
+using namespace entities;
 
 BlobEntity::BlobEntity(
 	const peng::shared_ref<const rendering::Mesh>& mesh,
 	const peng::shared_ref<rendering::Material>& material,
-	const Vector2f& pos_px,
-	float radius_px
+	const Vector2f& pos
 )
 	: Entity(true)
 	, _mesh(mesh)
 	, _material(material)
-	, _transform(Vector3f(pos_px, 0), Vector3f::one() * radius_px, Vector3f::zero())
-{
-	const Vector2f resolution = PengEngine::get().resolution();
-
-	_view_matrix =
-		Matrix4x4f::identity()
-		.scaled(Vector3f(1 / resolution.x, 1 / resolution.y, 1 / resolution.max()));
-}
+	, _transform(Vector3f(pos, 0), Vector3f::one(), Vector3f::zero())
+{ }
 
 void BlobEntity::tick(double delta_time)
 {
+	const Matrix4x4f view_matrix = Camera::current() ? Camera::current()->view_matrix() : Matrix4x4f::identity();
+
 	_transform.rotation += Vector3f(0.5, 1, 0) * static_cast<float>(delta_time);
-	_material->set_parameter("transform",  _view_matrix * _transform.to_matrix());
+	_material->set_parameter("transform", view_matrix * _transform.to_matrix());
 
 	_material->use();
 	_mesh->render();

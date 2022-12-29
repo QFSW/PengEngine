@@ -1,6 +1,8 @@
 #pragma once
 
-class Entity
+#include <memory>
+
+class Entity : public std::enable_shared_from_this<Entity>
 {
 public:
 	explicit Entity(bool can_tick);
