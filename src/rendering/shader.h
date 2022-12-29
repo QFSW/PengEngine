@@ -3,6 +3,7 @@
 #include <string>
 
 #include <GL/glew.h>
+#include <memory/shared_ref.h>
 
 namespace rendering
 {
@@ -14,13 +15,18 @@ namespace rendering
 		Shader(Shader&&) = delete;
 		~Shader();
 
+		static peng::shared_ref<const Shader> fallback();
+
 		void use() const;
-		GLint get_uniform_location(const std::string& name) const;
+
+		[[nodiscard]] bool broken() const noexcept;
+		[[nodiscard]] GLint get_uniform_location(const std::string& name) const;
 
 	private:
-		void validate_shader_compile(GLuint shader);
-		void validate_shader_link(GLuint shader);
+		bool validate_shader_compile(GLuint shader);
+		bool validate_shader_link(GLuint shader);
 
+		bool _broken;
 		GLuint _shader_prog;
 	};
 }

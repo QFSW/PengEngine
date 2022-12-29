@@ -241,5 +241,6 @@
     <None Include="src\libs\moodycamel\LICENSE.md" />
     <None Include="resources\shaders\core\projection.vert" />
     <None Include="resources\shaders\core\unlit.frag" />
+    <None Include="resources\shaders\core\fallback.frag" />
   </ItemGroup>
 </Project>

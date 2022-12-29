@@ -9,7 +9,13 @@ using namespace math;
 Material::Material(const peng::shared_ref<const Shader>& shader)
 	: _shader(shader)
 	, _num_bound_textures(0)
-{ }
+{
+	if (_shader->broken())
+	{
+		Logger::get().log(LogSeverity::warning, "Provided shader is broken - switching to fallback");
+		_shader = Shader::fallback();
+	}
+}
 
 void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 {
