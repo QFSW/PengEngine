@@ -2,12 +2,13 @@
 
 #include <core/logger.h>
 #include <utils/functional.h>
+#include <utils/utils.h>
 
 using namespace rendering;
 using namespace math;
 
-Material::Material(const peng::shared_ref<const Shader>& shader)
-	: _shader(shader)
+Material::Material(peng::shared_ref<const Shader>&& shader)
+	: _shader(std::move(shader))
 	, _num_bound_textures(0)
 {
 	if (_shader->broken())
@@ -16,6 +17,10 @@ Material::Material(const peng::shared_ref<const Shader>& shader)
 		_shader = Shader::fallback();
 	}
 }
+
+Material::Material(const peng::shared_ref<const Shader>& shader)
+	: Material(utils::copy(shader))
+{ }
 
 void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 {

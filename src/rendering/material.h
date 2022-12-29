@@ -38,6 +38,7 @@ namespace rendering
 			peng::shared_ref<const Texture>
 		>;
 
+		explicit Material(peng::shared_ref<const Shader>&& shader);
 		explicit Material(const peng::shared_ref<const Shader>& shader);
 
 		void set_parameter(GLint uniform_location, const Parameter& parameter);
