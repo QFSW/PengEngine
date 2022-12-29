@@ -70,17 +70,17 @@ void EntityManager::tick_entities(double delta_time)
 
 void EntityManager::flush_pending_adds()
 {
-	for (const peng::shared_ref<Entity>& entity : _pending_adds)
+	const std::vector staged_adds(std::move(_pending_adds));
+
+	for (const peng::shared_ref<Entity>& entity : staged_adds)
 	{
 		_entities.push_back(entity);
 	}
 
-	for (const peng::shared_ref<Entity>& entity : _pending_adds)
+	for (const peng::shared_ref<Entity>& entity : staged_adds)
 	{
 		entity->post_create();
 	}
-
-	_pending_adds.clear();
 }
 
 void EntityManager::flush_pending_kills()

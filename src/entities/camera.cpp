@@ -66,7 +66,7 @@ void Camera::tick(double delta_time)
 		scale = Vector3f::one();
 	}
 
-	_view_matrix = _transform.to_inverse_matrix() * ortho_transform.to_inverse_matrix();
+	_view_matrix = ortho_transform.to_inverse_matrix() * _transform.to_inverse_matrix();
 }
 
 Transform& Camera::transform() noexcept
