@@ -41,8 +41,9 @@ void Material::set_parameter(const std::string& parameter_name, const Parameter&
 	{
 		set_parameter(parameter_index, parameter);
 	}
-	else
+	else if (_bad_parameter_names.find(parameter_name) == _bad_parameter_names.end())
 	{
+		_bad_parameter_names.insert(parameter_name);
 		Logger::get().logf(LogSeverity::error,
 			"Could not set parameter '%s' as no matching uniform could be found in the shader", parameter_name.c_str()
 		);

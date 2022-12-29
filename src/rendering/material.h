@@ -86,6 +86,7 @@ namespace rendering
 
 		std::vector<std::tuple<GLint, Parameter>> _set_parameters;
 		common::unordered_map<GLint, size_t> _existing_parameters;
+		common::unordered_set<std::string> _bad_parameter_names;
 		uint32_t _num_bound_textures;
 	};
 }
