@@ -16,7 +16,8 @@ using namespace entities;
 
 DemoController::DemoController()
 	: Entity(true)
-	, _pan_speed(5)
+	, _pan_speed(1)
+	, _zoom_speed(1)
 { }
 
 void DemoController::post_create()
@@ -65,28 +66,42 @@ void DemoController::tick(double delta_time)
 	using namespace input;
 	const InputManager& input = PengEngine::get().input_manager();
 
-	Vector2f input_vector;
+	Vector2f pan_input;
+	float zoom_input = 0;
 
-	if (input[KeyCode::left].is_down())
+	if (input[KeyCode::left].is_down() || input[KeyCode::a].is_down())
 	{
-		input_vector.x -= 1;
+		pan_input.x -= 1;
 	}
 
-	if (input[KeyCode::right].is_down())
+	if (input[KeyCode::right].is_down() || input[KeyCode::d].is_down())
 	{
-		input_vector.x += 1;
+		pan_input.x += 1;
 	}
 
-	if (input[KeyCode::down].is_down())
+	if (input[KeyCode::down].is_down() || input[KeyCode::s].is_down())
 	{
-		input_vector.y -= 1;
+		pan_input.y -= 1;
 	}
 
-	if (input[KeyCode::up].is_down())
+	if (input[KeyCode::up].is_down() || input[KeyCode::w].is_down())
 	{
-		input_vector.y += 1;
+		pan_input.y += 1;
 	}
 
-	const float dist = _pan_speed * static_cast<float>(delta_time);
-	Camera::current()->transform().position += Vector3f(input_vector.normalized(), 0) * dist;
+	if (input[KeyCode::q].is_down() || input[KeyCode::z].is_down())
+	{
+		zoom_input -= 1;
+	}
+
+	if (input[KeyCode::e].is_down() || input[KeyCode::x].is_down())
+	{
+		zoom_input += 1;
+	}
+		
+	const float pan_amount = _pan_speed * static_cast<float>(delta_time) * Camera::current()->ortho_size();
+	const float zoom_amount = _zoom_speed * static_cast<float>(delta_time);
+
+	Camera::current()->transform().position += Vector3f(pan_input.normalized(), 0) * pan_amount;
+	Camera::current()->ortho_size() /= (1 + zoom_input * zoom_amount);
 }

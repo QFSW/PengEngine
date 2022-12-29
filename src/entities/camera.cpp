@@ -74,6 +74,11 @@ Transform& Camera::transform() noexcept
 	return _transform;
 }
 
+float& Camera::ortho_size() noexcept
+{
+	return _ortho_size;
+}
+
 const Transform& Camera::transform() const noexcept
 {
 	return _transform;

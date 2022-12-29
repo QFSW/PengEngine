@@ -16,7 +16,9 @@ namespace entities
 		void post_create() override;
 		void tick(double delta_time) override;
 
-		[[nodiscard]] math::Transform& transform() noexcept;
+		math::Transform& transform() noexcept;
+		float& ortho_size() noexcept;
+
 		[[nodiscard]] const math::Transform& transform() const noexcept;
 		[[nodiscard]] const math::Matrix4x4f& view_matrix() const noexcept;
 
