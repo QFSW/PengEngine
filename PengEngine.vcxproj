@@ -348,6 +348,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\threading\job.h" />
     <ClInclude Include="src\threading\thread_pool.h" />
     <ClInclude Include="src\threading\worker_thread.h" />
+    <ClInclude Include="src\utils\concepts.h" />
     <ClInclude Include="src\utils\event.h" />
     <ClInclude Include="src\utils\detail\final_act.h" />
     <ClInclude Include="src\utils\functional.h" />
