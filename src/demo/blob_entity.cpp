@@ -13,14 +13,12 @@ BlobEntity::BlobEntity(
 	: Entity(true)
 	, _mesh(mesh)
 	, _material(material)
-	, _transform(Vector3f(pos, 0), Vector3f::one(), Vector3f::zero())
+	, _transform(Vector3f(pos, pos.y), Vector3f::one(), Vector3f::zero())
 { }
 
 void BlobEntity::tick(double delta_time)
 {
 	const Matrix4x4f view_matrix = Camera::current() ? Camera::current()->view_matrix() : Matrix4x4f::identity();
-
-	_transform.rotation += Vector3f(0.5, 1, 0) * static_cast<float>(delta_time);
 	_material->set_parameter("transform", view_matrix * _transform.to_matrix());
 
 	_material->use();

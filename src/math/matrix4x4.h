@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <numbers>
 
 #include "vector4.h"
 
@@ -27,6 +28,8 @@ namespace math
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
 		[[nodiscard]] Matrix4x4 rotated(const Vector3<T>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
+
+		[[nodiscard]] Vector3<T> get_translation() const noexcept;
 
 		Matrix4x4& operator+=(const Matrix4x4& other);
 		Matrix4x4& operator-=(const Matrix4x4& other);
@@ -137,7 +140,7 @@ namespace math
 			return static_cast<T>(std::cos(x));
 		};
 
-		const Vector3<T>& r = rotation;
+		const Vector3<T> r = rotation * std::numbers::pi_v<T> / 180;
 		Matrix4x4 m = identity();
 
 		if (rotation.x != 0)
@@ -191,6 +194,12 @@ namespace math
 		});
 
 		return m * (*this);
+	}
+
+	template <number T>
+	Vector3<T> Matrix4x4<T>::get_translation() const noexcept
+	{
+		return Vector3f<T>(elements[12], elements[13], elements[14]);
 	}
 
 	template <number T>
@@ -262,7 +271,7 @@ namespace math
 	template <number T>
 	Vector3<T> Matrix4x4<T>::operator*(const Vector3<T>& other) const
 	{
-		return (*this * Vector4<T>(other, 1)).xyz;
+		return (*this * Vector4<T>(other, 1)).xyz();
 	}
 
 	template <number T>

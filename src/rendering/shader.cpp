@@ -93,9 +93,12 @@ bool Shader::validate_shader_compile(GLuint shader)
 	{
 		if (!success)
 		{
-			char info_log[512];
-			glGetShaderInfoLog(shader, 512, nullptr, info_log);
-			Logger::get().log(LogSeverity::error, info_log);
+			GLint error_length;
+			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &error_length);
+
+			std::vector<GLchar> error_log;
+			glGetShaderInfoLog(shader, error_length, nullptr, error_log.data());
+			Logger::get().log(LogSeverity::error, error_log.data());
 		}
 	}
 
@@ -111,9 +114,12 @@ bool Shader::validate_shader_link(GLuint shader)
 	{
 		if (!success)
 		{
-			char info_log[512];
-			glGetProgramInfoLog(shader, 512, nullptr, info_log);
-			Logger::get().log(LogSeverity::error, info_log);
+			GLint error_length;
+			glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &error_length);
+
+			std::vector<GLchar> error_log;
+			glGetProgramInfoLog(shader, error_length, nullptr, error_log.data());
+			Logger::get().log(LogSeverity::error, error_log.data());
 		}
 	}
 

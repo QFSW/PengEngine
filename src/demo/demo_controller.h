@@ -14,6 +14,7 @@ namespace demo
 
 	private:
 		float _pan_speed;
+		float _rot_speed;
 		float _zoom_speed;
 	};
 }
