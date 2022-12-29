@@ -72,6 +72,10 @@ namespace math
 		[[nodiscard]] F magnitude() const noexcept;
 		[[nodiscard]] Vector3<F> normalized() const noexcept;
 		[[nodiscard]] Vector3<F> normalized_unsafe() const noexcept;
+		[[nodiscard]] Vector3<F> reciprocal() const noexcept;
+
+		Vector3 operator+() const;
+		Vector3 operator-() const;
 
 		Vector3& operator+=(const Vector3& other);
 		Vector3& operator-=(const Vector3& other);
@@ -160,6 +164,25 @@ namespace math
 	Vector3<make_floating_t<T>> Vector3<T>::normalized_unsafe() const noexcept
 	{
 		return static_cast<Vector3<F>>(*this) / magnitude();
+	}
+
+	template <number T>
+	Vector3<make_floating_t<T>> Vector3<T>::reciprocal() const noexcept
+	{
+		constexpr F one_f = 1;
+		return Vector3<F>(one_f / x, one_f / y, one_f / z);
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator+() const
+	{
+		return *this;
+	}
+
+	template <number T>
+	Vector3<T> Vector3<T>::operator-() const
+	{
+		return *this * -1;
 	}
 
 	template <number T>

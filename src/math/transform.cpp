@@ -9,3 +9,11 @@ Matrix4x4f Transform::to_matrix() const noexcept
 		.rotated(rotation)
 		.translated(position);
 }
+
+Matrix4x4f Transform::to_inverse_matrix() const noexcept
+{
+	return Matrix4x4f::identity()
+		.translated(-position)
+		.rotated(-rotation)
+		.scaled(position.reciprocal());
+}

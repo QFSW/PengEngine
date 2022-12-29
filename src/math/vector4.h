@@ -380,6 +380,10 @@ namespace math
 		[[nodiscard]] F magnitude() const noexcept;
 		[[nodiscard]] Vector4<F> normalized() const noexcept;
 		[[nodiscard]] Vector4<F> normalized_unsafe() const noexcept;
+		[[nodiscard]] Vector4<F> reciprocal() const noexcept;
+
+		Vector4 operator+() const;
+		Vector4 operator-() const;
 
 		Vector4& operator+=(const Vector4& other);
 		Vector4& operator-=(const Vector4& other);
@@ -471,6 +475,25 @@ namespace math
 	Vector4<make_floating_t<T>> Vector4<T>::normalized_unsafe() const noexcept
 	{
 		return static_cast<Vector4<F>>(*this) / magnitude();
+	}
+
+	template <number T>
+	Vector4<make_floating_t<T>> Vector4<T>::reciprocal() const noexcept
+	{
+		constexpr F one_f = 1;
+		return Vector4<F>(one_f / x, one_f / y, one_f / z, one_f / w);
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator+() const
+	{
+		return *this;
+	}
+
+	template <number T>
+	Vector4<T> Vector4<T>::operator-() const
+	{
+		return *this * -1;
 	}
 
 	template <number T>

@@ -12,5 +12,6 @@ namespace math
 		Vector3f rotation;
 
 		[[nodiscard]] Matrix4x4f to_matrix() const noexcept;
+		[[nodiscard]] Matrix4x4f to_inverse_matrix() const noexcept;
 	};
 }
