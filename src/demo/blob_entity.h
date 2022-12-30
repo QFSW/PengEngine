@@ -4,7 +4,7 @@
 #include <memory/shared_ref.h>
 #include <rendering/material.h>
 #include <rendering/mesh.h>
-#include <math/transform.h>
+#include <components/mesh_renderer.h>
 
 class BlobEntity : public Entity
 {
@@ -15,12 +15,9 @@ public:
 		const math::Vector2f& pos
 	);
 
-	virtual void tick(double delta_time) override;
+	void tick(double delta_time) override;
 
 private:
-	peng::shared_ref<const rendering::Mesh> _mesh;
-	peng::shared_ref<rendering::Material> _material;
-
 	float _age;
-	math::Transform _transform;
+	peng::weak_ptr<components::MeshRenderer> _mesh_renderer;
 };

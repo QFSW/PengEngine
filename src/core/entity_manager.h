@@ -7,7 +7,14 @@
 
 #include <memory/shared_ref.h>
 #include <memory/weak_ptr.h>
-#include <utils/vectools.h>
+
+enum class EntityState
+{
+	invalid,
+	valid,
+	pending_add,
+	pending_kill
+};
 
 class EntityManager
 {
