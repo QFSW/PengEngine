@@ -70,19 +70,9 @@ void Camera::make_orthographic(float ortho_size, float near_clip, float far_clip
 	validate_config();
 }
 
-Transform& Camera::transform() noexcept
-{
-	return _transform;
-}
-
 float& Camera::ortho_size() noexcept
 {
 	return _ortho_size;
-}
-
-const Transform& Camera::transform() const noexcept
-{
-	return _transform;
 }
 
 const Matrix4x4f& Camera::view_matrix() const noexcept

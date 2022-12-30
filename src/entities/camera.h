@@ -25,10 +25,8 @@ namespace entities
 		void make_perspective(float fov, float near_clip, float far_clip);
 		void make_orthographic(float ortho_size, float near_clip, float far_clip);
 
-		math::Transform& transform() noexcept;
 		float& ortho_size() noexcept;
 
-		[[nodiscard]] const math::Transform& transform() const noexcept;
 		[[nodiscard]] const math::Matrix4x4f& view_matrix() const noexcept;
 		[[nodiscard]] Projection projection() const noexcept;
 
@@ -43,7 +41,6 @@ namespace entities
 		float _near_clip;
 		float _far_clip;
 		Projection _projection;
-		math::Transform _transform;
 		math::Matrix4x4f _view_matrix;
 	};
 }

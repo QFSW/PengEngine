@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "math/transform.h"
+
 class Entity : public std::enable_shared_from_this<Entity>
 {
 public:
@@ -12,13 +14,13 @@ public:
 	virtual void post_create() { }
 	virtual void pre_destroy() { }
 
-	[[nodiscard]] bool can_tick() const noexcept
-	{
-		return _can_tick;
-	}
+	[[nodiscard]] bool can_tick() const noexcept { return _can_tick; }
+	[[nodiscard]] math::Transform& transform() noexcept { return _transform; }
+	[[nodiscard]] const math::Transform& transform() const noexcept { return _transform; }
 
 protected:
 	bool _can_tick;
+	math::Transform _transform;
 };
 
 enum class EntityState
