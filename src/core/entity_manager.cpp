@@ -61,7 +61,7 @@ void EntityManager::tick_entities(double delta_time)
 {
 	for (const peng::shared_ref<Entity>& entity : _entities)
 	{
-		if (entity->can_tick())
+		if (entity->can_tick() && entity->is_active())
 		{
 			entity->tick(delta_time);
 		}

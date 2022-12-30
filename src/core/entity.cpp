@@ -2,9 +2,12 @@
 
 #include <cassert>
 
+#include "peng_engine.h"
+
 Entity::Entity(bool can_tick)
 	: _can_tick(can_tick)
 	, _created(false)
+	, _active(true)
 { }
 
 void Entity::tick(double delta_time)
@@ -36,4 +39,24 @@ void Entity::pre_destroy()
 	{
 		component->pre_destroy();
 	}
+}
+
+void Entity::set_active(bool active)
+{
+	if (active && !_active)
+	{
+		_active = true;
+		post_enable();
+	}
+	else if (!active && _active)
+	{
+		_active = false;
+		post_disable();
+	}
+}
+
+void Entity::destroy()
+{
+	const peng::shared_ref<Entity> strong_this = peng::shared_ref(shared_from_this());
+	PengEngine::get().entity_manager().destroy_entity(strong_this);
 }

@@ -17,17 +17,25 @@ public:
 	virtual void tick(double delta_time);
 	virtual void post_create();
 	virtual void pre_destroy();
+	virtual void post_enable() { }
+	virtual void post_disable() { }
+
+	void set_active(bool active);
+	void destroy();
 
 	template <std::derived_from<Component> T, typename ...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
 
 	[[nodiscard]] bool can_tick() const noexcept { return _can_tick; }
+	[[nodiscard]] bool is_active() const noexcept { return _active; }
+
 	[[nodiscard]] math::Transform& transform() noexcept { return _transform; }
 	[[nodiscard]] const math::Transform& transform() const noexcept { return _transform; }
 
 protected:
 	bool _can_tick;
 	bool _created;
+	bool _active;
 
 	math::Transform _transform;
 	std::vector<peng::shared_ref<Component>> _components;
