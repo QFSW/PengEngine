@@ -155,6 +155,18 @@ namespace math
 			m *= m_z;
 		}
 
+		if (rotation.y != 0)
+		{
+			const Matrix4x4 m_y({
+				cos(r.y), 0, -sin(r.y), 0,
+				0,        1, 0,         0,
+				sin(r.y), 0, cos(r.y),  0,
+				0,        0, 0,         1
+				});
+
+			m *= m_y;
+		}
+
 		if (rotation.x != 0)
 		{
 			const Matrix4x4 m_x({
@@ -165,18 +177,6 @@ namespace math
 			});
 
 			m *= m_x;
-		}
-
-		if (rotation.y != 0)
-		{
-			const Matrix4x4 m_y({
-				cos(r.y), 0, -sin(r.y), 0,
-				0,        1, 0,         0,
-				sin(r.y), 0, cos(r.y),  0,
-				0,        0, 0,         1
-			});
-
-			m *= m_y;
 		}
 
 		return m * (*this);
