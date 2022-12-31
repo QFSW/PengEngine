@@ -2,9 +2,11 @@
 
 #include <memory/weak_ptr.h>
 
+#include "tickable.h"
+
 class Entity;
 
-class Component
+class Component : ITickable
 {
 	friend Entity;
 
@@ -14,7 +16,7 @@ public:
 	Component(Component&&) = delete;
 	virtual ~Component() = default;
 
-	virtual void tick([[maybe_unused]] double delta_time) { }
+	virtual void tick([[maybe_unused]] float delta_time) { }
 	virtual void post_create() { }
 	virtual void pre_destroy() { }
 

@@ -19,7 +19,7 @@ namespace components
 			peng::shared_ref<rendering::Material>&& material
 		);
 
-		void tick(double delta_time) override;
+		void tick(float delta_time) override;
 		void post_create() override;
 
 		[[nodiscard]] const peng::shared_ref<const rendering::Mesh>& mesh() const noexcept { return _mesh; }

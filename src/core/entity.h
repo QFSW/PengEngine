@@ -6,15 +6,16 @@
 #include <memory/weak_ptr.h>
 #include <math/transform.h>
 
+#include "tickable.h"
 #include "component.h"
 
-class Entity : public std::enable_shared_from_this<Entity>
+class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
 public:
 	explicit Entity(bool can_tick);
 	virtual ~Entity() = default;
 
-	virtual void tick(double delta_time);
+	virtual void tick(float delta_time);
 	virtual void post_create();
 	virtual void pre_destroy();
 	virtual void post_enable() { }

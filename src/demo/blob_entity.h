@@ -15,7 +15,7 @@ public:
 		const math::Vector2f& pos
 	);
 
-	void tick(double delta_time) override;
+	void tick(float delta_time) override;
 
 private:
 	float _age;

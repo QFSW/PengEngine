@@ -20,7 +20,7 @@ class EntityManager
 {
 public:
 	// ----------- Engine API -----------
-	void tick(double delta_time);
+	void tick(float delta_time);
 	void shutdown();
 	// ----------------------------------
 
@@ -34,7 +34,7 @@ public:
 	// ----------------------------------
 
 private:
-	void tick_entities(double delta_time);
+	void tick_entities(float delta_time);
 	void flush_pending_adds();
 	void flush_pending_kills();
 

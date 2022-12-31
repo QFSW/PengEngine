@@ -10,7 +10,7 @@ namespace demo
 		DemoController();
 
 		void post_create() override;
-		void tick(double delta_time) override;
+		void tick(float delta_time) override;
 
 	private:
 		float _pan_speed;

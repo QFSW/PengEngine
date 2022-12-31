@@ -58,7 +58,7 @@ void DemoController::post_create()
 	Logger::get().log(LogSeverity::success, "Demo controller started");
 }
 
-void DemoController::tick(double delta_time)
+void DemoController::tick(float delta_time)
 {
 	Entity::tick(delta_time);
 

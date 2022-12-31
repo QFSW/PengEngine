@@ -224,7 +224,7 @@ void PengEngine::shutdown_opengl()
 void PengEngine::tick_main()
 {
 	_last_main_frametime = timing::measure_ms([this] {
-		const double delta_time = _last_frametime / 1000.0;
+		const float delta_time = static_cast<float>(_last_frametime / 1000.0);
 		
 		_on_frame_start();
 

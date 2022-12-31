@@ -317,6 +317,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\peng_engine.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\entity_manager.h" />
+    <ClInclude Include="src\core\tickable.h" />
     <ClInclude Include="src\demo\blob_entity.h" />
     <ClInclude Include="src\demo\demo_controller.h" />
     <ClInclude Include="src\demo\demo_main.h" />

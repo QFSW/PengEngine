@@ -5,7 +5,7 @@
 
 #include "logger.h"
 
-void EntityManager::tick(double delta_time)
+void EntityManager::tick(float delta_time)
 {
 	flush_pending_adds();
 	tick_entities(delta_time);
@@ -57,7 +57,7 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 	return EntityState::invalid;
 }
 
-void EntityManager::tick_entities(double delta_time)
+void EntityManager::tick_entities(float delta_time)
 {
 	for (const peng::shared_ref<Entity>& entity : _entities)
 	{

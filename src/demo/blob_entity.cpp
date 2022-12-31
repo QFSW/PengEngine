@@ -17,10 +17,10 @@ BlobEntity::BlobEntity(
 	_mesh_renderer = add_component<MeshRenderer>(mesh, material);
 }
 
-void BlobEntity::tick(double delta_time)
+void BlobEntity::tick(float delta_time)
 {
 	Entity::tick(delta_time);
 
-	_age += static_cast<float>(delta_time);
+	_age += delta_time;
 	_mesh_renderer->material()->set_parameter("time", _age);
 }

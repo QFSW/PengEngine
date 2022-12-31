@@ -24,7 +24,7 @@ MeshRenderer::MeshRenderer(
 	, _material(std::move(material))
 { }
 
-void MeshRenderer::tick(double delta_time)
+void MeshRenderer::tick(float delta_time)
 {
 	Component::tick(delta_time);
 

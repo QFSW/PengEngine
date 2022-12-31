@@ -20,7 +20,7 @@ namespace entities
 		static peng::weak_ptr<Camera>& current();
 
 		void post_create() override;
-		void tick(double delta_time) override;
+		void tick(float delta_time) override;
 
 		void make_perspective(float fov, float near_clip, float far_clip);
 		void make_orthographic(float ortho_size, float near_clip, float far_clip);

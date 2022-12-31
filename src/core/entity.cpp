@@ -10,7 +10,7 @@ Entity::Entity(bool can_tick)
 	, _active(true)
 { }
 
-void Entity::tick(double delta_time)
+void Entity::tick(float delta_time)
 {
 	assert(_can_tick);
 

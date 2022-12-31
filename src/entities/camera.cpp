@@ -39,7 +39,7 @@ void Camera::post_create()
 	assert(_current);
 }
 
-void Camera::tick(double delta_time)
+void Camera::tick(float delta_time)
 {
 	Entity::tick(delta_time);
 
