@@ -1,6 +1,7 @@
 #pragma once
 
-#include "matrix4x4.h"
+#include <numbers>
+
 #include "vector3.h"
 
 namespace math
@@ -26,12 +27,20 @@ namespace math
 		Quaternion operator+(const Quaternion& other) const;
 		Quaternion operator-(const Quaternion& other) const;
 		Quaternion operator*(const Quaternion& other) const;
+		Quaternion& operator*=(const Quaternion& other);
 
-		[[nodiscard]] Matrix4x4<T> rotator() const noexcept;
+		[[nodiscard]] Quaternion inverse() const noexcept;
 
+		static constexpr Quaternion identity();
 		static constexpr Quaternion euler(const Vector3<T>& euler_angles);
 		static constexpr Quaternion euler(T yaw, T pitch, T roll);
 	};
+
+	template <std::floating_point T>
+	constexpr Quaternion<T> Quaternion<T>::identity()
+	{
+		return Quaternion(1, 0, 0, 0);
+	}
 
 	template <std::floating_point T>
 	constexpr Quaternion<T> Quaternion<T>::euler(const Vector3<T>& euler_angles)
@@ -60,7 +69,7 @@ namespace math
 
 	template <std::floating_point T>
 	Quaternion<T>::Quaternion()
-		: w(0)
+		: w(1)
 		, x(0)
 		, y(0)
 		, z(0)
@@ -135,26 +144,20 @@ namespace math
 	}
 
 	template <std::floating_point T>
-	Matrix4x4<T> Quaternion<T>::rotator() const noexcept
+	Quaternion<T>& Quaternion<T>::operator*=(const Quaternion& other)
 	{
-		const float wx = w * x;
-		const float wy = w * y;
-		const float wz = w * z;
+		return *this = other * *this;
+	}
 
-		const float xx = x * x;
-		const float xy = x * y;
-		const float xz = x * z;
-
-		const float yy = y * y;
-		const float yz = y * z;
-
-		const float zz = z * z;
-
-		return Matrix4x4<T>({
-			1 - 2 * (yy + zz),  2 * (xy + wz),      2 * (xz - wy),      0,
-			2 * (xy - wz),      1 - 2 * (xx + zz),  2 * (yz + wx),      0,
-			2 * (xz + wy),      2 * (yz - wx),      1 - 2 * (xx + yy),  0,
-			0,                  0,                  0,                  1
-		});
+	template <std::floating_point T>
+	Quaternion<T> Quaternion<T>::inverse() const noexcept
+	{
+		const T denominator = w * w + x * x + y * y + z * z;
+		return Quaternion(
+			+w / denominator,
+			-x / denominator,
+			-y / denominator,
+			-z / denominator
+		);
 	}
 }

@@ -5,6 +5,7 @@
 #include <numbers>
 
 #include "vector4.h"
+#include "quaternion.h"
 
 namespace math
 {
@@ -12,6 +13,8 @@ namespace math
 	struct Matrix4x4
 	{
 	public:
+		using F = make_floating_t<T>;
+
 		std::array<T, 16> elements;
 
 		Matrix4x4();
@@ -26,8 +29,10 @@ namespace math
 
 		[[nodiscard]] Matrix4x4 transposed() const noexcept;
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
-		[[nodiscard]] Matrix4x4 rotated(const Vector3<T>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
+
+		[[nodiscard]] Matrix4x4<F> rotated(const Vector3<F>& rotation) const noexcept;
+		[[nodiscard]] Matrix4x4<F> rotated(const Quaternion<F>& rotation) const noexcept;
 
 		[[nodiscard]] Vector3<T> get_translation() const noexcept;
 
@@ -127,58 +132,6 @@ namespace math
 	}
 
 	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::rotated(const Vector3<T>& rotation) const noexcept
-	{
-		auto sin = [](T x) -> T
-		{
-			return static_cast<T>(std::sin(x));
-		};
-
-		auto cos = [](T x) -> T
-		{
-			return static_cast<T>(std::cos(x));
-		};
-
-		// x = yaw, y = pitch, z = roll
-		const Vector3<T> r = rotation * std::numbers::pi_v<T> / 180;
-		Matrix4x4 pitch = identity();
-		Matrix4x4 yaw = identity();
-		Matrix4x4 roll = identity();
-
-		if (rotation.x != 0)
-		{
-			yaw = Matrix4x4({
-				cos(r.x), 0, -sin(r.x), 0,
-				0,        1, 0,         0,
-				sin(r.x), 0, cos(r.x),  0,
-				0,        0, 0,         1
-			});
-		}
-
-		if (rotation.y != 0)
-		{
-			pitch = Matrix4x4({
-				1,   0,		    0,		  0,
-				0,   cos(r.y),  sin(r.y), 0,
-				0,   -sin(r.y), cos(r.y), 0,
-				0,   0,		    0,		  1
-			});
-		}
-
-		if (rotation.z != 0)
-		{
-			roll = Matrix4x4({
-				cos(r.z),  sin(r.z), 0, 0,
-				-sin(r.z), cos(r.z), 0, 0,
-				0,         0,        1, 0,
-				0,         0,		 0,	1
-			});
-		}
-
-		return roll * pitch * yaw * *this;
-	}
-
-	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::translated(const Vector3<T>& translation) const noexcept
 	{
 		const Vector3<T>& t = translation;
@@ -190,6 +143,76 @@ namespace math
 		});
 
 		return m * (*this);
+	}
+
+	template <number T>
+	Matrix4x4<make_floating_t<T>> Matrix4x4<T>::rotated(const Vector3<F>& rotation) const noexcept
+	{
+		// x = yaw, y = pitch, z = roll
+		const Vector3<F> r = rotation * std::numbers::pi_v<T> / 180;
+		Matrix4x4<F> pitch = identity();
+		Matrix4x4<F> yaw = identity();
+		Matrix4x4<F> roll = identity();
+
+		if (rotation.x != 0)
+		{
+			yaw = Matrix4x4<F>({
+				std::cos(r.x), 0, -std::sin(r.x), 0,
+				0,             1, 0,              0,
+				std::sin(r.x), 0, std::cos(r.x),  0,
+				0,             0, 0,              1
+			});
+		}
+
+		if (rotation.y != 0)
+		{
+			pitch = Matrix4x4<F>({
+				1,   0,		         0,		        0,
+				0,   std::cos(r.y),  std::sin(r.y), 0,
+				0,   -std::sin(r.y), std::cos(r.y), 0,
+				0,   0,		         0,		        1
+			});
+		}
+
+		if (rotation.z != 0)
+		{
+			roll = Matrix4x4<F>({
+				std::cos(r.z),  std::sin(r.z), 0, 0,
+				-std::sin(r.z), std::cos(r.z), 0, 0,
+				0,              0,             1, 0,
+				0,              0,		       0, 1
+			});
+		}
+
+		return roll * pitch * yaw * *this;
+	}
+
+	template <number T>
+	Matrix4x4<typename Matrix4x4<T>::F> Matrix4x4<T>::rotated(const Quaternion<F>& rotation) const noexcept
+	{
+		const Quaternion<F>& r = rotation;
+
+		const float wx = r.w * r.x;
+		const float wy = r.w * r.y;
+		const float wz = r.w * r.z;
+
+		const float xx = r.x * r.x;
+		const float xy = r.x * r.y;
+		const float xz = r.x * r.z;
+
+		const float yy = r.y * r.y;
+		const float yz = r.y * r.z;
+
+		const float zz = r.z * r.z;
+
+		const Matrix4x4<F> m({
+			1 - 2 * (yy + zz),  2 * (xy + wz),      2 * (xz - wy),      0,
+			2 * (xy - wz),      1 - 2 * (xx + zz),  2 * (yz + wx),      0,
+			2 * (xz + wy),      2 * (yz - wx),      1 - 2 * (xx + yy),  0,
+			0,                  0,                  0,                  1
+		});
+
+		return m * *this;
 	}
 
 	template <number T>

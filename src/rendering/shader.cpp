@@ -63,6 +63,8 @@ Shader::Shader(
 
 	if (!_broken)
 	{
+		Logger::get().log(LogSeverity::log, "Extracting uniform information");
+
 		GLint num_uniforms;
 		glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
 

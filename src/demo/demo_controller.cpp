@@ -145,7 +145,7 @@ void DemoController::tick(float delta_time)
 
 	if (orthographic)
 	{
-		const float zoom_amount = _zoom_speed * static_cast<float>(delta_time);
+		const float zoom_amount = _zoom_speed * delta_time;
 		Camera::current()->ortho_size() /= (1 + zoom_input * zoom_amount);
 	}
 	else
@@ -153,7 +153,7 @@ void DemoController::tick(float delta_time)
 		pan_input = Vector3f(pan_input.x, zoom_input, pan_input.y);
 	}
 
-	const float pan_amount = _pan_speed * static_cast<float>(delta_time)
+	const float pan_amount = _pan_speed * delta_time
 		* (orthographic ? Camera::current()->ortho_size() : 1);
 
 	const Vector3f camera_rotation = camera->local_transform().rotation;

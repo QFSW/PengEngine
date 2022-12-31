@@ -40,9 +40,9 @@ namespace rendering
 
 		struct Uniform
 		{
-			GLint location;
+			GLint location = -1;
 			std::string name;
-			GLenum type;
+			GLenum type = GL_INT;
 			std::optional<Parameter> default_value;
 		};
 
