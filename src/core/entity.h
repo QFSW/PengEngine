@@ -22,24 +22,35 @@ public:
 	virtual void post_disable() { }
 
 	void set_active(bool active);
+	void set_parent(const peng::weak_ptr<Entity>& parent);
 	void destroy();
 
 	template <std::derived_from<Component> T, typename ...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
 
+	[[nodiscard]] peng::weak_ptr<const Entity> weak_this() const;
+	[[nodiscard]] peng::weak_ptr<Entity> weak_this();
+
 	[[nodiscard]] bool can_tick() const noexcept { return _can_tick; }
 	[[nodiscard]] bool is_active() const noexcept { return _active; }
 
-	[[nodiscard]] math::Transform evaluate_transform() const noexcept;
+	[[nodiscard]] math::Matrix4x4f transform_matrix() const noexcept;
+	[[nodiscard]] math::Matrix4x4f transform_matrix_inv() const noexcept;
 	[[nodiscard]] math::Transform& local_transform() noexcept { return _local_transform; }
 	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
 
 protected:
 	bool _can_tick;
+	math::Transform _local_transform;
+
+private:
+	void cleanup_killed_children();
+
 	bool _created;
 	bool _active;
 
-	math::Transform _local_transform;
+	peng::weak_ptr<Entity> _parent;
+	std::vector<peng::weak_ptr<Entity>> _children;
 	std::vector<peng::shared_ref<Component>> _components;
 	std::vector<peng::shared_ref<Component>> _deferred_components;
 };

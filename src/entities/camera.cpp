@@ -47,7 +47,7 @@ void Camera::tick(float delta_time)
 		Matrix4x4f::identity()
 		.scaled(Vector3f(1, 1, -1));
 
-	_view_matrix = calc_projection_matrix() * z_reverse * evaluate_transform().to_inverse_matrix();
+	_view_matrix = calc_projection_matrix() * z_reverse * transform_matrix_inv();
 }
 
 void Camera::make_perspective(float fov, float near_clip, float far_clip)

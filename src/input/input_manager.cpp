@@ -122,13 +122,24 @@ void InputManager::tick()
 	double cursor_x, cursor_y;
 	glfwGetCursorPos(_window, &cursor_x, &cursor_y);
 
+	_last_cursor_pos = _cursor_pos;
 	_cursor_pos.x = static_cast<int32_t>(std::round(cursor_x));
 	_cursor_pos.y = static_cast<int32_t>(std::round(cursor_y));
 }
 
-const math::Vector2i& InputManager::cursor_pos_px() const noexcept
+math::Vector2i InputManager::cursor_delta() const noexcept
+{
+	return _cursor_pos - _last_cursor_pos;
+}
+
+const math::Vector2i& InputManager::cursor_pos() const noexcept
 {
 	return _cursor_pos;
+}
+
+const math::Vector2i& InputManager::last_cursor_pos() const noexcept
+{
+	return _last_cursor_pos;
 }
 
 const KeyState& InputManager::get_key(KeyCode code) const

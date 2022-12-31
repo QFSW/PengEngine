@@ -21,7 +21,9 @@ namespace input
 		// ----------------------------------
 
 		// ------------ User API ------------
-		[[nodiscard]] const math::Vector2i& cursor_pos_px() const noexcept;
+		[[nodiscard]] math::Vector2i cursor_delta() const noexcept;
+		[[nodiscard]] const math::Vector2i& cursor_pos() const noexcept;
+		[[nodiscard]] const math::Vector2i& last_cursor_pos() const noexcept;
 		[[nodiscard]] const KeyState& get_key(KeyCode code) const;
 		[[nodiscard]] const KeyState& operator[](KeyCode code) const;
 		// ----------------------------------
@@ -30,9 +32,11 @@ namespace input
 		static constexpr KeyCode from_opengl(int32_t opengl_key);
 		
 		GLFWwindow* _window;
-		math::Vector2i _cursor_pos;
 		std::vector<int32_t> _opengl_keys;
 		std::vector<int32_t> _opengl_mouse_buttons;
+
+		math::Vector2i _cursor_pos;
+		math::Vector2i _last_cursor_pos;
 		common::unordered_map<KeyCode, KeyState> _key_states;
 	};
 }

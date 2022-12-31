@@ -16,6 +16,12 @@ namespace vectools
     }
 
     template <typename T>
+    void remove(std::vector<T>& v, const T& item)
+    {
+        v.erase(std::remove(v.begin(), v.end(), item), v.end());
+    }
+
+    template <typename T>
     bool contains(const std::vector<T>& v, const T& item)
     {
         return std::find(v.begin(), v.end(), item) != v.end();
