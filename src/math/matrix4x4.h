@@ -139,7 +139,7 @@ namespace math
 			return static_cast<T>(std::cos(x));
 		};
 
-		// x = pitch, y = yaw, z = roll
+		// x = yaw, y = pitch, z = roll
 		const Vector3<T> r = rotation * std::numbers::pi_v<T> / 180;
 		Matrix4x4 pitch = identity();
 		Matrix4x4 yaw = identity();
@@ -147,21 +147,21 @@ namespace math
 
 		if (rotation.x != 0)
 		{
-			pitch = Matrix4x4({
-				1,   0,		    0,		  0,
-				0,   cos(r.x),  sin(r.x), 0,
-				0,   -sin(r.x), cos(r.x), 0,
-				0,   0,		    0,		  1
+			yaw = Matrix4x4({
+				cos(r.x), 0, -sin(r.x), 0,
+				0,        1, 0,         0,
+				sin(r.x), 0, cos(r.x),  0,
+				0,        0, 0,         1
 			});
 		}
 
 		if (rotation.y != 0)
 		{
-			yaw = Matrix4x4({
-				cos(r.y), 0, -sin(r.y), 0,
-				0,        1, 0,         0,
-				sin(r.y), 0, cos(r.y),  0,
-				0,        0, 0,         1
+			pitch = Matrix4x4({
+				1,   0,		    0,		  0,
+				0,   cos(r.y),  sin(r.y), 0,
+				0,   -sin(r.y), cos(r.y), 0,
+				0,   0,		    0,		  1
 			});
 		}
 

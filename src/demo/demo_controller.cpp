@@ -28,7 +28,7 @@ void DemoController::post_create()
 	Logger::get().log(LogSeverity::log, "Demo controller starting...");
 
 	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
-	camera->make_perspective(70, 0.0001f, 100.0f);
+	camera->make_perspective(70, 0.0001f, 100000.0f);
 	camera->local_transform().position = Vector3f(0, 0, -10);
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
@@ -56,7 +56,7 @@ void DemoController::post_create()
 		}
 	}
 
-	const Vector2f floor_size(100, 100);
+	const Vector2f floor_size(1000, 1000);
 	const auto floor_material = copy_shared(Primitives::unlit_material());
 	floor_material->set_parameter("color_tex", texture);
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
@@ -67,7 +67,7 @@ void DemoController::post_create()
 	floor_entity->local_transform() = Transform(
 		Vector3f(0, -5, 0),
 		Vector3f(floor_size, 1),
-		Vector3f(90, 0, 0)
+		Vector3f(0, 90, 0)
 	);
 
 	Logger::get().log(LogSeverity::success, "Demo controller started");
@@ -111,22 +111,22 @@ void DemoController::tick(float delta_time)
 
 	if (input[KeyCode::left].is_down())
 	{
-		rot_input.y -= 1;
+		rot_input.x -= 1;
 	}
 
 	if (input[KeyCode::right].is_down())
 	{
-		rot_input.y += 1;
+		rot_input.x += 1;
 	}
 
 	if (input[KeyCode::down].is_down())
 	{
-		rot_input.x += 1;
+		rot_input.y += 1;
 	}
 
 	if (input[KeyCode::up].is_down())
 	{
-		rot_input.x -= 1;
+		rot_input.y -= 1;
 	}
 
 	if (input[KeyCode::q].is_down() || input[KeyCode::z].is_down())

@@ -30,12 +30,29 @@ namespace math
 		[[nodiscard]] Matrix4x4<T> rotator() const noexcept;
 
 		static constexpr Quaternion euler(const Vector3<T>& euler_angles);
+		static constexpr Quaternion euler(T yaw, T pitch, T roll);
 	};
 
 	template <std::floating_point T>
 	constexpr Quaternion<T> Quaternion<T>::euler(const Vector3<T>& euler_angles)
 	{
-		return Quaternion();
+		return euler(euler_angles.x, euler_angles.y, euler_angles.z);
+	}
+
+	template <std::floating_point T>
+	constexpr Quaternion<T> Quaternion<T>::euler(T yaw, T pitch, T roll)
+	{
+		const T c = std::numbers::pi_v<T> / 360;
+		const T yaw_c = yaw * c;
+		const T pitch_c = pitch * c;
+		const T roll_c = roll * c;
+
+		return Quaternion(
+			std::cos(roll_c) * std::cos(pitch_c) * std::cos(yaw_c) + std::sin(roll_c) * std::sin(pitch_c) * std::sin(yaw_c),
+			std::sin(roll_c) * std::cos(pitch_c) * std::cos(yaw_c) - std::cos(roll_c) * std::sin(pitch_c) * std::sin(yaw_c),
+			std::cos(roll_c) * std::sin(pitch_c) * std::cos(yaw_c) + std::sin(roll_c) * std::cos(pitch_c) * std::sin(yaw_c),
+			std::cos(roll_c) * std::cos(pitch_c) * std::sin(yaw_c) - std::sin(roll_c) * std::sin(pitch_c) * std::cos(yaw_c)
+		);
 	}
 
 	using QuaternionF = Quaternion<float>;
