@@ -28,7 +28,7 @@ void DemoController::post_create()
 	Logger::get().log(LogSeverity::log, "Demo controller starting...");
 
 	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
-	camera->make_perspective(70, 0.0001f, 100000.0f);
+	camera->make_perspective(70, 0.01f, 1000.0f);
 	camera->local_transform().position = Vector3f(0, 0, -10);
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
@@ -56,7 +56,7 @@ void DemoController::post_create()
 		}
 	}
 
-	const Vector2f floor_size(1000, 1000);
+	const Vector2f floor_size(500, 500);
 	const auto floor_material = copy_shared(Primitives::unlit_material());
 	floor_material->set_parameter("color_tex", texture);
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
