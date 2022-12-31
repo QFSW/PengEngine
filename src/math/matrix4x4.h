@@ -143,6 +143,18 @@ namespace math
 		const Vector3<T> r = rotation * std::numbers::pi_v<T> / 180;
 		Matrix4x4 m = identity();
 
+		if (rotation.z != 0)
+		{
+			const Matrix4x4 m_z({
+				cos(r.z),  sin(r.z), 0, 0,
+				-sin(r.z), cos(r.z), 0, 0,
+				0,         0,        1, 0,
+				0,         0,		 0,	1
+				});
+
+			m *= m_z;
+		}
+
 		if (rotation.x != 0)
 		{
 			const Matrix4x4 m_x({
@@ -165,18 +177,6 @@ namespace math
 			});
 
 			m *= m_y;
-		}
-
-		if (rotation.z != 0)
-		{
-			const Matrix4x4 m_z({
-				cos(r.z),  sin(r.z), 0, 0,
-				-sin(r.z), cos(r.z), 0, 0,
-				0,         0,        1, 0,
-				0,         0,		 0,	1
-			});
-
-			m *= m_z;
 		}
 
 		return m * (*this);

@@ -43,9 +43,6 @@ void DemoController::post_create()
 
 	auto material = peng::make_shared<Material>(shader);
 	material->set_parameter("color_tex", texture);
-	material->set_parameter("base_color", Vector4f(1, 1, 1, 1));
-	// TODO: above shouldn't be needed, but materials don't yet handle parameters from one material
-	//		 leaking into unset parameters of another material
 
 	const Vector2i blob_grid(7, 4);
 	for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
@@ -61,6 +58,7 @@ void DemoController::post_create()
 
 	const Vector2f floor_size(100, 100);
 	const auto floor_material = copy_shared(Primitives::unlit_material());
+	floor_material->set_parameter("color_tex", texture);
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
 

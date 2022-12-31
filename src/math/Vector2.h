@@ -32,6 +32,7 @@ namespace math
 
 #pragma endregion
 
+		[[nodiscard]] T area() const noexcept;
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
 		[[nodiscard]] T magnitude_sqr() const noexcept;
@@ -86,6 +87,12 @@ namespace math
 		: x(static_cast<T>(other.x))
 		, y(static_cast<T>(other.y))
 	{ }
+
+	template <number T>
+	T Vector2<T>::area() const noexcept
+	{
+		return x * y;
+	}
 
 	template <number T>
 	T Vector2<T>::min() const noexcept

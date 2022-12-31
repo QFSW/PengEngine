@@ -194,6 +194,10 @@ peng::shared_ref<const Material> Primitives::unlit_material()
         unlit_shader()
     );
 
+    unlit->set_parameter("tex_scale", Vector2f::one());
+    unlit->set_parameter("base_color", Vector4f(1, 1, 1, 1));
+    unlit->set_parameter("color_tex", white_tex());
+
     weak_material = unlit;
     return unlit;
 }

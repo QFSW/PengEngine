@@ -66,6 +66,7 @@ namespace math
 
 #pragma endregion
 
+		[[nodiscard]] T volume() const noexcept;
 		[[nodiscard]] T min() const noexcept;
 		[[nodiscard]] T max() const noexcept;
 		[[nodiscard]] T magnitude_sqr() const noexcept;
@@ -123,6 +124,12 @@ namespace math
 		, y(static_cast<T>(other.y))
 		, z(static_cast<T>(other.z))
 	{ }
+
+	template <number T>
+	T Vector3<T>::volume() const noexcept
+	{
+		return x * y * z;
+	}
 
 	template <number T>
 	T Vector3<T>::min() const noexcept

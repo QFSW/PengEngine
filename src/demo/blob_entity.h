@@ -15,6 +15,7 @@ public:
 		const math::Vector2f& pos
 	);
 
+	void post_create() override;
 	void tick(float delta_time) override;
 
 private:

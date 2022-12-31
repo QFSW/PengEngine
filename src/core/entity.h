@@ -12,7 +12,7 @@
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
 public:
-	explicit Entity(bool can_tick);
+	explicit Entity(bool can_tick = true);
 	virtual ~Entity() = default;
 
 	virtual void tick(float delta_time);

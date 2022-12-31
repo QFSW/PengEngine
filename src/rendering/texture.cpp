@@ -73,7 +73,7 @@ void Texture::use(GLenum slot) const
 
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
 {
-	if (resolution.magnitude_sqr() != num_pixels)
+	if (resolution.area() != num_pixels)
 	{
 		throw std::runtime_error(strtools::catf(
 			"Texture %s has a resolution of %dx%d (%dpx) but %dpx",
