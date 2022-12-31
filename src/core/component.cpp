@@ -4,6 +4,15 @@
 
 #include "logger.h"
 
+Component::Component(TickGroup tick_group)
+	: _tick_group(tick_group)
+{ }
+
+TickGroup Component::tick_group() const noexcept
+{
+	return _tick_group;
+}
+
 Entity& Component::owner() noexcept
 {
 	const Component* const_this = this;

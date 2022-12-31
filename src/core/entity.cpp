@@ -4,20 +4,20 @@
 
 #include "peng_engine.h"
 
-Entity::Entity(bool can_tick)
-	: _can_tick(can_tick)
+Entity::Entity(TickGroup tick_group)
+	: _tick_group(tick_group)
 	, _created(false)
 	, _active(true)
 { }
 
-void Entity::tick(float delta_time)
+void Entity::tick(float)
 {
-	assert(_can_tick);
+	assert(_tick_group != TickGroup::none);
+}
 
-	for (const peng::shared_ref<Component>& component : _components)
-	{
-		component->tick(delta_time);
-	}
+TickGroup Entity::tick_group() const noexcept
+{
+	return _tick_group;
 }
 
 void Entity::post_create()

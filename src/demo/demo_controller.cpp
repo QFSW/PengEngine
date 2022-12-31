@@ -15,8 +15,7 @@ using namespace math;
 using namespace entities;
 
 DemoController::DemoController()
-	: Entity(true)
-	, _pan_speed(5)
+	: _pan_speed(5)
 	, _rot_speed(45)
 	, _zoom_speed(1)
 { }
@@ -62,7 +61,7 @@ void DemoController::post_create()
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
 
-	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>(true);
+	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>(TickGroup::none);
 	const auto floor_renderer = floor_entity->add_component<components::MeshRenderer>(Primitives::fullscreen_quad(), floor_material);
 	floor_entity->local_transform() = Transform(
 		Vector3f(0, -5, 0),

@@ -12,10 +12,14 @@
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
 public:
-	explicit Entity(bool can_tick = true);
+	explicit Entity(TickGroup tick_group = TickGroup::standard);
+	Entity(const Entity&) = delete;
+	Entity(Entity&&) = delete;
 	virtual ~Entity() = default;
 
-	virtual void tick(float delta_time);
+	void tick(float delta_time) override;
+	[[nodiscard]] TickGroup tick_group() const noexcept override;
+
 	virtual void post_create();
 	virtual void pre_destroy();
 	virtual void post_enable() { }
@@ -31,16 +35,16 @@ public:
 	[[nodiscard]] peng::weak_ptr<const Entity> weak_this() const;
 	[[nodiscard]] peng::weak_ptr<Entity> weak_this();
 
-	[[nodiscard]] bool can_tick() const noexcept { return _can_tick; }
 	[[nodiscard]] bool is_active() const noexcept { return _active; }
 
 	[[nodiscard]] math::Matrix4x4f transform_matrix() const noexcept;
 	[[nodiscard]] math::Matrix4x4f transform_matrix_inv() const noexcept;
 	[[nodiscard]] math::Transform& local_transform() noexcept { return _local_transform; }
 	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
+	[[nodiscard]] const std::vector<peng::shared_ref<Component>>& components() const noexcept { return _components; }
 
 protected:
-	bool _can_tick;
+	TickGroup _tick_group;
 	math::Transform _local_transform;
 
 private:

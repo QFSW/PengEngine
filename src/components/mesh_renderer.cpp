@@ -2,6 +2,7 @@
 
 #include <entities/camera.h>
 #include <core/logger.h>
+#include <utils/utils.h>
 
 using namespace entities;
 using namespace components;
@@ -9,19 +10,22 @@ using namespace rendering;
 using namespace math;
 
 MeshRenderer::MeshRenderer(
-	const peng::shared_ref<const Mesh>& mesh,
-	const peng::shared_ref<Material>& material
-)
-	: _mesh(mesh)
-	, _material(material)
-{ }
-
-MeshRenderer::MeshRenderer(
 	peng::shared_ref<const Mesh>&& mesh,
 	peng::shared_ref<Material>&& material
 )
-	: _mesh(std::move(mesh))
+	: Component(TickGroup::render)
+	, _mesh(std::move(mesh))
 	, _material(std::move(material))
+{ }
+
+MeshRenderer::MeshRenderer(
+	const peng::shared_ref<const Mesh>& mesh,
+	const peng::shared_ref<Material>& material
+)
+	: MeshRenderer(
+		utils::copy(mesh),
+		utils::copy(material)
+	)
 { }
 
 void MeshRenderer::tick(float delta_time)

@@ -5,6 +5,17 @@
 
 #include "logger.h"
 
+EntityManager::EntityManager()
+{
+	constexpr int32_t start = static_cast<int32_t>(TickGroup::standard);
+	constexpr int32_t end = static_cast<int32_t>(TickGroup::none);
+
+	for (int32_t tick_group = start; tick_group < end; tick_group++)
+	{
+		_tick_groups.push_back(static_cast<TickGroup>(tick_group));
+	}
+}
+
 void EntityManager::tick(float delta_time)
 {
 	flush_pending_adds();
@@ -59,11 +70,25 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 
 void EntityManager::tick_entities(float delta_time)
 {
-	for (const peng::shared_ref<Entity>& entity : _entities)
+	for (const TickGroup tick_group : _tick_groups)
 	{
-		if (entity->can_tick() && entity->is_active())
+		for (const peng::shared_ref<Entity>& entity : _entities)
 		{
-			entity->tick(delta_time);
+			if (entity->is_active())
+			{
+				if (entity->tick_group() == tick_group)
+				{
+					entity->tick(delta_time);
+				}
+
+				for (const peng::shared_ref<Component>& component : entity->components())
+				{
+					if (component->tick_group() == tick_group)
+					{
+						component->tick(delta_time);
+					}
+				}
+			}
 		}
 	}
 }

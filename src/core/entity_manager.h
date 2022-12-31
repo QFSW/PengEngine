@@ -19,6 +19,8 @@ enum class EntityState
 class EntityManager
 {
 public:
+	EntityManager();
+
 	// ----------- Engine API -----------
 	void tick(float delta_time);
 	void shutdown();
@@ -38,6 +40,7 @@ private:
 	void flush_pending_adds();
 	void flush_pending_kills();
 
+	std::vector<TickGroup> _tick_groups;
 	std::vector<peng::shared_ref<Entity>> _entities;
 	std::vector<peng::shared_ref<Entity>> _pending_adds;
 	std::vector<peng::weak_ptr<Entity>> _pending_kills;

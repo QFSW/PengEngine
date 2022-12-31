@@ -12,7 +12,7 @@ using namespace math;
 peng::weak_ptr<Camera> Camera::_current;
 
 Camera::Camera()
-	: Entity(true)
+	: Entity(TickGroup::pre_render)
 	, _fov(70)
 	, _ortho_size(20)
 	, _near_clip(0.01f)

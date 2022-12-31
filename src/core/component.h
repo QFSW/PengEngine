@@ -6,17 +6,19 @@
 
 class Entity;
 
-class Component : ITickable
+class Component : public ITickable
 {
 	friend Entity;
 
 public:
-	Component() = default;
+	explicit Component(TickGroup tick_group = TickGroup::standard);
 	Component(const Component&) = delete;
 	Component(Component&&) = delete;
 	virtual ~Component() = default;
 
-	virtual void tick([[maybe_unused]] float delta_time) { }
+	void tick([[maybe_unused]] float delta_time) override { }
+	[[nodiscard]] TickGroup tick_group() const noexcept override;
+
 	virtual void post_create() { }
 	virtual void pre_destroy() { }
 
@@ -26,5 +28,6 @@ public:
 private:
 	void set_owner(peng::shared_ref<Entity>&& entity);
 
+	TickGroup _tick_group;
 	peng::weak_ptr<Entity> _owner;
 };

@@ -10,13 +10,13 @@ namespace components
 	{
 	public:
 		MeshRenderer(
-			const peng::shared_ref<const rendering::Mesh>& mesh,
-			const peng::shared_ref<rendering::Material>& material
+			peng::shared_ref<const rendering::Mesh>&& mesh,
+			peng::shared_ref<rendering::Material>&& material
 		);
 
 		MeshRenderer(
-			peng::shared_ref<const rendering::Mesh>&& mesh,
-			peng::shared_ref<rendering::Material>&& material
+			const peng::shared_ref<const rendering::Mesh>& mesh,
+			const peng::shared_ref<rendering::Material>& material
 		);
 
 		void tick(float delta_time) override;
