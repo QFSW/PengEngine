@@ -10,7 +10,18 @@ namespace rendering
 	class Shader
 	{
 	public:
-		Shader(const std::string& vert_shader_path, const std::string& frag_shader_path);
+		Shader(
+			const std::string& name,
+			const std::string& vert_shader_path, 
+			const std::string& frag_shader_path
+		);
+
+		Shader(
+			std::string&& name,
+			const std::string& vert_shader_path,
+			const std::string& frag_shader_path
+		);
+
 		Shader(const Shader&) = delete;
 		Shader(Shader&&) = delete;
 		~Shader();
@@ -19,6 +30,7 @@ namespace rendering
 
 		void use() const;
 
+		[[nodiscard]] const std::string& name() const noexcept;
 		[[nodiscard]] bool broken() const noexcept;
 		[[nodiscard]] GLint get_uniform_location(const std::string& name) const;
 
@@ -26,7 +38,8 @@ namespace rendering
 		bool validate_shader_compile(GLuint shader);
 		bool validate_shader_link(GLuint shader);
 
-		bool _broken;
+		std::string _name;
 		GLuint _shader_prog;
+		bool _broken;
 	};
 }

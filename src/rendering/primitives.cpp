@@ -3,17 +3,18 @@
 #include <memory/shared_ref.h>
 #include <math/vector3.h>
 
+#include "mesh.h"
+#include "texture.h"
+#include "shader.h"
+#include "material.h"
+
 using namespace rendering;
 using namespace math;
 
-peng::weak_ptr<const Mesh> Primitives::_cube;
-peng::weak_ptr<const Mesh> Primitives::_fullscreen_quad;
-
-peng::weak_ptr<const Texture> Primitives::_white_tex;
-
 peng::shared_ref<const Mesh> Primitives::cube()
 {
-	if (const peng::shared_ptr<const Mesh> strong_cube = _cube.lock())
+    static peng::weak_ptr<const Mesh> weak_cube;
+	if (const peng::shared_ptr<const Mesh> strong_cube = weak_cube.lock())
 	{
 		return strong_cube.to_shared_ref();
 	}
@@ -104,13 +105,14 @@ peng::shared_ref<const Mesh> Primitives::cube()
         "Cube", vertices, indices, std::vector<Vector3f>(), tex_coords
     );
 
-    _cube = cube;
+    weak_cube = cube;
     return cube;
 }
 
 peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
 {
-    if (const peng::shared_ptr<const Mesh> strong_quad = _fullscreen_quad.lock())
+    static peng::weak_ptr<const Mesh> weak_quad;
+    if (const peng::shared_ptr<const Mesh> strong_quad = weak_quad.lock())
     {
         return strong_quad.to_shared_ref();
     }
@@ -141,22 +143,57 @@ peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
         "Fullscreen Quad", vertices, indices, std::vector<Vector3f>(), tex_coords
     );
 
-    _fullscreen_quad = quad;
+    weak_quad = quad;
     return quad;
 }
 
 peng::shared_ref<const Texture> Primitives::white_tex()
 {
-    if (const peng::shared_ptr<const Texture> strong_tex = _white_tex.lock())
+    static peng::weak_ptr<const Texture> weak_tex;
+    if (const peng::shared_ptr<const Texture> strong_tex = weak_tex.lock())
     {
         return strong_tex.to_shared_ref();
     }
 
-    const std::vector<Vector3u8> rgb_data = { Vector3u8(0xFF, 0xFF, 0xFF)};
+    const std::vector<Vector3u8> rgb_data = { Vector3u8(0xFF, 0xFF, 0xFF) };
     peng::shared_ref<Texture> white_tex = peng::make_shared<Texture>(
         "White 1x1px", rgb_data, Vector2i::one()
     );
 
-    _white_tex = white_tex;
+    weak_tex = white_tex;
     return white_tex;
+}
+
+peng::shared_ref<const Shader> Primitives::unlit_shader()
+{
+    static peng::weak_ptr<const Shader> weak_shader;
+    if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
+    {
+        return strong_shader.to_shared_ref();
+    }
+
+    peng::shared_ref<Shader> unlit = peng::make_shared<Shader>(
+        "Unlit",
+        "resources/shaders/core/projection.vert",
+        "resources/shaders/demo/unlit.frag"
+    );
+
+    weak_shader = unlit;
+    return unlit;
+}
+
+peng::shared_ref<const Material> Primitives::unlit_material()
+{
+    static peng::weak_ptr<const Material> weak_material;
+    if (const peng::shared_ptr<const Material> strong_material = weak_material.lock())
+    {
+        return strong_material.to_shared_ref();
+    }
+
+    peng::shared_ref<Material> unlit = peng::make_shared<Material>(
+        unlit_shader()
+    );
+
+    weak_material = unlit;
+    return unlit;
 }

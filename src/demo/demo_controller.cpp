@@ -32,6 +32,7 @@ void DemoController::post_create()
 	camera->transform().position = Vector3f(0, 0, -10);
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
+		"Rave",
 		"resources/shaders/core/projection.vert",
 		"resources/shaders/demo/rave.frag"
 	);

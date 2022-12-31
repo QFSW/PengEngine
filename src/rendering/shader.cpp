@@ -4,13 +4,28 @@
 
 #include <memory/weak_ptr.h>
 #include <core/logger.h>
+#include <utils/utils.h>
 #include <utils/io.h>
 
 using namespace rendering;
 
-Shader::Shader(const std::string& vert_shader_path, const std::string& frag_shader_path)
-	: _broken(false)
+Shader::Shader(
+	const std::string& name,
+	const std::string& vert_shader_path,
+	const std::string& frag_shader_path
+)
+	: Shader(utils::copy(name), vert_shader_path, frag_shader_path)
+{ }
+
+Shader::Shader(
+	std::string&& name,
+	const std::string& vert_shader_path,
+	const std::string& frag_shader_path
+)
+	: _name(std::move(name))
+	, _broken(false)
 {
+	Logger::get().logf(LogSeverity::log, "Building shader '%s'", _name.c_str());
 	Logger::get().logf(LogSeverity::log, "Loading vertex shader '%s'", vert_shader_path.c_str());
 	const std::string vert_shader_src = io::read_text_file(vert_shader_path);
 
@@ -46,6 +61,7 @@ Shader::Shader(const std::string& vert_shader_path, const std::string& frag_shad
 
 Shader::~Shader()
 {
+	Logger::get().logf(LogSeverity::log, "Destroying shader '%s'", _name.c_str());
 	glDeleteProgram(_shader_prog);
 }
 
@@ -58,6 +74,7 @@ peng::shared_ref<const Shader> Shader::fallback()
 	}
 
 	const peng::shared_ref shader = peng::make_shared<Shader>(
+		"Fallback",
 		"resources/shaders/core/projection.vert",
 		"resources/shaders/core/fallback.frag"
 	);
@@ -72,6 +89,11 @@ void Shader::use() const
 {
 	// TODO: either error or assert that shader is not broken
 	glUseProgram(_shader_prog);
+}
+
+const std::string& Shader::name() const noexcept
+{
+	return _name;
 }
 
 bool Shader::broken() const noexcept
@@ -96,7 +118,7 @@ bool Shader::validate_shader_compile(GLuint shader)
 			GLint error_length;
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &error_length);
 
-			std::vector<GLchar> error_log;
+			std::vector<GLchar> error_log(error_length);
 			glGetShaderInfoLog(shader, error_length, nullptr, error_log.data());
 			Logger::get().log(LogSeverity::error, error_log.data());
 		}
@@ -117,7 +139,7 @@ bool Shader::validate_shader_link(GLuint shader)
 			GLint error_length;
 			glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &error_length);
 
-			std::vector<GLchar> error_log;
+			std::vector<GLchar> error_log(error_length);
 			glGetProgramInfoLog(shader, error_length, nullptr, error_log.data());
 			Logger::get().log(LogSeverity::error, error_log.data());
 		}

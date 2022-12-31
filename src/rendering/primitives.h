@@ -2,11 +2,13 @@
 
 #include <memory/weak_ptr.h>
 
-#include "mesh.h"
-#include "texture.h"
-
 namespace rendering
 {
+	class Mesh;
+	class Texture;
+	class Shader;
+	class Material;
+
 	class Primitives
 	{
 	public:
@@ -15,10 +17,8 @@ namespace rendering
 
 		[[nodiscard]] static peng::shared_ref<const Texture> white_tex();
 
-	private:
-		static peng::weak_ptr<const Mesh> _cube;
-		static peng::weak_ptr<const Mesh> _fullscreen_quad;
+		[[nodiscard]] static peng::shared_ref<const Shader> unlit_shader();
 
-		static peng::weak_ptr<const Texture> _white_tex;
+		[[nodiscard]] static peng::shared_ref<const Material> unlit_material();
 	};
 }

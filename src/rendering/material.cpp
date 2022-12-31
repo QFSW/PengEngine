@@ -13,7 +13,11 @@ Material::Material(peng::shared_ref<const Shader>&& shader)
 {
 	if (_shader->broken())
 	{
-		Logger::get().log(LogSeverity::warning, "Provided shader is broken - switching to fallback");
+		Logger::get().logf(LogSeverity::warning,
+			"Provided shader '%s' is broken - switching to fallback",
+			_shader->name().c_str()
+		);
+
 		_shader = Shader::fallback();
 	}
 }
