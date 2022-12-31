@@ -175,7 +175,7 @@ peng::shared_ref<const Shader> Primitives::unlit_shader()
     peng::shared_ref<Shader> unlit = peng::make_shared<Shader>(
         "Unlit",
         "resources/shaders/core/projection.vert",
-        "resources/shaders/demo/unlit.frag"
+        "resources/shaders/core/unlit.frag"
     );
 
     weak_shader = unlit;

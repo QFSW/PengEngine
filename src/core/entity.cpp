@@ -60,3 +60,8 @@ void Entity::destroy()
 	const peng::shared_ref<Entity> strong_this = peng::shared_ref(shared_from_this());
 	PengEngine::get().entity_manager().destroy_entity(strong_this);
 }
+
+math::Transform Entity::evaluate_transform() const noexcept
+{
+	return _local_transform;
+}

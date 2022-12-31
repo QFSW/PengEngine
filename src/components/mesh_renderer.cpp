@@ -31,7 +31,7 @@ void MeshRenderer::tick(float delta_time)
 	if (_cached_transform_location >= 0)
 	{
 		const Matrix4x4f view_matrix = Camera::current() ? Camera::current()->view_matrix() : Matrix4x4f::identity();
-		const Matrix4x4f transform = view_matrix * owner().transform().to_matrix();
+		const Matrix4x4f transform = view_matrix * owner().evaluate_transform().to_matrix();
 		_material->set_parameter(_cached_transform_location, transform);
 	}
 

@@ -13,7 +13,7 @@ BlobEntity::BlobEntity(
 	: Entity(true)
 	, _age(static_cast<float>(rand()) / static_cast<float>((RAND_MAX)))
 {
-	_transform = Transform(Vector3f(pos, pos.y), Vector3f::one(), Vector3f::zero());
+	_local_transform = Transform(Vector3f(pos, pos.y), Vector3f::one(), Vector3f::zero());
 	_mesh_renderer = add_component<MeshRenderer>(mesh, material);
 }
 

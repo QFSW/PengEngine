@@ -29,7 +29,7 @@ void DemoController::post_create()
 
 	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
 	camera->make_perspective(70, 0.0001f, 100.0f);
-	camera->transform().position = Vector3f(0, 0, -10);
+	camera->local_transform().position = Vector3f(0, 0, -10);
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
 		"Rave",
@@ -43,6 +43,9 @@ void DemoController::post_create()
 
 	auto material = peng::make_shared<Material>(shader);
 	material->set_parameter("color_tex", texture);
+	material->set_parameter("base_color", Vector4f(1, 1, 1, 1));
+	// TODO: above shouldn't be needed, but materials don't yet handle parameters from one material
+	//		 leaking into unset parameters of another material
 
 	const Vector2i blob_grid(7, 4);
 	for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
@@ -55,6 +58,19 @@ void DemoController::post_create()
 			PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos);
 		}
 	}
+
+	const Vector2f floor_size(100, 100);
+	const auto floor_material = copy_shared(Primitives::unlit_material());
+	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
+	floor_material->set_parameter("tex_scale", floor_size);
+
+	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>(true);
+	const auto floor_renderer = floor_entity->add_component<components::MeshRenderer>(Primitives::fullscreen_quad(), floor_material);
+	floor_entity->local_transform() = Transform(
+		Vector3f(0, -5, 0),
+		Vector3f(floor_size, 1),
+		Vector3f(90, 0, 0)
+	);
 
 	Logger::get().log(LogSeverity::success, "Demo controller started");
 }
@@ -142,10 +158,10 @@ void DemoController::tick(float delta_time)
 	const float pan_amount = _pan_speed * static_cast<float>(delta_time)
 		* (orthographic ? Camera::current()->ortho_size() : 1);
 
-	const Vector3f camera_rotation = camera->transform().rotation;
+	const Vector3f camera_rotation = camera->local_transform().rotation;
 	const Matrix4x4f rotator = Matrix4x4f::identity().rotated(camera_rotation);
 
 	// TODO: something about rotation and camera is completely broken
-	camera->transform().position += (rotator * pan_input.normalized()) * pan_amount;
-	camera->transform().rotation += rot_input.normalized() * pan_amount * _rot_speed / _pan_speed;
+	camera->local_transform().position += (rotator * pan_input.normalized()) * pan_amount;
+	camera->local_transform().rotation += rot_input.normalized() * pan_amount * _rot_speed / _pan_speed;
 }

@@ -47,7 +47,7 @@ void Camera::tick(float delta_time)
 		Matrix4x4f::identity()
 		.scaled(Vector3f(1, 1, -1));
 
-	_view_matrix = calc_projection_matrix() * z_reverse * _transform.to_inverse_matrix();
+	_view_matrix = calc_projection_matrix() * z_reverse * evaluate_transform().to_inverse_matrix();
 }
 
 void Camera::make_perspective(float fov, float near_clip, float far_clip)
@@ -107,7 +107,7 @@ Matrix4x4f Camera::calc_projection_matrix()
 		ortho_transform.position = Vector3f(0, 0, _near_clip);
 		ortho_transform.scale = Vector3f(_ortho_size * aspect_ratio, _ortho_size, _far_clip - _near_clip);
 
-		Vector3f& scale = _transform.scale;
+		Vector3f& scale = _local_transform.scale;
 		if (scale.x * scale.y * scale.z == 0.0f)
 		{
 			Logger::get().logf(LogSeverity::warning,

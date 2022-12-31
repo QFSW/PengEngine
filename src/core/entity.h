@@ -30,15 +30,16 @@ public:
 	[[nodiscard]] bool can_tick() const noexcept { return _can_tick; }
 	[[nodiscard]] bool is_active() const noexcept { return _active; }
 
-	[[nodiscard]] math::Transform& transform() noexcept { return _transform; }
-	[[nodiscard]] const math::Transform& transform() const noexcept { return _transform; }
+	[[nodiscard]] math::Transform evaluate_transform() const noexcept;
+	[[nodiscard]] math::Transform& local_transform() noexcept { return _local_transform; }
+	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
 
 protected:
 	bool _can_tick;
 	bool _created;
 	bool _active;
 
-	math::Transform _transform;
+	math::Transform _local_transform;
 	std::vector<peng::shared_ref<Component>> _components;
 	std::vector<peng::shared_ref<Component>> _deferred_components;
 };
