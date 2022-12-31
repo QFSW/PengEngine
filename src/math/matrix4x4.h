@@ -33,7 +33,6 @@ namespace math
 
 		Matrix4x4& operator+=(const Matrix4x4& other);
 		Matrix4x4& operator-=(const Matrix4x4& other);
-		Matrix4x4& operator*=(const Matrix4x4& other);
 		Matrix4x4 operator+(const Matrix4x4& other) const;
 		Matrix4x4 operator-(const Matrix4x4& other) const;
 		Matrix4x4 operator*(const Matrix4x4& other) const;
@@ -140,46 +139,43 @@ namespace math
 			return static_cast<T>(std::cos(x));
 		};
 
+		// x = pitch, y = yaw, z = roll
 		const Vector3<T> r = rotation * std::numbers::pi_v<T> / 180;
-		Matrix4x4 m = identity();
-
-		if (rotation.z != 0)
-		{
-			const Matrix4x4 m_z({
-				cos(r.z),  sin(r.z), 0, 0,
-				-sin(r.z), cos(r.z), 0, 0,
-				0,         0,        1, 0,
-				0,         0,		 0,	1
-				});
-
-			m *= m_z;
-		}
-
-		if (rotation.y != 0)
-		{
-			const Matrix4x4 m_y({
-				cos(r.y), 0, -sin(r.y), 0,
-				0,        1, 0,         0,
-				sin(r.y), 0, cos(r.y),  0,
-				0,        0, 0,         1
-				});
-
-			m *= m_y;
-		}
+		Matrix4x4 pitch = identity();
+		Matrix4x4 yaw = identity();
+		Matrix4x4 roll = identity();
 
 		if (rotation.x != 0)
 		{
-			const Matrix4x4 m_x({
+			pitch = Matrix4x4({
 				1,   0,		    0,		  0,
 				0,   cos(r.x),  sin(r.x), 0,
 				0,   -sin(r.x), cos(r.x), 0,
 				0,   0,		    0,		  1
 			});
-
-			m *= m_x;
 		}
 
-		return m * (*this);
+		if (rotation.y != 0)
+		{
+			yaw = Matrix4x4({
+				cos(r.y), 0, -sin(r.y), 0,
+				0,        1, 0,         0,
+				sin(r.y), 0, cos(r.y),  0,
+				0,        0, 0,         1
+			});
+		}
+
+		if (rotation.z != 0)
+		{
+			roll = Matrix4x4({
+				cos(r.z),  sin(r.z), 0, 0,
+				-sin(r.z), cos(r.z), 0, 0,
+				0,         0,        1, 0,
+				0,         0,		 0,	1
+			});
+		}
+
+		return roll * pitch * yaw * *this;
 	}
 
 	template <number T>
@@ -222,12 +218,6 @@ namespace math
 		}
 
 		return *this;
-	}
-
-	template <number T>
-	Matrix4x4<T>& Matrix4x4<T>::operator*=(const Matrix4x4& other)
-	{
-		return *this = *this * other;
 	}
 
 	template <number T>

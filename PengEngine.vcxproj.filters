@@ -254,6 +254,9 @@
     <ClInclude Include="src\core\tickable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
