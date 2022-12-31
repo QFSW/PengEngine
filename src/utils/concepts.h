@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <variant>
 
 namespace utils
 {
@@ -8,7 +9,7 @@ namespace utils
 	concept variant_member =
         std::constructible_from<TVariant, T>
         && !std::same_as<T, TVariant>
-        && requires(TVariant v)
+        && requires(const TVariant& v)
     {
         std::get<T>(v);
     };

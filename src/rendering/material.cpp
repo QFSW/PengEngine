@@ -4,6 +4,8 @@
 #include <utils/functional.h>
 #include <utils/utils.h>
 
+#include "texture.h"
+
 using namespace rendering;
 using namespace math;
 
@@ -20,17 +22,25 @@ Material::Material(peng::shared_ref<const Shader>&& shader)
 
 		_shader = Shader::fallback();
 	}
+
+	for (const Shader::Uniform& uniform : _shader->uniforms())
+	{
+		if (uniform.default_value)
+		{
+			set_parameter(uniform.location, *uniform.default_value);
+		}
+	}
 }
 
 Material::Material(const peng::shared_ref<const Shader>& shader)
 	: Material(utils::copy(shader))
 { }
 
-void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
+void Material::set_parameter(GLint uniform_location, const Shader::Parameter& parameter)
 {
 	if (const auto it = _existing_parameters.find(uniform_location); it != _existing_parameters.end())
 	{
-		std::get<Parameter>(_set_parameters[it->second]) = parameter;
+		std::get<Shader::Parameter>(_set_parameters[it->second]) = parameter;
 		return;
 	}
 
@@ -38,7 +48,7 @@ void Material::set_parameter(GLint uniform_location, const Parameter& parameter)
 	_set_parameters.emplace_back(uniform_location, parameter);
 }
 
-void Material::set_parameter(const std::string& parameter_name, const Parameter& parameter)
+void Material::set_parameter(const std::string& parameter_name, const Shader::Parameter& parameter)
 {
 	const GLint parameter_index = _shader->get_uniform_location(parameter_name);
 	if (parameter_index >= 0)
@@ -169,7 +179,7 @@ void Material::apply_parameter(GLint location, const peng::shared_ref<const Text
 		throw std::runtime_error("Cannot bind more than 16 textures to a material");
 	}
 
-	const GLuint texture_slot = _num_bound_textures++;
+	const GLint texture_slot = static_cast<GLint>(_num_bound_textures++);
 
 	texture->use(GL_TEXTURE0 + texture_slot);
 	glUniform1i(location, texture_slot);
