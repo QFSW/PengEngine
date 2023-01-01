@@ -5,6 +5,7 @@
 
 #include <core/logger.h>
 #include <core/peng_engine.h>
+#include <utils/utils.h>
 
 using namespace entities;
 using namespace math;
@@ -12,7 +13,15 @@ using namespace math;
 peng::weak_ptr<Camera> Camera::_current;
 
 Camera::Camera()
-	: Entity("Camera", TickGroup::pre_render)
+	: Camera("Camera")
+{ }
+
+Camera::Camera(const std::string& name)
+	: Camera(utils::copy(name))
+{ }
+
+Camera::Camera(std::string&& name)
+	: Entity(std::move(name), TickGroup::pre_render)
 	, _fov(70)
 	, _ortho_size(20)
 	, _near_clip(0.01f)

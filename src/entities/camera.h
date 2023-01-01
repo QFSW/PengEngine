@@ -16,6 +16,8 @@ namespace entities
 		};
 
 		Camera();
+		explicit Camera(const std::string& name);
+		explicit Camera(std::string&& name);
 
 		static peng::weak_ptr<Camera>& current();
 
