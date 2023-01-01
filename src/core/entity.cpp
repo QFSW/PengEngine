@@ -29,6 +29,8 @@ TickGroup Entity::tick_group() const noexcept
 
 void Entity::post_create()
 {
+	// TODO: entities should receive post_enable() when created
+
 	_created = true;
 
 	for (const peng::shared_ref<Component>& component : _deferred_components)
@@ -42,9 +44,16 @@ void Entity::post_create()
 
 void Entity::pre_destroy()
 {
+	set_active(false);
+
 	for (const peng::shared_ref<Component>& component : _components)
 	{
 		component->pre_destroy();
+	}
+
+	if (_parent)
+	{
+		vectools::remove(_parent->_children, weak_this());
 	}
 }
 
@@ -150,11 +159,4 @@ void Entity::propagate_active_change(bool parent_active)
 	{
 		post_disable();
 	}
-}
-
-void Entity::cleanup_killed_children()
-{
-	vectools::remove_all<peng::weak_ptr<Entity>>(_children, [](const peng::weak_ptr<Entity>& child) {
-		return !child.valid();
-	});
 }

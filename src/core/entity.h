@@ -58,7 +58,6 @@ protected:
 
 private:
 	void propagate_active_change(bool parent_active);
-	void cleanup_killed_children();
 
 	bool _created;
 	bool _active_self;

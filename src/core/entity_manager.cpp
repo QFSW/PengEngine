@@ -39,11 +39,18 @@ void EntityManager::shutdown()
 
 void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
 {
-	assert(entity.valid());
+	if (!entity.valid())
+	{
+		Logger::get().log(LogSeverity::error, "Cannot destroy invalid entity");
+		return;
+	}
 
 	// TODO: check if entity is already queued for destruction
-	// TODO: need to kill children too
 	_pending_kills.push_back(entity);
+	for (const peng::weak_ptr<Entity>& child : entity->children())
+	{
+		destroy_entity(child);
+	}
 }
 
 EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity) const
@@ -172,7 +179,10 @@ void EntityManager::flush_pending_kills()
 
 				if (weak_entity.valid())
 				{
-					Logger::get().log(LogSeverity::warning, "Entity still exists after kill, potential leak");
+					Logger::get().logf(LogSeverity::warning,
+						"Entity '%s' still exists after kill, potential leak",
+						weak_entity->name().c_str()
+					);
 				}
 			}
 		}
