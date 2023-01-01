@@ -148,6 +148,11 @@ void DemoController::tick(float delta_time)
 		PengEngine::get().entity_manager().dump_hierarchy();
 	}
 
+	if (input[KeyCode::num_row_9].pressed())
+	{
+		PengEngine::get().entity_manager().destroy_entity(PengEngine::get().entity_manager().find_entity("Blob", true));
+	}
+
 	const peng::shared_ref<Camera> camera = Camera::current().lock().to_shared_ref();
 	const Camera::Projection projection = camera->projection();
 	const bool orthographic = projection == Camera::Projection::orthographic;

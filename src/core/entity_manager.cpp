@@ -42,6 +42,7 @@ void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
 	assert(entity.valid());
 
 	// TODO: check if entity is already queued for destruction
+	// TODO: need to kill children too
 	_pending_kills.push_back(entity);
 }
 
@@ -66,6 +67,22 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 	}
 
 	return EntityState::invalid;
+}
+
+peng::weak_ptr<Entity> EntityManager::find_entity(const std::string& entity_name, bool include_inactive) const
+{
+	for (const peng::shared_ref<Entity>& entity : _entities)
+	{
+		if (include_inactive || entity->active_in_hierarchy())
+		{
+			if (entity->name() == entity_name)
+			{
+				return entity;
+			}
+		}
+	}
+
+	return {};
 }
 
 void EntityManager::dump_hierarchy() const

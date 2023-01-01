@@ -32,7 +32,9 @@ public:
 	peng::weak_ptr<T> create_entity(Args&&...args);
 
 	void destroy_entity(const peng::weak_ptr<Entity>& entity);
-	EntityState get_entity_state(const peng::weak_ptr<Entity>& entity) const;
+
+	[[nodiscard]] EntityState get_entity_state(const peng::weak_ptr<Entity>& entity) const;
+	[[nodiscard]] peng::weak_ptr<Entity> find_entity(const std::string& entity_name, bool include_inactive) const;
 
 	void dump_hierarchy() const;
 	// ----------------------------------
