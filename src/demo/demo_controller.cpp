@@ -15,7 +15,8 @@ using namespace math;
 using namespace entities;
 
 DemoController::DemoController()
-	: _pan_speed(5)
+	: Entity("DemoController")
+	, _pan_speed(5)
 	, _rot_speed(45)
 	, _zoom_speed(1)
 { }
@@ -43,6 +44,8 @@ void DemoController::post_create()
 	auto material = peng::make_shared<Material>(shader);
 	material->set_parameter("color_tex", texture);
 
+	const auto blobs_entity = PengEngine::get().entity_manager().create_entity<Entity>("Blobs", TickGroup::none);
+
 	const Vector2i blob_grid(7, 4);
 	for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
 	{
@@ -51,7 +54,9 @@ void DemoController::post_create()
 			constexpr float blob_spacing = 1.75f;
 			const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f)
 				* blob_spacing;
-			PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos);
+
+			PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos)
+				->set_parent(blobs_entity);
 		}
 	}
 
@@ -61,7 +66,7 @@ void DemoController::post_create()
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
 
-	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>(TickGroup::none);
+	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>("Floor", TickGroup::none);
 	const auto floor_renderer = floor_entity->add_component<components::MeshRenderer>(Primitives::fullscreen_quad(), floor_material);
 	floor_entity->local_transform() = Transform(
 		Vector3f(0, -5, 0),
@@ -136,6 +141,11 @@ void DemoController::tick(float delta_time)
 	if (input[KeyCode::e].is_down() || input[KeyCode::x].is_down())
 	{
 		zoom_input += 1;
+	}
+
+	if (input[KeyCode::num_row_0].pressed())
+	{
+		PengEngine::get().entity_manager().dump_hierarchy();
 	}
 
 	const peng::shared_ref<Camera> camera = Camera::current().lock().to_shared_ref();

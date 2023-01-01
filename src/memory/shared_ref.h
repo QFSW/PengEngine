@@ -46,6 +46,7 @@ namespace peng
 	};
 
 	template <typename T, typename...Args>
+	requires std::constructible_from<T, Args...>
 	[[nodiscard]] shared_ref<T> make_shared(Args&&...args)
 	{
 		return shared_ref<T>(std::make_shared<T>(std::forward<Args>(args)...));

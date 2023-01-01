@@ -1,13 +1,20 @@
 #include "entity.h"
 
 #include <cassert>
+#include <utils/utils.h>
 
 #include "peng_engine.h"
 
-Entity::Entity(TickGroup tick_group)
-	: _tick_group(tick_group)
+Entity::Entity(std::string&& name, TickGroup tick_group)
+	: _name(std::move(name))
+	, _tick_group(tick_group)
 	, _created(false)
-	, _active(true)
+	, _active_self(true)
+	, _active_hierarchy(true)
+{ }
+
+Entity::Entity(const std::string& name, TickGroup tick_group)
+	: Entity(utils::copy(name), tick_group)
 { }
 
 void Entity::tick(float)
@@ -43,20 +50,14 @@ void Entity::pre_destroy()
 
 void Entity::set_active(bool active)
 {
-	if (active && !_active)
-	{
-		_active = true;
-		post_enable();
-	}
-	else if (!active && _active)
-	{
-		_active = false;
-		post_disable();
-	}
+	_active_self = active;
+	propagate_active_change(true);
 }
 
 void Entity::set_parent(const peng::weak_ptr<Entity>& parent)
 {
+	const bool was_active_hierarchy = _active_hierarchy;
+
 	if (parent == _parent)
 	{
 		return;
@@ -65,6 +66,7 @@ void Entity::set_parent(const peng::weak_ptr<Entity>& parent)
 	if (_parent.valid())
 	{
 		vectools::remove(_parent->_children, weak_this());
+		_active_hierarchy = _active_self;
 	}
 
 	_parent = parent;
@@ -72,6 +74,16 @@ void Entity::set_parent(const peng::weak_ptr<Entity>& parent)
 	if (_parent.valid())
 	{
 		_parent->_children.push_back(weak_this());
+		_active_hierarchy = _active_self && _parent->active_in_hierarchy();
+	}
+
+	if (_active_hierarchy && !was_active_hierarchy)
+	{
+		post_enable();
+	}
+	else if (!_active_hierarchy && was_active_hierarchy)
+	{
+		post_disable();
 	}
 }
 
@@ -113,6 +125,31 @@ math::Matrix4x4f Entity::transform_matrix_inv() const noexcept
 	}
 
 	return local_matrix_inv;
+}
+
+void Entity::propagate_active_change(bool parent_active)
+{
+	const bool new_active = parent_active && _active_self;
+	const bool require_enable = new_active && !_active_hierarchy;
+	const bool require_disable = !new_active && _active_hierarchy;
+
+	for (const peng::weak_ptr<Entity>& child : _children)
+	{
+		if (child)
+		{
+			child->propagate_active_change(new_active);
+		}
+	}
+
+	_active_hierarchy = new_active;
+	if (require_enable)
+	{
+		post_enable();
+	}
+	else if (require_disable)
+	{
+		post_disable();
+	}
 }
 
 void Entity::cleanup_killed_children()

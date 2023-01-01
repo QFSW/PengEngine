@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <sstream>
 #include <vector>
@@ -7,14 +8,20 @@
 
 namespace strtools
 {
-	template <size_t BufSize = 1024, typename ...Args>
+	template <typename ...Args>
 	std::string catf(const char* format, Args...args)
 	{
 		static_assert(traits::for_none<std::is_class, Args...>(), "strtools::catf does not work with classes");
+		static thread_local std::vector<char> char_buf(1024);
 
-		char buf[BufSize];
-		snprintf(buf, BufSize, format, args...);
-		return std::string(buf);
+		const int32_t msg_size = snprintf(char_buf.data(), char_buf.size(), format, args...);
+		if (msg_size < static_cast<int32_t>(char_buf.size()))
+		{
+			return char_buf.data();
+		}
+
+		char_buf.resize(msg_size + 1);
+		return catf(format, args...);
 	}
 
 	template <typename T>
