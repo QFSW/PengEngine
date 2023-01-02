@@ -148,7 +148,7 @@ namespace math
 	template <number T>
 	Matrix4x4<make_floating_t<T>> Matrix4x4<T>::rotated(const Vector3<F>& rotation) const noexcept
 	{
-		// x = yaw, y = pitch, z = roll
+		// x = pitch, y = yaw, z = roll
 		const Vector3<F> r = rotation * std::numbers::pi_v<T> / 180;
 		Matrix4x4<F> pitch = identity();
 		Matrix4x4<F> yaw = identity();
@@ -156,21 +156,21 @@ namespace math
 
 		if (rotation.x != 0)
 		{
-			yaw = Matrix4x4<F>({
-				std::cos(r.x), 0, -std::sin(r.x), 0,
-				0,             1, 0,              0,
-				std::sin(r.x), 0, std::cos(r.x),  0,
-				0,             0, 0,              1
+			pitch = Matrix4x4<F>({
+				1,   0,		         0,		        0,
+				0,   std::cos(r.x),  std::sin(r.x), 0,
+				0,   -std::sin(r.x), std::cos(r.x), 0,
+				0,   0,		         0,		        1
 			});
 		}
 
 		if (rotation.y != 0)
 		{
-			pitch = Matrix4x4<F>({
-				1,   0,		         0,		        0,
-				0,   std::cos(r.y),  std::sin(r.y), 0,
-				0,   -std::sin(r.y), std::cos(r.y), 0,
-				0,   0,		         0,		        1
+			yaw = Matrix4x4<F>({
+				std::cos(r.y), 0, -std::sin(r.y), 0,
+				0,             1, 0,              0,
+				std::sin(r.y), 0, std::cos(r.y),  0,
+				0,             0, 0,              1
 			});
 		}
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include "shared_ptr.h"
 
 namespace peng
@@ -55,9 +57,10 @@ namespace peng
 			return shared_ptr<T>(_ptr.lock());
 		}
 
-		[[nodiscard]] T* operator->() const noexcept
+		[[nodiscard]] T* operator->() const 
 		{
-			return lock().get();
+			assert(valid());
+			return _ptr.lock().get();
 		}
 
 		[[nodiscard]] bool valid() const noexcept

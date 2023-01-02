@@ -94,6 +94,9 @@ namespace math
 
 		static constexpr Vector3 zero() { return Vector3(0, 0, 0); }
 		static constexpr Vector3 one() { return Vector3(1, 1, 1); }
+		static constexpr Vector3 right() { return Vector3(1, 0, 0); }
+		static constexpr Vector3 up() { return Vector3(0, 1, 0); }
+		static constexpr Vector3 forwards() { return Vector3(0, 0, 1); }
 	};
 
 	using Vector3f = Vector3<float>;

@@ -71,7 +71,7 @@ void DemoController::post_create()
 	floor_entity->local_transform() = Transform(
 		Vector3f(0, -5, 0),
 		Vector3f(floor_size, 1),
-		Vector3f(0, 90, 0)
+		Vector3f(90, 0, 0)
 	);
 
 	Logger::get().log(LogSeverity::success, "Demo controller started");
@@ -115,22 +115,22 @@ void DemoController::tick(float delta_time)
 
 	if (input[KeyCode::left].is_down())
 	{
-		rot_input.x -= 1;
+		rot_input.y -= 1;
 	}
 
 	if (input[KeyCode::right].is_down())
 	{
-		rot_input.x += 1;
+		rot_input.y += 1;
 	}
 
 	if (input[KeyCode::down].is_down())
 	{
-		rot_input.y += 1;
+		rot_input.x += 1;
 	}
 
 	if (input[KeyCode::up].is_down())
 	{
-		rot_input.y -= 1;
+		rot_input.x -= 1;
 	}
 
 	if (input[KeyCode::q].is_down() || input[KeyCode::z].is_down())
@@ -176,4 +176,5 @@ void DemoController::tick(float delta_time)
 	// TODO: something about rotation and camera is completely broken
 	camera->local_transform().position += (rotator * pan_input.normalized()) * pan_amount;
 	camera->local_transform().rotation += rot_input.normalized() * pan_amount * _rot_speed / _pan_speed;
+	camera->local_transform().rotation.x = std::clamp<float>(camera->local_transform().rotation.x, -90, 90);
 }

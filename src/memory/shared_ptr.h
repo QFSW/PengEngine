@@ -42,8 +42,17 @@ namespace peng
 			return *this;
 		}
 
-		[[nodiscard]] T* get() const noexcept { return _ptr.get(); }
-		[[nodiscard]] T* operator->() const noexcept { return get(); }
+		[[nodiscard]] T* get() const noexcept
+		{
+			return _ptr.get();
+		}
+
+		[[nodiscard]] T* operator->() const
+		{
+			assert(_ptr);
+			return get();
+		}
+
 		[[nodiscard]] size_t use_count() const noexcept { return _ptr.use_count(); }
 
 		[[nodiscard]] const std::shared_ptr<T>& get_impl() const noexcept

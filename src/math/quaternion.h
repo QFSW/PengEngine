@@ -33,7 +33,7 @@ namespace math
 
 		static constexpr Quaternion identity();
 		static constexpr Quaternion euler(const Vector3<T>& euler_angles);
-		static constexpr Quaternion euler(T yaw, T pitch, T roll);
+		static constexpr Quaternion euler(T pitch, T yaw, T roll);
 	};
 
 	template <std::floating_point T>
@@ -49,11 +49,11 @@ namespace math
 	}
 
 	template <std::floating_point T>
-	constexpr Quaternion<T> Quaternion<T>::euler(T yaw, T pitch, T roll)
+	constexpr Quaternion<T> Quaternion<T>::euler(T pitch, T yaw, T roll)
 	{
 		const T c = std::numbers::pi_v<T> / 360;
-		const T yaw_c = yaw * c;
 		const T pitch_c = pitch * c;
+		const T yaw_c = yaw * c;
 		const T roll_c = roll * c;
 
 		return Quaternion(

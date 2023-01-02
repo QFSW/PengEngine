@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <cassert>
 
 namespace peng
 {
@@ -12,10 +13,7 @@ namespace peng
 		explicit shared_ref(const std::shared_ptr<T>& ptr)
 			: _ptr(ptr)
 		{
-			if (_ptr == nullptr)
-			{
-				throw std::runtime_error("Cannot create a shared_ref from a nullptr");
-			}
+			assert(_ptr);
 		}
 
 		template <typename U>
