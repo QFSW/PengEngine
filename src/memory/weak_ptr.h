@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cassert>
-
 #include "shared_ptr.h"
 
 namespace peng
@@ -66,6 +64,12 @@ namespace peng
 		[[nodiscard]] bool valid() const noexcept
 		{
 			return !_ptr.expired();
+		}
+
+		weak_ptr& if_valid(const std::function<void(T&)>& func)
+		{
+			lock().if_valid(func);
+			return *this;
 		}
 
 		explicit operator bool() const noexcept

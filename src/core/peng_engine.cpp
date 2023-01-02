@@ -11,6 +11,7 @@ PengEngine::PengEngine()
 	: _executing(false)
 	, _target_frametime(1000 / 60.0)
 	, _resolution(800, 600)
+	, _cursor_locked(false)
 	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
 	, _last_render_frametime(0)
@@ -75,6 +76,17 @@ void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
 	}
 
 	_resolution = resolution;
+}
+
+void PengEngine::set_cursor_locked(bool cursor_locked)
+{
+	if (cursor_locked == _cursor_locked)
+	{
+		return;
+	}
+
+	_cursor_locked = cursor_locked;
+	glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 bool PengEngine::shutting_down() const
@@ -200,6 +212,8 @@ void PengEngine::start_opengl()
 		get()._resolution = math::Vector2i(width, height);
 		glViewport(0, 0, width, height);
 	});
+
+	glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void PengEngine::shutdown()

@@ -29,3 +29,27 @@ Matrix4x4f Transform::to_inverse_matrix() const noexcept
 		.rotated(-rotation)
 		.scaled(scale.reciprocal());
 }
+
+Vector3f Transform::local_right() const noexcept
+{
+	// TODO: breaks if local_forwards == up
+	return Vector3f::cross(Vector3f::up(), local_forwards());
+}
+
+Vector3f Transform::local_up() const noexcept
+{
+	// TODO: breaks if local_forwards == right
+	return Vector3f::cross(Vector3f::right(), local_forwards());
+}
+
+Vector3f Transform::local_forwards() const noexcept
+{
+	const float pitch_rads = rotation.x * std::numbers::pi_v<float> / 180;
+	const float yaw_rads = rotation.y * std::numbers::pi_v<float> / 180;
+
+	return Vector3f(
+		std::sin(yaw_rads) * std::cos(pitch_rads),
+		-std::sin(pitch_rads),
+		std::cos(yaw_rads) * std::cos(pitch_rads)
+	);
+}

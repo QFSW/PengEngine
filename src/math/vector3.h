@@ -92,6 +92,8 @@ namespace math
 		Vector3 operator*(const T& scalar) const;
 		Vector3 operator/(const T& scalar) const;
 
+		static constexpr Vector3 cross(const Vector3& a, const Vector3& b);
+
 		static constexpr Vector3 zero() { return Vector3(0, 0, 0); }
 		static constexpr Vector3 one() { return Vector3(1, 1, 1); }
 		static constexpr Vector3 right() { return Vector3(1, 0, 0); }
@@ -295,5 +297,15 @@ namespace math
 	{
 		Vector3 result = *this;
 		return result /= scalar;
+	}
+
+	template <number T>
+	constexpr Vector3<T> Vector3<T>::cross(const Vector3& a, const Vector3& b)
+	{
+		return Vector3(
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x
+		);
 	}
 }

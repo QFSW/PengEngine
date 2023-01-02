@@ -23,6 +23,7 @@ public:
 	void set_target_fps(double fps) noexcept;
 	void set_target_frametime(double frametime_ms) noexcept;
 	void set_resolution(const math::Vector2i& resolution) noexcept;
+	void set_cursor_locked(bool cursor_locked);
 
 	[[nodiscard]] bool shutting_down() const;
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
@@ -54,6 +55,7 @@ private:
 	double _target_frametime;
 
 	math::Vector2i _resolution;
+	bool _cursor_locked;
 
 	double _last_frametime;
 	double _last_main_frametime;

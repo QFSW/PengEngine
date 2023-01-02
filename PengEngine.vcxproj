@@ -283,6 +283,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\fly_cam_controller.cpp" />
     <ClCompile Include="src\components\mesh_renderer.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\logger.cpp" />
@@ -311,6 +312,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common\common.h" />
+    <ClInclude Include="src\components\fly_cam_controller.h" />
     <ClInclude Include="src\components\mesh_renderer.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\logger.h" />

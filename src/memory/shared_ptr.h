@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "shared_ref.h"
 
 namespace peng
@@ -63,6 +65,16 @@ namespace peng
 		[[nodiscard]] shared_ref<T> to_shared_ref() const noexcept
 		{
 			return shared_ref<T>(_ptr);
+		}
+
+		shared_ptr& if_valid(const std::function<void(T&)>& func)
+		{
+			if (_ptr)
+			{
+				func(*get());
+			}
+
+			return *this;
 		}
 
 		explicit operator bool() const noexcept
