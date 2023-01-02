@@ -49,5 +49,5 @@ void FlyCamController::tick(float delta_time)
 
 	camera_transform.position += fly_input.normalized() * _fly_speed * delta_time;
 	camera_transform.rotation += rot_input * _rot_sensitivity;
-	camera_transform.rotation.x = std::clamp<float>(camera_transform.rotation.x, -90, 90);
+	camera_transform.rotation.x = std::clamp<float>(camera_transform.rotation.x, -89.9f, 89.9f);
 }
