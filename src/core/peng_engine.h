@@ -24,6 +24,7 @@ public:
 	void set_target_frametime(double frametime_ms) noexcept;
 	void set_resolution(const math::Vector2i& resolution) noexcept;
 	void set_cursor_locked(bool cursor_locked);
+	void set_msaa(uint32_t msaa_samples);
 
 	[[nodiscard]] bool shutting_down() const;
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
@@ -56,6 +57,7 @@ private:
 
 	math::Vector2i _resolution;
 	bool _cursor_locked;
+	uint32_t _msaa_samples;
 
 	double _last_frametime;
 	double _last_main_frametime;

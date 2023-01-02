@@ -12,6 +12,7 @@ PengEngine::PengEngine()
 	, _target_frametime(1000 / 60.0)
 	, _resolution(800, 600)
 	, _cursor_locked(false)
+	, _msaa_samples(0)
 	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
 	, _last_render_frametime(0)
@@ -86,7 +87,33 @@ void PengEngine::set_cursor_locked(bool cursor_locked)
 	}
 
 	_cursor_locked = cursor_locked;
-	glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+
+	if (_executing)
+	{
+		glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+	}
+}
+
+void PengEngine::set_msaa(uint32_t msaa_samples)
+{
+	if (msaa_samples == _msaa_samples)
+	{
+		return;
+	}
+
+	if (_executing)
+	{
+		Logger::get().log(LogSeverity::error, "Changing MSAA at runtime is not yet supported");
+		return;
+	}
+
+	if ((msaa_samples & (msaa_samples - 1)) != 0)
+	{
+		Logger::get().logf(LogSeverity::error, "Cannot set MSAA to %dx as %d is not a power of 2", msaa_samples, msaa_samples);
+		return;
+	}
+
+	_msaa_samples = msaa_samples;
 }
 
 bool PengEngine::shutting_down() const
@@ -176,6 +203,7 @@ void PengEngine::start_opengl()
     glfwWindowHint(GLFW_BLUE_BITS,  8);
     glfwWindowHint(GLFW_GREEN_BITS, 8);
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
+	glfwWindowHint(GLFW_SAMPLES, static_cast<GLint>(_msaa_samples));
 
 	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", nullptr, nullptr);
 	if (!_glfw_window)
@@ -212,6 +240,11 @@ void PengEngine::start_opengl()
 		get()._resolution = math::Vector2i(width, height);
 		glViewport(0, 0, width, height);
 	});
+
+	if (_msaa_samples > 0)
+	{
+		glEnable(GL_MULTISAMPLE);
+	}
 
 	glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
