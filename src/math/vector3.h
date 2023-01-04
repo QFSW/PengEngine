@@ -75,6 +75,9 @@ namespace math
 		[[nodiscard]] Vector3<F> normalized_unsafe() const noexcept;
 		[[nodiscard]] Vector3<F> reciprocal() const noexcept;
 
+		bool operator==(const Vector3& other) const;
+		bool operator!=(const Vector3& other) const;
+
 		Vector3 operator+() const;
 		Vector3 operator-() const;
 
@@ -183,6 +186,20 @@ namespace math
 	{
 		constexpr F one_f = 1;
 		return Vector3<F>(one_f / x, one_f / y, one_f / z);
+	}
+
+	template <number T>
+	bool Vector3<T>::operator==(const Vector3& other) const
+	{
+		return x == other.x
+			&& y == other.y
+			&& z == other.z;
+	}
+
+	template <number T>
+	bool Vector3<T>::operator!=(const Vector3& other) const
+	{
+		return !(*this == other);
 	}
 
 	template <number T>
@@ -309,3 +326,12 @@ namespace math
 		);
 	}
 }
+
+template<math::number T>
+struct std::hash<math::Vector3<T>>
+{
+	size_t operator()(const math::Vector3<T>& x) const
+	{
+		return std::hash<T>{}(x.x) ^ std::hash<T>{}(x.y) ^ std::hash<T>{}(x.z);
+	}
+};

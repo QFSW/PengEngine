@@ -13,11 +13,15 @@ namespace rendering
 	{
 	public:
 		Mesh(
+			std::string&& name,
+			std::vector<Vertex>&& vertices,
+			std::vector<math::Vector3u>&& indices
+		);
+
+		Mesh(
 			const std::string& name,
-			const std::vector<math::Vector3f>& vertices,
-			const std::vector<math::Vector3u>& indices,
-			const std::vector<math::Vector3f>& colors,
-			const std::vector<math::Vector2f>& tex_coords
+			const std::vector<Vertex>& vertices,
+			const std::vector<math::Vector3u>& indices
 		);
 
 		Mesh(const Mesh&) = delete;

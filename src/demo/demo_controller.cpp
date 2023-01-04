@@ -54,7 +54,11 @@ void DemoController::post_create()
 			const Vector2f pos = Vector2f(blob_x - (blob_grid.x - 1) / 2.0f, blob_y - (blob_grid.y - 1) / 2.0f)
 				* blob_spacing;
 
-			PengEngine::get().entity_manager().create_entity<BlobEntity>(Primitives::cube(), material, pos)
+			auto mesh = blob_x % 2
+				? Primitives::cube()
+				: Primitives::icosphere(blob_y);
+
+			PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material, pos)
 				->set_parent(blobs_entity);
 		}
 	}

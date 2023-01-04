@@ -5,6 +5,12 @@
 
 namespace strtools
 {
+	std::vector<char>& detail::get_catf_buffer()
+	{
+		static thread_local std::vector<char> char_buf(1024);
+		return char_buf;
+	}
+
 	std::vector<std::string> split(const std::string& str, const char delim)
 	{
 		std::vector<std::string> elems;

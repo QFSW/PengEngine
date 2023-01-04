@@ -382,6 +382,9 @@ namespace math
 		[[nodiscard]] Vector4<F> normalized_unsafe() const noexcept;
 		[[nodiscard]] Vector4<F> reciprocal() const noexcept;
 
+		bool operator==(const Vector4& other) const;
+		bool operator!=(const Vector4& other) const;
+
 		Vector4 operator+() const;
 		Vector4 operator-() const;
 
@@ -482,6 +485,21 @@ namespace math
 	{
 		constexpr F one_f = 1;
 		return Vector4<F>(one_f / x, one_f / y, one_f / z, one_f / w);
+	}
+
+	template <number T>
+	bool Vector4<T>::operator==(const Vector4& other) const
+	{
+		return x == other.x
+			&& y == other.y
+			&& z == other.z
+			&& w == other.w;
+	}
+
+	template <number T>
+	bool Vector4<T>::operator!=(const Vector4& other) const
+	{
+		return !(*this == other);
 	}
 
 	template <number T>
@@ -604,3 +622,12 @@ namespace math
 		return result /= scalar;
 	}
 }
+
+template<math::number T>
+struct std::hash<math::Vector4<T>>
+{
+	size_t operator()(const math::Vector3<T>& x) const
+	{
+		return std::hash<T>{}(x.x) ^ std::hash<T>{}(x.y) ^ std::hash<T>{}(x.z) ^ std::hash<T>{}(x.w);
+	}
+};

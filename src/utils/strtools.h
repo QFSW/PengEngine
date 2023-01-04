@@ -8,11 +8,16 @@
 
 namespace strtools
 {
+	namespace detail
+	{
+		std::vector<char>& get_catf_buffer();
+	}
+
 	template <typename ...Args>
 	std::string catf(const char* format, Args...args)
 	{
 		static_assert(traits::for_none<std::is_class, Args...>(), "strtools::catf does not work with classes");
-		static thread_local std::vector<char> char_buf(1024);
+		std::vector<char>& char_buf = detail::get_catf_buffer();
 
 		const int32_t msg_size = snprintf(char_buf.data(), char_buf.size(), format, args...);
 		if (msg_size < static_cast<int32_t>(char_buf.size()))

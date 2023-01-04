@@ -9,52 +9,16 @@ using namespace rendering;
 using namespace math;
 
 Mesh::Mesh(
-	const std::string& name,
-	const std::vector<Vector3f>& vertices,
-	const std::vector<Vector3u>& indices,
-	const std::vector<Vector3f>& colors,
-	const std::vector<Vector2f>& tex_coords
+	std::string&& name,
+	std::vector<Vertex>&& vertices,
+	std::vector<Vector3u>&& indices
 )
-	: _name(name)
-	, _index_buffer(indices)
-	, _num_indices(static_cast<GLuint>(indices.size() * 3))
+	: _name(std::move(name))
+	, _vertex_buffer(std::move(vertices))
+	, _index_buffer(std::move(indices))
+	, _num_indices(static_cast<GLuint>(_index_buffer.size() * 3))
 {
-	if constexpr (Logger::enabled())
-	{
-		Logger::get().logf(LogSeverity::log, "Building mesh '%s'", name.c_str());
-
-		if (!colors.empty() && colors.size() != vertices.size())
-		{
-			Logger::get().logf(LogSeverity::warning,
-				"Mesh '%s' has %d vertices but %d vertex colors",
-				name.c_str(), vertices.size(), colors.size()
-			);
-		}
-
-		if (!tex_coords.empty() && tex_coords.size() != vertices.size())
-		{
-			Logger::get().logf(LogSeverity::warning,
-				"Mesh '%s' has %d vertices but %d texture coordinates",
-				name.c_str(), vertices.size(), tex_coords.size()
-			);
-		}
-	}
-
-	_vertex_buffer.resize(vertices.size(), Vertex(Vector3f::zero(), Vector3f::one(), Vector2f::zero()));
-	for (size_t vert_index = 0; vert_index < vertices.size(); vert_index++)
-	{
-		_vertex_buffer[vert_index].position = vertices[vert_index];
-
-		if (vert_index < colors.size())
-		{
-			_vertex_buffer[vert_index].color = colors[vert_index];
-		}
-
-		if (vert_index < tex_coords.size())
-		{
-			_vertex_buffer[vert_index].tex_coord = tex_coords[vert_index];
-		}
-	}
+	Logger::get().logf(LogSeverity::log, "Building mesh '%s'", _name.c_str());
 
 	glGenBuffers(1, &_vbo);
 	glGenBuffers(1, &_ebo);
@@ -76,6 +40,18 @@ Mesh::Mesh(
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
 	glEnableVertexAttribArray(2);
 }
+
+Mesh::Mesh(
+	const std::string& name,
+	const std::vector<Vertex>& vertices,
+	const std::vector<Vector3u>& indices
+)
+	: Mesh(
+		utils::copy(name),
+		utils::copy(vertices),
+		utils::copy(indices)
+	)
+{ }
 
 Mesh::~Mesh()
 {
