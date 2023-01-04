@@ -297,6 +297,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\input\input_manager.cpp" />
     <ClCompile Include="src\input\key_state.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\plane.cpp" />
+    <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
@@ -340,6 +342,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\math\matrix4x4.h" />
     <ClInclude Include="src\math\number.h" />
     <ClInclude Include="src\math\quaternion.h" />
+    <ClInclude Include="src\math\ray.h" />
     <ClInclude Include="src\math\transform.h" />
     <ClInclude Include="src\math\vector2.h" />
     <ClInclude Include="src\math\vector3.h" />
@@ -349,6 +352,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\memory\weak_ptr.h" />
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
+    <ClInclude Include="src\math\plane.h" />
     <ClInclude Include="src\rendering\primitives.h" />
     <ClInclude Include="src\rendering\shader.h" />
     <ClInclude Include="src\rendering\texture.h" />
