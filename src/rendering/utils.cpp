@@ -27,9 +27,9 @@ std::tuple<std::vector<Vertex>, std::vector<Vector3u>> rendering::subdivide(
             continue;
         }
 
-        for (uint32_t index_y = 0; index_y < num_vertices; index_y++)
+        for (uint32_t index_y = index_x + 1; index_y < num_vertices; index_y++)
         {
-	        if (index_x != index_y && vertices[index_x].position == vertices[index_y].position)
+	        if (vertices[index_x].position == vertices[index_y].position)
 	        {
                 seam_indices.insert(index_x);
                 seam_indices.insert(index_y);
