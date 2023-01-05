@@ -20,21 +20,27 @@ std::tuple<std::vector<Vertex>, std::vector<Vector3u>> rendering::subdivide(
     // Generate a list of which indices correspond to vertices on a seam
     // so that we can preserve seams when subdividing
     common::unordered_set<uint32_t> seam_indices;
-    for (uint32_t index_x = 0; index_x < num_vertices; index_x++)
-    {
-        if (seam_indices.contains(index_x))
-        {
-            continue;
-        }
+    common::unordered_map<Vector3f, size_t> vertex_hits;
 
-        for (uint32_t index_y = index_x + 1; index_y < num_vertices; index_y++)
+    // Initialize vertex hits to zero
+    for (const Vertex& vertex : vertices)
+    {
+        vertex_hits[vertex.position] = 0;
+    }
+
+    // Count hits for each vertex
+    for (const Vertex& vertex : vertices)
+    {
+        vertex_hits[vertex.position]++;
+    }
+
+    // All indices that correspond to vertices with >=2 vertex hits are seam indices
+    for (uint32_t index = 0; index < num_vertices; index++)
+    {
+        const Vertex& vertex = vertices[index];
+        if (vertex_hits[vertex.position] >= 2)
         {
-	        if (vertices[index_x].position == vertices[index_y].position)
-	        {
-                seam_indices.insert(index_x);
-                seam_indices.insert(index_y);
-                break;
-	        }
+            seam_indices.insert(index);
         }
     }
 
