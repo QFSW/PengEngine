@@ -23,6 +23,7 @@ public:
 	void set_target_fps(double fps) noexcept;
 	void set_target_frametime(double frametime_ms) noexcept;
 	void set_resolution(const math::Vector2i& resolution) noexcept;
+	void set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept;
 	void set_cursor_locked(bool cursor_locked);
 	void set_msaa(uint32_t msaa_samples);
 
@@ -56,6 +57,7 @@ private:
 	double _target_frametime;
 
 	math::Vector2i _resolution;
+	bool _fullscreen;
 	bool _cursor_locked;
 	uint32_t _msaa_samples;
 

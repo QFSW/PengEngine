@@ -11,6 +11,7 @@ PengEngine::PengEngine()
 	: _executing(false)
 	, _target_frametime(1000 / 60.0)
 	, _resolution(800, 600)
+	, _fullscreen(false)
 	, _cursor_locked(false)
 	, _msaa_samples(0)
 	, _last_frametime(_target_frametime)
@@ -70,13 +71,25 @@ void PengEngine::set_target_frametime(double frametime_ms) noexcept
 
 void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
 {
+	set_resolution(resolution, _fullscreen);
+}
+
+void PengEngine::set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept
+{
 	if (_executing)
 	{
+		if (fullscreen != _fullscreen)
+		{
+			Logger::get().log(LogSeverity::error, "Changing fullscreen mode at runtime is not yet supported");
+			return;
+		}
+
 		glfwSetWindowSize(_glfw_window, resolution.x, resolution.y);
 		return;
 	}
 
 	_resolution = resolution;
+	_fullscreen = fullscreen;
 }
 
 void PengEngine::set_cursor_locked(bool cursor_locked)
@@ -205,7 +218,9 @@ void PengEngine::start_opengl()
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
 	glfwWindowHint(GLFW_SAMPLES, static_cast<GLint>(_msaa_samples));
 
-	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", nullptr, nullptr);
+	GLFWmonitor* monitor = _fullscreen ? glfwGetPrimaryMonitor() : nullptr;
+	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", monitor, nullptr);
+
 	if (!_glfw_window)
 	{
 		throw std::logic_error("GLFW window creation failed");
