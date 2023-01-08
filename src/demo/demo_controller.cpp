@@ -32,7 +32,7 @@ void DemoController::post_create()
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
 		"Rave",
-		"resources/shaders/core/projection.vert",
+		"resources/shaders/demo/wobble.vert",
 		"resources/shaders/demo/rave.frag"
 	);
 
@@ -45,7 +45,7 @@ void DemoController::post_create()
 
 	const auto blobs_entity = PengEngine::get().entity_manager().create_entity<Entity>("Blobs", TickGroup::none);
 
-	const Vector2i blob_grid(7, 4);
+	const Vector2i blob_grid(7, 5);
 	for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
 	{
 		for (int32_t blob_y = 0; blob_y < blob_grid.y; blob_y++)
