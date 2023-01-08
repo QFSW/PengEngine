@@ -129,6 +129,17 @@ void PengEngine::set_msaa(uint32_t msaa_samples)
 	_msaa_samples = msaa_samples;
 }
 
+void PengEngine::maximize_window() const
+{
+	if (!_executing)
+	{
+		Logger::get().log(LogSeverity::error, "Cannot maximize window while the engine isn't running");
+		return;
+	}
+
+	glfwMaximizeWindow(_glfw_window);
+}
+
 bool PengEngine::shutting_down() const
 {
 	if (!_executing)
@@ -147,6 +158,11 @@ bool PengEngine::shutting_down() const
 const math::Vector2i& PengEngine::resolution() const noexcept
 {
 	return _resolution;
+}
+
+bool PengEngine::fullscreen() const noexcept
+{
+	return _fullscreen;
 }
 
 EntityManager& PengEngine::entity_manager() noexcept

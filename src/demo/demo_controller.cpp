@@ -97,6 +97,11 @@ void DemoController::tick(float delta_time)
 		PengEngine::get().entity_manager().destroy_entity(PengEngine::get().entity_manager().find_entity("Blob", true));
 	}
 
+	if (input_manager[KeyCode::f11].pressed())
+	{
+		PengEngine::get().maximize_window();
+	}
+
 	if (input_manager[KeyCode::escape].pressed())
 	{
 		PengEngine::get().request_shutdown();

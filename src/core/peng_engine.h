@@ -27,8 +27,11 @@ public:
 	void set_cursor_locked(bool cursor_locked);
 	void set_msaa(uint32_t msaa_samples);
 
+	void maximize_window() const;
+
 	[[nodiscard]] bool shutting_down() const;
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
+	[[nodiscard]] bool fullscreen() const noexcept;
 
 	EntityManager& entity_manager() noexcept;
 	input::InputManager& input_manager() noexcept;
