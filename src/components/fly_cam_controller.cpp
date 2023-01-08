@@ -35,6 +35,7 @@ void FlyCamController::tick(float delta_time)
 
 	const Vector3f fly_forwards = camera_transform.local_forwards();
 	const Vector3f fly_right = camera_transform.local_right();
+	const Vector3f fly_up = Vector3f::up();
 
 	const InputManager& input_manager = PengEngine::get().input_manager();
 
@@ -46,6 +47,8 @@ void FlyCamController::tick(float delta_time)
 	fly_input += input_manager[KeyCode::a].is_down() ? -fly_right    : Vector3f::zero();
 	fly_input += input_manager[KeyCode::w].is_down() ? +fly_forwards : Vector3f::zero();
 	fly_input += input_manager[KeyCode::s].is_down() ? -fly_forwards : Vector3f::zero();
+	fly_input += input_manager[KeyCode::e].is_down() ? +fly_up       : Vector3f::zero();
+	fly_input += input_manager[KeyCode::q].is_down() ? -fly_up       : Vector3f::zero();
 
 	camera_transform.position += fly_input.normalized() * _fly_speed * delta_time;
 	camera_transform.rotation += rot_input * _rot_sensitivity;
