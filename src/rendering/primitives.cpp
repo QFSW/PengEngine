@@ -25,35 +25,35 @@ peng::shared_ref<const Mesh> Primitives::cube()
 
     const std::vector<Vertex> vertices =
     {
-        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 0)),
+        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 1)),
+        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 1)),
 
-        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(0, 0)),
+        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(1, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(1, 1)),
+        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(0, 1)),
 
-        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(0, 0)),
+        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(1, 0)),
+        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(1, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(0, 1)),
 
-        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(0, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(1, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(1, 1)),
+        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(0, 1)),
 
-        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(0, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(1, 0)),
+        Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(1, 1)),
+        Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(0, 1)),
 
-        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector2f(0, 0)),
-        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector2f(1, 0)),
-        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector2f(1, 1)),
-        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector2f(0, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(0, 0)),
+        Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(1, 0)),
+        Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(1, 1)),
+        Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(0, 1)),
     };
 
     const std::vector<Vector3u> indices =
@@ -95,10 +95,10 @@ peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
 
     const std::vector<Vertex> vertices =
     {
-        Vertex(Vector3f(-1, -1, 0), Vector2f(0, 0)),
-        Vertex(Vector3f(1, -1, 0), Vector2f(1, 0)),
-        Vertex(Vector3f(1, 1, 0), Vector2f(1, 1)),
-        Vertex(Vector3f(-1, 1, 0), Vector2f(0, 1)),
+        Vertex(Vector3f(-1, -1, 0), Vector3f(0, 0, 1), Vector2f(0, 0)),
+        Vertex(Vector3f(1, -1, 0), Vector3f(0, 0, 1), Vector2f(1, 0)),
+        Vertex(Vector3f(1, 1, 0), Vector3f(0, 0, 1), Vector2f(1, 1)),
+        Vertex(Vector3f(-1, 1, 0), Vector3f(0, 0, 1), Vector2f(0, 1)),
     };
 
     const std::vector<Vector3u> indices =
@@ -122,18 +122,18 @@ std::vector<Vertex> Primitives::icosahedron_vertices(float radius)
     const float x = r / t;
 
 	std::vector<Vertex> vertices = {
-        Vertex(Vector3f(-x, r, 0), Vector2f::zero()),
-        Vertex(Vector3f(x, r, 0), Vector2f::zero()),
-        Vertex(Vector3f(-x, -r, 0), Vector2f::zero()),
-        Vertex(Vector3f(x, -r, 0), Vector2f::zero()),
-        Vertex(Vector3f(0, -x, r), Vector2f::zero()),
-        Vertex(Vector3f(0, x, r), Vector2f::zero()),
-        Vertex(Vector3f(0, -x, -r), Vector2f::zero()),
-        Vertex(Vector3f(0, x, -r), Vector2f::zero()),
-        Vertex(Vector3f(r, 0, -x), Vector2f::zero()),
-        Vertex(Vector3f(r, 0, x), Vector2f::zero()),
-        Vertex(Vector3f(-r, 0, -x), Vector2f::zero()),
-        Vertex(Vector3f(-r, 0, x), Vector2f::zero()),
+        Vertex(Vector3f(-x, r, 0), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(x, r, 0), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(-x, -r, 0), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(x, -r, 0), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(0, -x, r), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(0, x, r), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(0, -x, -r), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(0, x, -r), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(r, 0, -x), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(r, 0, x), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(-r, 0, -x), Vector3f::zero(), Vector2f::zero()),
+        Vertex(Vector3f(-r, 0, x), Vector3f::zero(), Vector2f::zero()),
     };
 
     return vertices;
@@ -199,6 +199,7 @@ peng::shared_ref<const Mesh> Primitives::icosphere(uint32_t order)
         constexpr float inv_tau = std::numbers::inv_pi_v<float> / 2;
 
         vertex.position = dir * radius;
+        vertex.normal = dir;
         vertex.tex_coord = Vector2f(
             std::atan2(dir.z, dir.x) * inv_tau,
             std::atan2(dir.y, dir.x) * inv_tau
