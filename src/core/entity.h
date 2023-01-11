@@ -8,6 +8,7 @@
 
 #include "tickable.h"
 #include "component.h"
+#include "entity_relationship.h"
 
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
@@ -28,7 +29,7 @@ public:
 	virtual void post_disable() { }
 
 	void set_active(bool active);
-	void set_parent(const peng::weak_ptr<Entity>& parent);
+	void set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship = EntityRelationship::full);
 	void destroy();
 
 	template <std::derived_from<Component> T, typename...Args>
@@ -44,6 +45,10 @@ public:
 	[[nodiscard]] peng::weak_ptr<Entity> parent() noexcept { return _parent; }
 	[[nodiscard]] peng::weak_ptr<const Entity> parent() const noexcept { return _parent; }
 	[[nodiscard]] const std::vector<peng::weak_ptr<Entity>>& children() const noexcept { return _children; }
+
+	[[nodiscard]] bool has_parent() const noexcept;
+	[[nodiscard]] bool has_spatial_parent() const noexcept;
+	[[nodiscard]] bool has_activity_parent() const noexcept;
 
 	[[nodiscard]] math::Matrix4x4f transform_matrix() const noexcept;
 	[[nodiscard]] math::Matrix4x4f transform_matrix_inv() const noexcept;
@@ -64,6 +69,8 @@ private:
 	bool _active_hierarchy;
 
 	peng::weak_ptr<Entity> _parent;
+	EntityRelationship _parent_relationship;
+
 	std::vector<peng::weak_ptr<Entity>> _children;
 	std::vector<peng::shared_ref<Component>> _components;
 	std::vector<peng::shared_ref<Component>> _deferred_components;

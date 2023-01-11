@@ -11,6 +11,7 @@ Entity::Entity(std::string&& name, TickGroup tick_group)
 	, _created(false)
 	, _active_self(true)
 	, _active_hierarchy(true)
+	, _parent_relationship(EntityRelationship::full)
 { }
 
 Entity::Entity(const std::string& name, TickGroup tick_group)
@@ -63,11 +64,11 @@ void Entity::set_active(bool active)
 	propagate_active_change(true);
 }
 
-void Entity::set_parent(const peng::weak_ptr<Entity>& parent)
+void Entity::set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship)
 {
 	const bool was_active_hierarchy = _active_hierarchy;
 
-	if (parent == _parent)
+	if (parent == _parent && relationship == _parent_relationship)
 	{
 		return;
 	}
@@ -79,11 +80,14 @@ void Entity::set_parent(const peng::weak_ptr<Entity>& parent)
 	}
 
 	_parent = parent;
+	_parent_relationship = relationship;
 
 	if (_parent.valid())
 	{
 		_parent->_children.push_back(weak_this());
-		_active_hierarchy = _active_self && _parent->active_in_hierarchy();
+		_active_hierarchy = has_activity_parent()
+			? _active_self && _parent->active_in_hierarchy()
+			: _active_self;
 	}
 
 	if (_active_hierarchy && !was_active_hierarchy)
@@ -112,11 +116,26 @@ peng::weak_ptr<Entity> Entity::weak_this()
 	return peng::shared_ref(shared_from_this());
 }
 
+bool Entity::has_parent() const noexcept
+{
+	return _parent.valid();
+}
+
+bool Entity::has_spatial_parent() const noexcept
+{
+	return has_parent() && (_parent_relationship & EntityRelationship::spatial) == EntityRelationship::spatial;
+}
+
+bool Entity::has_activity_parent() const noexcept
+{
+	return has_parent() && (_parent_relationship & EntityRelationship::activity) == EntityRelationship::activity;
+}
+
 math::Matrix4x4f Entity::transform_matrix() const noexcept
 {
 	const math::Matrix4x4f local_matrix = _local_transform.to_matrix();
 
-	if (_parent)
+	if (has_spatial_parent())
 	{
 		return _parent->transform_matrix() * local_matrix;
 	}
@@ -128,7 +147,7 @@ math::Matrix4x4f Entity::transform_matrix_inv() const noexcept
 {
 	const math::Matrix4x4f local_matrix_inv = _local_transform.to_inverse_matrix();
 
-	if (_parent)
+	if (has_spatial_parent())
 	{
 		return local_matrix_inv * _parent->transform_matrix_inv();
 	}
@@ -144,7 +163,7 @@ void Entity::propagate_active_change(bool parent_active)
 
 	for (const peng::weak_ptr<Entity>& child : _children)
 	{
-		if (child)
+		if (child && child->has_activity_parent())
 		{
 			child->propagate_active_change(new_active);
 		}
