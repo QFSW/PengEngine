@@ -32,12 +32,12 @@ PengEngine& PengEngine::get()
 void PengEngine::start()
 {
 	_executing = true;
-	Logger::get().log(LogSeverity::log, "PengEngine starting...");
+	Logger::log("PengEngine starting...");
 
 	start_opengl();
 	_input_manager.start(_glfw_window);
 
-	Logger::get().log(LogSeverity::success, "PengEngine started");
+	Logger::success("PengEngine started");
 	_on_engine_initialized();
 
 	while (!shutting_down())
@@ -50,13 +50,13 @@ void PengEngine::start()
 		});
 	}
 
-	Logger::get().log(LogSeverity::log, "PengEngine shutting down...");
+	Logger::log("PengEngine shutting down...");
 	shutdown();
 }
 
 void PengEngine::request_shutdown()
 {
-	Logger::get().log(LogSeverity::log, "PengEngine shutdown requested");
+	Logger::log("PengEngine shutdown requested");
 	_executing = false;
 }
 
@@ -81,7 +81,7 @@ void PengEngine::set_resolution(const math::Vector2i& resolution, bool fullscree
 	{
 		if (fullscreen != _fullscreen)
 		{
-			Logger::get().log(LogSeverity::error, "Changing fullscreen mode at runtime is not yet supported");
+			Logger::get().error("Changing fullscreen mode at runtime is not yet supported");
 			return;
 		}
 
@@ -127,13 +127,13 @@ void PengEngine::set_msaa(uint32_t msaa_samples)
 
 	if (_executing)
 	{
-		Logger::get().log(LogSeverity::error, "Changing MSAA at runtime is not yet supported");
+		Logger::error("Changing MSAA at runtime is not yet supported");
 		return;
 	}
 
 	if ((msaa_samples & (msaa_samples - 1)) != 0)
 	{
-		Logger::get().logf(LogSeverity::error, "Cannot set MSAA to %dx as %d is not a power of 2", msaa_samples, msaa_samples);
+		Logger::error("Cannot set MSAA to %dx as %d is not a power of 2", msaa_samples, msaa_samples);
 		return;
 	}
 
@@ -144,7 +144,7 @@ void PengEngine::maximize_window() const
 {
 	if (!_executing)
 	{
-		Logger::get().log(LogSeverity::error, "Cannot maximize window while the engine isn't running");
+		Logger::error("Cannot maximize window while the engine isn't running");
 		return;
 	}
 
@@ -192,32 +192,32 @@ static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, G
 	{
 		case GL_DEBUG_TYPE_ERROR:
 		{
-			Logger::get().logf(LogSeverity::error, "OpenGL Error: %s", message);
+			Logger::error("OpenGL Error: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
 		{
-			Logger::get().logf(LogSeverity::warning, "OpenGL Deprecation: %s", message);
+			Logger::error("OpenGL Deprecation: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
 		{
-			Logger::get().logf(LogSeverity::error, "OpenGL UB: %s", message);
+			Logger::error("OpenGL UB: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_PORTABILITY:
 		{
-			Logger::get().logf(LogSeverity::warning, "OpenGL Portability: %s", message);
+			Logger::warning("OpenGL Portability: %s", message);
 			break;
 		}
 		case GL_DEBUG_TYPE_PERFORMANCE:
 		{
-			Logger::get().logf(LogSeverity::warning, "OpenGL Performance: %s", message);
+			Logger::warning("OpenGL Performance: %s", message);
 			break;
 		}
 		default:
 		{
-			Logger::get().logf(LogSeverity::log, "OpenGL: %s", message);
+			Logger::log("OpenGL: %s", message);
 			break;
 		}
 	}
@@ -256,7 +256,7 @@ void PengEngine::start_opengl()
 	glfwGetFramebufferSize(_glfw_window, &_resolution.x, &_resolution.y);
 	glfwMakeContextCurrent(_glfw_window);
 
-	Logger::get().logf(LogSeverity::log, "OpenGL context created - %s", glGetString(GL_VERSION));
+	Logger::log("OpenGL context created - %s", glGetString(GL_VERSION));
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -297,7 +297,7 @@ void PengEngine::shutdown()
 	_entity_manager.shutdown();
 	shutdown_opengl();
 
-	Logger::get().log(LogSeverity::success, "PengEngine shutdown");
+	Logger::success("PengEngine shutdown");
 }
 
 void PengEngine::shutdown_opengl()

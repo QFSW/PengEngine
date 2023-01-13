@@ -41,7 +41,7 @@ void Camera::post_create()
 
 	if (_current.valid())
 	{
-		Logger::get().log(LogSeverity::warning, "Camera entity created when a valid camera already exists");
+		Logger::warning("Camera entity created when a valid camera already exists");
 	}
 
 	_current = peng::weak_ptr<Camera>(std::static_pointer_cast<Camera>(shared_from_this()));
@@ -98,7 +98,7 @@ void Camera::validate_config() const noexcept
 {
 	if (_near_clip >= _far_clip)
 	{
-		Logger::get().logf(LogSeverity::warning,
+		Logger::warning(
 			"Camera far-clip (%f) is not grater than near-clip (%f) - unexpected results may occur",
 			_far_clip, _near_clip
 		);
@@ -119,7 +119,7 @@ Matrix4x4f Camera::calc_projection_matrix()
 		Vector3f& scale = _local_transform.scale;
 		if (scale.x * scale.y * scale.z == 0.0f)
 		{
-			Logger::get().logf(LogSeverity::warning,
+			Logger::warning(
 				"Camera scale of (%f, %f, %f) is invalid - reverting to (1, 1, 1)",
 				scale.x, scale.y, scale.z
 			);
@@ -145,6 +145,6 @@ Matrix4x4f Camera::calc_projection_matrix()
 		});
 	}
 
-	Logger::get().logf(LogSeverity::error, "Unsupported projection mode %d", _projection);
+	Logger::error("Unsupported projection mode %d", _projection);
 	return Matrix4x4f::identity();
 }

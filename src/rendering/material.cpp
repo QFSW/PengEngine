@@ -15,7 +15,7 @@ Material::Material(peng::shared_ref<const Shader>&& shader)
 {
 	if (_shader->broken())
 	{
-		Logger::get().logf(LogSeverity::warning,
+		Logger::warning(
 			"Provided shader '%s' is broken - switching to fallback",
 			_shader->name().c_str()
 		);
@@ -58,7 +58,7 @@ void Material::set_parameter(const std::string& parameter_name, const Shader::Pa
 	else if (_bad_parameter_names.find(parameter_name) == _bad_parameter_names.end())
 	{
 		_bad_parameter_names.insert(parameter_name);
-		Logger::get().logf(LogSeverity::error,
+		Logger::error(
 			"Could not set parameter '%s' as no matching uniform could be found in the shader '%s'",
 			parameter_name.c_str(), _shader->name().c_str()
 		);

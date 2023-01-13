@@ -52,3 +52,23 @@ void Logger::log(LogSeverity severity, const std::string& message)
 		}
 	}
 }
+
+void Logger::log(const std::string& message)
+{
+	get().log(LogSeverity::log, message);
+}
+
+void Logger::warning(const std::string& message)
+{
+	get().log(LogSeverity::warning, message);
+}
+
+void Logger::error(const std::string& message)
+{
+	get().log(LogSeverity::error, message);
+}
+
+void Logger::success(const std::string& message)
+{
+	get().log(LogSeverity::success, message);
+}

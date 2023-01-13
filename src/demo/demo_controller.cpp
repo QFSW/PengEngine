@@ -23,7 +23,7 @@ void DemoController::post_create()
 {
 	Entity::post_create();
 
-	Logger::get().log(LogSeverity::log, "Demo controller starting...");
+	Logger::log("Demo controller starting...");
 
 	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
 	camera->make_perspective(70, 0.01f, 1000.0f);
@@ -80,7 +80,7 @@ void DemoController::post_create()
 	const auto light_entity = PengEngine::get().entity_manager().create_entity<Entity>("Light", TickGroup::none);
 	light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
 
-	Logger::get().log(LogSeverity::success, "Demo controller started");
+	Logger::success("Demo controller started");
 }
 
 void DemoController::tick(float delta_time)

@@ -33,7 +33,7 @@ void Component::set_owner(peng::shared_ref<Entity>&& entity)
 {
 	if (_owner.valid())
 	{
-		Logger::get().log(LogSeverity::error, "Component already has an owner");
+		Logger::error("Component already has an owner");
 	}
 	else
 	{

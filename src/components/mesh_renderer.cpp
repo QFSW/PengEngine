@@ -55,12 +55,12 @@ void MeshRenderer::post_create()
 	_cached_model_matrix = _material->shader()->get_uniform_location("model_matrix");
 	if (_cached_model_matrix < 0)
 	{
-		Logger::get().logf(LogSeverity::warning, "Material has no 'model_matrix' parameter so rendering may be incorrect");
+		Logger::warning("Material has no 'model_matrix' parameter so rendering may be incorrect");
 	}
 
 	_cached_view_matrix = _material->shader()->get_uniform_location("view_matrix");
 	if (_cached_view_matrix < 0)
 	{
-		Logger::get().logf(LogSeverity::warning, "Material has no 'view_matrix' parameter so rendering may be incorrect");
+		Logger::warning("Material has no 'view_matrix' parameter so rendering may be incorrect");
 	}
 }

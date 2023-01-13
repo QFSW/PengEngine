@@ -28,30 +28,30 @@ Shader::Shader(
 	: _name(std::move(name))
 	, _broken(false)
 {
-	Logger::get().logf(LogSeverity::log, "Building shader '%s'", _name.c_str());
-	Logger::get().logf(LogSeverity::log, "Loading vertex shader '%s'", vert_shader_path.c_str());
+	Logger::log("Building shader '%s'", _name.c_str());
+	Logger::log("Loading vertex shader '%s'", vert_shader_path.c_str());
 	const std::string vert_shader_src = io::read_text_file(vert_shader_path);
 
-	Logger::get().logf(LogSeverity::log, "Loading fragment shader '%s'", frag_shader_path.c_str());
+	Logger::log("Loading fragment shader '%s'", frag_shader_path.c_str());
 	const std::string frag_shader_src = io::read_text_file(frag_shader_path);
 
 	const char* shader_src;
 
-	Logger::get().log(LogSeverity::log, "Compiling vertex shader");
+	Logger::log("Compiling vertex shader");
 	const GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER);
 	shader_src = vert_shader_src.c_str();
 	glShaderSource(vert_shader, 1, &shader_src, nullptr);
 	glCompileShader(vert_shader);
 	_broken |= !validate_shader_compile(vert_shader);
 
-	Logger::get().log(LogSeverity::log, "Compiling fragment shader");
+	Logger::log("Compiling fragment shader");
 	const GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
 	shader_src = frag_shader_src.c_str();
 	glShaderSource(frag_shader, 1, &shader_src, nullptr);
 	glCompileShader(frag_shader);
 	_broken |= !validate_shader_compile(frag_shader);
 
-	Logger::get().log(LogSeverity::log, "Linking shader program");
+	Logger::log("Linking shader program");
 	_program = glCreateProgram();
 	glAttachShader(_program, vert_shader);
 	glAttachShader(_program, frag_shader);
@@ -63,7 +63,7 @@ Shader::Shader(
 
 	if (!_broken)
 	{
-		Logger::get().log(LogSeverity::log, "Extracting uniform information");
+		Logger::log("Extracting uniform information");
 
 		GLint num_uniforms;
 		glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
@@ -90,7 +90,7 @@ Shader::Shader(
 
 Shader::~Shader()
 {
-	Logger::get().logf(LogSeverity::log, "Destroying shader '%s'", _name.c_str());
+	Logger::log("Destroying shader '%s'", _name.c_str());
 	glDeleteProgram(_program);
 }
 
@@ -140,7 +140,7 @@ std::vector<Shader::Uniform> Shader::uniforms() const
 	return _uniforms;
 }
 
-bool Shader::validate_shader_compile(GLuint shader)
+bool Shader::validate_shader_compile(GLuint shader) const
 {
 	GLint success;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -154,14 +154,14 @@ bool Shader::validate_shader_compile(GLuint shader)
 
 			std::vector<GLchar> error_log(error_length);
 			glGetShaderInfoLog(shader, error_length, nullptr, error_log.data());
-			Logger::get().log(LogSeverity::error, error_log.data());
+			Logger::error(error_log.data());
 		}
 	}
 
 	return success == GL_TRUE;
 }
 
-bool Shader::validate_shader_link(GLuint shader)
+bool Shader::validate_shader_link(GLuint shader) const
 {
 	GLint success;
 	glGetProgramiv(shader, GL_LINK_STATUS, &success);
@@ -175,7 +175,7 @@ bool Shader::validate_shader_link(GLuint shader)
 
 			std::vector<GLchar> error_log(error_length);
 			glGetProgramInfoLog(shader, error_length, nullptr, error_log.data());
-			Logger::get().log(LogSeverity::error, error_log.data());
+			Logger::error(error_log.data());
 		}
 	}
 

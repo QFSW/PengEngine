@@ -18,7 +18,7 @@ Mesh::Mesh(
 	, _index_buffer(std::move(indices))
 	, _num_indices(static_cast<GLuint>(_index_buffer.size() * 3))
 {
-	Logger::get().logf(LogSeverity::log, "Building mesh '%s'", _name.c_str());
+	Logger::log("Building mesh '%s'", _name.c_str());
 
 	glGenBuffers(1, &_vbo);
 	glGenBuffers(1, &_ebo);
@@ -58,7 +58,7 @@ Mesh::Mesh(
 
 Mesh::~Mesh()
 {
-	Logger::get().logf(LogSeverity::log, "Destroying mesh '%s'", _name.c_str());
+	Logger::log("Destroying mesh '%s'", _name.c_str());
 
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);

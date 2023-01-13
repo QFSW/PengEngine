@@ -25,7 +25,7 @@ void EntityManager::tick(float delta_time)
 
 void EntityManager::shutdown()
 {
-	Logger::get().log(LogSeverity::log, "Destroying all entities");
+	Logger::log("Destroying all entities");
 
 	for (peng::shared_ref<Entity>& entity : _entities)
 	{
@@ -41,7 +41,7 @@ void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
 {
 	if (!entity.valid())
 	{
-		Logger::get().log(LogSeverity::error, "Cannot destroy invalid entity");
+		Logger::error("Cannot destroy invalid entity");
 		return;
 	}
 
@@ -111,11 +111,11 @@ void EntityManager::dump_hierarchy() const
 	const std::string hierarchy = build_entity_hierarchy(root_entities);
 	if (hierarchy.empty())
 	{
-		Logger::get().log(LogSeverity::log, "No entities exist");
+		Logger::log("No entities exist");
 	}
 	else
 	{
-		Logger::get().logf(LogSeverity::log, "Entity hierarchy\n%s", hierarchy.c_str());
+		Logger::log("Entity hierarchy\n%s", hierarchy.c_str());
 	}
 }
 
@@ -179,7 +179,7 @@ void EntityManager::flush_pending_kills()
 
 				if (weak_entity.valid())
 				{
-					Logger::get().logf(LogSeverity::warning,
+					Logger::warning(
 						"Entity '%s' still exists after kill, potential leak",
 						weak_entity->name().c_str()
 					);

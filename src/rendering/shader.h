@@ -73,8 +73,8 @@ namespace rendering
 		[[nodiscard]] std::vector<Uniform> uniforms() const;
 
 	private:
-		bool validate_shader_compile(GLuint shader);
-		bool validate_shader_link(GLuint shader);
+		bool validate_shader_compile(GLuint shader) const;
+		bool validate_shader_link(GLuint shader) const;
 
 		[[nodiscard]] std::optional<Parameter> read_uniform(const Uniform& uniform) const;
 
