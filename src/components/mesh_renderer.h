@@ -29,6 +29,7 @@ namespace components
 		peng::shared_ref<const rendering::Mesh> _mesh;
 		peng::shared_ref<rendering::Material> _material;
 
-		int32_t _cached_transform_location = -1;
+		int32_t _cached_model_matrix = -1;
+		int32_t _cached_view_matrix = -1;
 	};
 }
