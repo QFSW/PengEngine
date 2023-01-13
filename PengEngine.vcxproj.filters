@@ -298,5 +298,6 @@
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
+    <None Include="resources\shaders\core\phong.frag" />
   </ItemGroup>
 </Project>

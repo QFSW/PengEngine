@@ -22,8 +22,10 @@ namespace rendering
 		[[nodiscard]] static peng::shared_ref<const Texture> white_tex();
 
 		[[nodiscard]] static peng::shared_ref<const Shader> unlit_shader();
+		[[nodiscard]] static peng::shared_ref<const Shader> phong_shader();
 
 		[[nodiscard]] static peng::shared_ref<const Material> unlit_material();
+		[[nodiscard]] static peng::shared_ref<const Material> phong_material();
 
 	private:
 		static std::vector<Vertex> icosahedron_vertices(float radius);

@@ -16,7 +16,7 @@ BlobEntity::BlobEntity(
 	: Entity("Blob")
 	, _age(static_cast<float>(rand()) / static_cast<float>((RAND_MAX)))
 {
-	_local_transform = Transform(Vector3f(pos, pos.y), Vector3f::one(), Vector3f::zero());
+	_local_transform = Transform(Vector3f(pos, pos.y + 2), Vector3f::one(), Vector3f::zero());
 	_mesh_renderer = add_component<MeshRenderer>(mesh, material);
 }
 
@@ -32,7 +32,7 @@ void BlobEntity::post_create()
 
 	for (const Vector3f& child_position : child_positions)
 	{
-		const peng::shared_ref<Material> child_material = peng::copy_shared(Primitives::unlit_material());
+		const peng::shared_ref<Material> child_material = peng::copy_shared(Primitives::phong_material());
 		child_material->set_parameter("base_color", Vector4f(child_position * 2, 1));
 
 		const peng::weak_ptr<Entity> entity = PengEngine::get().entity_manager().create_entity<Entity>("AxisMarker");

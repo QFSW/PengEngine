@@ -251,6 +251,24 @@ peng::shared_ref<const Shader> Primitives::unlit_shader()
     return unlit;
 }
 
+peng::shared_ref<const Shader> Primitives::phong_shader()
+{
+	static peng::weak_ptr<const Shader> weak_shader;
+	if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
+	{
+		return strong_shader.to_shared_ref();
+	}
+
+	peng::shared_ref<Shader> unlit = peng::make_shared<Shader>(
+		"Phong",
+		"resources/shaders/core/projection.vert",
+		"resources/shaders/core/phong.frag"
+		);
+
+	weak_shader = unlit;
+	return unlit;
+}
+
 peng::shared_ref<const Material> Primitives::unlit_material()
 {
     static peng::weak_ptr<const Material> weak_material;
@@ -265,4 +283,21 @@ peng::shared_ref<const Material> Primitives::unlit_material()
 
     weak_material = unlit;
     return unlit;
+}
+
+peng::shared_ref<const Material> Primitives::phong_material()
+{
+    // TODO: work out a way to de-duplicate all this caching boilerplate
+	static peng::weak_ptr<const Material> weak_material;
+	if (const peng::shared_ptr<const Material> strong_material = weak_material.lock())
+	{
+		return strong_material.to_shared_ref();
+	}
+
+	peng::shared_ref<Material> phong = peng::make_shared<Material>(
+		phong_shader()
+	);
+
+	weak_material = phong;
+	return phong;
 }

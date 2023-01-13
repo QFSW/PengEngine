@@ -18,8 +18,10 @@ void main()
 {
     pos = vec3(model_matrix * vec4(a_pos, 1.0));
     gl_Position = view_matrix * vec4(pos, 1.0);
-
-    normal = a_normal;
+    
+    // TODO: calculate on CPU
+    mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
+    normal = normal_matrix * a_normal;
     tex_coord = a_tex_coord * tex_scale;
     vertex_color = vec4(a_col, 1);
 }

@@ -21,13 +21,16 @@ uniform float time = 0;
 
 void main()
 {
-    vec3 pos = a_pos;
-    pos.xz *= 1 + wobble_strength * sin(time * wobble_speed + pos.y * wobble_freq);
+    vec3 pos_local = a_pos;
+    pos_local.xz *= 1 + wobble_strength * sin(time * wobble_speed + pos_local.y * wobble_freq);
 
     // TODO: we could remove so much of this boilerplate with an include system
-    pos = vec3(model_matrix * vec4(a_pos, 1.0));
+    pos = vec3(model_matrix * vec4(pos_local, 1.0));
     gl_Position = view_matrix * vec4(pos, 1.0);
-
-    vertex_color = vec4(a_col, 1);
+    
+    // TODO: calculate on CPU
+    mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
+    normal = normal_matrix * a_normal;
     tex_coord = a_tex_coord * tex_scale;
+    vertex_color = vec4(a_col, 1);
 }
