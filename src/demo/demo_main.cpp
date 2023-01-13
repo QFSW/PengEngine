@@ -10,7 +10,7 @@ namespace demo
     {
         PengEngine::get().entity_manager().create_entity<DemoController>();
         PengEngine::get().set_resolution(math::Vector2i(1280, 720));
-        PengEngine::get().set_target_fps(60);
+        PengEngine::get().set_vsync(true);
         PengEngine::get().set_msaa(4);
         PengEngine::get().start();
 

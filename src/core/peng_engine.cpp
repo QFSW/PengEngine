@@ -13,6 +13,7 @@ PengEngine::PengEngine()
 	, _resolution(800, 600)
 	, _fullscreen(false)
 	, _cursor_locked(false)
+	, _vsync(false)
 	, _msaa_samples(0)
 	, _last_frametime(_target_frametime)
 	, _last_main_frametime(0)
@@ -104,6 +105,16 @@ void PengEngine::set_cursor_locked(bool cursor_locked)
 	if (_executing)
 	{
 		glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+	}
+}
+
+void PengEngine::set_vsync(bool vsync)
+{
+	_vsync = vsync;
+
+	if (_executing)
+	{
+		glfwSwapInterval(_vsync ? 1 : 0);
 	}
 }
 
@@ -278,6 +289,7 @@ void PengEngine::start_opengl()
 	}
 
 	glfwSetInputMode(_glfw_window, GLFW_CURSOR, _cursor_locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+	glfwSwapInterval(_vsync ? 1 : 0);
 }
 
 void PengEngine::shutdown()

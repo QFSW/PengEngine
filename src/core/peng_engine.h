@@ -25,6 +25,7 @@ public:
 	void set_resolution(const math::Vector2i& resolution) noexcept;
 	void set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept;
 	void set_cursor_locked(bool cursor_locked);
+	void set_vsync(bool vsync);
 	void set_msaa(uint32_t msaa_samples);
 
 	void maximize_window() const;
@@ -62,6 +63,7 @@ private:
 	math::Vector2i _resolution;
 	bool _fullscreen;
 	bool _cursor_locked;
+	bool _vsync;
 	uint32_t _msaa_samples;
 
 	double _last_frametime;
