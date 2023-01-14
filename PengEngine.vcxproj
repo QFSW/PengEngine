@@ -344,6 +344,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\math\matrix.h" />
+    <ClInclude Include="src\math\matrix3x3.h" />
     <ClInclude Include="src\math\matrix4x4.h" />
     <ClInclude Include="src\math\number.h" />
     <ClInclude Include="src\math\quaternion.h" />

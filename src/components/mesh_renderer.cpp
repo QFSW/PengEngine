@@ -37,6 +37,15 @@ void MeshRenderer::tick(float delta_time)
 	{
 		const Matrix4x4f model_matrix = owner().transform_matrix();
 		_material->set_parameter(_cached_model_matrix, model_matrix);
+
+		if (_cached_normal_matrix >= 0)
+		{
+			const Matrix3x3f normal_matrix = Matrix3x3f(model_matrix)
+				.inverse()
+				.transposed();
+
+			_material->set_parameter(_cached_normal_matrix, normal_matrix);
+		}
 	}
 
 	if (_cached_view_matrix >= 0)
@@ -65,15 +74,16 @@ void MeshRenderer::post_create()
 	_cached_model_matrix = _material->shader()->get_uniform_location("model_matrix");
 	if (_cached_model_matrix < 0)
 	{
-		Logger::warning("Material has no 'model_matrix' parameter so rendering may be incorrect");
+		Logger::warning("Material '%s' has no 'model_matrix' parameter so rendering may be incorrect", _material->shader()->name().c_str());
 	}
 
 	_cached_view_matrix = _material->shader()->get_uniform_location("view_matrix");
 	if (_cached_view_matrix < 0)
 	{
-		Logger::warning("Material has no 'view_matrix' parameter so rendering may be incorrect");
+		Logger::warning("Material '%s' has no 'view_matrix' parameter so rendering may be incorrect", _material->shader()->name().c_str());
 	}
 
 	// TODO: only get light pos if the shader has a SHADER_LIT symbol
+	_cached_normal_matrix = _material->shader()->get_uniform_location("normal_matrix");
 	_cached_light_pos = _material->shader()->get_uniform_location("light_pos");
 }

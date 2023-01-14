@@ -7,6 +7,7 @@
 
 #include <GL/glew.h>
 #include <memory/shared_ref.h>
+#include <math/matrix3x3.h>
 #include <math/matrix4x4.h>
 
 #include "texture.h"
@@ -33,6 +34,8 @@ namespace rendering
 			math::Vector4u,
 			math::Vector4f,
 			math::Vector4d,
+			math::Matrix3x3f,
+			math::Matrix3x3d,
 			math::Matrix4x4f,
 			math::Matrix4x4d,
 			peng::shared_ref<const Texture>

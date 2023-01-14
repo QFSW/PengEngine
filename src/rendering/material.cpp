@@ -163,6 +163,16 @@ void Material::apply_parameter(GLint location, const Vector4d& value)
 	glUniform4d(location, value.x, value.y, value.z, value.w);
 }
 
+void Material::apply_parameter(GLint location, const Matrix3x3f& value)
+{
+	glUniformMatrix3fv(location, 1, GL_FALSE, value.elements.data());
+}
+
+void Material::apply_parameter(GLint location, const Matrix3x3d& value)
+{
+	glUniformMatrix3dv(location, 1, GL_FALSE, value.elements.data());
+}
+
 void Material::apply_parameter(GLint location, const Matrix4x4f& value)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, value.elements.data());

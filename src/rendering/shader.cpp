@@ -298,12 +298,33 @@ std::optional<Shader::Parameter> Shader::read_uniform(const Uniform& uniform) co
 
 			return Vector4d(value[0], value[1], value[2], value[3]);
 		}
+		case GL_FLOAT_MAT3:
+		{
+			std::array<float, 9> value;
+			glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
+
+			return Matrix3x3f(value);
+		}
+		case GL_DOUBLE_MAT3:
+		{
+			std::array<double, 9> value;
+			glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+
+			return Matrix3x3d(value);
+		}
 		case GL_FLOAT_MAT4:
 		{
 			std::array<float, 16> value;
 			glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
 
 			return Matrix4x4f(value);
+		}
+		case GL_DOUBLE_MAT4:
+		{
+			std::array<double, 16> value;
+			glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+
+			return Matrix4x4d(value);
 		}
 		case GL_SAMPLER_2D:
 		{

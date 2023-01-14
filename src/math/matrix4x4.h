@@ -1,33 +1,24 @@
 #pragma once
 
-#include <array>
 #include <cmath>
 #include <numbers>
 
+#include "matrix.h"
 #include "vector4.h"
 #include "quaternion.h"
 
 namespace math
 {
 	template <number T>
-	struct Matrix4x4
+	struct Matrix4x4 : public Matrix<T, 4, 4>
 	{
 	public:
 		using F = make_floating_t<T>;
 
-		std::array<T, 16> elements;
-
 		Matrix4x4();
-		Matrix4x4(const std::array<T, 16>& elements);
+		Matrix4x4(const Matrix<T, 4, 4>& m);
+		explicit Matrix4x4(const std::array<T, 16>& elements);
 
-		template <number U>
-		requires std::convertible_to<U, T>
-		Matrix4x4(const Matrix4x4<U>& other);
-
-		[[nodiscard]] T& get(uint8_t row, uint8_t col);
-		[[nodiscard]] const T& get(uint8_t row, uint8_t col) const;
-
-		[[nodiscard]] Matrix4x4 transposed() const noexcept;
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
 
@@ -36,19 +27,8 @@ namespace math
 
 		[[nodiscard]] Vector3<T> get_translation() const noexcept;
 
-		Matrix4x4& operator+=(const Matrix4x4& other);
-		Matrix4x4& operator-=(const Matrix4x4& other);
-		Matrix4x4 operator+(const Matrix4x4& other) const;
-		Matrix4x4 operator-(const Matrix4x4& other) const;
-		Matrix4x4 operator*(const Matrix4x4& other) const;
-
 		Vector3<T> operator*(const Vector3<T>& other) const;
 		Vector4<T> operator*(const Vector4<T>& other) const;
-
-		Matrix4x4& operator*=(const T& scalar);
-		Matrix4x4& operator/=(const T& scalar);
-		Matrix4x4 operator*(const T& scalar) const;
-		Matrix4x4 operator/(const T& scalar) const;
 
 		static constexpr Matrix4x4 identity();
 	};
@@ -71,51 +51,18 @@ namespace math
 
 	template <number T>
 	Matrix4x4<T>::Matrix4x4()
-		: elements({})
+		: Matrix<T, 4, 4>()
+	{ }
+
+	template <number T>
+	Matrix4x4<T>::Matrix4x4(const Matrix<T, 4, 4>& m)
+		: Matrix<T, 4, 4>(m)
 	{ }
 
 	template <number T>
 	Matrix4x4<T>::Matrix4x4(const std::array<T, 16>& elements)
-		: elements(elements)
+		: Matrix<T, 4, 4>(elements)
 	{ }
-
-	template <number T>
-	template <number U>
-	requires std::convertible_to<U, T>
-	Matrix4x4<T>::Matrix4x4(const Matrix4x4<U>& other)
-	{
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			elements[i] = static_cast<T>(other.elements[i]);
-		}
-	}
-
-	template <number T>
-	T& Matrix4x4<T>::get(uint8_t row, uint8_t col)
-	{
-		return elements[col * 4 + row];
-	}
-
-	template <number T>
-	const T& Matrix4x4<T>::get(uint8_t row, uint8_t col) const
-	{
-		return elements[col * 4 + row];
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::transposed() const noexcept
-	{
-		Matrix4x4 result;
-		for (uint8_t row = 0; row < 4; row++)
-		{
-			for (uint8_t col = 0; col < 4; col++)
-			{
-				result.get(row, col) = get(col, row);
-			}
-		}
-
-		return result;
-	}
 
 	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::scaled(const Vector3<T>& scale) const noexcept
@@ -126,7 +73,7 @@ namespace math
 			0,   s.y, 0,   0,
 			0,   0,   s.z, 0,
 			0,   0,   0,   1
-			});
+		});
 
 		return m * (*this);
 	}
@@ -188,7 +135,7 @@ namespace math
 	}
 
 	template <number T>
-	Matrix4x4<typename Matrix4x4<T>::F> Matrix4x4<T>::rotated(const Quaternion<F>& rotation) const noexcept
+	Matrix4x4<make_floating_t<T>> Matrix4x4<T>::rotated(const Quaternion<F>& rotation) const noexcept
 	{
 		const Quaternion<F>& r = rotation;
 
@@ -218,67 +165,7 @@ namespace math
 	template <number T>
 	Vector3<T> Matrix4x4<T>::get_translation() const noexcept
 	{
-		return Vector3<T>(elements[12], elements[13], elements[14]);
-	}
-
-	template <number T>
-	Matrix4x4<T>& Matrix4x4<T>::operator+=(const Matrix4x4& other)
-	{
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			elements[i] += other.elements[i];
-		}
-
-		return *this;
-	}
-
-	template <number T>
-	Matrix4x4<T>& Matrix4x4<T>::operator-=(const Matrix4x4& other)
-	{
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			elements[i] -= other.elements[i];
-		}
-
-		return *this;
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::operator+(const Matrix4x4& other) const
-	{
-		Matrix4x4 result = *this;
-		return result += other;
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::operator-(const Matrix4x4& other) const
-	{
-		Matrix4x4 result = *this;
-		return result -= other;
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::operator*(const Matrix4x4& other) const
-	{
-		Matrix4x4 result;
-		const Matrix4x4& lhs = *this;
-		const Matrix4x4& rhs = other;
-
-		for (uint8_t row = 0; row < 4; row++)
-		{
-			for (uint8_t col = 0; col < 4; col++)
-			{
-				T num = 0;
-				for (uint8_t i = 0; i < 4; i++)
-				{
-					num += lhs.get(row, i) * rhs.get(i, col);
-				}
-
-				result.get(row, col) = num;
-			}
-		}
-
-		return result;
+		return Vector3<T>(this->elements[12], this->elements[13], this->elements[14]);
 	}
 
 	template <number T>
@@ -291,46 +178,10 @@ namespace math
 	Vector4<T> Matrix4x4<T>::operator*(const Vector4<T>& other) const
 	{
 		return Vector4<T>(
-			other.x * get(0, 0) + other.y * get(0, 1) + other.z * get(0, 2) + other.w * get(0, 3),
-			other.x * get(1, 0) + other.y * get(1, 1) + other.z * get(1, 2) + other.w * get(1, 3),
-			other.x * get(2, 0) + other.y * get(2, 1) + other.z * get(2, 2) + other.w * get(2, 3),
-			other.x * get(3, 0) + other.y * get(3, 1) + other.z * get(3, 2) + other.w * get(3, 3)
+			other.x * this->get(0, 0) + other.y * this->get(0, 1) + other.z * this->get(0, 2) + other.w * this->get(0, 3),
+			other.x * this->get(1, 0) + other.y * this->get(1, 1) + other.z * this->get(1, 2) + other.w * this->get(1, 3),
+			other.x * this->get(2, 0) + other.y * this->get(2, 1) + other.z * this->get(2, 2) + other.w * this->get(2, 3),
+			other.x * this->get(3, 0) + other.y * this->get(3, 1) + other.z * this->get(3, 2) + other.w * this->get(3, 3)
 		);
-	}
-
-	template <number T>
-	Matrix4x4<T>& Matrix4x4<T>::operator*=(const T& scalar)
-	{
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			elements[i] *= scalar;
-		}
-
-		return *this;
-	}
-
-	template <number T>
-	Matrix4x4<T>& Matrix4x4<T>::operator/=(const T& scalar)
-	{
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			elements[i] /= scalar;
-		}
-
-		return *this;
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::operator*(const T& scalar) const
-	{
-		Matrix4x4 result = *this;
-		return result *= scalar;
-	}
-
-	template <number T>
-	Matrix4x4<T> Matrix4x4<T>::operator/(const T& scalar) const
-	{
-		Matrix4x4 result = *this;
-		return result /= scalar;
 	}
 }

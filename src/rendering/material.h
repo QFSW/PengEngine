@@ -52,6 +52,8 @@ namespace rendering
 		void apply_parameter(GLint location, const math::Vector4u& value);
 		void apply_parameter(GLint location, const math::Vector4f& value);
 		void apply_parameter(GLint location, const math::Vector4d& value);
+		void apply_parameter(GLint location, const math::Matrix3x3f& value);
+		void apply_parameter(GLint location, const math::Matrix3x3d& value);
 		void apply_parameter(GLint location, const math::Matrix4x4f& value);
 		void apply_parameter(GLint location, const math::Matrix4x4d& value);
 		void apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture);
