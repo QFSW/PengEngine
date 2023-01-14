@@ -30,7 +30,7 @@ Camera::Camera(std::string&& name)
 	, _view_matrix(Matrix4x4f::identity())
 { }
 
-peng::weak_ptr<Camera>& Camera::current()
+const peng::weak_ptr<Camera>& Camera::current()
 {
 	return _current;
 }
@@ -44,7 +44,7 @@ void Camera::post_create()
 		Logger::warning("Camera entity created when a valid camera already exists");
 	}
 
-	_current = peng::weak_ptr<Camera>(std::static_pointer_cast<Camera>(shared_from_this()));
+	_current = weak_from(*this);
 	assert(_current);
 }
 

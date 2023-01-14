@@ -56,6 +56,12 @@ public:
 	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
 	[[nodiscard]] const std::vector<peng::shared_ref<Component>>& components() const noexcept { return _components; }
 
+	template <std::derived_from<Entity> T>
+	[[nodiscard]] static peng::weak_ptr<T> weak_from(T& entity);
+
+	template <std::derived_from<Entity> T>
+	[[nodiscard]] static peng::weak_ptr<const T> weak_from(const T& entity);
+
 protected:
 	std::string _name;
 	TickGroup _tick_group;
@@ -93,4 +99,16 @@ peng::weak_ptr<T> Entity::add_component(Args&&... args)
 	}
 
 	return component;
+}
+
+template <std::derived_from<Entity> T>
+peng::weak_ptr<T> Entity::weak_from(T& entity)
+{
+	return peng::weak_ptr<T>(std::static_pointer_cast<T>(entity.shared_from_this()));
+}
+
+template <std::derived_from<Entity> T>
+peng::weak_ptr<const T> Entity::weak_from(const T& entity)
+{
+	return peng::weak_ptr<const T>(std::static_pointer_cast<const T>(entity.shared_from_this()));
 }

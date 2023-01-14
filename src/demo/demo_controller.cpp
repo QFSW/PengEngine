@@ -5,6 +5,7 @@
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <entities/camera.h>
+#include <entities/point_light.h>
 #include <components/fly_cam_controller.h>
 #include <input/input_manager.h>
 
@@ -77,8 +78,8 @@ void DemoController::post_create()
 		Vector3f(-90, 0, 0)
 	);
 
-	const auto light_entity = PengEngine::get().entity_manager().create_entity<Entity>("Light", TickGroup::none);
-	light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
+	_light_entity = PengEngine::get().entity_manager().create_entity<PointLight>();
+	_light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
 
 	Logger::success("Demo controller started");
 }
@@ -108,5 +109,18 @@ void DemoController::tick(float delta_time)
 	if (input_manager[KeyCode::escape].pressed())
 	{
 		PengEngine::get().request_shutdown();
+	}
+
+	if (_light_entity)
+	{
+		Vector3f light_delta = Vector3f::zero();
+		light_delta += input_manager[KeyCode::up].is_down()    ? +Vector3f::forwards() : Vector3f::zero();
+		light_delta += input_manager[KeyCode::down].is_down()  ? -Vector3f::forwards() : Vector3f::zero();
+		light_delta += input_manager[KeyCode::right].is_down() ? +Vector3f::right()    : Vector3f::zero();
+		light_delta += input_manager[KeyCode::left].is_down()  ? -Vector3f::right()    : Vector3f::zero();
+		light_delta += input_manager[KeyCode::n].is_down()     ? +Vector3f::up()       : Vector3f::zero();
+		light_delta += input_manager[KeyCode::m].is_down()     ? -Vector3f::up()       : Vector3f::zero();
+
+		_light_entity->local_transform().position += light_delta * 5 * delta_time;
 	}
 }

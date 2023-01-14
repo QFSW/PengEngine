@@ -11,5 +11,8 @@ namespace demo
 
 		void post_create() override;
 		void tick(float delta_time) override;
+
+	private:
+		peng::weak_ptr<Entity> _light_entity;
 	};
 }

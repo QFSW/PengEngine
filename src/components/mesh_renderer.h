@@ -31,5 +31,6 @@ namespace components
 
 		int32_t _cached_model_matrix = -1;
 		int32_t _cached_view_matrix = -1;
+		int32_t _cached_light_pos = -1;
 	};
 }

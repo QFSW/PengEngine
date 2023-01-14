@@ -218,7 +218,7 @@ namespace math
 	template <number T>
 	Vector3<T> Matrix4x4<T>::get_translation() const noexcept
 	{
-		return Vector3f<T>(elements[12], elements[13], elements[14]);
+		return Vector3<T>(elements[12], elements[13], elements[14]);
 	}
 
 	template <number T>

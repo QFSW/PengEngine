@@ -19,7 +19,7 @@ namespace entities
 		explicit Camera(const std::string& name);
 		explicit Camera(std::string&& name);
 
-		static peng::weak_ptr<Camera>& current();
+		static const peng::weak_ptr<Camera>& current();
 
 		void post_create() override;
 		void tick(float delta_time) override;

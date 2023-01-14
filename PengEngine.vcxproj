@@ -294,6 +294,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\demo_controller.cpp" />
     <ClCompile Include="src\demo\demo_main.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
+    <ClCompile Include="src\entities\point_light.cpp" />
     <ClCompile Include="src\input\input_manager.cpp" />
     <ClCompile Include="src\input\key_state.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -329,6 +330,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\demo_controller.h" />
     <ClInclude Include="src\demo\demo_main.h" />
     <ClInclude Include="src\entities\camera.h" />
+    <ClInclude Include="src\entities\point_light.h" />
     <ClInclude Include="src\input\input_manager.h" />
     <ClInclude Include="src\input\key_code.h" />
     <ClInclude Include="src\input\key_state.h" />

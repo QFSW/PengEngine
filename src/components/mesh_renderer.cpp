@@ -1,6 +1,7 @@
 #include "mesh_renderer.h"
 
 #include <entities/camera.h>
+#include <entities/point_light.h>
 #include <core/logger.h>
 #include <utils/utils.h>
 
@@ -44,6 +45,15 @@ void MeshRenderer::tick(float delta_time)
 		_material->set_parameter(_cached_view_matrix, view_matrix);
 	}
 
+	if (_cached_light_pos >= 0)
+	{
+		const Vector3f light_pos = PointLight::current()
+			? PointLight::current()->transform_matrix().get_translation()
+			: Vector3f::zero();
+
+		_material->set_parameter(_cached_light_pos, light_pos);
+	}
+
 	_material->use();
 	_mesh->render();
 }
@@ -63,4 +73,7 @@ void MeshRenderer::post_create()
 	{
 		Logger::warning("Material has no 'view_matrix' parameter so rendering may be incorrect");
 	}
+
+	// TODO: only get light pos if the shader has a SHADER_LIT symbol
+	_cached_light_pos = _material->shader()->get_uniform_location("light_pos");
 }
