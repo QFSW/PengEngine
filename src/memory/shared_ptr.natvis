@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="peng::shared_ptr&lt;*&gt;">
+    <DisplayString Condition="!_ptr._Ptr">Unbound</DisplayString>
+    <DisplayString>{*_ptr._Ptr}</DisplayString>
+    <Expand>
+      <Item Name="ptr">_ptr._Ptr</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>

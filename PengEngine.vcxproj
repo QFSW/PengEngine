@@ -391,6 +391,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="src\libs\moodycamel\LICENSE.md" />
     <UpToDateCheckInput Include="resources\**\*" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="src\core\entity.natvis" />
+    <Natvis Include="src\memory\shared_ptr.natvis" />
+    <Natvis Include="src\memory\shared_ref.natvis" />
+    <Natvis Include="src\memory\weak_ptr.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
