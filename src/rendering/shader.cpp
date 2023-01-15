@@ -7,6 +7,7 @@
 #include <utils/utils.h>
 #include <utils/io.h>
 
+#include "shader_compiler.h"
 #include "primitives.h"
 
 using namespace rendering;
@@ -29,26 +30,15 @@ Shader::Shader(
 	, _broken(false)
 {
 	Logger::log("Building shader '%s'", _name.c_str());
-	Logger::log("Loading vertex shader '%s'", vert_shader_path.c_str());
-	const std::string vert_shader_src = io::read_text_file(vert_shader_path);
 
-	Logger::log("Loading fragment shader '%s'", frag_shader_path.c_str());
-	const std::string frag_shader_src = io::read_text_file(frag_shader_path);
+	ShaderCompiler compiler;
+	const PreprocessedShader preprocessed_vert_shader = compiler.preprocess_shader(vert_shader_path, ShaderType::vertex);
+	const PreprocessedShader preprocessed_frag_shader = compiler.preprocess_shader(frag_shader_path, ShaderType::fragment);
 
-	const char* shader_src;
+	const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
+	const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
 
-	Logger::log("Compiling vertex shader");
-	const GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER);
-	shader_src = vert_shader_src.c_str();
-	glShaderSource(vert_shader, 1, &shader_src, nullptr);
-	glCompileShader(vert_shader);
 	_broken |= !validate_shader_compile(vert_shader);
-
-	Logger::log("Compiling fragment shader");
-	const GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	shader_src = frag_shader_src.c_str();
-	glShaderSource(frag_shader, 1, &shader_src, nullptr);
-	glCompileShader(frag_shader);
 	_broken |= !validate_shader_compile(frag_shader);
 
 	Logger::log("Linking shader program");

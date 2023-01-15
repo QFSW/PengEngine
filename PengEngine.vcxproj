@@ -305,6 +305,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\primitives.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
+    <ClCompile Include="src\rendering\shader_compiler.cpp" />
+    <ClCompile Include="src\rendering\shader_type.cpp" />
     <ClCompile Include="src\rendering\texture.cpp" />
     <ClCompile Include="src\rendering\utils.cpp" />
     <ClCompile Include="src\rendering\vertex.cpp" />
@@ -362,6 +364,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\math\plane.h" />
     <ClInclude Include="src\rendering\primitives.h" />
     <ClInclude Include="src\rendering\shader.h" />
+    <ClInclude Include="src\rendering\shader_compiler.h" />
+    <ClInclude Include="src\rendering\shader_type.h" />
     <ClInclude Include="src\rendering\texture.h" />
     <ClInclude Include="src\rendering\utils.h" />
     <ClInclude Include="src\rendering\vertex.h" />
@@ -396,6 +400,9 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <Natvis Include="src\memory\shared_ptr.natvis" />
     <Natvis Include="src\memory\shared_ref.natvis" />
     <Natvis Include="src\memory\weak_ptr.natvis" />
+    <Natvis Include="src\rendering\mesh.natvis" />
+    <Natvis Include="src\rendering\shader.natvis" />
+    <Natvis Include="src\rendering\texture.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

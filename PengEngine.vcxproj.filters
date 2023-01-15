@@ -105,6 +105,15 @@
     <ClCompile Include="src\rendering\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\point_light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\shader_compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\shader_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -290,6 +299,21 @@
     <ClInclude Include="src\utils\enum_flags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\entities\point_light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\matrix3x3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\shader_compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\shader_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -299,5 +323,14 @@
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
     <None Include="resources\shaders\core\phong.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="src\core\entity.natvis" />
+    <Natvis Include="src\memory\shared_ptr.natvis" />
+    <Natvis Include="src\memory\shared_ref.natvis" />
+    <Natvis Include="src\memory\weak_ptr.natvis" />
+    <Natvis Include="src\rendering\shader.natvis" />
+    <Natvis Include="src\rendering\texture.natvis" />
+    <Natvis Include="src\rendering\mesh.natvis" />
   </ItemGroup>
 </Project>
