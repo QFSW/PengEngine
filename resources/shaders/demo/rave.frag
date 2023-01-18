@@ -1,5 +1,7 @@
 #version 330 core
 
+#pragma symbol SHADER_LIT
+
 in vec3 pos;
 in vec3 normal;
 in vec2 tex_coord;

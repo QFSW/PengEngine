@@ -32,11 +32,21 @@ Shader::Shader(
 	Logger::log("Building shader '%s'", _name.c_str());
 
 	ShaderCompiler compiler;
-	const PreprocessedShader preprocessed_vert_shader = compiler.preprocess_shader(vert_shader_path, ShaderType::vertex);
-	const PreprocessedShader preprocessed_frag_shader = compiler.preprocess_shader(frag_shader_path, ShaderType::fragment);
+	PreprocessedShader preprocessed_vert_shader = compiler.preprocess_shader(vert_shader_path, ShaderType::vertex);
+	PreprocessedShader preprocessed_frag_shader = compiler.preprocess_shader(frag_shader_path, ShaderType::fragment);
 
 	const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
 	const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
+
+	for (std::string& symbol : preprocessed_vert_shader.symbols)
+	{
+		_symbols.insert(std::move(symbol));
+	}
+
+	for (std::string& symbol : preprocessed_frag_shader.symbols)
+	{
+		_symbols.insert(std::move(symbol));
+	}
 
 	_broken |= !validate_shader_compile(vert_shader);
 	_broken |= !validate_shader_compile(frag_shader);
@@ -125,9 +135,14 @@ GLint Shader::get_uniform_location(const std::string& name) const
 	return glGetUniformLocation(_program, name.c_str());
 }
 
-std::vector<Shader::Uniform> Shader::uniforms() const
+const std::vector<Shader::Uniform>& Shader::uniforms() const noexcept
 {
 	return _uniforms;
+}
+
+const common::unordered_set<std::string>& Shader::symbols() const noexcept
+{
+	return _symbols;
 }
 
 bool Shader::validate_shader_compile(GLuint shader) const

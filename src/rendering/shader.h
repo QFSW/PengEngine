@@ -6,6 +6,7 @@
 #include <optional>
 
 #include <GL/glew.h>
+#include <common/common.h>
 #include <memory/shared_ref.h>
 #include <math/matrix3x3.h>
 #include <math/matrix4x4.h>
@@ -73,7 +74,8 @@ namespace rendering
 		[[nodiscard]] bool broken() const noexcept;
 
 		[[nodiscard]] GLint get_uniform_location(const std::string& name) const;
-		[[nodiscard]] std::vector<Uniform> uniforms() const;
+		[[nodiscard]] const std::vector<Uniform>& uniforms() const noexcept;
+		[[nodiscard]] const common::unordered_set<std::string>& symbols() const noexcept;
 
 	private:
 		bool validate_shader_compile(GLuint shader) const;
@@ -86,5 +88,6 @@ namespace rendering
 		bool _broken;
 
 		std::vector<Uniform> _uniforms;
+		common::unordered_set<std::string> _symbols;
 	};
 }

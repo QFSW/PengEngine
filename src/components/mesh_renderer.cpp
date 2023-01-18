@@ -83,7 +83,25 @@ void MeshRenderer::post_create()
 		Logger::warning("Material '%s' has no 'view_matrix' parameter so rendering may be incorrect", _material->shader()->name().c_str());
 	}
 
-	// TODO: only get light pos if the shader has a SHADER_LIT symbol
-	_cached_normal_matrix = _material->shader()->get_uniform_location("normal_matrix");
-	_cached_light_pos = _material->shader()->get_uniform_location("light_pos");
+	if (_material->shader()->symbols().contains("SHADER_LIT"))
+	{
+		// TODO: make error copy pasting less cringe
+		_cached_normal_matrix = _material->shader()->get_uniform_location("normal_matrix");
+		if (_cached_normal_matrix < 0)
+		{
+			Logger::warning(
+				"Material '%s' has no 'normal_matrix' parameter but uses SHADER_LIT so rendering may be incorrect",
+				_material->shader()->name().c_str()
+			);
+		}
+
+		_cached_light_pos = _material->shader()->get_uniform_location("light_pos");
+		if (_cached_light_pos < 0)
+		{
+			Logger::warning(
+				"Material '%s' has no 'light_pos' parameter but uses SHADER_LIT so rendering may be incorrect",
+				_material->shader()->name().c_str()
+			);
+		}
+	}
 }

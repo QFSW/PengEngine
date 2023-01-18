@@ -1,5 +1,7 @@
 #include "shader_compiler.h"
 
+#include <regex>
+
 #include <core/logger.h>
 #include <utils/io.h>
 
@@ -18,6 +20,20 @@ PreprocessedShader ShaderCompiler::preprocess_shader(const std::string& /*path*/
 	PreprocessedShader shader;
 	shader.type = type;
 	shader.contents = src;
+
+	std::istringstream stream(shader.contents);
+	std::string line;
+
+	while (std::getline(stream, line))
+	{
+		static thread_local std::smatch matches;
+		static thread_local std::regex symbol_regex(R"(#pragma\s+symbol\s+(\w+))");
+
+		if (std::regex_search(line, matches, symbol_regex))
+		{
+			shader.symbols.push_back(matches[1]);
+		}
+	}
 
 	return shader;
 }
