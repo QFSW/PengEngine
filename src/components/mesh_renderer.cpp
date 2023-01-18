@@ -63,6 +63,15 @@ void MeshRenderer::tick(float delta_time)
 		_material->set_parameter(_cached_light_pos, light_pos);
 	}
 
+	if (_cached_view_pos >= 0)
+	{
+		const Vector3f view_pos = Camera::current()
+			? Camera::current()->transform_matrix().get_translation()
+			: Vector3f::zero();
+
+		_material->set_parameter(_cached_view_pos, view_pos);
+	}
+
 	_material->use();
 	_mesh->render();
 }
@@ -71,37 +80,29 @@ void MeshRenderer::post_create()
 {
 	Component::post_create();
 
-	_cached_model_matrix = _material->shader()->get_uniform_location("model_matrix");
-	if (_cached_model_matrix < 0)
+	auto get_uniform_location_checked = [&](const std::string& uniform_name, const std::string& required_symbol = "")
 	{
-		Logger::warning("Material '%s' has no 'model_matrix' parameter so rendering may be incorrect", _material->shader()->name().c_str());
-	}
+		const int32_t location = _material->shader()->get_uniform_location(uniform_name);
+		if (location < 0)
+		{
+			Logger::warning(
+				"Material '%s' has no '%s' parameter%s%s so rendering may be incorrect",
+				_material->shader()->name().c_str(), uniform_name.c_str(),
+				required_symbol.empty() ? "" : " but uses ",
+				required_symbol.c_str()
+			);
+		}
 
-	_cached_view_matrix = _material->shader()->get_uniform_location("view_matrix");
-	if (_cached_view_matrix < 0)
-	{
-		Logger::warning("Material '%s' has no 'view_matrix' parameter so rendering may be incorrect", _material->shader()->name().c_str());
-	}
+		return location;
+	};
+
+	_cached_model_matrix = get_uniform_location_checked("model_matrix");
+	_cached_view_matrix = get_uniform_location_checked("view_matrix");
 
 	if (_material->shader()->symbols().contains("SHADER_LIT"))
 	{
-		// TODO: make error copy pasting less cringe
-		_cached_normal_matrix = _material->shader()->get_uniform_location("normal_matrix");
-		if (_cached_normal_matrix < 0)
-		{
-			Logger::warning(
-				"Material '%s' has no 'normal_matrix' parameter but uses SHADER_LIT so rendering may be incorrect",
-				_material->shader()->name().c_str()
-			);
-		}
-
-		_cached_light_pos = _material->shader()->get_uniform_location("light_pos");
-		if (_cached_light_pos < 0)
-		{
-			Logger::warning(
-				"Material '%s' has no 'light_pos' parameter but uses SHADER_LIT so rendering may be incorrect",
-				_material->shader()->name().c_str()
-			);
-		}
+		_cached_normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
+		_cached_light_pos = get_uniform_location_checked("light_pos", "SHADER_LIT");
+		_cached_view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
 	}
 }

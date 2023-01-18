@@ -69,6 +69,7 @@ void DemoController::post_create()
 	floor_material->set_parameter("color_tex", texture);
 	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
+	floor_material->set_parameter<float>("shinyness", 8);
 
 	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>("Floor", TickGroup::none);
 	const auto floor_renderer = floor_entity->add_component<components::MeshRenderer>(Primitives::fullscreen_quad(), floor_material);
