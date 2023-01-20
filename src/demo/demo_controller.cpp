@@ -67,7 +67,7 @@ void DemoController::post_create()
 	const Vector2f floor_size(500, 500);
 	const auto floor_material = copy_shared(Primitives::phong_material());
 	floor_material->set_parameter("color_tex", texture);
-	floor_material->set_parameter("base_color", Vector4f(0, 1, 0, 1));
+	floor_material->set_parameter("base_color", Vector3f(0.7f, 1, 0.7f));
 	floor_material->set_parameter("tex_scale", floor_size);
 	floor_material->set_parameter<float>("shinyness", 8);
 
@@ -80,7 +80,7 @@ void DemoController::post_create()
 	);
 
 	_light_entity = PengEngine::get().entity_manager().create_entity<PointLight>();
-	_light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
+	_light_renderer = _light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
 
 	Logger::success("Demo controller started");
 }
@@ -91,6 +91,8 @@ void DemoController::tick(float delta_time)
 
 	using namespace input;
 	const InputManager& input_manager = PengEngine::get().input_manager();
+
+	_age += delta_time;
 
 	if (input_manager[KeyCode::num_row_0].pressed())
 	{
@@ -122,6 +124,17 @@ void DemoController::tick(float delta_time)
 		light_delta += input_manager[KeyCode::n].is_down()     ? +Vector3f::up()       : Vector3f::zero();
 		light_delta += input_manager[KeyCode::m].is_down()     ? -Vector3f::up()       : Vector3f::zero();
 
+		float light_range_delta = 0;
+		light_range_delta += input_manager[KeyCode::t].is_down() ? +1 : 0;
+		light_range_delta += input_manager[KeyCode::y].is_down() ? -1 : 0;
+
+		PointLight::LightData& light_data = _light_entity->data();
+
 		_light_entity->local_transform().position += light_delta * 5 * delta_time;
+		light_data.range *= (1 + light_range_delta * delta_time);
+		light_data.color = Vector3f(0.5f + std::sin(_age) / 2, 1, 0.5f + std::cos(_age) / 2);
+
+		_light_entity->local_transform().scale = Vector3f::one() * 0.5f * std::powf(light_data.range, 0.33f);
+		_light_renderer->material()->set_parameter("base_color", light_data.color);
 	}
 }

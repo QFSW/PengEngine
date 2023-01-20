@@ -1,6 +1,8 @@
 #pragma once
 
 #include <core/entity.h>
+#include <entities/point_light.h>
+#include <components/mesh_renderer.h>
 
 namespace demo
 {
@@ -13,6 +15,8 @@ namespace demo
 		void tick(float delta_time) override;
 
 	private:
-		peng::weak_ptr<Entity> _light_entity;
+		float _age = 0;
+		peng::weak_ptr<entities::PointLight> _light_entity;
+		peng::weak_ptr<components::MeshRenderer> _light_renderer;
 	};
 }

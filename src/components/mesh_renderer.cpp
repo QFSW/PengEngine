@@ -54,22 +54,25 @@ void MeshRenderer::tick(float delta_time)
 		_material->set_parameter(_cached_view_matrix, view_matrix);
 	}
 
-	if (_cached_light_pos >= 0)
-	{
-		const Vector3f light_pos = PointLight::current()
-			? PointLight::current()->transform_matrix().get_translation()
-			: Vector3f::zero();
-
-		_material->set_parameter(_cached_light_pos, light_pos);
-	}
-
-	if (_cached_view_pos >= 0)
+	if (_uses_lighting)
 	{
 		const Vector3f view_pos = Camera::current()
 			? Camera::current()->transform_matrix().get_translation()
 			: Vector3f::zero();
 
-		_material->set_parameter(_cached_view_pos, view_pos);
+		const Vector3f light_pos = PointLight::current()
+			? PointLight::current()->transform_matrix().get_translation()
+			: Vector3f::zero();
+
+		const PointLight::LightData light_data = PointLight::current()
+			? PointLight::current()->data()
+			: PointLight::LightData();
+
+		_material->try_set_parameter(_cached_view_pos, view_pos);
+		_material->try_set_parameter(_cached_light_pos, light_pos);
+		_material->try_set_parameter(_cached_light_color, light_data.color);
+		_material->try_set_parameter(_cached_light_ambient, light_data.ambient);
+		_material->try_set_parameter(_cached_light_range, light_data.range);
 	}
 
 	_material->use();
@@ -99,10 +102,15 @@ void MeshRenderer::post_create()
 	_cached_model_matrix = get_uniform_location_checked("model_matrix");
 	_cached_view_matrix = get_uniform_location_checked("view_matrix");
 
-	if (_material->shader()->symbols().contains("SHADER_LIT"))
+	_uses_lighting = _material->shader()->symbols().contains("SHADER_LIT");
+
+	if (_uses_lighting)
 	{
 		_cached_normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
-		_cached_light_pos = get_uniform_location_checked("light_pos", "SHADER_LIT");
 		_cached_view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
+		_cached_light_pos = get_uniform_location_checked("light_pos", "SHADER_LIT");
+		_cached_light_color = get_uniform_location_checked("light_color", "SHADER_LIT");
+		_cached_light_ambient = get_uniform_location_checked("light_ambient", "SHADER_LIT");
+		_cached_light_range = get_uniform_location_checked("light_range", "SHADER_LIT");
 	}
 }

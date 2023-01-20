@@ -29,10 +29,15 @@ namespace components
 		peng::shared_ref<const rendering::Mesh> _mesh;
 		peng::shared_ref<rendering::Material> _material;
 
+		bool _uses_lighting = false;
+
 		int32_t _cached_model_matrix = -1;
 		int32_t _cached_normal_matrix = -1;
 		int32_t _cached_view_matrix = -1;
 		int32_t _cached_view_pos = -1;
 		int32_t _cached_light_pos = -1;
+		int32_t _cached_light_color = -1;
+		int32_t _cached_light_ambient = -1;
+		int32_t _cached_light_range = -1;
 	};
 }

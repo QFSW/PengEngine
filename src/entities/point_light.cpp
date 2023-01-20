@@ -40,3 +40,13 @@ void PointLight::post_create()
 		_current = weak_from(*this);
 	}
 }
+
+PointLight::LightData& PointLight::data() noexcept
+{
+	return _data;
+}
+
+const PointLight::LightData& PointLight::data() const noexcept
+{
+	return _data;
+}

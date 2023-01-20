@@ -19,6 +19,15 @@ namespace rendering
 		void use();
 
 		template <utils::variant_member<Shader::Parameter> T>
+		void try_set_parameter(GLint uniform_location, const T& parameter)
+		{
+			if (uniform_location >= 0)
+			{
+				set_parameter(uniform_location, Shader::Parameter(parameter));
+			}
+		}
+
+		template <utils::variant_member<Shader::Parameter> T>
 		void set_parameter(GLint uniform_location, const T& parameter)
 		{
 			set_parameter(uniform_location, Shader::Parameter(parameter));
