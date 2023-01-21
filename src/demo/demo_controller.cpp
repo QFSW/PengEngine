@@ -80,6 +80,7 @@ void DemoController::post_create()
 	);
 
 	_light_entity = PengEngine::get().entity_manager().create_entity<PointLight>();
+	_light_entity->data().range = 100;
 	_light_renderer = _light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
 
 	Logger::success("Demo controller started");
@@ -134,7 +135,7 @@ void DemoController::tick(float delta_time)
 		light_data.range *= (1 + light_range_delta * delta_time);
 		light_data.color = Vector3f(0.5f + std::sin(_age) / 2, 1, 0.5f + std::cos(_age) / 2);
 
-		_light_entity->local_transform().scale = Vector3f::one() * 0.5f * std::powf(light_data.range, 0.33f);
+		_light_entity->local_transform().scale = Vector3f::one() * 0.2f * std::powf(light_data.range, 0.33f);
 		_light_renderer->material()->set_parameter("base_color", light_data.color);
 	}
 }

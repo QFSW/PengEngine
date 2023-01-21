@@ -16,6 +16,7 @@ uniform vec3 light_pos = vec3(0);
 uniform vec3 light_color = vec3(1);
 uniform vec3 light_ambient = vec3(0.1);
 uniform float light_range = 10;
+uniform float light_max = 1;
 uniform float specular_strength = 0.5;
 uniform float shinyness = 32;
 
@@ -34,8 +35,8 @@ void main()
 	vec3 specular_color = specular_strength * specular_amount * light_color;
 
 	float light_dist = length(light_pos - pos);
-	float attenuation = min(1, light_range / (light_range + light_dist));
+	float attenuation = min(light_max, light_range / (1 + light_dist * light_dist));
 
 	// TODO: add ambient lighting
-	frag_color = obj_color * vec4(light_ambient + attenuation * (diffuse_color + specular_color), 1);
+	frag_color = obj_color * vec4(attenuation * (light_ambient + diffuse_color + specular_color), 1);
 }

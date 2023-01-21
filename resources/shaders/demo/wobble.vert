@@ -28,7 +28,8 @@ void main()
     pos = vec3(model_matrix * vec4(pos_local, 1.0));
     gl_Position = view_matrix * vec4(pos, 1.0);
     
-    normal = normal_matrix * a_normal;
+    // TODO: the normal_matrix should be constructed such that normalization isn't needed
+    normal = normalize(normal_matrix * a_normal);
     tex_coord = a_tex_coord * tex_scale;
     vertex_color = vec4(a_col, 1);
 }
