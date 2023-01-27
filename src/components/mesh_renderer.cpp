@@ -60,19 +60,26 @@ void MeshRenderer::tick(float delta_time)
 			? Camera::current()->transform_matrix().get_translation()
 			: Vector3f::zero();
 
-		const Vector3f light_pos = PointLight::current()
-			? PointLight::current()->transform_matrix().get_translation()
-			: Vector3f::zero();
-
-		const PointLight::LightData light_data = PointLight::current()
-			? PointLight::current()->data()
-			: PointLight::LightData();
-
 		_material->try_set_parameter(_cached_view_pos, view_pos);
-		_material->try_set_parameter(_cached_light_pos, light_pos);
-		_material->try_set_parameter(_cached_light_color, light_data.color);
-		_material->try_set_parameter(_cached_light_ambient, light_data.ambient);
-		_material->try_set_parameter(_cached_light_range, light_data.range);
+
+		const std::vector<peng::weak_ptr<PointLight>> active_lights = PointLight::active_lights();
+		for (int32_t i = 0; i < 4; i++)
+		{
+			const Vector3f light_pos = i < active_lights.size()
+				? active_lights[i]->transform_matrix().get_translation()
+				: Vector3f::zero();
+
+			const PointLight::LightData light_data = i < active_lights.size()
+				? active_lights[i]->data()
+				: PointLight::LightData();
+
+			const PointLightUniformSet& uniform_set = _cached_point_light_uniform_sets[i];
+			_material->try_set_parameter(uniform_set.pos, light_pos);
+			_material->try_set_parameter(uniform_set.color, light_data.color);
+			_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
+			_material->try_set_parameter(uniform_set.range, light_data.range);
+			_material->try_set_parameter(uniform_set.max_strength, 1.0f);
+		}
 	}
 
 	_material->use();
@@ -108,9 +115,17 @@ void MeshRenderer::post_create()
 	{
 		_cached_normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
 		_cached_view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
-		_cached_light_pos = get_uniform_location_checked("light_pos", "SHADER_LIT");
-		_cached_light_color = get_uniform_location_checked("light_color", "SHADER_LIT");
-		_cached_light_ambient = get_uniform_location_checked("light_ambient", "SHADER_LIT");
-		_cached_light_range = get_uniform_location_checked("light_range", "SHADER_LIT");
+
+		for (int32_t i = 0; i < 4; i++)
+		{
+			PointLightUniformSet uniform_set;
+			uniform_set.pos = get_uniform_location_checked(strtools::catf("point_lights[%d].pos", i), "SHADER_LIT");
+			uniform_set.color = get_uniform_location_checked(strtools::catf("point_lights[%d].color", i), "SHADER_LIT");
+			uniform_set.ambient = get_uniform_location_checked(strtools::catf("point_lights[%d].ambient", i), "SHADER_LIT");
+			uniform_set.range = get_uniform_location_checked(strtools::catf("point_lights[%d].range", i), "SHADER_LIT");
+			uniform_set.max_strength = get_uniform_location_checked(strtools::catf("point_lights[%d].max_strength", i), "SHADER_LIT");
+
+			_cached_point_light_uniform_sets.push_back(uniform_set);
+		}
 	}
 }

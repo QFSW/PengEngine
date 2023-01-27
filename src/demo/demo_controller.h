@@ -16,7 +16,7 @@ namespace demo
 
 	private:
 		float _age = 0;
-		peng::weak_ptr<entities::PointLight> _light_entity;
-		peng::weak_ptr<components::MeshRenderer> _light_renderer;
+		std::vector<peng::weak_ptr<entities::PointLight>> _light_entities;
+		std::vector<peng::weak_ptr<components::MeshRenderer>> _light_renderers;
 	};
 }

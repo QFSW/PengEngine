@@ -31,13 +31,20 @@ namespace components
 
 		bool _uses_lighting = false;
 
+		struct PointLightUniformSet
+		{
+			int32_t pos = -1;
+			int32_t color = -1;
+			int32_t ambient = -1;
+			int32_t range = -1;
+			int32_t max_strength = -1;
+		};
+
 		int32_t _cached_model_matrix = -1;
 		int32_t _cached_normal_matrix = -1;
 		int32_t _cached_view_matrix = -1;
 		int32_t _cached_view_pos = -1;
-		int32_t _cached_light_pos = -1;
-		int32_t _cached_light_color = -1;
-		int32_t _cached_light_ambient = -1;
-		int32_t _cached_light_range = -1;
+		
+		std::vector<PointLightUniformSet> _cached_point_light_uniform_sets;
 	};
 }

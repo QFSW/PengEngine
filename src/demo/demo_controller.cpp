@@ -79,9 +79,13 @@ void DemoController::post_create()
 		Vector3f(-90, 0, 0)
 	);
 
-	_light_entity = PengEngine::get().entity_manager().create_entity<PointLight>();
-	_light_entity->data().range = 100;
-	_light_renderer = _light_entity->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material()));
+	for (int32_t i = 0; i < 4; i++)
+	{
+		_light_entities.push_back(PengEngine::get().entity_manager().create_entity<PointLight>());
+		_light_entities[i]->data().range = 100;
+		_light_entities[i]->local_transform().position = Vector3f(i * 5.0f, 0, 0);
+		_light_renderers.push_back(_light_entities[i]->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material())));
+	}
 
 	Logger::success("Demo controller started");
 }
@@ -115,27 +119,32 @@ void DemoController::tick(float delta_time)
 		PengEngine::get().request_shutdown();
 	}
 
-	if (_light_entity)
+	Vector3f light_delta = Vector3f::zero();
+	light_delta += input_manager[KeyCode::up].is_down() ? +Vector3f::forwards() : Vector3f::zero();
+	light_delta += input_manager[KeyCode::down].is_down() ? -Vector3f::forwards() : Vector3f::zero();
+	light_delta += input_manager[KeyCode::right].is_down() ? +Vector3f::right() : Vector3f::zero();
+	light_delta += input_manager[KeyCode::left].is_down() ? -Vector3f::right() : Vector3f::zero();
+	light_delta += input_manager[KeyCode::n].is_down() ? +Vector3f::up() : Vector3f::zero();
+	light_delta += input_manager[KeyCode::m].is_down() ? -Vector3f::up() : Vector3f::zero();
+
+	float light_range_delta = 0;
+	light_range_delta += input_manager[KeyCode::t].is_down() ? +1 : 0;
+	light_range_delta += input_manager[KeyCode::y].is_down() ? -1 : 0;
+
+	for (int32_t i = 0; i < 4; i++)
 	{
-		Vector3f light_delta = Vector3f::zero();
-		light_delta += input_manager[KeyCode::up].is_down()    ? +Vector3f::forwards() : Vector3f::zero();
-		light_delta += input_manager[KeyCode::down].is_down()  ? -Vector3f::forwards() : Vector3f::zero();
-		light_delta += input_manager[KeyCode::right].is_down() ? +Vector3f::right()    : Vector3f::zero();
-		light_delta += input_manager[KeyCode::left].is_down()  ? -Vector3f::right()    : Vector3f::zero();
-		light_delta += input_manager[KeyCode::n].is_down()     ? +Vector3f::up()       : Vector3f::zero();
-		light_delta += input_manager[KeyCode::m].is_down()     ? -Vector3f::up()       : Vector3f::zero();
+		if (_light_entities[i])
+		{
+			PointLight::LightData& light_data = _light_entities[i]->data();
 
-		float light_range_delta = 0;
-		light_range_delta += input_manager[KeyCode::t].is_down() ? +1 : 0;
-		light_range_delta += input_manager[KeyCode::y].is_down() ? -1 : 0;
+			_light_entities[i]->local_transform().position += light_delta * 5 * delta_time;
+			light_data.range *= (1 + light_range_delta * delta_time);
 
-		PointLight::LightData& light_data = _light_entity->data();
+			const float age = _age * (1 + 0.3f * i);
+			light_data.color = Vector3f::one() * 0.5 + Vector3f(std::sin(age), std::sin(age * 1.2f), std::sin(age * 1.4f)) / 2;
 
-		_light_entity->local_transform().position += light_delta * 5 * delta_time;
-		light_data.range *= (1 + light_range_delta * delta_time);
-		light_data.color = Vector3f(0.5f + std::sin(_age) / 2, 1, 0.5f + std::cos(_age) / 2);
-
-		_light_entity->local_transform().scale = Vector3f::one() * 0.2f * std::powf(light_data.range, 0.33f);
-		_light_renderer->material()->set_parameter("base_color", light_data.color);
+			_light_entities[i]->local_transform().scale = Vector3f::one() * 0.2f * std::powf(light_data.range, 0.33f);
+			_light_renderers[i]->material()->set_parameter("base_color", light_data.color);
+		}
 	}
 }

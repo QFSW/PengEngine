@@ -1,11 +1,12 @@
 #include "point_light.h"
 
 #include <core/logger.h>
+#include <utils/vectools.h>
 #include <utils/utils.h>
 
 using namespace entities;
 
-peng::weak_ptr<PointLight> PointLight::_current;
+std::vector<peng::weak_ptr<PointLight>> PointLight::_active_lights;
 
 PointLight::PointLight()
 	: PointLight("PointLight")
@@ -17,28 +18,30 @@ PointLight::PointLight(const std::string& name)
 
 PointLight::PointLight(std::string&& name)
 	: Entity(name, TickGroup::none)
+	, _data({
+		math::Vector3f::one(),
+		math::Vector3f::one() * 0.01f,
+		10
+	})
 { }
 
-const peng::weak_ptr<PointLight>& PointLight::current()
+const std::vector<peng::weak_ptr<PointLight>>& PointLight::active_lights()
 {
-	return _current;
+	return _active_lights;
 }
 
 void PointLight::post_create()
 {
 	Entity::post_create();
 
-	if (_current.valid())
-	{
-		Logger::warning(
-			"Cannot register '%s' as a light source ('%s') already exists",
-			name().c_str(), _current->name().c_str()
-		);
-	}
-	else
-	{
-		_current = weak_from(*this);
-	}
+	_active_lights.push_back(weak_from(*this));
+}
+
+void PointLight::pre_destroy()
+{
+	Entity::pre_destroy();
+
+	vectools::remove(_active_lights, weak_from(*this));
 }
 
 PointLight::LightData& PointLight::data() noexcept
