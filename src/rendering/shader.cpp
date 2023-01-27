@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include <common/common.h>
 #include <memory/weak_ptr.h>
 #include <core/logger.h>
 #include <utils/utils.h>
@@ -38,14 +39,24 @@ Shader::Shader(
 	const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
 	const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
 
-	for (std::string& symbol : preprocessed_vert_shader.symbols)
+	common::unordered_set<std::string> seen_symbols;
+
+	for (ShaderSymbol& symbol : preprocessed_vert_shader.symbols)
 	{
-		_symbols.insert(std::move(symbol));
+		if (!seen_symbols.contains(symbol.identifier))
+		{
+			seen_symbols.insert(symbol.identifier);
+			_symbols.push_back(std::move(symbol));
+		}
 	}
 
-	for (std::string& symbol : preprocessed_frag_shader.symbols)
+	for (ShaderSymbol& symbol : preprocessed_frag_shader.symbols)
 	{
-		_symbols.insert(std::move(symbol));
+		if (!seen_symbols.contains(symbol.identifier))
+		{
+			seen_symbols.insert(symbol.identifier);
+			_symbols.push_back(std::move(symbol));
+		}
 	}
 
 	_broken |= !validate_shader_compile(vert_shader);
@@ -135,12 +146,38 @@ GLint Shader::get_uniform_location(const std::string& name) const
 	return glGetUniformLocation(_program, name.c_str());
 }
 
+std::optional<std::string> Shader::get_symbol_value(const std::string& identifier) const noexcept
+{
+	for (const ShaderSymbol& symbol : _symbols)
+	{
+		if (symbol.identifier == identifier)
+		{
+			return symbol.value;
+		}
+	}
+
+	return {};
+}
+
+bool Shader::has_symbol(const std::string& identifier) const noexcept
+{
+	for (const ShaderSymbol& symbol : _symbols)
+	{
+		if (symbol.identifier == identifier)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 const std::vector<Shader::Uniform>& Shader::uniforms() const noexcept
 {
 	return _uniforms;
 }
 
-const common::unordered_set<std::string>& Shader::symbols() const noexcept
+const std::vector<ShaderSymbol>& Shader::symbols() const noexcept
 {
 	return _symbols;
 }

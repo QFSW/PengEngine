@@ -45,6 +45,7 @@ namespace components
 		int32_t _cached_view_matrix = -1;
 		int32_t _cached_view_pos = -1;
 		
+		int32_t _max_point_lights = 0;
 		std::vector<PointLightUniformSet> _cached_point_light_uniform_sets;
 	};
 }

@@ -365,6 +365,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\primitives.h" />
     <ClInclude Include="src\rendering\shader.h" />
     <ClInclude Include="src\rendering\shader_compiler.h" />
+    <ClInclude Include="src\rendering\shader_symbol.h" />
     <ClInclude Include="src\rendering\shader_type.h" />
     <ClInclude Include="src\rendering\texture.h" />
     <ClInclude Include="src\rendering\utils.h" />

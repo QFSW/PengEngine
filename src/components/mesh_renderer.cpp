@@ -63,7 +63,7 @@ void MeshRenderer::tick(float delta_time)
 		_material->try_set_parameter(_cached_view_pos, view_pos);
 
 		const std::vector<peng::weak_ptr<PointLight>> active_lights = PointLight::active_lights();
-		for (int32_t i = 0; i < 4; i++)
+		for (int32_t i = 0; i < _max_point_lights; i++)
 		{
 			const Vector3f light_pos = i < active_lights.size()
 				? active_lights[i]->transform_matrix().get_translation()
@@ -109,23 +109,35 @@ void MeshRenderer::post_create()
 	_cached_model_matrix = get_uniform_location_checked("model_matrix");
 	_cached_view_matrix = get_uniform_location_checked("view_matrix");
 
-	_uses_lighting = _material->shader()->symbols().contains("SHADER_LIT");
+	_uses_lighting = _material->shader()->has_symbol("SHADER_LIT");
 
 	if (_uses_lighting)
 	{
 		_cached_normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
 		_cached_view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
 
-		for (int32_t i = 0; i < 4; i++)
+		std::optional<std::string> max_num_lights_raw = _material->shader()->get_symbol_value("MAX_POINT_LIGHTS");
+		if (max_num_lights_raw)
 		{
-			PointLightUniformSet uniform_set;
-			uniform_set.pos = get_uniform_location_checked(strtools::catf("point_lights[%d].pos", i), "SHADER_LIT");
-			uniform_set.color = get_uniform_location_checked(strtools::catf("point_lights[%d].color", i), "SHADER_LIT");
-			uniform_set.ambient = get_uniform_location_checked(strtools::catf("point_lights[%d].ambient", i), "SHADER_LIT");
-			uniform_set.range = get_uniform_location_checked(strtools::catf("point_lights[%d].range", i), "SHADER_LIT");
-			uniform_set.max_strength = get_uniform_location_checked(strtools::catf("point_lights[%d].max_strength", i), "SHADER_LIT");
+			_max_point_lights = std::stoi(*max_num_lights_raw);
+			for (int32_t i = 0; i < _max_point_lights; i++)
+			{
+				PointLightUniformSet uniform_set;
+				uniform_set.pos = get_uniform_location_checked(strtools::catf("point_lights[%d].pos", i), "SHADER_LIT");
+				uniform_set.color = get_uniform_location_checked(strtools::catf("point_lights[%d].color", i), "SHADER_LIT");
+				uniform_set.ambient = get_uniform_location_checked(strtools::catf("point_lights[%d].ambient", i), "SHADER_LIT");
+				uniform_set.range = get_uniform_location_checked(strtools::catf("point_lights[%d].range", i), "SHADER_LIT");
+				uniform_set.max_strength = get_uniform_location_checked(strtools::catf("point_lights[%d].max_strength", i), "SHADER_LIT");
 
-			_cached_point_light_uniform_sets.push_back(uniform_set);
+				_cached_point_light_uniform_sets.push_back(uniform_set);
+			}
+		}
+		else
+		{
+			Logger::warning(
+				"Material '%s' has uses SHADER_LIT but has no defined value for MAX_POINT_LIGHTS",
+				_material->shader()->name().c_str()
+			);
 		}
 	}
 }

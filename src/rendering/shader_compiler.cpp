@@ -27,11 +27,17 @@ PreprocessedShader ShaderCompiler::preprocess_shader(const std::string& /*path*/
 	while (std::getline(stream, line))
 	{
 		static thread_local std::smatch matches;
-		static thread_local std::regex symbol_regex(R"(#pragma\s+symbol\s+(\w+))");
+		static thread_local std::regex symbol_regex(R"(#pragma\s+symbol\s+([A-Za-z_]+))");
+		static thread_local std::regex define_regex(R"(#define\s+([A-Za-z_]+)\s+([A-Za-z0-9_]+))");
 
 		if (std::regex_search(line, matches, symbol_regex))
 		{
-			shader.symbols.push_back(matches[1]);
+			shader.symbols.push_back(ShaderSymbol{ matches[1], "" });
+		}
+
+		if (std::regex_search(line, matches, define_regex))
+		{
+			shader.symbols.push_back(ShaderSymbol{ matches[1], matches[2]});
 		}
 	}
 

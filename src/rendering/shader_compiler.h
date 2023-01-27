@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include "shader_type.h"
+#include "shader_symbol.h"
 
 namespace rendering
 {
@@ -13,7 +14,7 @@ namespace rendering
 	{
 		ShaderType type;
 		std::string contents;
-		std::vector<std::string> symbols;
+		std::vector<ShaderSymbol> symbols;
 	};
 
 	class ShaderCompiler
