@@ -65,6 +65,7 @@ void DemoController::post_create()
 		}
 	}
 
+	// TODO: make skybox entity
 	const peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
 		"resources/textures/demo/skybox.jpg"
 	);
