@@ -10,6 +10,7 @@
 #include <input/input_manager.h>
 
 #include "blob_entity.h"
+#include "rendering/utils.h"
 
 using namespace demo;
 using namespace rendering;
@@ -63,6 +64,90 @@ void DemoController::post_create()
 				->set_parent(blobs_entity);
 		}
 	}
+
+	const peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
+		"resources/textures/demo/skybox.jpg"
+	);
+
+	std::vector<Vertex> skybox_vertices =
+	{
+		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 2) / Vector2f(4, 3)),
+
+		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(1, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(2, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(2, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(1, 2) / Vector2f(4, 3)),
+
+		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(2, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(3, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(3, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(2, 2) / Vector2f(4, 3)),
+
+		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(4, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(3, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(3, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(4, 2) / Vector2f(4, 3)),
+
+		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(1, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(2, 2) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(2, 3) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(1, 3) / Vector2f(4, 3)),
+
+		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(1, 0) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(2, 0) / Vector2f(4, 3)),
+		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(2, 1) / Vector2f(4, 3)),
+		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(1, 1) / Vector2f(4, 3)),
+	};
+
+	std::vector<Vector3u> skybox_indices =
+	{
+		Vector3u(0, 1, 3),
+		Vector3u(3, 1, 2),
+
+		Vector3u(4, 5, 7),
+		Vector3u(7, 5, 6),
+
+		Vector3u(8, 9, 11),
+		Vector3u(11, 9, 10),
+
+		Vector3u(12, 13, 15),
+		Vector3u(15, 13, 14),
+
+		Vector3u(16, 17, 19),
+		Vector3u(19, 17, 18),
+
+		Vector3u(20, 21, 23),
+		Vector3u(23, 21, 22),
+	};
+
+	for (uint32_t level = 0; level < 4; level++)
+	{
+		auto [vertices_s, indices_s] = subdivide(skybox_vertices, skybox_indices);
+		skybox_vertices = std::move(vertices_s);
+		skybox_indices = std::move(indices_s);
+	}
+
+	for (Vertex& vertex : skybox_vertices)
+	{
+		const Vector3f dir = vertex.position.normalized_unsafe();
+
+		vertex.position = dir;
+		vertex.normal = dir;
+	}
+
+	peng::shared_ref<Mesh> skybox_mesh = peng::make_shared<Mesh>(
+		"Skybox", skybox_vertices, skybox_indices
+	);
+
+	const auto sky_box_material = copy_shared(Primitives::unlit_material());
+	sky_box_material->set_parameter("color_tex", skybox_texture);
+
+	const auto skybox_entity = PengEngine::get().entity_manager().create_entity<Entity>("Skybox", TickGroup::none);
+	const auto skybox_renderer = skybox_entity->add_component<components::MeshRenderer>(skybox_mesh, sky_box_material);
+	skybox_entity->local_transform().scale = Vector3f::one() * 800;
 
 	const Vector2f floor_size(500, 500);
 	const auto floor_material = copy_shared(Primitives::phong_material());
@@ -131,7 +216,7 @@ void DemoController::tick(float delta_time)
 	light_range_delta += input_manager[KeyCode::t].is_down() ? +1 : 0;
 	light_range_delta += input_manager[KeyCode::y].is_down() ? -1 : 0;
 
-	for (int32_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < _light_entities.size(); i++)
 	{
 		if (_light_entities[i])
 		{
