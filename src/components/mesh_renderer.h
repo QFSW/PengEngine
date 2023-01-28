@@ -4,6 +4,11 @@
 #include <rendering/mesh.h>
 #include <rendering/material.h>
 
+namespace entities
+{
+	class PointLight;
+}
+
 namespace components
 {
 	class MeshRenderer final : public Component
@@ -26,6 +31,8 @@ namespace components
 		[[nodiscard]] const peng::shared_ref<rendering::Material>& material() const noexcept { return _material; }
 
 	private:
+		std::vector<peng::shared_ref<const entities::PointLight>> get_relevant_point_lights();
+
 		peng::shared_ref<const rendering::Mesh> _mesh;
 		peng::shared_ref<rendering::Material> _material;
 

@@ -62,15 +62,15 @@ void MeshRenderer::tick(float delta_time)
 
 		_material->try_set_parameter(_cached_view_pos, view_pos);
 
-		const std::vector<peng::weak_ptr<PointLight>> active_lights = PointLight::active_lights();
+		const std::vector<peng::shared_ref<const PointLight>> relevant_lights = get_relevant_point_lights();
 		for (int32_t i = 0; i < _max_point_lights; i++)
 		{
-			const Vector3f light_pos = i < active_lights.size()
-				? active_lights[i]->transform_matrix().get_translation()
+			const Vector3f light_pos = i < relevant_lights.size()
+				? relevant_lights[i]->transform_matrix().get_translation()
 				: Vector3f::zero();
 
-			const PointLight::LightData light_data = i < active_lights.size()
-				? active_lights[i]->data()
+			const PointLight::LightData light_data = i < relevant_lights.size()
+				? relevant_lights[i]->data()
 				: PointLight::LightData();
 
 			const PointLightUniformSet& uniform_set = _cached_point_light_uniform_sets[i];
@@ -140,4 +140,51 @@ void MeshRenderer::post_create()
 			);
 		}
 	}
+}
+
+std::vector<peng::shared_ref<const PointLight>> MeshRenderer::get_relevant_point_lights()
+{
+	struct Consideration
+	{
+		peng::shared_ref<const PointLight> light;
+		float relevance;
+	};
+
+	// Start with all active point lights
+	const std::vector<peng::weak_ptr<PointLight>> active_lights = PointLight::active_lights();
+
+	// Calculate the relative strength for each light to the origin of this object
+	// Drop any invalid or disabled lights
+	// TODO: consider relative strength to bounding box instead
+	// TODO: skip considerations if we don't need to do them
+	std::vector<Consideration> considerations;
+	for (const peng::weak_ptr<PointLight>& light : active_lights)
+	{
+		if (light && light->active_in_hierarchy())
+		{
+			const float light_intensity_sqr = light->data().color.magnitude_sqr() * std::powf(light->data().range, 2);
+			const float light_dist_sqr = (light->transform_matrix().get_translation() - owner().transform_matrix().get_translation()).magnitude_sqr();
+			const float relative_strength = light_intensity_sqr / light_dist_sqr;
+
+			considerations.emplace_back(Consideration{
+				.light = light.lock().to_shared_ref(),
+				.relevance = relative_strength
+			});
+		}
+	}
+
+	// Sort by relevance
+	std::ranges::sort(considerations, [](const auto& x, const auto& y)
+	{
+		return x.relevance > y.relevance;
+	});
+
+	// Only pick the most relevant ones
+	std::vector<peng::shared_ref<const PointLight>> relevant_lights;
+	for (size_t i = 0; i < std::min<size_t>(considerations.size(), _max_point_lights); i++)
+	{
+		relevant_lights.push_back(considerations[i].light);
+	}
+
+	return relevant_lights;
 }
