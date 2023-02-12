@@ -7,6 +7,8 @@
 #include <core/peng_engine.h>
 #include <utils/utils.h>
 
+IMPLEMENT_ENTITY(entities::Camera);
+
 using namespace entities;
 using namespace math;
 

@@ -6,6 +6,8 @@ namespace entities
 {
 	class PointLight final : public Entity
 	{
+		DECLARE_ENTITY(PointLight);
+
 	public:
 		struct LightData
 		{

@@ -8,6 +8,8 @@ namespace demo
 {
 	class DemoController final : public Entity
 	{
+		DECLARE_ENTITY(DemoController);
+
 	public:
 		DemoController();
 

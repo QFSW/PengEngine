@@ -5,6 +5,8 @@
 
 #include "peng_engine.h"
 
+IMPLEMENT_ENTITY(Entity);
+
 Entity::Entity(std::string&& name, TickGroup tick_group)
 	: _name(std::move(name))
 	, _tick_group(tick_group)

@@ -8,6 +8,8 @@ using namespace math;
 using namespace components;
 using namespace rendering;
 
+IMPLEMENT_ENTITY(BlobEntity);
+
 BlobEntity::BlobEntity(
 	const peng::shared_ref<const Mesh>& mesh,
 	const peng::shared_ref<Material>& material,

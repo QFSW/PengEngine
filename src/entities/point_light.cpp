@@ -4,6 +4,8 @@
 #include <utils/vectools.h>
 #include <utils/utils.h>
 
+IMPLEMENT_ENTITY(entities::PointLight);
+
 using namespace entities;
 
 std::vector<peng::weak_ptr<PointLight>> PointLight::_active_lights;

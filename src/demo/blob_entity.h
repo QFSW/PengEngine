@@ -8,6 +8,8 @@
 
 class BlobEntity : public Entity
 {
+	DECLARE_ENTITY(BlobEntity);
+
 public:
 	BlobEntity(
 		const peng::shared_ref<const rendering::Mesh>& mesh,

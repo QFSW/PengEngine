@@ -9,9 +9,12 @@
 #include "tickable.h"
 #include "component.h"
 #include "entity_relationship.h"
+#include "entity_definition.h"
 
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
+	DECLARE_ENTITY(Entity);
+
 public:
 	explicit Entity(std::string&& name, TickGroup tick_group = TickGroup::standard);
 	explicit Entity(const std::string& name, TickGroup tick_group = TickGroup::standard);

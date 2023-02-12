@@ -8,6 +8,8 @@ namespace entities
 {
 	class Camera final : public Entity
 	{
+		DECLARE_ENTITY(Camera);
+
 	public:
 		enum class Projection
 		{

@@ -17,6 +17,8 @@ using namespace rendering;
 using namespace math;
 using namespace entities;
 
+IMPLEMENT_ENTITY(DemoController);
+
 DemoController::DemoController()
 	: Entity("DemoController")
 { }
