@@ -23,10 +23,15 @@ public:
 	ReflectionDatabase(ReflectionDatabase&&) = delete;
 
 	void register_type(const ReflectedType& reflected_type);
-	[[nodiscard]] peng::shared_ptr<ReflectedType> reflect_type(const std::type_info& type_info) const;
+	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type(const std::type_info& type_info) const;
+	[[nodiscard]] peng::shared_ptr<const ReflectedType> resolve_base(
+		const peng::shared_ref<const ReflectedType>& derived_type) const;
 
 	template <typename T>
-	[[nodiscard]] peng::shared_ptr<ReflectedType> reflect_type() const;
+	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type() const;
+
+	template <typename T>
+	[[nodiscard]] peng::shared_ptr<const ReflectedType> resolve_base() const;
 
 private:
 	ReflectionDatabase() = default;
@@ -37,7 +42,18 @@ private:
 };
 
 template <typename T>
-peng::shared_ptr<ReflectedType> ReflectionDatabase::reflect_type() const
+peng::shared_ptr<const ReflectedType> ReflectionDatabase::reflect_type() const
 {
 	return reflect_type(typeid(T));
+}
+
+template <typename T>
+peng::shared_ptr<const ReflectedType> ReflectionDatabase::resolve_base() const
+{
+	if (const peng::shared_ptr<const ReflectedType> derived_type = reflect_type<T>())
+	{
+		return resolve_base(derived_type.to_shared_ref());
+	}
+
+	return {};
 }
