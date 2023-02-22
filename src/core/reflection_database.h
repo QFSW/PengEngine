@@ -24,6 +24,7 @@ public:
 
 	void register_type(const ReflectedType& reflected_type);
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type(const std::type_info& type_info) const;
+	[[nodiscard]] peng::shared_ref<const ReflectedType> reflect_type_checked(const std::type_info& type_info) const;
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> resolve_base(
 		const peng::shared_ref<const ReflectedType>& derived_type) const;
 
@@ -32,6 +33,8 @@ public:
 
 	template <typename T>
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> resolve_base() const;
+
+	[[nodiscard]] bool is_derived_from(const std::type_info& derived_type, const std::type_info& base_type);
 
 private:
 	ReflectionDatabase() = default;

@@ -29,6 +29,14 @@ peng::shared_ptr<const ReflectedType> ReflectionDatabase::reflect_type(const std
 	return {};
 }
 
+peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(const std::type_info& type_info) const
+{
+	const peng::shared_ptr<const ReflectedType> reflected_type = reflect_type(type_info);
+	assert(reflected_type);
+
+	return reflected_type.to_shared_ref();
+}
+
 peng::shared_ptr<const ReflectedType> ReflectionDatabase::resolve_base(
 	const peng::shared_ref<const ReflectedType>& derived_type) const
 {
@@ -38,4 +46,21 @@ peng::shared_ptr<const ReflectedType> ReflectionDatabase::resolve_base(
 	}
 
 	return {};
+}
+
+bool ReflectionDatabase::is_derived_from(const std::type_info& derived_type, const std::type_info& base_type)
+{
+	if (&derived_type == &base_type)
+	{
+		return true;
+	}
+
+	const peng::shared_ref<const ReflectedType> derived_reflected = reflect_type_checked(derived_type);
+
+	if (!derived_reflected->base_info)
+	{
+		return false;
+	}
+
+	return is_derived_from(*derived_reflected->base_info, base_type);
 }
