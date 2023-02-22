@@ -2,6 +2,8 @@
 
 #include "reflection_bootstrap.h"
 
+// TODO: Register a factory for this entity in the ItemFactory
+
 #define DECLARE_ENTITY(EntityType) \
 private: \
 	static ReflectionBootstrap<##EntityType> _reflection_bootstrap

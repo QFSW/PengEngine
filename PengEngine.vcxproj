@@ -325,10 +325,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\entity_definition.h" />
     <ClInclude Include="src\core\entity_relationship.h" />
+    <ClInclude Include="src\core\item_factory.h" />
     <ClInclude Include="src\core\logger.h" />
     <ClInclude Include="src\core\peng_engine.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\entity_manager.h" />
+    <ClInclude Include="src\core\reflected_type.h" />
     <ClInclude Include="src\core\reflection_bootstrap.h" />
     <ClInclude Include="src\core\reflection_database.h" />
     <ClInclude Include="src\core\tickable.h" />

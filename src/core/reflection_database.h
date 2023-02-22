@@ -1,18 +1,11 @@
 #pragma once
 
-#include <string>
 #include <vector>
-#include <typeinfo>
 
 #include <common/common.h>
 #include <memory/shared_ptr.h>
 
-struct ReflectedType
-{
-	std::string name;
-	const std::type_info* info = nullptr;
-	const std::type_info* base_info = nullptr;
-};
+#include "reflected_type.h"
 
 class ReflectionDatabase
 {
@@ -23,8 +16,11 @@ public:
 	ReflectionDatabase(ReflectionDatabase&&) = delete;
 
 	void register_type(const ReflectedType& reflected_type);
+
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type(const std::type_info& type_info) const;
+	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type(const std::string& type_name) const;
 	[[nodiscard]] peng::shared_ref<const ReflectedType> reflect_type_checked(const std::type_info& type_info) const;
+	[[nodiscard]] peng::shared_ref<const ReflectedType> reflect_type_checked(const std::string& type_name) const;
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> resolve_base(
 		const peng::shared_ref<const ReflectedType>& derived_type) const;
 

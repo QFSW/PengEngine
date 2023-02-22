@@ -29,9 +29,27 @@ peng::shared_ptr<const ReflectedType> ReflectionDatabase::reflect_type(const std
 	return {};
 }
 
+peng::shared_ptr<const ReflectedType> ReflectionDatabase::reflect_type(const std::string& type_name) const
+{
+	if (const auto it = _name_to_type.find(type_name); it != _name_to_type.end())
+	{
+		return it->second;
+	}
+
+	return {};
+}
+
 peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(const std::type_info& type_info) const
 {
 	const peng::shared_ptr<const ReflectedType> reflected_type = reflect_type(type_info);
+	assert(reflected_type);
+
+	return reflected_type.to_shared_ref();
+}
+
+peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(const std::string& type_name) const
+{
+	const peng::shared_ptr<const ReflectedType> reflected_type = reflect_type(type_name);
 	assert(reflected_type);
 
 	return reflected_type.to_shared_ref();
