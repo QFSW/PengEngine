@@ -111,3 +111,12 @@ namespace peng
 
 #pragma endregion
 }
+
+template<typename T>
+struct std::hash<peng::shared_ptr<T>>
+{
+	size_t operator()(const peng::shared_ptr<T>& ptr) const
+	{
+		return std::hash<T*>{}(ptr.get());
+	}
+};

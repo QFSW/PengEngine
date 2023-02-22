@@ -3,6 +3,7 @@
 #include <cassert>
 #include <utils/vectools.h>
 
+#include "entity.h"
 #include "logger.h"
 
 EntityManager::EntityManager()
@@ -35,6 +36,11 @@ void EntityManager::shutdown()
 
 	_pending_adds.clear();
 	_entities.clear();
+}
+
+void EntityManager::register_entity(const peng::shared_ref<Entity>& entity)
+{
+	_pending_adds.push_back(entity);
 }
 
 void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)

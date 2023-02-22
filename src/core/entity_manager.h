@@ -1,12 +1,12 @@
 #pragma once
 
-#include "entity.h"
-
 #include <vector>
 #include <concepts>
 
 #include <memory/shared_ref.h>
 #include <memory/weak_ptr.h>
+
+#include "tickable.h"
 
 enum class EntityState
 {
@@ -15,6 +15,8 @@ enum class EntityState
 	pending_add,
 	pending_kill
 };
+
+class Entity;
 
 class EntityManager
 {
@@ -27,10 +29,17 @@ public:
 	// ----------------------------------
 
 	// ------------ User API ------------
+
+	// Construct and register an entity with the entity manager
 	template <std::derived_from<Entity> T, typename...Args>
 	requires std::constructible_from<T, Args...>
 	peng::weak_ptr<T> create_entity(Args&&...args);
 
+	// Register an entity that was constructed externally with the entity manager
+	// Once registered, the entity manager is responsible for the lifetime of the entity
+	void register_entity(const peng::shared_ref<Entity>& entity);
+
+	// Destroys an entity owned by the entity manager
 	void destroy_entity(const peng::weak_ptr<Entity>& entity);
 
 	[[nodiscard]] EntityState get_entity_state(const peng::weak_ptr<Entity>& entity) const;
@@ -64,7 +73,7 @@ requires std::constructible_from<T, Args...>
 peng::weak_ptr<T> EntityManager::create_entity(Args&&...args)
 {
 	peng::shared_ref<T> entity = peng::make_shared<T>(std::forward<Args>(args)...);
-	_pending_adds.push_back(entity);
+	register_entity(entity);
 
 	return entity;
 }

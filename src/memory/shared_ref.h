@@ -67,3 +67,12 @@ namespace peng
 
 #pragma endregion
 }
+
+template<typename T>
+struct std::hash<peng::shared_ref<T>>
+{
+	size_t operator()(const peng::shared_ref<T>& ref) const
+	{
+		return std::hash<T*>{}(ref.get());
+	}
+};

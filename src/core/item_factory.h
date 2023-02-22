@@ -1,7 +1,10 @@
 #pragma once
 
+#include <functional>
+
 #include <memory/shared_ref.h>
 #include <common/common.h>
+#include <utils/strtools.h>
 
 #include "reflected_type.h"
 
@@ -11,23 +14,42 @@ template <typename ItemBase, typename...Args>
 class ItemFactory
 {
 public:
-	static ItemFactory& get();
+	void register_factory(
+		peng::shared_ref<const ReflectedType> item_type,
+		std::function<ItemBase(Args...)> factory
+	);
 
-	ItemFactory(const ItemFactory&) = delete;
-	ItemFactory(ItemFactory&&) = delete;
-
-	// TODO: add a register_factory function
-	// TODO: add a construct_item function
+	ItemBase construct_item(
+		peng::shared_ref<const ReflectedType> item_type,
+		Args&&...args
+	) const;
 
 private:
-	ItemFactory() = default;
-
-	common::unordered_map<peng::shared_ref<const ReflectedType>, std::function<Entity(Args...)>> _type_to_factory;
+	common::unordered_map<peng::shared_ref<const ReflectedType>, std::function<ItemBase(Args...)>> _type_to_factory;
 };
 
 template <typename ItemBase, typename ... Args>
-ItemFactory<ItemBase, Args...>& ItemFactory<ItemBase, Args...>::get()
+void ItemFactory<ItemBase, Args...>::register_factory(
+	peng::shared_ref<const ReflectedType> item_type,
+	std::function<ItemBase(Args...)> factory
+)
 {
-	static ItemFactory item_factory;
-	return item_factory;
+	_type_to_factory[item_type] = factory;
+}
+
+template <typename ItemBase, typename ... Args>
+ItemBase ItemFactory<ItemBase, Args...>::construct_item(
+	peng::shared_ref<const ReflectedType> item_type,
+	Args&&...args
+) const
+{
+	if (const auto it = _type_to_factory.find(item_type); it != _type_to_factory.end())
+	{
+		return it->second(std::forward<Args>(args)...);
+	}
+
+	throw std::runtime_error(strtools::catf(
+		"Cannot construct item of type '%s' as no corresponding factory exists",
+		item_type->name.c_str()
+	));
 }

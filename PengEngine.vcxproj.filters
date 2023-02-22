@@ -117,6 +117,9 @@
     <ClCompile Include="src\core\reflection_database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\entity_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -326,13 +329,19 @@
     <ClInclude Include="src\core\entity_definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\reflection_bootstrap.h">
+    <ClInclude Include="src\core\detail\reflection_bootstrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\item_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\reflected_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\detail\entity_definition_bootstrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\entity_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

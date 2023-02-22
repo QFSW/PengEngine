@@ -1,0 +1,29 @@
+#pragma once
+
+#include <core/entity_factory.h>
+#include <core/peng_engine.h>
+#include <core/logger.h>
+
+#include "reflection_bootstrap.h"
+
+namespace core::detail
+{
+	template <typename T>
+	class EntityDefinitionBootstrap
+	{
+	public:
+		EntityDefinitionBootstrap(const std::string& type_name);
+		EntityDefinitionBootstrap(const EntityDefinitionBootstrap&) = delete;
+		EntityDefinitionBootstrap(EntityDefinitionBootstrap&&) = delete;
+
+	private:
+		ReflectionBootstrap<T> _reflection_bootstrap;
+	};
+
+	template <typename T>
+	EntityDefinitionBootstrap<T>::EntityDefinitionBootstrap(const std::string& type_name)
+		: _reflection_bootstrap(type_name)
+	{
+		EntityFactory::get().register_entity<T>();
+	}
+}

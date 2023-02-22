@@ -286,6 +286,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\components\fly_cam_controller.cpp" />
     <ClCompile Include="src\components\mesh_renderer.cpp" />
     <ClCompile Include="src\core\component.cpp" />
+    <ClCompile Include="src\core\entity_factory.cpp" />
     <ClCompile Include="src\core\logger.cpp" />
     <ClCompile Include="src\core\peng_engine.cpp" />
     <ClCompile Include="src\core\entity.cpp" />
@@ -324,6 +325,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\mesh_renderer.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\entity_definition.h" />
+    <ClInclude Include="src\core\detail\entity_definition_bootstrap.h" />
+    <ClInclude Include="src\core\entity_factory.h" />
     <ClInclude Include="src\core\entity_relationship.h" />
     <ClInclude Include="src\core\item_factory.h" />
     <ClInclude Include="src\core\logger.h" />
@@ -331,7 +334,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\core\entity_manager.h" />
     <ClInclude Include="src\core\reflected_type.h" />
-    <ClInclude Include="src\core\reflection_bootstrap.h" />
+    <ClInclude Include="src\core\detail\reflection_bootstrap.h" />
     <ClInclude Include="src\core\reflection_database.h" />
     <ClInclude Include="src\core\tickable.h" />
     <ClInclude Include="src\demo\blob_entity.h" />

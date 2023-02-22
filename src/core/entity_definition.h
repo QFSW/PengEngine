@@ -1,12 +1,10 @@
 #pragma once
 
-#include "reflection_bootstrap.h"
-
-// TODO: Register a factory for this entity in the ItemFactory
+#include "detail/entity_definition_bootstrap.h"
 
 #define DECLARE_ENTITY(EntityType) \
 private: \
-	static ReflectionBootstrap<##EntityType> _reflection_bootstrap
+	static core::detail::EntityDefinitionBootstrap<##EntityType> _definition_bootstrap
 
 #define IMPLEMENT_ENTITY(EntityType) \
-	ReflectionBootstrap<##EntityType> EntityType::_reflection_bootstrap(#EntityType)
+	core::detail::EntityDefinitionBootstrap<##EntityType> EntityType::_definition_bootstrap(#EntityType)
