@@ -120,6 +120,9 @@
     <ClCompile Include="src\core\entity_factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\csv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -344,6 +347,9 @@
     <ClInclude Include="src\core\entity_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\csv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -353,6 +359,7 @@
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
     <None Include="resources\shaders\core\phong.frag" />
+    <None Include="resources\maps\demo\demo.csv" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

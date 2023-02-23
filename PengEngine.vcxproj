@@ -315,6 +315,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\threading\job.cpp" />
     <ClCompile Include="src\threading\thread_pool.cpp" />
     <ClCompile Include="src\threading\worker_thread.cpp" />
+    <ClCompile Include="src\utils\csv.cpp" />
     <ClCompile Include="src\utils\io.cpp" />
     <ClCompile Include="src\utils\strtools.cpp" />
     <ClCompile Include="src\utils\timing.cpp" />
@@ -383,6 +384,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\threading\thread_pool.h" />
     <ClInclude Include="src\threading\worker_thread.h" />
     <ClInclude Include="src\utils\concepts.h" />
+    <ClInclude Include="src\utils\csv.h" />
     <ClInclude Include="src\utils\enum_flags.h" />
     <ClInclude Include="src\utils\event.h" />
     <ClInclude Include="src\utils\detail\final_act.h" />
@@ -396,6 +398,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\utils\vectools.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\maps\demo\demo.csv" />
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\shaders\core\projection.vert" />

@@ -20,6 +20,7 @@ public:
 	template <typename T>
 	void register_entity();
 
+	// NOLINT(modernize-use-nodiscard)
 	peng::weak_ptr<Entity> create_entity(
 		peng::shared_ref<const ReflectedType> entity_type,
 		const std::string& entity_name = ""
