@@ -24,6 +24,9 @@ namespace core::detail
 	EntityDefinitionBootstrap<T>::EntityDefinitionBootstrap(const std::string& type_name)
 		: _reflection_bootstrap(type_name)
 	{
-		EntityFactory::get().register_entity<T>();
+		if constexpr (!std::is_abstract_v<T>)
+		{
+			EntityFactory::get().register_entity<T>();
+		}
 	}
 }

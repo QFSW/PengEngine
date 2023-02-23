@@ -20,6 +20,7 @@ namespace core::detail
 		Logger::log("Registering reflection information for '%s'", type_name.c_str());
 
 		ReflectedType type;
+		type.is_abstract = std::is_abstract_v<T>;
 		type.name = type_name;
 		type.info = &typeid(T);
 

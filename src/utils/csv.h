@@ -8,6 +8,7 @@
 
 namespace csv
 {
+    // TODO: this should probably be refactored out as a more general ItemParser
     template <typename T>
     class CsvParser
     {
