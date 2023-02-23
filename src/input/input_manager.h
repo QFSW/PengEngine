@@ -10,6 +10,8 @@ struct GLFWwindow;
 
 namespace input
 {
+	// TODO: Add "Action" for wrapping key bindings for actions 
+	// TODO: Add "Axis" for wrapping things like "forwards"
 	class InputManager
 	{
 	public:
