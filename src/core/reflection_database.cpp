@@ -8,9 +8,9 @@ ReflectionDatabase& ReflectionDatabase::get()
 
 void ReflectionDatabase::register_type(const ReflectedType& reflected_type)
 {
-	assert(reflected_type.name);
-	assert(_name_to_type.contains(reflected_type.name));
-	assert(_info_to_type.contains(reflected_type.info));
+	assert(!reflected_type.name.empty());
+	assert(!_name_to_type.contains(reflected_type.name));
+	assert(!_info_to_type.contains(reflected_type.info));
 
 	const peng::shared_ref<ReflectedType> reflected_type_ref = peng::make_shared<ReflectedType>(reflected_type);
 
