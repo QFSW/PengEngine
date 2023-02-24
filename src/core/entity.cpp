@@ -157,6 +157,16 @@ math::Matrix4x4f Entity::transform_matrix_inv() const noexcept
 	return local_matrix_inv;
 }
 
+math::Vector3f Entity::world_position() const noexcept
+{
+	if (has_spatial_parent())
+	{
+		return transform_matrix().get_translation();
+	}
+
+	return _local_transform.position;
+}
+
 void Entity::propagate_active_change(bool parent_active)
 {
 	const bool new_active = parent_active && _active_self;

@@ -55,6 +55,7 @@ public:
 
 	[[nodiscard]] math::Matrix4x4f transform_matrix() const noexcept;
 	[[nodiscard]] math::Matrix4x4f transform_matrix_inv() const noexcept;
+	[[nodiscard]] math::Vector3f world_position() const noexcept;
 	[[nodiscard]] math::Transform& local_transform() noexcept { return _local_transform; }
 	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
 	[[nodiscard]] const std::vector<peng::shared_ref<Component>>& components() const noexcept { return _components; }
