@@ -12,12 +12,12 @@
 #include "blob_entity.h"
 #include "rendering/utils.h"
 
+IMPLEMENT_ENTITY(demo::DemoController);
+
 using namespace demo;
 using namespace rendering;
 using namespace math;
 using namespace entities;
-
-IMPLEMENT_ENTITY(DemoController);
 
 DemoController::DemoController()
 	: Entity("DemoController")
@@ -187,24 +187,9 @@ void DemoController::tick(float delta_time)
 
 	_age += delta_time;
 
-	if (input_manager[KeyCode::num_row_0].pressed())
-	{
-		PengEngine::get().entity_manager().dump_hierarchy();
-	}
-
 	if (input_manager[KeyCode::num_row_9].pressed())
 	{
 		PengEngine::get().entity_manager().destroy_entity(PengEngine::get().entity_manager().find_entity("Blob", true));
-	}
-
-	if (input_manager[KeyCode::f11].pressed())
-	{
-		PengEngine::get().maximize_window();
-	}
-
-	if (input_manager[KeyCode::escape].pressed())
-	{
-		PengEngine::get().request_shutdown();
 	}
 
 	Vector3f light_delta = Vector3f::zero();

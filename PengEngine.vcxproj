@@ -294,13 +294,17 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\core\reflection_database.cpp" />
     <ClCompile Include="src\core\tickable.cpp" />
     <ClCompile Include="src\demo\blob_entity.cpp" />
+    <ClCompile Include="src\demo\debug_entity.cpp" />
     <ClCompile Include="src\demo\demo_controller.cpp" />
     <ClCompile Include="src\demo\demo_main.cpp" />
+    <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
+    <ClCompile Include="src\demo\gravity\rock.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
     <ClCompile Include="src\entities\point_light.cpp" />
     <ClCompile Include="src\input\input_manager.cpp" />
     <ClCompile Include="src\input\key_state.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\math.cpp" />
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
@@ -343,8 +347,11 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\reflection_database.h" />
     <ClInclude Include="src\core\tickable.h" />
     <ClInclude Include="src\demo\blob_entity.h" />
+    <ClInclude Include="src\demo\debug_entity.h" />
     <ClInclude Include="src\demo\demo_controller.h" />
     <ClInclude Include="src\demo\demo_main.h" />
+    <ClInclude Include="src\demo\gravity\gravity_controller.h" />
+    <ClInclude Include="src\demo\gravity\rock.h" />
     <ClInclude Include="src\entities\camera.h" />
     <ClInclude Include="src\entities\point_light.h" />
     <ClInclude Include="src\input\input_manager.h" />
@@ -363,6 +370,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\matrix.h" />
     <ClInclude Include="src\math\matrix3x3.h" />
     <ClInclude Include="src\math\matrix4x4.h" />

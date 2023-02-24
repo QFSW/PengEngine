@@ -1,1 +1,2 @@
-DemoController,Demo1
+demo::gravity::GravityController,GravityDemo
+demo::DebugEntity,Debug
