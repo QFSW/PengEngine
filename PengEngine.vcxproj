@@ -303,6 +303,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
+    <ClCompile Include="src\profiling\profiler_manager.cpp" />
+    <ClCompile Include="src\profiling\scoped_event.cpp" />
     <ClCompile Include="src\profiling\superluminal_profiler.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
@@ -375,6 +377,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\memory\weak_ptr.h" />
     <ClInclude Include="src\profiling\event_data.h" />
     <ClInclude Include="src\profiling\profiler.h" />
+    <ClInclude Include="src\profiling\profiler_manager.h" />
+    <ClInclude Include="src\profiling\scoped_event.h" />
     <ClInclude Include="src\profiling\stub_profiler.h" />
     <ClInclude Include="src\profiling\superluminal_profiler.h" />
     <ClInclude Include="src\rendering\material.h" />

@@ -2,12 +2,16 @@
 
 #include <core/peng_engine.h>
 #include <core/entity_factory.h>
+#include <profiling/profiler_manager.h>
+#include <profiling/superluminal_profiler.h>
 #include <utils/csv.h>
 
 namespace demo
 {
     int demo_main()
     {
+        profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
+
         const auto entity_definitions = csv::read_file<std::tuple<std::string, std::string>>(
 			"resources/maps/demo/demo.csv"
         );
@@ -32,7 +36,7 @@ namespace demo
         PengEngine::get().set_vsync(false);
         PengEngine::get().set_target_frametime(0);
         PengEngine::get().set_msaa(4);
-        PengEngine::get().start();
+        PengEngine::get().run();
 
         return 0;
     }

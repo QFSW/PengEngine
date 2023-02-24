@@ -126,6 +126,12 @@
     <ClCompile Include="src\profiling\superluminal_profiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\profiling\profiler_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\profiling\scoped_event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -372,6 +378,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\profiling\event_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\profiling\profiler_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\profiling\scoped_event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

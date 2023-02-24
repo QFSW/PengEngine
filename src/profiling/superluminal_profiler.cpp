@@ -28,6 +28,8 @@ SuperluminalProfiler::~SuperluminalProfiler()
 	{
 		PerformanceAPI_ModuleHandle module_typed = static_cast<PerformanceAPI_ModuleHandle>(_module);
 		PerformanceAPI_Free(&module_typed);
+
+		Logger::log("Shutdown Superluminal profiler");
 	}
 }
 
@@ -36,7 +38,7 @@ void SuperluminalProfiler::begin_event(const EventData& event)
 	if (_module)
 	{
 		const uint32_t color_packed = PERFORMANCEAPI_MAKE_COLOR(event.color.x, event.color.y, event.color.z);
-		_functions.BeginEvent(event.name, event.extra, color_packed);
+		_functions.BeginEvent(event.id, event.extra, color_packed);
 	}
 }
 
