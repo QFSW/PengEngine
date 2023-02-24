@@ -303,6 +303,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
+    <ClCompile Include="src\profiling\superluminal_profiler.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\primitives.cpp" />
@@ -352,6 +353,9 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\moodycamel\lightweightsemaphore.h" />
     <ClInclude Include="src\libs\moodycamel\readerwriterqueue.h" />
     <ClInclude Include="src\libs\stb\stb_image.h" />
+    <ClInclude Include="src\libs\superluminal\PerformanceAPI.h" />
+    <ClInclude Include="src\libs\superluminal\PerformanceAPI_capi.h" />
+    <ClInclude Include="src\libs\superluminal\PerformanceAPI_loader.h" />
     <ClInclude Include="src\libs\tsl\robin_growth_policy.h" />
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
@@ -369,6 +373,10 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\memory\shared_ptr.h" />
     <ClInclude Include="src\memory\shared_ref.h" />
     <ClInclude Include="src\memory\weak_ptr.h" />
+    <ClInclude Include="src\profiling\event_data.h" />
+    <ClInclude Include="src\profiling\profiler.h" />
+    <ClInclude Include="src\profiling\stub_profiler.h" />
+    <ClInclude Include="src\profiling\superluminal_profiler.h" />
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
     <ClInclude Include="src\math\plane.h" />
