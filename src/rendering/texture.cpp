@@ -5,6 +5,7 @@
 #include <core/logger.h>
 #include <utils/strtools.h>
 #include <common/common.h>
+#include <profiling/scoped_event.h>
 
 #pragma warning( push, 0 )
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,8 +17,10 @@ using namespace rendering;
 Texture::Texture(const std::string& name, const std::string& texture_path)
 	: _name(name)
 {
+	SCOPED_EVENT("Building texture", _name.c_str());
 	Logger::log("Building texture '%s'", _name.c_str());
 	Logger::log("Loading texture data '%s'", texture_path.c_str());
+
 	stbi_set_flip_vertically_on_load(true);
 	stbi_uc* texture_data = stbi_load(texture_path.c_str(), &_resolution.x, &_resolution.y, &_num_channels, 0);
 	if (!texture_data)
@@ -38,6 +41,7 @@ Texture::Texture(
 	, _resolution(resolution)
 	, _num_channels(3)
 {
+	SCOPED_EVENT("Building texture", _name.c_str());
 	Logger::log("Building texture '%s'", _name.c_str());
 
 	verify_resolution(resolution, static_cast<int32_t>(rgb_data.size()));
@@ -53,6 +57,7 @@ Texture::Texture(
 	, _resolution(resolution)
 	, _num_channels(4)
 {
+	SCOPED_EVENT("Building texture", _name.c_str());
 	Logger::log("Building texture '%s'", _name.c_str());
 
 	verify_resolution(resolution, static_cast<int32_t>(rgba_data.size()));
@@ -61,7 +66,9 @@ Texture::Texture(
 
 Texture::~Texture()
 {
+	SCOPED_EVENT("Destroying texture", _name.c_str());
 	Logger::log("Destroying texture '%s'", _name.c_str());
+
 	glDeleteTextures(1, &_tex);
 }
 

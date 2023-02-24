@@ -4,6 +4,7 @@
 #include <utils/strtools.h>
 #include <utils/vectools.h>
 #include <core/logger.h>
+#include <profiling/scoped_event.h>
 
 using namespace rendering;
 using namespace math;
@@ -18,6 +19,7 @@ Mesh::Mesh(
 	, _index_buffer(std::move(indices))
 	, _num_indices(static_cast<GLuint>(_index_buffer.size() * 3))
 {
+	SCOPED_EVENT("Building mesh", _name.c_str());
 	Logger::log("Building mesh '%s'", _name.c_str());
 
 	glGenBuffers(1, &_vbo);
@@ -58,6 +60,7 @@ Mesh::Mesh(
 
 Mesh::~Mesh()
 {
+	SCOPED_EVENT("Destroying mesh", _name.c_str());
 	Logger::log("Destroying mesh '%s'", _name.c_str());
 
 	glDeleteBuffers(1, &_vbo);

@@ -292,6 +292,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\core\entity.cpp" />
     <ClCompile Include="src\core\entity_manager.cpp" />
     <ClCompile Include="src\core\reflection_database.cpp" />
+    <ClCompile Include="src\core\tickable.cpp" />
     <ClCompile Include="src\demo\blob_entity.cpp" />
     <ClCompile Include="src\demo\demo_controller.cpp" />
     <ClCompile Include="src\demo\demo_main.cpp" />

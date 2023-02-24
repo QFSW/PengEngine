@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <utils/vectools.h>
+#include <profiling/scoped_event.h>
 
 #include "entity.h"
 #include "logger.h"
@@ -13,12 +14,16 @@ EntityManager::EntityManager()
 
 	for (int32_t tick_group = start; tick_group < end; tick_group++)
 	{
-		_tick_groups.push_back(static_cast<TickGroup>(tick_group));
+		const TickGroup group = static_cast<TickGroup>(tick_group);
+		_tick_groups.push_back(group);
+		_tick_group_names.push_back(strtools::cat(group));
 	}
 }
 
 void EntityManager::tick(float delta_time)
 {
+	SCOPED_EVENT("EntityManager - tick");
+
 	flush_pending_adds();
 	tick_entities(delta_time);
 	flush_pending_kills();
@@ -26,6 +31,7 @@ void EntityManager::tick(float delta_time)
 
 void EntityManager::shutdown()
 {
+	SCOPED_EVENT("EntityManager - shutdown");
 	Logger::log("Destroying all entities");
 
 	for (peng::shared_ref<Entity>& entity : _entities)
@@ -127,8 +133,11 @@ void EntityManager::dump_hierarchy() const
 
 void EntityManager::tick_entities(float delta_time)
 {
-	for (const TickGroup tick_group : _tick_groups)
+	for (size_t i = 0; i < _tick_groups.size(); i++)
 	{
+		SCOPED_EVENT("EntityManager - ticking entity group", _tick_group_names[i].c_str());
+		const TickGroup tick_group = _tick_groups[i];
+
 		for (const peng::shared_ref<Entity>& entity : _entities)
 		{
 			if (entity->active_in_hierarchy())
@@ -152,6 +161,8 @@ void EntityManager::tick_entities(float delta_time)
 
 void EntityManager::flush_pending_adds()
 {
+	SCOPED_EVENT("EntityManager - flush pending adds");
+
 	const std::vector staged_adds(std::move(_pending_adds));
 
 	for (const peng::shared_ref<Entity>& entity : staged_adds)
@@ -167,6 +178,8 @@ void EntityManager::flush_pending_adds()
 
 void EntityManager::flush_pending_kills()
 {
+	SCOPED_EVENT("EntityManager - flush pending kills");
+
 	auto kill_in_buffer = [&](std::vector<peng::shared_ref<Entity>>& entities, bool exists_yet)
 	{
 		for (int32_t entity_index = static_cast<int32_t>(entities.size() - 1); entity_index >= 0; entity_index--)

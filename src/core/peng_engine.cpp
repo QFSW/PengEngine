@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <utils/timing.h>
+#include <profiling/scoped_event.h>
 
 #include "logger.h"
 
@@ -15,10 +16,8 @@ PengEngine::PengEngine()
 	, _cursor_locked(false)
 	, _vsync(false)
 	, _msaa_samples(0)
+	, _frame_number(0)
 	, _last_frametime(_target_frametime)
-	, _last_main_frametime(0)
-	, _last_render_frametime(0)
-	, _last_opengl_frametime(0)
 	, _last_draw_time(timing::clock::now())
 	, _glfw_window(nullptr)
 { }
@@ -29,24 +28,14 @@ PengEngine& PengEngine::get()
 	return peng_engine;
 }
 
-void PengEngine::start()
+void PengEngine::run()
 {
-	_executing = true;
-	Logger::log("PengEngine starting...");
-
-	start_opengl();
-	_input_manager.start(_glfw_window);
-
-	Logger::success("PengEngine started");
-	_on_engine_initialized();
+	start();
 
 	while (!shutting_down())
 	{
 		_last_frametime = timing::measure_ms([this] {
-			tick_opengl();
-			tick_main();
-			tick_render();
-			finalize_frame();
+			tick();
 		});
 	}
 
@@ -223,6 +212,20 @@ static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, G
 	}
 }
 
+void PengEngine::start()
+{
+	SCOPED_EVENT("PengEngine - start");
+
+	_executing = true;
+	Logger::log("PengEngine starting...");
+
+	start_opengl();
+	_input_manager.start(_glfw_window);
+
+	Logger::success("PengEngine started");
+	_on_engine_initialized();
+}
+
 void PengEngine::start_opengl()
 {
 	if (!glfwInit())
@@ -294,6 +297,8 @@ void PengEngine::start_opengl()
 
 void PengEngine::shutdown()
 {
+	SCOPED_EVENT("PengEngine - shutdown");
+
 	_entity_manager.shutdown();
 	shutdown_opengl();
 
@@ -302,6 +307,8 @@ void PengEngine::shutdown()
 
 void PengEngine::shutdown_opengl()
 {
+	SCOPED_EVENT("PengEngine - shutdown opengl");
+
 	if (_glfw_window)
 	{
 		glfwDestroyWindow(_glfw_window);
@@ -311,50 +318,64 @@ void PengEngine::shutdown_opengl()
 	glfwTerminate();
 }
 
+void PengEngine::tick()
+{
+	SCOPED_EVENT("Frame", strtools::catf_temp("%d", _frame_number), {255, 200, 255});
+
+	tick_opengl();
+	tick_main();
+	tick_render();
+	finalize_frame();
+
+	_frame_number++;
+}
+
 void PengEngine::tick_main()
 {
-	_last_main_frametime = timing::measure_ms([this] {
-		const float delta_time = static_cast<float>(_last_frametime / 1000.0);
-		
-		_on_frame_start();
+	SCOPED_EVENT("PengEngine - tick main");
 
-		_input_manager.tick();
-		_entity_manager.tick(delta_time);
+	const float delta_time = static_cast<float>(_last_frametime / 1000.0);
+	
+	_on_frame_start();
 
-		_on_frame_end();
-	});
+	_input_manager.tick();
+	_entity_manager.tick(delta_time);
+
+	_on_frame_end();
 }
 
 void PengEngine::tick_render()
 {
-	_last_render_frametime = timing::measure_ms([this] {
-		if (_input_manager[input::KeyCode::num_row_1].pressed())
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
+	SCOPED_EVENT("PengEngine - tick render");
 
-		if (_input_manager[input::KeyCode::num_row_2].pressed())
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
+	if (_input_manager[input::KeyCode::num_row_1].pressed())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
-		if (_input_manager[input::KeyCode::num_row_3].pressed())
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-		}
-	});
+	if (_input_manager[input::KeyCode::num_row_2].pressed())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+
+	if (_input_manager[input::KeyCode::num_row_3].pressed())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	}
 }
 
 void PengEngine::tick_opengl()
 {
-	_last_opengl_frametime = timing::measure_ms([this] {
-		glfwPollEvents();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	});
+	SCOPED_EVENT("PengEngine - tick opengl");
+
+	glfwPollEvents();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void PengEngine::finalize_frame()
 {
+	SCOPED_EVENT("PengEngine - finalize frame");
+
 	const timing::clock::time_point sync_point = 
 		_last_draw_time 
 		+ std::chrono::duration_cast<timing::clock::duration>(timing::duration_ms(_target_frametime));

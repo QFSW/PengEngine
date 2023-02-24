@@ -63,6 +63,7 @@ private:
 	) const;
 
 	std::vector<TickGroup> _tick_groups;
+	std::vector<std::string> _tick_group_names;
 	std::vector<peng::shared_ref<Entity>> _entities;
 	std::vector<peng::shared_ref<Entity>> _pending_adds;
 	std::vector<peng::weak_ptr<Entity>> _pending_kills;

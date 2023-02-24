@@ -13,8 +13,10 @@ namespace strtools
 		std::vector<char>& get_catf_buffer();
 	}
 
+	// Creates a formatted string in a temporary buffer for immediate use
+	// The result can safely be used until the next time catf/catf_temp are called
 	template <typename ...Args>
-	std::string catf(const char* format, Args...args)
+	const char* catf_temp(const char* format, Args...args)
 	{
 		static_assert(traits::for_none<std::is_class, Args...>(), "strtools::catf does not work with classes");
 		std::vector<char>& char_buf = detail::get_catf_buffer();
@@ -26,7 +28,13 @@ namespace strtools
 		}
 
 		char_buf.resize(msg_size + 1);
-		return catf(format, args...);
+		return catf_temp(format, args...);
+	}
+
+	template <typename ...Args>
+	std::string catf(const char* format, Args...args)
+	{
+		return catf_temp(format, args...);
 	}
 
 	template <typename T>

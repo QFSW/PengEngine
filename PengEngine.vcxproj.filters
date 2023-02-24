@@ -132,6 +132,9 @@
     <ClCompile Include="src\profiling\scoped_event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\tickable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">

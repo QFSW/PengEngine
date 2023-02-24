@@ -17,7 +17,7 @@ class PengEngine
 public:
 	static PengEngine& get();
 
-	void start();
+	void run();
 	void request_shutdown();
 
 	void set_target_fps(double fps) noexcept;
@@ -47,10 +47,12 @@ private:
 	PengEngine& operator=(const PengEngine&) = delete;
 	PengEngine& operator=(PengEngine&&) = delete;
 
+	void start();
 	void start_opengl();
 	void shutdown();
 	void shutdown_opengl();
 
+	void tick();
 	void tick_main();
 	void tick_render();
 	void tick_opengl();
@@ -66,10 +68,8 @@ private:
 	bool _vsync;
 	uint32_t _msaa_samples;
 
+	int32_t _frame_number;
 	double _last_frametime;
-	double _last_main_frametime;
-	double _last_render_frametime;
-	double _last_opengl_frametime;
 	timing::clock::time_point _last_draw_time;
 
 	struct GLFWwindow* _glfw_window;

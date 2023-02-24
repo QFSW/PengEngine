@@ -7,6 +7,7 @@
 #include <core/logger.h>
 #include <utils/utils.h>
 #include <utils/io.h>
+#include <profiling/scoped_event.h>
 
 #include "shader_compiler.h"
 #include "primitives.h"
@@ -30,6 +31,7 @@ Shader::Shader(
 	: _name(std::move(name))
 	, _broken(false)
 {
+	SCOPED_EVENT("Building shader", _name.c_str());
 	Logger::log("Building shader '%s'", _name.c_str());
 
 	ShaderCompiler compiler;
@@ -101,7 +103,9 @@ Shader::Shader(
 
 Shader::~Shader()
 {
+	SCOPED_EVENT("Destroying shader", _name.c_str());
 	Logger::log("Destroying shader '%s'", _name.c_str());
+
 	glDeleteProgram(_program);
 }
 

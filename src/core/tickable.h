@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 enum class TickGroup
 {
 	standard,
@@ -16,3 +18,5 @@ public:
 	virtual void tick(float delta_time) = 0;
 	[[nodiscard]] virtual TickGroup tick_group() const noexcept = 0;
 };
+
+std::ostream& operator<<(std::ostream& os, TickGroup tick_group);
