@@ -162,8 +162,8 @@ std::vector<peng::shared_ref<const PointLight>> MeshRenderer::get_relevant_point
 	{
 		if (light && light->active_in_hierarchy())
 		{
-			const float light_intensity_sqr = light->data().color.magnitude_sqr() * std::powf(light->data().range, 2);
-			const float light_dist_sqr = (light->transform_matrix().get_translation() - owner().transform_matrix().get_translation()).magnitude_sqr();
+			const float light_intensity_sqr = light->data().color.magnitude_sqr() * light->data().range * light->data().range;
+			const float light_dist_sqr = (light->world_position() - owner().world_position()).magnitude_sqr();
 			const float relative_strength = light_intensity_sqr / light_dist_sqr;
 
 			considerations.emplace_back(Consideration{
