@@ -23,34 +23,14 @@ void GravityController::post_create()
 	camera->local_transform().position = Vector3f(0, 0, -10);
 	camera->add_component<FlyCamController>();
 
-	for (int32_t i = 0; i < 500; i++)
-	{
-		auto rock = PengEngine::get().entity_manager().create_entity<Rock>(strtools::catf("Rock#%d", i));
-
-		constexpr float field_radius = 10;
-		constexpr float initial_speed = 2.5f;
-
-		rock->mass = rand_range(0.001f, 0.05f);
-		rock->local_transform().position = Vector3f(
-			rand_range(-field_radius, field_radius), 
-			rand_range(-field_radius, field_radius),
-			rand_range(-field_radius, field_radius)
-		);
-
-		rock->velocity = Vector3f(
-			rand_range(-initial_speed, initial_speed),
-			rand_range(-initial_speed, initial_speed),
-			rand_range(-initial_speed, initial_speed)
-		);
-
-		_rocks.push_back(rock);
-	}
+	create_rock_field(500, 5, 2);
+	create_rock_field(100, 10, 4);
 
 	peng::weak_ptr<PointLight> light = PengEngine::get().entity_manager().create_entity<PointLight>();
-	light->data().range = 300;
+	light->data().range = 1000;
 	light->data().color = Vector3f(0.9f, 0.9f, 1);
 	light->data().ambient = Vector3f(0.05f, 0.05f, 0);
-	light->local_transform().position = Vector3f::up() * 20;
+	light->local_transform().position = Vector3f::up() * 30;
 	
 	Logger::success("Gravity demo started");
 }
@@ -101,5 +81,28 @@ void GravityController::tick(float delta_time)
 				}
 			}
 		}
+	}
+}
+
+void GravityController::create_rock_field(int32_t count, float radius, float speed)
+{
+	for (int32_t i = 0; i < count; i++)
+	{
+		auto rock = PengEngine::get().entity_manager().create_entity<Rock>(strtools::catf("Rock#%d", i));
+
+		rock->mass = rand_range(0.001f, 0.05f);
+		rock->local_transform().position = Vector3f(
+			rand_range(-radius, radius),
+			rand_range(-radius, radius),
+			rand_range(-radius, radius)
+		);
+
+		rock->velocity = Vector3f(
+			rand_range(-speed, speed),
+			rand_range(-speed, speed),
+			rand_range(-speed, speed)
+		);
+
+		_rocks.push_back(rock);
 	}
 }

@@ -1,5 +1,6 @@
 #include "rock.h"
 
+#include <math/math.h>
 #include <components/mesh_renderer.h>
 #include <rendering/primitives.h>
 
@@ -15,7 +16,7 @@ void Rock::post_create()
 	add_component<MeshRenderer>(
 		rendering::Primitives::icosphere(1),
 		copy_shared(rendering::Primitives::phong_material())
-	);
+	)->material()->set_parameter("base_color", math::Vector3f(math::randf(), math::randf(), math::randf()));
 }
 
 void Rock::tick(float delta_time)

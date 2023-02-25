@@ -17,6 +17,8 @@ namespace demo::gravity
 		void tick(float delta_time) override;
 
 	private:
+		void create_rock_field(int32_t count, float radius, float speed);
+
 		std::vector<peng::weak_ptr<Rock>> _rocks;
 	};
 }
