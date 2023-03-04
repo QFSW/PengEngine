@@ -2,7 +2,6 @@
 
 #include <core/entity_factory.h>
 #include <core/peng_engine.h>
-#include <core/logger.h>
 
 #include "reflection_bootstrap.h"
 
