@@ -412,6 +412,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\utils\detail\final_act.h" />
     <ClInclude Include="src\utils\functional.h" />
     <ClInclude Include="src\utils\io.h" />
+    <ClInclude Include="src\utils\singleton.h" />
     <ClInclude Include="src\utils\strtools.h" />
     <ClInclude Include="src\utils\timing.h" />
     <ClInclude Include="src\utils\traits.h" />

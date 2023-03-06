@@ -1,19 +1,17 @@
 #pragma once
 
 #include <memory>
+#include <utils/singleton.h>
 
 #include "profiler.h"
 
 namespace profiling
 {
-	class ProfilerManager
+	class ProfilerManager : public utils::Singleton<ProfilerManager>
 	{
+		using Singleton::Singleton;
+
 	public:
-		ProfilerManager(const ProfilerManager&) = delete;
-		ProfilerManager(ProfilerManager&&) = delete;
-
-		static ProfilerManager& get();
-
 		// Loads a new profiler into the profiler manager releasing the existing profiler
 		void load_profiler(std::unique_ptr<IProfiler>&& profiler);
 
@@ -27,8 +25,6 @@ namespace profiling
 		const std::unique_ptr<IProfiler>& current_profiler();
 
 	private:
-		ProfilerManager() = default;
-
 		std::unique_ptr<IProfiler> _current_profiler;
 	};
 

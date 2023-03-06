@@ -2,12 +2,6 @@
 
 #include <iostream>
 
-Logger& Logger::get()
-{
-	static Logger logger;
-	return logger;
-}
-
 void Logger::log(LogSeverity severity, const std::string& message)
 {
 	if constexpr (!enabled())

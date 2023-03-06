@@ -1,11 +1,5 @@
 #include "entity_factory.h"
 
-EntityFactory& EntityFactory::get()
-{
-	static EntityFactory entity_factory;
-	return entity_factory;
-}
-
 peng::weak_ptr<Entity> EntityFactory::create_entity(peng::shared_ref<const ReflectedType> entity_type, const std::string& entity_name) const
 {
 	if (const auto it = _type_to_constructor_set.find(entity_type); it != _type_to_constructor_set.end())

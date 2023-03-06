@@ -9,14 +9,11 @@
 
 class Entity;
 
-class EntityFactory
+class EntityFactory : public utils::Singleton<EntityFactory>
 {
+	using Singleton::Singleton;
+
 public:
-	static EntityFactory& get();
-
-	EntityFactory(const EntityFactory&) = delete;
-	EntityFactory(EntityFactory&&) = delete;
-
 	template <typename T>
 	void register_entity();
 
@@ -27,8 +24,6 @@ public:
 	) const;
 
 private:
-	EntityFactory() = default;
-
 	struct EntityConstructorSet
 	{
 		bool has_default = false;

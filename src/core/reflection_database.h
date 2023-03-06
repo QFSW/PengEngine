@@ -4,17 +4,15 @@
 
 #include <common/common.h>
 #include <memory/shared_ptr.h>
+#include <utils/singleton.h>
 
 #include "reflected_type.h"
 
-class ReflectionDatabase
+class ReflectionDatabase : public utils::Singleton<ReflectionDatabase>
 {
+	using Singleton::Singleton;
+
 public:
-	static ReflectionDatabase& get();
-
-	ReflectionDatabase(const ReflectionDatabase&) = delete;
-	ReflectionDatabase(ReflectionDatabase&&) = delete;
-
 	void register_type(const ReflectedType& reflected_type);
 
 	[[nodiscard]] peng::shared_ptr<const ReflectedType> reflect_type(const std::type_info& type_info) const;
@@ -36,8 +34,6 @@ public:
 	[[nodiscard]] bool is_derived_from(const std::type_info& derived_type, const std::type_info& base_type);
 
 private:
-	ReflectionDatabase() = default;
-
 	std::vector<peng::shared_ptr<ReflectedType>> _reflected_types;
 	common::unordered_map<std::string, peng::shared_ptr<ReflectedType>> _name_to_type;
 	common::unordered_map<const std::type_info*, peng::shared_ptr<ReflectedType>> _info_to_type;

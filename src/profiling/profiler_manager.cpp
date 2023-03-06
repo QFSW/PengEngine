@@ -4,12 +4,6 @@
 
 using namespace profiling;
 
-ProfilerManager& ProfilerManager::get()
-{
-	static ProfilerManager profiler_manager;
-	return profiler_manager;
-}
-
 void ProfilerManager::load_profiler(std::unique_ptr<IProfiler>&& profiler)
 {
 	_current_profiler = std::move(profiler);

@@ -1,11 +1,5 @@
 #include "reflection_database.h"
 
-ReflectionDatabase& ReflectionDatabase::get()
-{
-	static ReflectionDatabase reflection_database;
-	return reflection_database;
-}
-
 void ReflectionDatabase::register_type(const ReflectedType& reflected_type)
 {
 	assert(!reflected_type.name.empty());

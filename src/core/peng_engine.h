@@ -4,19 +4,20 @@
 #include <input/input_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
+#include <utils/singleton.h>
 
 #include "entity_manager.h"
 
 // TODO: move opengl code into an RHI object
-class PengEngine
+class PengEngine : public utils::Singleton<PengEngine>
 {
+	friend Singleton;
+
 	DEFINE_EVENT(on_engine_initialized)
 	DEFINE_EVENT(on_frame_start)
 	DEFINE_EVENT(on_frame_end)
 
 public:
-	static PengEngine& get();
-
 	void run();
 	void request_shutdown();
 
@@ -39,13 +40,6 @@ public:
 
 private:
 	PengEngine();
-	~PengEngine() = default;
-
-	PengEngine(const PengEngine&) = delete;
-	PengEngine(PengEngine&&) = delete;
-
-	PengEngine& operator=(const PengEngine&) = delete;
-	PengEngine& operator=(PengEngine&&) = delete;
 
 	void start();
 	void start_opengl();

@@ -3,6 +3,7 @@
 #include <string>
 
 #include <utils/strtools.h>
+#include <utils/singleton.h>
 
 enum class LogSeverity
 {
@@ -12,14 +13,11 @@ enum class LogSeverity
 	success
 };
 
-class Logger
+class Logger : public utils::Singleton<Logger>
 {
+	using Singleton::Singleton;
+
 public:
-	static Logger& get();
-
-	Logger(const Logger&) = delete;
-	Logger(Logger&&) = delete;
-
 	void log(LogSeverity severity, const std::string& message);
 
 	template <typename...Args>
@@ -43,9 +41,6 @@ public:
 	static void success(const char* format, Args&&...args);
 
 	consteval static bool enabled();
-
-private:
-	Logger() = default;
 };
 
 consteval bool Logger::enabled()

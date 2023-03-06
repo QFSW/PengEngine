@@ -9,7 +9,8 @@
 #include "logger.h"
 
 PengEngine::PengEngine()
-	: _executing(false)
+	: Singleton()
+	, _executing(false)
 	, _target_frametime(1000 / 60.0)
 	, _resolution(800, 600)
 	, _fullscreen(false)
@@ -21,12 +22,6 @@ PengEngine::PengEngine()
 	, _last_draw_time(timing::clock::now())
 	, _glfw_window(nullptr)
 { }
-
-PengEngine& PengEngine::get()
-{
-	static PengEngine peng_engine;
-	return peng_engine;
-}
 
 void PengEngine::run()
 {
