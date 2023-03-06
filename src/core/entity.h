@@ -38,7 +38,10 @@ public:
 	template <std::derived_from<Component> T, typename...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
 
-	// TODO: add get_component and friends
+	[[nodiscard]] peng::weak_ptr<Component> get_component(const peng::shared_ref<const ReflectedType>& component_type) const;
+
+	template <std::derived_from<Component> T>
+	[[nodiscard]] peng::weak_ptr<T> get_component() const;
 
 	[[nodiscard]] peng::weak_ptr<const Entity> weak_this() const;
 	[[nodiscard]] peng::weak_ptr<Entity> weak_this();
@@ -105,6 +108,14 @@ peng::weak_ptr<T> Entity::add_component(Args&&... args)
 	}
 
 	return component;
+}
+
+template <std::derived_from<Component> T>
+peng::weak_ptr<T> Entity::get_component() const
+{
+	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
+	const peng::weak_ptr<Component> component = get_component(reflected_type);
+	return peng::weak_ptr<T>(std::static_pointer_cast<T>(component.lock().get_impl()));
 }
 
 template <std::derived_from<Entity> T>

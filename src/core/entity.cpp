@@ -108,6 +108,19 @@ void Entity::destroy()
 	PengEngine::get().entity_manager().destroy_entity(strong_this);
 }
 
+peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type) const
+{
+	for (const peng::shared_ref<Component>& component : _components)
+	{
+		if (component->type() == component_type)
+		{
+			return component;
+		}
+	}
+
+	return {};
+}
+
 peng::weak_ptr<const Entity> Entity::weak_this() const
 {
 	return peng::shared_ref(shared_from_this());
