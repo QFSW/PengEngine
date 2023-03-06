@@ -4,6 +4,8 @@
 #include <core/peng_engine.h>
 #include <entities/camera.h>
 
+IMPLEMENT_COMPONENT(components::FlyCamController);
+
 using namespace components;
 using namespace entities;
 using namespace input;

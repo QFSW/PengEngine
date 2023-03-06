@@ -6,6 +6,8 @@ namespace components
 {
 	class FlyCamController final : public Component
 	{
+		DECLARE_COMPONENT(FlyCamController);
+
 	public:
 		FlyCamController();
 

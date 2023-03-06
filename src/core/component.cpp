@@ -4,6 +4,8 @@
 
 #include "logger.h"
 
+IMPLEMENT_COMPONENT(Component);
+
 Component::Component(TickGroup tick_group)
 	: _tick_group(tick_group)
 { }

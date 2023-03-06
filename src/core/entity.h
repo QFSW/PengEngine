@@ -38,6 +38,8 @@ public:
 	template <std::derived_from<Component> T, typename...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
 
+	// TODO: add get_component and friends
+
 	[[nodiscard]] peng::weak_ptr<const Entity> weak_this() const;
 	[[nodiscard]] peng::weak_ptr<Entity> weak_this();
 

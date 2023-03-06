@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/reflection_database.h>
+#include <core/logger.h>
 
 namespace core::detail
 {

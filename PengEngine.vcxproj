@@ -333,6 +333,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\fly_cam_controller.h" />
     <ClInclude Include="src\components\mesh_renderer.h" />
     <ClInclude Include="src\core\component.h" />
+    <ClInclude Include="src\core\component_definition.h" />
     <ClInclude Include="src\core\entity_definition.h" />
     <ClInclude Include="src\core\detail\entity_definition_bootstrap.h" />
     <ClInclude Include="src\core\entity_factory.h" />

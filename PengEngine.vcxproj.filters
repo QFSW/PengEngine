@@ -413,6 +413,9 @@
     <ClInclude Include="src\math\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\component_definition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />

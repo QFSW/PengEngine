@@ -3,12 +3,15 @@
 #include <memory/weak_ptr.h>
 
 #include "tickable.h"
+#include "component_definition.h"
 
 class Entity;
 
 class Component : public ITickable
 {
 	friend Entity;
+
+	DECLARE_COMPONENT(Component);
 
 public:
 	explicit Component(TickGroup tick_group = TickGroup::standard);

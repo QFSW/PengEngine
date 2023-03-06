@@ -44,7 +44,6 @@ public:
 
 	[[nodiscard]] EntityState get_entity_state(const peng::weak_ptr<Entity>& entity) const;
 	[[nodiscard]] peng::weak_ptr<Entity> find_entity(const std::string& entity_name, bool include_inactive) const;
-
 	// TODO: add templated and non templated functions for finding entity/entities via type
 
 	void dump_hierarchy() const;

@@ -5,6 +5,8 @@
 #include <core/logger.h>
 #include <utils/utils.h>
 
+IMPLEMENT_COMPONENT(components::MeshRenderer);
+
 using namespace entities;
 using namespace components;
 using namespace rendering;

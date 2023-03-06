@@ -13,6 +13,8 @@ namespace components
 {
 	class MeshRenderer final : public Component
 	{
+		DECLARE_COMPONENT(MeshRenderer);
+
 	public:
 		MeshRenderer(
 			peng::shared_ref<const rendering::Mesh>&& mesh,
