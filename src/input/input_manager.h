@@ -37,6 +37,7 @@ namespace input
 		std::vector<int32_t> _opengl_keys;
 		std::vector<int32_t> _opengl_mouse_buttons;
 
+		bool _has_ticked = false;
 		math::Vector2i _cursor_pos;
 		math::Vector2i _last_cursor_pos;
 		common::unordered_map<KeyCode, KeyState> _key_states;

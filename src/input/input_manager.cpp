@@ -125,6 +125,13 @@ void InputManager::tick()
 	_last_cursor_pos = _cursor_pos;
 	_cursor_pos.x = static_cast<int32_t>(std::round(cursor_x));
 	_cursor_pos.y = static_cast<int32_t>(std::round(cursor_y));
+
+	// Copy down current to last on the first frame to prevent arbitrary deltas
+	if (!_has_ticked)
+	{
+		_has_ticked = true;
+		_last_cursor_pos = _cursor_pos;
+	}
 }
 
 math::Vector2i InputManager::cursor_delta() const noexcept
