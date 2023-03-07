@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory/weak_ptr.h>
 #include <libs/nlohmann/json.hpp>
+
+class Entity;
 
 namespace world
 {
@@ -13,6 +16,8 @@ namespace world
 	private:
 		void load_entities(const nlohmann::json& world_def);
 		void load_entity(const nlohmann::json& entity_def);
+		void load_components(const nlohmann::json& entity_def, const peng::weak_ptr<Entity>& entity);
+		void load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity);
 
 		template <typename T>
 		[[nodiscard]] T get_value(const nlohmann::json& obj, const std::string& key) const;

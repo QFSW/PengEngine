@@ -7,11 +7,15 @@
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 
+#include "core/entity.h"
+
 using namespace world;
 
 void WorldLoader::load_from_file(const std::string& path)
 {
     SCOPED_EVENT("WorldLoader - load from file");
+    Logger::log("Loading world '%s'", path.c_str());
+
     std::ifstream file(path);
     if (!file.is_open())
     {
@@ -57,13 +61,62 @@ void WorldLoader::load_entity(const nlohmann::json& entity_def)
 
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(entity_type))
     {
-        peng::weak_ptr<Entity> entity = EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
+	    const peng::weak_ptr<Entity> entity = EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
+        load_components(entity_def, entity);
     }
     else
     {
         Logger::error(
             "Could not load entity '%' as the type '%s' does not exist",
             entity_name.c_str(), entity_type.c_str()
+        );
+    }
+}
+
+void WorldLoader::load_components(const nlohmann::json& entity_def, const peng::weak_ptr<Entity>& entity)
+{
+    if (const auto it = entity_def.find("components"); it != entity_def.end())
+    {
+        if (it->is_array())
+        {
+            for (const auto& component_def : *it)
+            {
+                load_component(component_def, entity);
+            }
+        }
+        else
+        {
+            Logger::error("The 'components' entry in the entity '%s' was not an array", entity->name().c_str());
+        }
+    }
+}
+
+void WorldLoader::load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity)
+{
+    if (component_def.is_string())
+    {
+        const std::string component_type = component_def.get<std::string>();
+        if (const auto reflected_type = ReflectionDatabase::get().reflect_type(component_type))
+        {
+			// TODO: once component factory is created, actually create component and add it to entity
+            Logger::error(
+                "Could add component '%s' to entity '%s' as the component factory has not been implemented yet",
+                component_type.c_str(), entity->name().c_str()
+            );
+        }
+        else
+        {
+            Logger::error(
+                "Could add component '%s' to entity '%s' as the type does not exist",
+                component_type.c_str(), entity->name().c_str()
+            );
+        }
+    }
+    else
+    {
+        Logger::error(
+            "Cannot load component '%s' on entity '%s' as it is not a component typename",
+            component_def.dump().c_str(), entity->name().c_str()
         );
     }
 }

@@ -6,7 +6,9 @@
       "name": "GravityController"
     },
     {
-      "type": "demo::DebugEntity"
+      "type": "demo::DebugEntity",
+      "components": [
+      ]
     }
   ]
 }
