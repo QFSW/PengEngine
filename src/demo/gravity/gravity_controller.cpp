@@ -1,15 +1,12 @@
 #include "gravity_controller.h"
 
 #include <profiling/scoped_event.h>
-#include <components/fly_cam_controller.h>
-#include <entities/camera.h>
 #include <entities/point_light.h>
 #include <math/math.h>
 
 IMPLEMENT_ENTITY(demo::gravity::GravityController);
 
 using namespace demo::gravity;
-using namespace components;
 using namespace entities;
 using namespace math;
 
@@ -17,11 +14,6 @@ void GravityController::post_create()
 {
 	Entity::post_create();
 	Logger::log("Gravity demo starting...");
-
-	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
-	camera->make_perspective(70, 0.01f, 1000.0f);
-	camera->local_transform().position = Vector3f(0, 0, -10);
-	camera->add_component<FlyCamController>();
 
 	create_rock_field(500, 5, 2);
 	create_rock_field(100, 10, 4);
@@ -86,6 +78,7 @@ void GravityController::tick(float delta_time)
 
 void GravityController::create_rock_field(int32_t count, float radius, float speed)
 {
+	SCOPED_EVENT("GravityController - create rock field", strtools::catf_temp("%d rocks", count));
 	for (int32_t i = 0; i < count; i++)
 	{
 		auto rock = PengEngine::get().entity_manager().create_entity<Rock>(strtools::catf("Rock#%d", i));

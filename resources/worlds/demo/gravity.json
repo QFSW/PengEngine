@@ -16,6 +16,19 @@
       "type": "demo::DebugEntity",
       "components": [
       ]
+    },
+    {
+      "type": "entities::Camera",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -10
+        }
+      },
+      "components": [
+        "components::FlyCamController"
+      ]
     }
   ]
 }
