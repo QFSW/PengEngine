@@ -7,9 +7,10 @@
 #include <math/transform.h>
 
 #include "tickable.h"
-#include "component.h"
 #include "entity_relationship.h"
 #include "entity_definition.h"
+
+class Component;
 
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {

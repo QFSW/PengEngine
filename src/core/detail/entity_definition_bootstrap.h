@@ -1,7 +1,6 @@
 #pragma once
 
 #include <core/entity_factory.h>
-#include <core/peng_engine.h>
 
 #include "reflection_bootstrap.h"
 

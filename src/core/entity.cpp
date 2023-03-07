@@ -4,6 +4,7 @@
 #include <utils/utils.h>
 
 #include "peng_engine.h"
+#include "component.h"
 
 IMPLEMENT_ENTITY(Entity);
 

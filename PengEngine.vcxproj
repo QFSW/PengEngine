@@ -286,6 +286,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\components\fly_cam_controller.cpp" />
     <ClCompile Include="src\components\mesh_renderer.cpp" />
     <ClCompile Include="src\core\component.cpp" />
+    <ClCompile Include="src\core\component_factory.cpp" />
     <ClCompile Include="src\core\entity_factory.cpp" />
     <ClCompile Include="src\core\logger.cpp" />
     <ClCompile Include="src\core\peng_engine.cpp" />
@@ -337,6 +338,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\mesh_renderer.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\component_definition.h" />
+    <ClInclude Include="src\core\component_factory.h" />
+    <ClInclude Include="src\core\detail\component_definition_bootstrap.h" />
     <ClInclude Include="src\core\entity_definition.h" />
     <ClInclude Include="src\core\detail\entity_definition_bootstrap.h" />
     <ClInclude Include="src\core\entity_factory.h" />

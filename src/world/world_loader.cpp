@@ -4,6 +4,7 @@
 
 #include <core/reflection_database.h>
 #include <core/entity_factory.h>
+#include <core/component_factory.h>
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 #include <math/json_support.h>
@@ -108,11 +109,7 @@ void WorldLoader::load_component(const nlohmann::json& component_def, const peng
     const std::string component_type = component_def.get<std::string>();
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(component_type))
     {
-	    // TODO: once component factory is created, actually create component and add it to entity
-	    Logger::error(
-		    "Could add component '%s' to entity '%s' as the component factory has not been implemented yet",
-		    component_type.c_str(), entity->name().c_str()
-	    );
+        ComponentFactory::get().create_component(reflected_type.to_shared_ref(), entity);
     }
     else
     {

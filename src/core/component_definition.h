@@ -1,8 +1,6 @@
 #pragma once
 
-#include "detail/reflection_bootstrap.h"
-
-// TODO: make components get registered into a factory similar to entities
+#include "detail/component_definition_bootstrap.h"
 
 #define DECLARE_COMPONENT(ComponentType) \
 public: \
@@ -11,7 +9,7 @@ public: \
 		return ReflectionDatabase::get().reflect_type_checked<##ComponentType>(); \
 	} \
 private: \
-	static core::detail::ReflectionBootstrap<##ComponentType> _reflection_bootstrap
+	static core::detail::ComponentDefinitionBootstrap<##ComponentType> _component_bootstrap
 
 #define IMPLEMENT_COMPONENT(ComponentType) \
-	core::detail::ReflectionBootstrap<##ComponentType> ComponentType::_reflection_bootstrap(#ComponentType)
+	core::detail::ComponentDefinitionBootstrap<##ComponentType> ComponentType::_component_bootstrap(#ComponentType)

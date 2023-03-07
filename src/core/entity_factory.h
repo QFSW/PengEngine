@@ -14,7 +14,7 @@ class EntityFactory : public utils::Singleton<EntityFactory>
 	using Singleton::Singleton;
 
 public:
-	template <typename T>
+	template <std::derived_from<Entity> T>
 	void register_entity();
 
 	// NOLINT(modernize-use-nodiscard)
@@ -35,7 +35,7 @@ private:
 	common::unordered_map<peng::shared_ref<const ReflectedType>, EntityConstructorSet> _type_to_constructor_set;
 };
 
-template <typename T>
+template <std::derived_from<Entity> T>
 void EntityFactory::register_entity()
 {
 	const peng::shared_ref<const ReflectedType> entity_type = ReflectionDatabase::get().reflect_type_checked<T>();

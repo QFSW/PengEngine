@@ -5,6 +5,7 @@
 #include <profiling/scoped_event.h>
 
 #include "entity.h"
+#include "component.h"
 #include "logger.h"
 
 EntityManager::EntityManager()
