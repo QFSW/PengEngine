@@ -100,7 +100,7 @@ void WorldLoader::load_component(const nlohmann::json& component_def, const peng
     if (!component_def.is_string())
     {
 	    Logger::error(
-		    "Cannot load component '%s' on entity '%s' as it is not a component typename",
+		    "Could not load component '%s' on entity '%s' as it is not a component typename",
 		    component_def.dump().c_str(), entity->name().c_str()
         );
         return;
@@ -114,7 +114,7 @@ void WorldLoader::load_component(const nlohmann::json& component_def, const peng
     else
     {
 	    Logger::error(
-		    "Could add component '%s' to entity '%s' as the type does not exist",
+		    "Could not add component '%s' to entity '%s' as the type does not exist",
 		    component_type.c_str(), entity->name().c_str()
 	    );
     }

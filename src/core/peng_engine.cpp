@@ -363,6 +363,7 @@ void PengEngine::tick_opengl()
 {
 	SCOPED_EVENT("PengEngine - tick opengl");
 
+	// TODO: lags a lot when moving the mouse cursor quickly
 	glfwPollEvents();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
