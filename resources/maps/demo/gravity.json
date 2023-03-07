@@ -1,0 +1,12 @@
+{
+  "name":  "Gravity Demo",
+  "entities": [
+    {
+      "type": "demo::gravity::GravityController",
+      "name": "GravityController"
+    },
+    {
+      "type": "demo::DebugEntity"
+    }
+  ]
+}

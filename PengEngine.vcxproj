@@ -329,6 +329,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\utils\timing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Downloads\json.hpp" />
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\components\fly_cam_controller.h" />
     <ClInclude Include="src\components\mesh_renderer.h" />
@@ -363,6 +364,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\moodycamel\concurrentqueue.h" />
     <ClInclude Include="src\libs\moodycamel\lightweightsemaphore.h" />
     <ClInclude Include="src\libs\moodycamel\readerwriterqueue.h" />
+    <ClInclude Include="src\libs\nlohmann\json.hpp" />
     <ClInclude Include="src\libs\stb\stb_image.h" />
     <ClInclude Include="src\libs\superluminal\PerformanceAPI.h" />
     <ClInclude Include="src\libs\superluminal\PerformanceAPI_capi.h" />
@@ -421,7 +423,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\utils\vectools.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\maps\demo\demo.csv" />
+    <None Include="resources\maps\demo\gravity.json" />
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\shaders\core\projection.vert" />

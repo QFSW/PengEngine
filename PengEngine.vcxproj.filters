@@ -419,6 +419,12 @@
     <ClInclude Include="src\utils\singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Downloads\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\libs\nlohmann\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -428,7 +434,7 @@
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
     <None Include="resources\shaders\core\phong.frag" />
-    <None Include="resources\maps\demo\demo.csv" />
+    <None Include="resources\maps\demo\gravity.json" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

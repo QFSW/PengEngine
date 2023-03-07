@@ -1,10 +1,12 @@
 #include "demo_main.h"
 
+#include <fstream>
+
 #include <core/peng_engine.h>
 #include <core/entity_factory.h>
 #include <profiling/profiler_manager.h>
 #include <profiling/superluminal_profiler.h>
-#include <utils/csv.h>
+#include <libs/nlohmann/json.hpp>
 
 namespace demo
 {
@@ -12,23 +14,35 @@ namespace demo
     {
         profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
 
-        const auto entity_definitions = csv::read_file<std::tuple<std::string, std::string>>(
-			"resources/maps/demo/demo.csv"
-        );
+        std::ifstream level_file("resources/maps/demo/gravity.json");
+        nlohmann::json level_definition = nlohmann::json::parse(level_file);
 
-        for (auto [entity_type, entity_name] : entity_definitions)
+        if (const auto it = level_definition.find("entities"); it != level_definition.end())
         {
-            auto reflected_type = ReflectionDatabase::get().reflect_type(entity_type);
-            if (reflected_type)
+            if (it->is_array())
             {
-                EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
+                for (const auto& entity : *it)
+                {
+                    const std::string entity_type = entity["type"].get<std::string>();
+                    const std::string entity_name = entity.contains("name") ? entity["name"].get<std::string>() : "";
+
+                    auto reflected_type = ReflectionDatabase::get().reflect_type(entity_type);
+                    if (reflected_type)
+                    {
+                        EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
+                    }
+                    else
+                    {
+                        Logger::error(
+                            "Could not load entity '%' as the type '%s' does not exist",
+                            entity_name.c_str(), entity_type.c_str()
+                        );
+                    }
+                }
             }
             else
             {
-                Logger::error(
-					"Could not load entity '%' as the type '%s' does not exist",
-                    entity_name.c_str(), entity_type.c_str()
-                );
+                Logger::error("The 'entities' entry in the level was not an array");
             }
         }
         

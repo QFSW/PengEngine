@@ -121,6 +121,25 @@ peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const Ref
 	return {};
 }
 
+peng::weak_ptr<Component> Entity::get_component_in_children(
+	const peng::shared_ref<const ReflectedType>& component_type) const
+{
+	if (peng::weak_ptr<Component> component = get_component(component_type))
+	{
+		return component;
+	}
+
+	for (const peng::weak_ptr<Entity>& child : _children)
+	{
+		if (peng::weak_ptr<Component> component = child->get_component(component_type))
+		{
+			return component;
+		}
+	}
+
+	return {};
+}
+
 peng::weak_ptr<const Entity> Entity::weak_this() const
 {
 	return peng::shared_ref(shared_from_this());
