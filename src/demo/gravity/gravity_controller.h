@@ -4,6 +4,8 @@
 
 #include "rock.h"
 
+// TODO: we need either a FixedUpdate equivalent or a way to cap tick times otherwise physics sim can break from lag spikes
+
 namespace demo::gravity
 {
 	class GravityController final : public Entity

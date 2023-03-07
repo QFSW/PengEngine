@@ -304,6 +304,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\input\input_manager.cpp" />
     <ClCompile Include="src\input\key_state.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\json_support.cpp" />
     <ClCompile Include="src\math\math.cpp" />
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
@@ -374,6 +375,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\tsl\robin_hash.h" />
     <ClInclude Include="src\libs\tsl\robin_map.h" />
     <ClInclude Include="src\libs\tsl\robin_set.h" />
+    <ClInclude Include="src\math\json_support.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\matrix.h" />
     <ClInclude Include="src\math\matrix3x3.h" />

@@ -3,7 +3,14 @@
   "entities": [
     {
       "type": "demo::gravity::GravityController",
-      "name": "GravityController"
+      "name": "GravityController",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 5,
+          "z": 10
+        }
+      }
     },
     {
       "type": "demo::DebugEntity",
