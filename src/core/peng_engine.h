@@ -21,8 +21,9 @@ public:
 	void run();
 	void request_shutdown();
 
-	void set_target_fps(double fps) noexcept;
-	void set_target_frametime(double frametime_ms) noexcept;
+	void set_target_fps(float fps) noexcept;
+	void set_target_frametime(float frametime_ms) noexcept;
+	void set_max_delta_time(float frametime_ms) noexcept;
 	void set_resolution(const math::Vector2i& resolution) noexcept;
 	void set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept;
 	void set_cursor_locked(bool cursor_locked);
@@ -54,7 +55,8 @@ private:
 	void finalize_frame();
 
 	bool _executing;
-	double _target_frametime;
+	float _target_frametime;
+	float _max_delta_time;
 
 	math::Vector2i _resolution;
 	bool _fullscreen;
@@ -63,7 +65,7 @@ private:
 	uint32_t _msaa_samples;
 
 	int32_t _frame_number;
-	double _last_frametime;
+	float _last_frametime;
 	timing::clock::time_point _last_draw_time;
 
 	struct GLFWwindow* _glfw_window;

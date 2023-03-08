@@ -11,7 +11,8 @@
 PengEngine::PengEngine()
 	: Singleton()
 	, _executing(false)
-	, _target_frametime(1000 / 60.0)
+	, _target_frametime(1000 / 60.0f)
+	, _max_delta_time(0)
 	, _resolution(800, 600)
 	, _fullscreen(false)
 	, _cursor_locked(false)
@@ -29,9 +30,9 @@ void PengEngine::run()
 
 	while (!shutting_down())
 	{
-		_last_frametime = timing::measure_ms([this] {
+		_last_frametime = static_cast<float>(timing::measure_ms([this] {
 			tick();
-		});
+		}));
 	}
 
 	Logger::log("PengEngine shutting down...");
@@ -44,14 +45,19 @@ void PengEngine::request_shutdown()
 	_executing = false;
 }
 
-void PengEngine::set_target_fps(double fps) noexcept
+void PengEngine::set_target_fps(float fps) noexcept
 {
 	set_target_frametime(1000 / fps);
 }
 
-void PengEngine::set_target_frametime(double frametime_ms) noexcept
+void PengEngine::set_target_frametime(float frametime_ms) noexcept
 {
 	_target_frametime = frametime_ms;
+}
+
+void PengEngine::set_max_delta_time(float frametime_ms) noexcept
+{
+	_max_delta_time = frametime_ms;
 }
 
 void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
@@ -329,7 +335,12 @@ void PengEngine::tick_main()
 {
 	SCOPED_EVENT("PengEngine - tick main");
 
-	const float delta_time = static_cast<float>(_last_frametime / 1000.0);
+	const float frametime_capped =
+		_max_delta_time > 0
+		? std::min(_last_frametime, _max_delta_time)
+		: _last_frametime;
+
+	const float delta_time = frametime_capped / 1000.0f;
 	
 	_on_frame_start();
 
