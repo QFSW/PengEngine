@@ -32,6 +32,8 @@ public:
 	virtual void post_enable() { }
 	virtual void post_disable() { }
 
+	// TODO: add a deserialize function so entities can extract extra information from their json def
+
 	void set_active(bool active);
 	void set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship = EntityRelationship::full);
 	void destroy();

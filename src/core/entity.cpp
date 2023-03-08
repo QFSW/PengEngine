@@ -105,8 +105,12 @@ void Entity::set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship
 
 void Entity::destroy()
 {
-	const peng::shared_ref<Entity> strong_this = peng::shared_ref(shared_from_this());
-	PengEngine::get().entity_manager().destroy_entity(strong_this);
+	for (const peng::weak_ptr<Entity>& child : _children)
+	{
+		child->destroy();
+	}
+
+	PengEngine::get().entity_manager().destroy_entity(weak_this());
 }
 
 peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type) const

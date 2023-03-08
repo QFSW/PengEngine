@@ -29,6 +29,25 @@
       "components": [
         "components::FlyCamController"
       ]
+    },
+    {
+      "type": "Entity",
+      "name": "Floor",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": -10,
+          "z": 0
+        },
+        "scale": {
+          "x": 30,
+          "y": 0.1,
+          "z": 30
+        }
+      },
+      "components": [
+        "components::MeshRenderer"
+      ]
     }
   ]
 }

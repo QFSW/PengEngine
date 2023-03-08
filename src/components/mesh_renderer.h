@@ -16,6 +16,8 @@ namespace components
 		DECLARE_COMPONENT(MeshRenderer);
 
 	public:
+		MeshRenderer();
+
 		MeshRenderer(
 			peng::shared_ref<const rendering::Mesh>&& mesh,
 			peng::shared_ref<rendering::Material>&& material
@@ -29,16 +31,18 @@ namespace components
 		void tick(float delta_time) override;
 		void post_create() override;
 
-		[[nodiscard]] const peng::shared_ref<const rendering::Mesh>& mesh() const noexcept { return _mesh; }
-		[[nodiscard]] const peng::shared_ref<rendering::Material>& material() const noexcept { return _material; }
+		void set_mesh(const peng::shared_ptr<const rendering::Mesh>& mesh);
+		void set_material(const peng::shared_ptr<rendering::Material>& material);
+
+		[[nodiscard]] const peng::shared_ptr<const rendering::Mesh>& mesh() const noexcept { return _mesh; }
+		[[nodiscard]] const peng::shared_ptr<rendering::Material>& material() const noexcept { return _material; }
 
 	private:
+		void cache_uniforms();
 		std::vector<peng::shared_ref<const entities::PointLight>> get_relevant_point_lights();
 
-		peng::shared_ref<const rendering::Mesh> _mesh;
-		peng::shared_ref<rendering::Material> _material;
-
-		bool _uses_lighting = false;
+		peng::shared_ptr<const rendering::Mesh> _mesh;
+		peng::shared_ptr<rendering::Material> _material;
 
 		struct PointLightUniformSet
 		{
@@ -49,12 +53,18 @@ namespace components
 			int32_t max_strength = -1;
 		};
 
-		int32_t _cached_model_matrix = -1;
-		int32_t _cached_normal_matrix = -1;
-		int32_t _cached_view_matrix = -1;
-		int32_t _cached_view_pos = -1;
-		
+		struct UniformSet
+		{
+			int32_t model_matrix = -1;
+			int32_t normal_matrix = -1;
+			int32_t view_matrix = -1;
+			int32_t view_pos = -1;
+
+			std::vector<PointLightUniformSet> point_lights;
+		};
+
+		bool _uses_lighting = false;
 		int32_t _max_point_lights = 0;
-		std::vector<PointLightUniformSet> _cached_point_light_uniform_sets;
+		UniformSet _cached_uniforms;
 	};
 }

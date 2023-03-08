@@ -25,6 +25,8 @@ public:
 	virtual void post_create() { }
 	virtual void pre_destroy() { }
 
+	// TODO: add a deserialize function so components can extract extra information from their json def
+
 	[[nodiscard]] Entity& owner() noexcept;
 	[[nodiscard]] const Entity& owner() const noexcept;
 

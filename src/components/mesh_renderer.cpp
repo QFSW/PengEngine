@@ -2,6 +2,7 @@
 
 #include <entities/camera.h>
 #include <entities/point_light.h>
+#include <rendering/primitives.h>
 #include <core/logger.h>
 #include <utils/utils.h>
 
@@ -11,6 +12,13 @@ using namespace entities;
 using namespace components;
 using namespace rendering;
 using namespace math;
+
+MeshRenderer::MeshRenderer()
+	: MeshRenderer(
+		Primitives::cube(),
+		copy_shared(Primitives::phong_material())
+	)
+{ }
 
 MeshRenderer::MeshRenderer(
 	peng::shared_ref<const Mesh>&& mesh,
@@ -35,25 +43,31 @@ void MeshRenderer::tick(float delta_time)
 {
 	Component::tick(delta_time);
 
-	if (_cached_model_matrix >= 0)
+	// Nothing to render without a material or mesh
+	if (!(_material && _mesh))
+	{
+		return;
+	}
+
+	if (_cached_uniforms.model_matrix >= 0)
 	{
 		const Matrix4x4f model_matrix = owner().transform_matrix();
-		_material->set_parameter(_cached_model_matrix, model_matrix);
+		_material->set_parameter(_cached_uniforms.model_matrix, model_matrix);
 
-		if (_cached_normal_matrix >= 0)
+		if (_cached_uniforms.normal_matrix >= 0)
 		{
 			const Matrix3x3f normal_matrix = Matrix3x3f(model_matrix)
 				.inverse()
 				.transposed();
 
-			_material->set_parameter(_cached_normal_matrix, normal_matrix);
+			_material->set_parameter(_cached_uniforms.normal_matrix, normal_matrix);
 		}
 	}
 
-	if (_cached_view_matrix >= 0)
+	if (_cached_uniforms.view_matrix >= 0)
 	{
 		const Matrix4x4f view_matrix = Camera::current() ? Camera::current()->view_matrix() : Matrix4x4f::identity();
-		_material->set_parameter(_cached_view_matrix, view_matrix);
+		_material->set_parameter(_cached_uniforms.view_matrix, view_matrix);
 	}
 
 	if (_uses_lighting)
@@ -62,7 +76,7 @@ void MeshRenderer::tick(float delta_time)
 			? Camera::current()->transform_matrix().get_translation()
 			: Vector3f::zero();
 
-		_material->try_set_parameter(_cached_view_pos, view_pos);
+		_material->try_set_parameter(_cached_uniforms.view_pos, view_pos);
 
 		const std::vector<peng::shared_ref<const PointLight>> relevant_lights = get_relevant_point_lights();
 		for (int32_t i = 0; i < _max_point_lights; i++)
@@ -75,7 +89,7 @@ void MeshRenderer::tick(float delta_time)
 				? relevant_lights[i]->data()
 				: PointLight::LightData();
 
-			const PointLightUniformSet& uniform_set = _cached_point_light_uniform_sets[i];
+			const PointLightUniformSet& uniform_set = _cached_uniforms.point_lights[i];
 			_material->try_set_parameter(uniform_set.pos, light_pos);
 			_material->try_set_parameter(uniform_set.color, light_data.color);
 			_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
@@ -91,6 +105,32 @@ void MeshRenderer::tick(float delta_time)
 void MeshRenderer::post_create()
 {
 	Component::post_create();
+
+	if (_material)
+	{
+		cache_uniforms();
+	}
+}
+
+void MeshRenderer::set_mesh(const peng::shared_ptr<const Mesh>& mesh)
+{
+	_mesh = mesh;
+}
+
+void MeshRenderer::set_material(const peng::shared_ptr<Material>& material)
+{
+	const bool material_changed = material != _material;
+	_material = material;
+
+	if (_material && material_changed)
+	{
+		cache_uniforms();
+	}
+}
+
+void MeshRenderer::cache_uniforms()
+{
+	assert(_material);
 
 	auto get_uniform_location_checked = [&](const std::string& uniform_name, const std::string& required_symbol = "")
 	{
@@ -108,17 +148,17 @@ void MeshRenderer::post_create()
 		return location;
 	};
 
-	_cached_model_matrix = get_uniform_location_checked("model_matrix");
-	_cached_view_matrix = get_uniform_location_checked("view_matrix");
+	_cached_uniforms.model_matrix = get_uniform_location_checked("model_matrix");
+	_cached_uniforms.view_matrix = get_uniform_location_checked("view_matrix");
 
 	_uses_lighting = _material->shader()->has_symbol("SHADER_LIT");
 
 	if (_uses_lighting)
 	{
-		_cached_normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
-		_cached_view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
+		_cached_uniforms.normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
+		_cached_uniforms.view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
 
-		std::optional<std::string> max_num_lights_raw = _material->shader()->get_symbol_value("MAX_POINT_LIGHTS");
+		const std::optional<std::string> max_num_lights_raw = _material->shader()->get_symbol_value("MAX_POINT_LIGHTS");
 		if (max_num_lights_raw)
 		{
 			_max_point_lights = std::stoi(*max_num_lights_raw);
@@ -131,7 +171,7 @@ void MeshRenderer::post_create()
 				uniform_set.range = get_uniform_location_checked(strtools::catf("point_lights[%d].range", i), "SHADER_LIT");
 				uniform_set.max_strength = get_uniform_location_checked(strtools::catf("point_lights[%d].max_strength", i), "SHADER_LIT");
 
-				_cached_point_light_uniform_sets.push_back(uniform_set);
+				_cached_uniforms.point_lights.push_back(uniform_set);
 			}
 		}
 		else

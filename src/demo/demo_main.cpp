@@ -11,8 +11,12 @@ namespace demo
     {
         profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
 
-        world::WorldLoader world_loader;
-        world_loader.load_from_file("resources/worlds/demo/gravity.json");
+        // TODO: add a subscribe_once function to events
+        PengEngine::get().on_engine_initialized().subscribe([]
+        {
+            world::WorldLoader world_loader;
+            world_loader.load_from_file("resources/worlds/demo/gravity.json");
+        });
         
         PengEngine::get().set_resolution(math::Vector2i(1280, 720));
         PengEngine::get().set_vsync(false);
