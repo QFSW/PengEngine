@@ -24,7 +24,19 @@ void WorldLoader::load_from_file(const std::string& path)
         throw std::runtime_error("Could not open file " + path);
     }
 
-    const nlohmann::json world_def = nlohmann::json::parse(file);
+    nlohmann::json world_def;
+
+    try
+    {
+        world_def = nlohmann::json::parse(file);
+    }
+    catch (const nlohmann::json::parse_error& e)
+    {
+        Logger::error("Error occurred while parsing JSON - terminating world loading");
+        Logger::error(e.what());
+        return;
+    }
+
     load_from_json(world_def);
 }
 
