@@ -11,8 +11,7 @@ namespace demo
     {
         profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
 
-        // TODO: add a subscribe_once function to events
-        PengEngine::get().on_engine_initialized().subscribe([]
+        PengEngine::get().on_engine_initialized().subscribe_once([]
         {
             world::WorldLoader world_loader;
             world_loader.load_from_file("resources/worlds/demo/gravity.json");

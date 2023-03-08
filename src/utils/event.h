@@ -18,6 +18,8 @@ namespace utils
 		using named_listener = std::tuple<invocable, std::string, listener_handle>;
 
 		listener_handle subscribe(invocable&& listener, const std::string& name = "");
+		listener_handle subscribe_once(invocable&& listener, const std::string& name = "");
+
 		void unsubscribe(listener_handle handle);
 		void unsubscribe(const std::string& name);
 
@@ -54,6 +56,21 @@ namespace utils
 		listener_handle handle = get_new_handle();
 		subscribe(std::move(listener), name, handle);
 
+		return handle;
+	}
+
+	template <typename ... Args>
+	typename EventInterface<Args...>::listener_handle EventInterface<Args...>::subscribe_once(invocable&& listener,
+		const std::string& name)
+	{
+		listener_handle handle = get_new_handle();
+		invocable listener_once = [inner = std::move(listener), handle, this](Args...args)
+		{
+			inner(std::forward(args)...);
+			unsubscribe(handle);
+		};
+
+		subscribe(std::move(listener_once), name, handle);
 		return handle;
 	}
 
