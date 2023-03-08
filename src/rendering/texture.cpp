@@ -64,6 +64,21 @@ Texture::Texture(
 	build_from_buffer(rgba_data.data());
 }
 
+Texture::Texture(
+	const std::string& name,
+	int32_t num_channels,
+	const math::Vector2i& resolution
+)
+	: _name(name)
+	, _resolution(resolution)
+	, _num_channels(num_channels)
+{
+	SCOPED_EVENT("Building texture", _name.c_str());
+	Logger::log("Building texture '%s'", _name.c_str());
+
+	build_from_buffer(nullptr);
+}
+
 Texture::~Texture()
 {
 	SCOPED_EVENT("Destroying texture", _name.c_str());
@@ -72,10 +87,15 @@ Texture::~Texture()
 	glDeleteTextures(1, &_tex);
 }
 
-void Texture::use(GLenum slot) const
+void Texture::bind(GLenum slot) const
 {
 	glActiveTexture(slot);
 	glBindTexture(GL_TEXTURE_2D, _tex);
+}
+
+GLuint Texture::raw() const
+{
+	return _tex;
 }
 
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const

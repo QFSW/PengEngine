@@ -192,6 +192,6 @@ void Material::apply_parameter(GLint location, const peng::shared_ref<const Text
 
 	const GLint texture_slot = static_cast<GLint>(_num_bound_textures++);
 
-	texture->use(GL_TEXTURE0 + texture_slot);
+	texture->bind(GL_TEXTURE0 + texture_slot);
 	glUniform1i(location, texture_slot);
 }

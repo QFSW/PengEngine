@@ -25,11 +25,19 @@ namespace rendering
 			const math::Vector2i& resolution
 		);
 
+		// Creates an uninitialized texture with the specified resolution and channels
+		Texture(
+			const std::string& name,
+			int32_t num_channels,
+			const math::Vector2i& resolution
+		);
+
 		Texture(const Texture&) = delete;
 		Texture(Texture&&) = delete;
 		~Texture();
 
-		void use(GLenum slot) const;
+		void bind(GLenum slot) const;
+		GLuint raw() const;
 
 	private:
 		void verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const;

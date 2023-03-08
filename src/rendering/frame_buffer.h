@@ -2,12 +2,13 @@
 
 #include <GL/glew.h>
 
+#include <memory/shared_ref.h>
 #include <math/vector2.h>
 
 namespace rendering
 {
-	// TODO: refactor out all of the render texture stuff so that we have a RenderTexture object similar to Texture
-	//		 that can be bound to things
+	class Texture;
+
 	class FrameBuffer
 	{
 	public:
@@ -21,8 +22,8 @@ namespace rendering
 
 	private:
 		GLuint _fbo;
-		GLuint _tex;
 
 		math::Vector2i _resolution;
+		peng::shared_ref<Texture> _texture;
 	};
 }
