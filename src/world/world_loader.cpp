@@ -84,7 +84,7 @@ void WorldLoader::load_entity(const nlohmann::json& entity_def)
     else
     {
         Logger::error(
-            "Could not load entity '%' as the type '%s' does not exist",
+            "Could not load entity '%s' as the type '%s' does not exist",
             entity_name.c_str(), entity_type.c_str()
         );
     }
