@@ -37,7 +37,8 @@ namespace rendering
 		~Texture();
 
 		void bind(GLenum slot) const;
-		GLuint raw() const;
+
+		[[nodiscard]] GLuint raw() const noexcept;
 
 	private:
 		void verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const;

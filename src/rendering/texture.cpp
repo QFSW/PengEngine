@@ -93,7 +93,7 @@ void Texture::bind(GLenum slot) const
 	glBindTexture(GL_TEXTURE_2D, _tex);
 }
 
-GLuint Texture::raw() const
+GLuint Texture::raw() const noexcept
 {
 	return _tex;
 }
