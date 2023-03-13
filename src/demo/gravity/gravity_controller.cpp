@@ -70,8 +70,9 @@ void GravityController::tick(float delta_time)
 						const Vector3f rock_1_to_2_dir = rock_1_to_2.normalized_unsafe();
 						const float attraction = gravity_strength / rock_1_to_2.magnitude_sqr();
 
-						rock1->velocity += rock_1_to_2_dir * attraction * rock2->mass * delta_time;
-						rock2->velocity -= rock_1_to_2_dir * attraction * rock1->mass * delta_time;
+						const Vector3f dv = rock_1_to_2_dir * attraction * delta_time;
+						rock1->velocity += dv * rock2->mass;
+						rock2->velocity -= dv * rock1->mass;
 					}
 				}
 			}
