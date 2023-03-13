@@ -21,6 +21,7 @@ PengEngine::PengEngine()
 	, _frame_number(0)
 	, _last_frametime(_target_frametime)
 	, _last_draw_time(timing::clock::now())
+	, _window_name("PengEngine")
 	, _glfw_window(nullptr)
 { }
 
@@ -128,6 +129,16 @@ void PengEngine::set_msaa(uint32_t msaa_samples)
 	}
 
 	_msaa_samples = msaa_samples;
+}
+
+void PengEngine::set_window_name(const std::string& name)
+{
+	_window_name = name;
+
+	if (_executing)
+	{
+		glfwSetWindowTitle(_glfw_window, _window_name.c_str());
+	}
 }
 
 void PengEngine::maximize_window() const
@@ -250,7 +261,7 @@ void PengEngine::start_opengl()
 	glfwWindowHint(GLFW_SAMPLES, static_cast<GLint>(_msaa_samples));
 
 	GLFWmonitor* monitor = _fullscreen ? glfwGetPrimaryMonitor() : nullptr;
-	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, "PengEngine", monitor, nullptr);
+	_glfw_window = glfwCreateWindow(_resolution.x, _resolution.y, _window_name.c_str(), monitor, nullptr);
 
 	if (!_glfw_window)
 	{

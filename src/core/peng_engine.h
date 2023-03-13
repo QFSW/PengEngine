@@ -29,6 +29,7 @@ public:
 	void set_cursor_locked(bool cursor_locked);
 	void set_vsync(bool vsync);
 	void set_msaa(uint32_t msaa_samples);
+	void set_window_name(const std::string& name);
 
 	void maximize_window() const;
 
@@ -68,6 +69,7 @@ private:
 	float _last_frametime;
 	timing::clock::time_point _last_draw_time;
 
+	std::string _window_name;
 	struct GLFWwindow* _glfw_window;
 
 	EntityManager _entity_manager;

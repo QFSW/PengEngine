@@ -16,6 +16,7 @@ void GravityController::post_create()
 	Logger::log("Gravity demo starting...");
 
 	PengEngine::get().set_max_delta_time(50.0);
+	PengEngine::get().set_window_name("PengEngine - Gravity Demo");
 
 	create_rock_field(500, 5, 2);
 	create_rock_field(100, 10, 4);

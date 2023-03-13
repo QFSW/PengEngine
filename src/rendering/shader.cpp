@@ -131,7 +131,7 @@ peng::shared_ref<const Shader> Shader::fallback()
 
 void Shader::use() const
 {
-	// TODO: either error or assert that shader is not broken
+	assert(!_broken);
 	glUseProgram(_program);
 }
 
