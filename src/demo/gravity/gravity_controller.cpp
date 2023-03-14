@@ -1,5 +1,8 @@
 #include "gravity_controller.h"
 
+#include <algorithm>
+#include <execution>
+
 #include <profiling/scoped_event.h>
 #include <entities/point_light.h>
 #include <entities/skybox.h>
@@ -64,32 +67,28 @@ void GravityController::tick(float delta_time)
 	{
 		SCOPED_EVENT("GravityController - apply attraction");
 
-		for (size_t i = 0; i < _rocks.size(); i++)
-		{
-			Rock* rock1 = rock_ptrs[i];
-			for (size_t j = 0; j < _rocks.size(); j++)
-			{
-				Rock* rock2 = rock_ptrs[j];
-				if (i != j)
+		std::for_each(
+			std::execution::par_unseq, rock_ptrs.begin(), rock_ptrs.end(),
+			[&](Rock* rock1) {
+				for (Rock* rock2 : rock_ptrs)
 				{
-					constexpr float gravity_strength = 10.0f;
-					const Vector3f rock_1_to_2 = rock2->world_position() - rock1->world_position();
-					const float dist_sqr = rock_1_to_2.magnitude_sqr();
-					const float radii = rock1->radius() + rock2->radius();
-					const float radius_sqr = radii * radii;
-
-					if (dist_sqr > radius_sqr)
+					if (rock1 != rock2)
 					{
-						const Vector3f rock_1_to_2_dir = rock_1_to_2.normalized_unsafe();
-						const float attraction = gravity_strength / rock_1_to_2.magnitude_sqr();
+						constexpr float gravity_strength = 20.0f;
+						const Vector3f rock_1_to_2 = rock2->world_position() - rock1->world_position();
+						const float dist_sqr = rock_1_to_2.magnitude_sqr();
+						const float radii = rock1->radius() + rock2->radius();
+						const float radius_sqr = radii * radii;
 
-						const Vector3f dv = rock_1_to_2_dir * attraction * delta_time;
-						rock1->velocity += dv * rock2->mass;
-						rock2->velocity -= dv * rock1->mass;
+						if (dist_sqr > radius_sqr)
+						{
+							const Vector3f rock_1_to_2_dir = rock_1_to_2.normalized_unsafe();
+							const float attraction = gravity_strength / rock_1_to_2.magnitude_sqr();
+							rock1->velocity += rock_1_to_2_dir * attraction * rock2->mass * delta_time;
+						}
 					}
 				}
-			}
-		}
+			});
 	}
 }
 
