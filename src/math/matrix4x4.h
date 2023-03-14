@@ -31,6 +31,7 @@ namespace math
 		Vector4<T> operator*(const Vector4<T>& other) const;
 
 		static constexpr Matrix4x4 identity();
+		static constexpr Matrix4x4 from_translation(const Vector3<T>& translation);
 	};
 
 	using Matrix4x4f = Matrix4x4<float>;
@@ -46,6 +47,18 @@ namespace math
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1,
+		});
+	}
+
+	template <number T>
+	constexpr Matrix4x4<T> Matrix4x4<T>::from_translation(const Vector3<T>& translation)
+	{
+		const Vector3<T>& t = translation;
+		return Matrix4x4({
+			1,   0,   0,   0,
+			0,	 1,   0,   0,
+			0,   0,   1,   0,
+			t.x, t.y, t.z, 1
 		});
 	}
 
@@ -81,15 +94,7 @@ namespace math
 	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::translated(const Vector3<T>& translation) const noexcept
 	{
-		const Vector3<T>& t = translation;
-		const Matrix4x4 m({
-			1,   0,   0,   0,
-			0,	 1,   0,   0,
-			0,   0,   1,   0,
-			t.x, t.y, t.z, 1
-		});
-
-		return m * (*this);
+		return from_translation(translation) * (*this);
 	}
 
 	template <number T>

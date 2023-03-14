@@ -291,6 +291,8 @@ void PengEngine::start_opengl()
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
 	glViewport(0, 0, _resolution.x, _resolution.y);
 	glfwSetFramebufferSizeCallback(_glfw_window, [](GLFWwindow*, int32_t width, int32_t height)
 	{

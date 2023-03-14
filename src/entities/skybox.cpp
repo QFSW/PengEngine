@@ -1,14 +1,49 @@
 #include "skybox.h"
 
+#include <entities/camera.h>
+#include <rendering/mesh.h>
+#include <rendering/primitives.h>
+#include <rendering/material.h>
+
 IMPLEMENT_ENTITY(entities::Skybox);
 
 using namespace entities;
+using namespace rendering;
+using namespace math;
 
 Skybox::Skybox()
-	: Entity("Skybox", TickGroup::render)
+	: Entity("Skybox", TickGroup::post_render)
+	, _mesh(Primitives::cube_uv())
+	, _material(Primitives::skybox_material())
 { }
 
-void Skybox::tick(float)
+void Skybox::tick(float delta_time)
 {
-	// TODO: implement
+	Entity::tick(delta_time);
+
+	peng::weak_ptr<Camera> camera = Camera::current();
+	if (!camera)
+	{
+		return;
+	}
+
+	// Get the view matrix from the camera but undo translation
+	const Matrix4x4f view_matrix = camera->view_matrix();
+	const Matrix4x4f view_matrix_shifted = view_matrix * Matrix4x4f::from_translation(camera->world_position());
+
+	// TODO: cache parameter name
+	_material->set_parameter("view_matrix", view_matrix_shifted);
+
+	_material->use();
+	_mesh->render();
+}
+
+peng::shared_ref<Material>& Skybox::material() noexcept
+{
+	return _material;
+}
+
+peng::shared_ref<const Material> Skybox::material() const noexcept
+{
+	return _material;
 }

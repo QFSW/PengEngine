@@ -38,6 +38,7 @@ void WorldLoader::load_from_file(const std::string& path)
     }
 
     load_from_json(world_def);
+    Logger::success("Loaded world '%s'", path.c_str());
 }
 
 void WorldLoader::load_from_json(const nlohmann::json& world_def)

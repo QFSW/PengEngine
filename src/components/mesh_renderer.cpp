@@ -16,7 +16,7 @@ using namespace math;
 MeshRenderer::MeshRenderer()
 	: MeshRenderer(
 		Primitives::cube(),
-		copy_shared(Primitives::phong_material())
+		Primitives::phong_material()
 	)
 { }
 

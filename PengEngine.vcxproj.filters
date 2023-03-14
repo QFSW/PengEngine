@@ -468,6 +468,7 @@
     <None Include="resources\shaders\demo\wobble.vert" />
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\worlds\demo\gravity.json" />
+    <None Include="resources\shaders\core\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

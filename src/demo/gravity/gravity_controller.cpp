@@ -2,12 +2,17 @@
 
 #include <profiling/scoped_event.h>
 #include <entities/point_light.h>
+#include <entities/skybox.h>
+#include <rendering/texture.h>
+#include <rendering/material.h>
+#include <rendering/primitives.h>
 #include <math/math.h>
 
 IMPLEMENT_ENTITY(demo::gravity::GravityController);
 
 using namespace demo::gravity;
 using namespace entities;
+using namespace rendering;
 using namespace math;
 
 void GravityController::post_create()
@@ -26,6 +31,14 @@ void GravityController::post_create()
 	light->data().color = Vector3f(0.9f, 0.9f, 1);
 	light->data().ambient = Vector3f(0.05f, 0.05f, 0);
 	light->local_transform().position = Vector3f::up() * 30;
+
+	peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
+		"resources/textures/demo/skybox.jpg"
+	);
+
+	peng::weak_ptr<Skybox> skybox = PengEngine::get().entity_manager().create_entity<Skybox>();
+	skybox->material()->set_parameter("color_tex", skybox_texture);
+	skybox->set_parent(weak_this());
 	
 	Logger::success("Gravity demo started");
 }

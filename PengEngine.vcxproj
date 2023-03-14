@@ -434,6 +434,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\world\world_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\shaders\core\skybox.vert" />
     <None Include="resources\worlds\demo\gravity.json" />
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\core\phong.frag" />

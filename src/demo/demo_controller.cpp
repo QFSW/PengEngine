@@ -4,8 +4,8 @@
 #include <core/logger.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
-#include <entities/camera.h>
 #include <entities/point_light.h>
+#include <entities/skybox.h>
 #include <components/fly_cam_controller.h>
 #include <input/input_manager.h>
 
@@ -28,11 +28,6 @@ void DemoController::post_create()
 	Entity::post_create();
 
 	Logger::log("Demo controller starting...");
-
-	const peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
-	camera->make_perspective(70, 0.01f, 1000.0f);
-	camera->local_transform().position = Vector3f(0, 0, -10);
-	camera->add_component<components::FlyCamController>();
 
 	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
 		"Rave",
@@ -67,93 +62,16 @@ void DemoController::post_create()
 		}
 	}
 
-	// TODO: make skybox entity
-	const peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
+	peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
 		"resources/textures/demo/skybox.jpg"
 	);
 
-	std::vector<Vertex> skybox_vertices =
-	{
-		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 2) / Vector2f(4, 3)),
-
-		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(1, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(2, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(-1, 0, 0), Vector2f(2, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(-1, 0, 0), Vector2f(1, 2) / Vector2f(4, 3)),
-
-		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(2, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(3, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(3, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 0, 1), Vector2f(2, 2) / Vector2f(4, 3)),
-
-		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(4, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(3, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(1, 0, 0), Vector2f(3, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(1, 0, 0), Vector2f(4, 2) / Vector2f(4, 3)),
-
-		Vertex(Vector3f(-0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(1, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(2, 2) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0, 1, 0), Vector2f(2, 3) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 1, 0), Vector2f(1, 3) / Vector2f(4, 3)),
-
-		Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(1, 0) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(2, 0) / Vector2f(4, 3)),
-		Vertex(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(2, 1) / Vector2f(4, 3)),
-		Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(1, 1) / Vector2f(4, 3)),
-	};
-
-	std::vector<Vector3u> skybox_indices =
-	{
-		Vector3u(0, 1, 3),
-		Vector3u(3, 1, 2),
-
-		Vector3u(4, 5, 7),
-		Vector3u(7, 5, 6),
-
-		Vector3u(8, 9, 11),
-		Vector3u(11, 9, 10),
-
-		Vector3u(12, 13, 15),
-		Vector3u(15, 13, 14),
-
-		Vector3u(16, 17, 19),
-		Vector3u(19, 17, 18),
-
-		Vector3u(20, 21, 23),
-		Vector3u(23, 21, 22),
-	};
-
-	for (uint32_t level = 0; level < 4; level++)
-	{
-		auto [vertices_s, indices_s] = subdivide(skybox_vertices, skybox_indices);
-		skybox_vertices = std::move(vertices_s);
-		skybox_indices = std::move(indices_s);
-	}
-
-	for (Vertex& vertex : skybox_vertices)
-	{
-		const Vector3f dir = vertex.position.normalized_unsafe();
-
-		vertex.position = dir;
-		vertex.normal = dir;
-	}
-
-	peng::shared_ref<Mesh> skybox_mesh = peng::make_shared<Mesh>(
-		"Skybox", skybox_vertices, skybox_indices
-	);
-
-	const auto sky_box_material = copy_shared(Primitives::unlit_material());
-	sky_box_material->set_parameter("color_tex", skybox_texture);
-
-	const auto skybox_entity = PengEngine::get().entity_manager().create_entity<Entity>("Skybox", TickGroup::none);
-	const auto skybox_renderer = skybox_entity->add_component<components::MeshRenderer>(skybox_mesh, sky_box_material);
-	skybox_entity->local_transform().scale = Vector3f::one() * 800;
+	peng::weak_ptr<Skybox> skybox = PengEngine::get().entity_manager().create_entity<Skybox>();
+	skybox->material()->set_parameter("color_tex", skybox_texture);
+	skybox->set_parent(weak_this());
 
 	const Vector2f floor_size(500, 500);
-	const auto floor_material = copy_shared(Primitives::phong_material());
+	const auto floor_material = Primitives::phong_material();
 	floor_material->set_parameter("color_tex", texture);
 	floor_material->set_parameter("base_color", Vector3f(0.7f, 1, 0.7f));
 	floor_material->set_parameter("tex_scale", floor_size);
@@ -172,7 +90,7 @@ void DemoController::post_create()
 		_light_entities.push_back(PengEngine::get().entity_manager().create_entity<PointLight>());
 		_light_entities[i]->data().range = 100;
 		_light_entities[i]->local_transform().position = Vector3f(i * 5.0f, 0, 0);
-		_light_renderers.push_back(_light_entities[i]->add_component<components::MeshRenderer>(Primitives::icosphere(4), peng::copy_shared(Primitives::unlit_material())));
+		_light_renderers.push_back(_light_entities[i]->add_component<components::MeshRenderer>(Primitives::icosphere(4), Primitives::unlit_material()));
 	}
 
 	Logger::success("Demo controller started");

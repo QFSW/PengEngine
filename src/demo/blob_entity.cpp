@@ -34,7 +34,7 @@ void BlobEntity::post_create()
 
 	for (const Vector3f& child_position : child_positions)
 	{
-		const peng::shared_ref<Material> child_material = peng::copy_shared(Primitives::phong_material());
+		const peng::shared_ref<Material> child_material = Primitives::phong_material();
 		child_material->set_parameter("base_color", child_position * 2);
 
 		const peng::weak_ptr<Entity> entity = PengEngine::get().entity_manager().create_entity<Entity>("AxisMarker");
