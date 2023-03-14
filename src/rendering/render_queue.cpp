@@ -2,8 +2,7 @@
 
 #include <profiling/scoped_event.h>
 
-#include "mesh.h"
-#include "material.h"
+#include "draw_call_tree.h"
 
 using namespace rendering;
 
@@ -11,11 +10,8 @@ void RenderQueue::execute()
 {
 	SCOPED_EVENT("RenderQueue - execute");
 
-	for (const DrawCall& draw_call : _draw_calls)
-	{
-		draw_call.material->use();
-		draw_call.mesh->render();
-	}
+	const DrawCallTree tree(_draw_calls);
+	tree.execute();
 
 	_draw_calls.clear();
 }

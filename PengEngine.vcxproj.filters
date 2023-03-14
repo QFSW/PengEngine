@@ -165,6 +165,9 @@
     <ClCompile Include="src\rendering\render_queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\draw_call_tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -465,6 +468,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\render_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\draw_call_tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\hash_helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,6 +17,7 @@ namespace rendering
 		explicit Material(const peng::shared_ref<const Shader>& shader);
 
 		void use();
+		void apply_uniforms();
 
 		template <utils::variant_member<Shader::Parameter> T>
 		void try_set_parameter(GLint uniform_location, const T& parameter)

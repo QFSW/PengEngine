@@ -67,14 +67,18 @@ void Material::set_parameter(const std::string& parameter_name, const Shader::Pa
 
 void Material::use()
 {
-	_num_bound_textures = 0;
-
 	_shader->use();
+	apply_uniforms();
+}
+
+void Material::apply_uniforms()
+{
+	_num_bound_textures = 0;
 	for (const auto& [location, parameter] : _set_parameters)
 	{
 		std::visit(functional::overload{
 			[&](const auto& x) { apply_parameter(location, x); }
-		}, parameter);
+			}, parameter);
 	}
 }
 
