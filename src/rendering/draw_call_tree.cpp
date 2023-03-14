@@ -1,5 +1,7 @@
 #include "draw_call_tree.h"
 
+#include <cassert>
+
 #include <profiling/scoped_event.h>
 #include <utils/strtools.h>
 
@@ -16,9 +18,12 @@ DrawCallTree::DrawCallTree(const std::vector<DrawCall>& draw_calls)
 
 	for (const DrawCall& draw_call : draw_calls)
 	{
+		assert(draw_call.material);
+		assert(draw_call.mesh);
+
 		const peng::shared_ref<const Shader> shader = draw_call.material->shader();
-		MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh);
-		mesh_draw.materials.push_back(draw_call.material);
+		MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh.to_shared_ref());
+		mesh_draw.materials.push_back(draw_call.material.to_shared_ref());
 	}
 
 	std::ranges::sort(

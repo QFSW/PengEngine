@@ -60,6 +60,9 @@ private:
 
 	[[nodiscard]] std::string build_entity_hierarchy(const std::vector<peng::weak_ptr<Entity>>& root_entities) const;
 
+	template <typename F>
+	void for_each_entity(bool parallel, F&& invocable);
+
 	void build_entity_hierarchy(
 		const std::vector<peng::weak_ptr<Entity>>& root_entities,
 		int32_t depth,

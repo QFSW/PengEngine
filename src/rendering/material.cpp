@@ -78,7 +78,7 @@ void Material::apply_uniforms()
 	{
 		std::visit(functional::overload{
 			[&](const auto& x) { apply_parameter(location, x); }
-			}, parameter);
+		}, parameter);
 	}
 }
 

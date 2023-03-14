@@ -158,7 +158,15 @@ int32_t Shader::draw_order() const noexcept
 
 GLint Shader::get_uniform_location(const std::string& name) const
 {
-	return glGetUniformLocation(_program, name.c_str());
+	for (const Uniform& uniform : _uniforms)
+	{
+		if (uniform.name == name)
+		{
+			return uniform.location;
+		}
+	}
+
+	return -1;
 }
 
 std::optional<std::string> Shader::get_symbol_value(const std::string& identifier) const noexcept

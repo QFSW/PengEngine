@@ -1,6 +1,7 @@
 ﻿#include "entity_manager.h"
 
-#include <cassert>
+#include <execution>
+#include <algorithm>
 #include <utils/vectools.h>
 #include <profiling/scoped_event.h>
 
@@ -145,30 +146,46 @@ void EntityManager::tick_entities(float delta_time)
 
 		{
 			SCOPED_EVENT("EntityManager - ticking entity group", _tick_group_names[i].c_str());
-			for (const peng::shared_ref<Entity>& entity : _entities)
-			{
-				if (entity->active_in_hierarchy())
-				{
-					if (entity->tick_group() == tick_group)
-					{
-						entity->tick(delta_time);
-					}
 
-					for (const peng::shared_ref<Component>& component : entity->components())
+			for_each_entity(
+				is_parallel_tick_group(tick_group),
+				[&](const peng::shared_ref<Entity>& entity)
+				{
+					if (entity->active_in_hierarchy())
 					{
-						if (component->tick_group() == tick_group)
+						if (entity->tick_group() == tick_group)
 						{
-							component->tick(delta_time);
+							entity->tick(delta_time);
+						}
+
+						for (const peng::shared_ref<Component>& component : entity->components())
+						{
+							if (component->tick_group() == tick_group)
+							{
+								component->tick(delta_time);
+							}
 						}
 					}
-				}
-			}
+				});
 		}
 
 		{
 			SCOPED_EVENT("EntityManager - post tick entity group", _tick_group_names[i].c_str());
 			_post_tick_entity_group.invoke(tick_group);
 		}
+	}
+}
+
+template <typename F>
+void EntityManager::for_each_entity(bool parallel, F&& invocable)
+{
+	if (parallel)
+	{
+		std::for_each(std::execution::par, _entities.begin(), _entities.end(), std::move(invocable));
+	}
+	else
+	{
+		std::for_each(std::execution::seq, _entities.begin(), _entities.end(), std::move(invocable));
 	}
 }
 

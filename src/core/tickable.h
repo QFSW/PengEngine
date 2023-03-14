@@ -7,6 +7,7 @@ enum class TickGroup
 	standard,
 	pre_render,
 	render,
+	render_parallel,
 	post_render,
 
 	none
@@ -20,3 +21,4 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, TickGroup tick_group);
+bool is_parallel_tick_group(TickGroup tick_group);

@@ -26,7 +26,7 @@ MeshRenderer::MeshRenderer(
 	peng::shared_ref<const Mesh>&& mesh,
 	peng::shared_ref<Material>&& material
 )
-	: Component(TickGroup::render)
+	: Component(TickGroup::render_parallel)
 	, _mesh(std::move(mesh))
 	, _material(std::move(material))
 { }
@@ -101,8 +101,8 @@ void MeshRenderer::tick(float delta_time)
 	}
 
 	RenderQueue::get().enqueue_draw({
-		.mesh = _mesh.to_shared_ref(),
-		.material = _material.to_shared_ref()
+		.mesh = _mesh,
+		.material = _material
 	});
 }
 
