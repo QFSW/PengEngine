@@ -11,6 +11,7 @@
 PengEngine::PengEngine()
 	: Singleton()
 	, _executing(false)
+	, _shutting_down(false)
 	, _target_frametime(1000 / 60.0f)
 	, _max_delta_time(0)
 	, _resolution(800, 600)
@@ -43,7 +44,7 @@ void PengEngine::run()
 void PengEngine::request_shutdown()
 {
 	Logger::log("PengEngine shutdown requested");
-	_executing = false;
+	_shutting_down = true;
 }
 
 void PengEngine::set_target_fps(float fps) noexcept
@@ -154,7 +155,7 @@ void PengEngine::maximize_window() const
 
 bool PengEngine::shutting_down() const
 {
-	if (!_executing)
+	if (_shutting_down)
 	{
 		return true;
 	}
@@ -315,6 +316,9 @@ void PengEngine::shutdown()
 
 	_entity_manager.shutdown();
 	shutdown_opengl();
+
+	_shutting_down = false;
+	_executing = false;
 
 	Logger::success("PengEngine shutdown");
 }

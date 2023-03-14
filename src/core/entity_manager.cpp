@@ -136,26 +136,38 @@ void EntityManager::tick_entities(float delta_time)
 {
 	for (size_t i = 0; i < _tick_groups.size(); i++)
 	{
-		SCOPED_EVENT("EntityManager - ticking entity group", _tick_group_names[i].c_str());
 		const TickGroup tick_group = _tick_groups[i];
 
-		for (const peng::shared_ref<Entity>& entity : _entities)
 		{
-			if (entity->active_in_hierarchy())
-			{
-				if (entity->tick_group() == tick_group)
-				{
-					entity->tick(delta_time);
-				}
+			SCOPED_EVENT("EntityManager - pre tick entity group", _tick_group_names[i].c_str());
+			_pre_tick_entity_group.invoke(tick_group);
+		}
 
-				for (const peng::shared_ref<Component>& component : entity->components())
+		{
+			SCOPED_EVENT("EntityManager - ticking entity group", _tick_group_names[i].c_str());
+			for (const peng::shared_ref<Entity>& entity : _entities)
+			{
+				if (entity->active_in_hierarchy())
 				{
-					if (component->tick_group() == tick_group)
+					if (entity->tick_group() == tick_group)
 					{
-						component->tick(delta_time);
+						entity->tick(delta_time);
+					}
+
+					for (const peng::shared_ref<Component>& component : entity->components())
+					{
+						if (component->tick_group() == tick_group)
+						{
+							component->tick(delta_time);
+						}
 					}
 				}
 			}
+		}
+
+		{
+			SCOPED_EVENT("EntityManager - post tick entity group", _tick_group_names[i].c_str());
+			_post_tick_entity_group.invoke(tick_group);
 		}
 	}
 }

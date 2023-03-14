@@ -66,7 +66,7 @@ namespace utils
 		listener_handle handle = get_new_handle();
 		invocable listener_once = [inner = std::move(listener), handle, this](Args...args)
 		{
-			inner(std::forward(args)...);
+			inner(std::forward<Args...>(args)...);
 			unsubscribe(handle);
 		};
 
@@ -152,7 +152,7 @@ namespace utils
 
 		for (const named_listener& listener : this->_listeners)
 		{
-			std::get<invocable>(listener)(std::forward(args)...);
+			std::get<invocable>(listener)(std::forward<Args...>(args)...);
 		}
 
 		this->_is_invoking = false;
@@ -162,7 +162,7 @@ namespace utils
 	template <typename...Args>
 	void Event<Args...>::operator()(Args...args)
 	{
-		invoke(std::forward(args)...);
+		invoke(std::forward<Args...>(args)...);
 	}
 }
 

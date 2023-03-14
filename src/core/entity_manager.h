@@ -5,6 +5,7 @@
 
 #include <memory/shared_ref.h>
 #include <memory/weak_ptr.h>
+#include <utils/event.h>
 
 #include "tickable.h"
 
@@ -20,6 +21,9 @@ class Entity;
 
 class EntityManager
 {
+	DEFINE_EVENT(pre_tick_entity_group, TickGroup)
+	DEFINE_EVENT(post_tick_entity_group, TickGroup)
+
 public:
 	EntityManager();
 

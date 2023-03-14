@@ -56,6 +56,7 @@ private:
 	void finalize_frame();
 
 	bool _executing;
+	bool _shutting_down;
 	float _target_frametime;
 	float _max_delta_time;
 
