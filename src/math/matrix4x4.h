@@ -32,6 +32,7 @@ namespace math
 
 		static constexpr Matrix4x4 identity();
 		static constexpr Matrix4x4 from_translation(const Vector3<T>& translation);
+		static constexpr Matrix4x4 from_scale(const Vector3<T>& scale);
 	};
 
 	using Matrix4x4f = Matrix4x4<float>;
@@ -63,6 +64,18 @@ namespace math
 	}
 
 	template <number T>
+	constexpr Matrix4x4<T> Matrix4x4<T>::from_scale(const Vector3<T>& scale)
+	{
+		const Vector3<T>& s = scale;
+		return Matrix4x4({
+			s.x, 0,   0,   0,
+			0,   s.y, 0,   0,
+			0,   0,   s.z, 0,
+			0,   0,   0,   1
+		});
+	}
+
+	template <number T>
 	Matrix4x4<T>::Matrix4x4()
 		: Matrix<T, 4, 4>()
 	{ }
@@ -80,15 +93,7 @@ namespace math
 	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::scaled(const Vector3<T>& scale) const noexcept
 	{
-		const Vector3<T>& s = scale;
-		const Matrix4x4 m({
-			s.x, 0,   0,   0,
-			0,   s.y, 0,   0,
-			0,   0,   s.z, 0,
-			0,   0,   0,   1
-		});
-
-		return m * (*this);
+		return from_scale(scale) * (*this);
 	}
 
 	template <number T>
