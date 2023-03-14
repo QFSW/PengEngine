@@ -93,13 +93,32 @@ namespace math
 	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::scaled(const Vector3<T>& scale) const noexcept
 	{
-		return from_scale(scale) * (*this);
+		Matrix4x4 m = *this;
+		m.elements[0]  *= scale.x;
+		m.elements[4]  *= scale.x;
+		m.elements[8]  *= scale.x;
+		m.elements[12] *= scale.x;
+		m.elements[1]  *= scale.y;
+		m.elements[5]  *= scale.y;
+		m.elements[9]  *= scale.y;
+		m.elements[13] *= scale.y;
+		m.elements[2]  *= scale.z;
+		m.elements[6]  *= scale.z;
+		m.elements[10] *= scale.z;
+		m.elements[14] *= scale.z;
+
+		return m;
 	}
 
 	template <number T>
 	Matrix4x4<T> Matrix4x4<T>::translated(const Vector3<T>& translation) const noexcept
 	{
-		return from_translation(translation) * (*this);
+		Matrix4x4 m = *this;
+		m.elements[12] += translation.x;
+		m.elements[13] += translation.y;
+		m.elements[14] += translation.z;
+
+		return m;
 	}
 
 	template <number T>
