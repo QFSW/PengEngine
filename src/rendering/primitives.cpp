@@ -353,6 +353,9 @@ peng::shared_ref<const Shader> Primitives::skybox_shader()
         "resources/shaders/core/skybox.vert",
         "resources/shaders/core/unlit.frag"
     );
+#
+    // Needs to be drawn after most other entities
+    skybox->draw_order() = 100;
 
     weak_shader = skybox;
     return skybox;

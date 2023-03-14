@@ -20,6 +20,13 @@ DrawCallTree::DrawCallTree(const std::vector<DrawCall>& draw_calls)
 		MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh);
 		mesh_draw.materials.push_back(draw_call.material);
 	}
+
+	std::ranges::sort(
+		_shader_draws,
+		[](const ShaderDrawTree& x, const ShaderDrawTree& y)
+		{
+			return x.shader->draw_order() < y.shader->draw_order();
+		});
 }
 
 void DrawCallTree::execute() const

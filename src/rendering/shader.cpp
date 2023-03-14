@@ -30,6 +30,7 @@ Shader::Shader(
 )
 	: _name(std::move(name))
 	, _broken(false)
+	, _draw_order(0)
 {
 	SCOPED_EVENT("Building shader", _name.c_str());
 	Logger::log("Building shader '%s'", _name.c_str());
@@ -135,6 +136,11 @@ void Shader::use() const
 	glUseProgram(_program);
 }
 
+int32_t& Shader::draw_order() noexcept
+{
+	return _draw_order;
+}
+
 const std::string& Shader::name() const noexcept
 {
 	return _name;
@@ -143,6 +149,11 @@ const std::string& Shader::name() const noexcept
 bool Shader::broken() const noexcept
 {
 	return _broken;
+}
+
+int32_t Shader::draw_order() const noexcept
+{
+	return _draw_order;
 }
 
 GLint Shader::get_uniform_location(const std::string& name) const

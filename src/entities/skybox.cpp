@@ -12,7 +12,7 @@ using namespace rendering;
 using namespace math;
 
 Skybox::Skybox()
-	: Entity("Skybox", TickGroup::post_render)
+	: Entity("Skybox", TickGroup::render)
 	, _mesh(Primitives::cube_uv())
 	, _material(Primitives::skybox_material())
 { }

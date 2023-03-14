@@ -70,8 +70,11 @@ namespace rendering
 
 		void use() const;
 
+		[[nodiscard]] int32_t& draw_order() noexcept;
+
 		[[nodiscard]] const std::string& name() const noexcept;
 		[[nodiscard]] bool broken() const noexcept;
+		[[nodiscard]] int32_t draw_order() const noexcept;
 
 		[[nodiscard]] GLint get_uniform_location(const std::string& name) const;
 		[[nodiscard]] std::optional<std::string> get_symbol_value(const std::string& identifier) const noexcept;
@@ -90,6 +93,7 @@ namespace rendering
 		GLuint _program;
 		bool _broken;
 
+		int32_t _draw_order;
 		std::vector<Uniform> _uniforms;
 		std::vector<ShaderSymbol> _symbols;
 	};
