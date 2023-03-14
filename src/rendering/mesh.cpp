@@ -70,8 +70,23 @@ Mesh::~Mesh()
 
 void Mesh::render() const
 {
+	bind();
+	draw();
+	unbind();
+}
+
+void Mesh::bind() const
+{
 	glBindVertexArray(_vao);
-	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, nullptr);
+}
+
+void Mesh::unbind() const
+{
 	glBindVertexArray(0);
+}
+
+void Mesh::draw() const
+{
+	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, nullptr);
 }
 

@@ -1,12 +1,16 @@
 #pragma once
 
 #include <core/component.h>
-#include <rendering/mesh.h>
-#include <rendering/material.h>
 
 namespace entities
 {
 	class PointLight;
+}
+
+namespace rendering
+{
+	class Mesh;
+	class Material;
 }
 
 namespace components

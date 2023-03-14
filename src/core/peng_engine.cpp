@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <utils/timing.h>
+#include <rendering/render_queue.h>
 #include <profiling/scoped_event.h>
 
 #include "logger.h"
@@ -385,6 +386,8 @@ void PengEngine::tick_render()
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	}
+
+	rendering::RenderQueue::get().execute();
 }
 
 void PengEngine::tick_opengl()

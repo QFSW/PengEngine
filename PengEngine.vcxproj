@@ -318,6 +318,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\primitives.cpp" />
+    <ClCompile Include="src\rendering\render_queue.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\rendering\shader_compiler.cpp" />
     <ClCompile Include="src\rendering\shader_type.cpp" />
@@ -402,11 +403,13 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\profiling\scoped_event.h" />
     <ClInclude Include="src\profiling\stub_profiler.h" />
     <ClInclude Include="src\profiling\superluminal_profiler.h" />
+    <ClInclude Include="src\rendering\draw_call.h" />
     <ClInclude Include="src\rendering\frame_buffer.h" />
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
     <ClInclude Include="src\math\plane.h" />
     <ClInclude Include="src\rendering\primitives.h" />
+    <ClInclude Include="src\rendering\render_queue.h" />
     <ClInclude Include="src\rendering\shader.h" />
     <ClInclude Include="src\rendering\shader_compiler.h" />
     <ClInclude Include="src\rendering\shader_symbol.h" />

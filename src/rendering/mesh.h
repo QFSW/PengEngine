@@ -28,7 +28,13 @@ namespace rendering
 		Mesh(Mesh&&) = delete;
 		~Mesh();
 
+		// Renders the mesh
+		// A shader/material must already be in use before calling this
 		void render() const;
+
+		void bind() const;
+		void unbind() const;
+		void draw() const;
 
 	private:
 		std::string _name;

@@ -2,6 +2,7 @@
 
 #include <math/math.h>
 #include <components/mesh_renderer.h>
+#include <rendering/material.h>
 #include <rendering/primitives.h>
 
 IMPLEMENT_ENTITY(demo::gravity::Rock);

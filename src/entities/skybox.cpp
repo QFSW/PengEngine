@@ -1,7 +1,7 @@
 #include "skybox.h"
 
 #include <entities/camera.h>
-#include <rendering/mesh.h>
+#include <rendering/render_queue.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 
@@ -34,8 +34,10 @@ void Skybox::tick(float delta_time)
 	// TODO: cache parameter name
 	_material->set_parameter("view_matrix", view_matrix_shifted);
 
-	_material->use();
-	_mesh->render();
+	RenderQueue::get().enqueue_draw({
+		.mesh = _mesh,
+		.material = _material
+	});
 }
 
 peng::shared_ref<Material>& Skybox::material() noexcept

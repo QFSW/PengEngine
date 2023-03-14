@@ -3,6 +3,8 @@
 #include <entities/camera.h>
 #include <entities/point_light.h>
 #include <rendering/primitives.h>
+#include <rendering/material.h>
+#include <rendering/render_queue.h>
 #include <core/logger.h>
 #include <utils/utils.h>
 
@@ -98,8 +100,10 @@ void MeshRenderer::tick(float delta_time)
 		}
 	}
 
-	_material->use();
-	_mesh->render();
+	RenderQueue::get().enqueue_draw({
+		.mesh = _mesh.to_shared_ref(),
+		.material = _material.to_shared_ref()
+	});
 }
 
 void MeshRenderer::post_create()
