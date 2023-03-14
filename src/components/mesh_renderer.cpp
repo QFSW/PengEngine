@@ -75,7 +75,7 @@ void MeshRenderer::tick(float delta_time)
 	if (_uses_lighting)
 	{
 		const Vector3f view_pos = Camera::current()
-			? Camera::current()->transform_matrix().get_translation()
+			? Camera::current()->world_position()
 			: Vector3f::zero();
 
 		_material->try_set_parameter(_cached_uniforms.view_pos, view_pos);
@@ -84,7 +84,7 @@ void MeshRenderer::tick(float delta_time)
 		for (int32_t i = 0; i < _max_point_lights; i++)
 		{
 			const Vector3f light_pos = i < relevant_lights.size()
-				? relevant_lights[i]->transform_matrix().get_translation()
+				? relevant_lights[i]->world_position()
 				: Vector3f::zero();
 
 			const PointLight::LightData light_data = i < relevant_lights.size()
