@@ -1,7 +1,5 @@
 #include "primitives.h"
 
-#include <common/common.h>
-
 #include <memory/shared_ref.h>
 #include <math/vector3.h>
 #include <rendering/utils.h>
@@ -243,7 +241,7 @@ peng::shared_ref<const Mesh> Primitives::icosahedron()
 
 peng::shared_ref<const Mesh> Primitives::icosphere(uint32_t order)
 {
-    static common::unordered_map<uint32_t, peng::weak_ptr<const Mesh>> weak_icospheres;
+    static std::unordered_map<uint32_t, peng::weak_ptr<const Mesh>> weak_icospheres;
     if (const auto it = weak_icospheres.find(order); it != weak_icospheres.end())
     {
         if (const peng::shared_ptr<const Mesh> strong_icosphere = it->second.lock())

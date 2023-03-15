@@ -35,8 +35,8 @@ public:
 
 private:
 	std::vector<peng::shared_ptr<ReflectedType>> _reflected_types;
-	common::unordered_map<std::string, peng::shared_ptr<ReflectedType>> _name_to_type;
-	common::unordered_map<const std::type_info*, peng::shared_ptr<ReflectedType>> _info_to_type;
+	std::unordered_map<std::string, peng::shared_ptr<ReflectedType>> _name_to_type;
+	std::unordered_map<const std::type_info*, peng::shared_ptr<ReflectedType>> _info_to_type;
 };
 
 template <typename T>

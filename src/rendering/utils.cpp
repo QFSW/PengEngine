@@ -1,6 +1,7 @@
 #include "utils.h"
 
-#include <common/common.h>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace rendering;
 using namespace math;
@@ -19,8 +20,8 @@ std::tuple<std::vector<Vertex>, std::vector<Vector3u>> rendering::subdivide(
 
     // Generate a list of which indices correspond to vertices on a seam
     // so that we can preserve seams when subdividing
-    common::unordered_set<uint32_t> seam_indices;
-    common::unordered_map<Vector3f, size_t> vertex_hits;
+    std::unordered_set<uint32_t> seam_indices;
+    std::unordered_map<Vector3f, size_t> vertex_hits;
 
     // Initialize vertex hits to zero
     for (const Vertex& vertex : vertices)
@@ -53,7 +54,7 @@ std::tuple<std::vector<Vertex>, std::vector<Vector3u>> rendering::subdivide(
     // Gets the index for the provided vertex
     // If the given vertex is a seam, then a new index will always be created
     // otherwise, it will attempt to pool with vertices that already exist
-    common::unordered_map<Vector3f, uint32_t> vertex_index_cache;
+    std::unordered_map<Vector3f, uint32_t> vertex_index_cache;
     auto get_index = [&](const Vertex& vertex, bool in_seam) -> uint32_t
     {
         if (!in_seam)

@@ -1,8 +1,8 @@
 #include "shader.h"
 
 #include <cassert>
+#include <unordered_set>
 
-#include <common/common.h>
 #include <memory/weak_ptr.h>
 #include <core/logger.h>
 #include <utils/utils.h>
@@ -42,7 +42,7 @@ Shader::Shader(
 	const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
 	const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
 
-	common::unordered_set<std::string> seen_symbols;
+	std::unordered_set<std::string> seen_symbols;
 
 	for (ShaderSymbol& symbol : preprocessed_vert_shader.symbols)
 	{

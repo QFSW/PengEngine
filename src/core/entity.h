@@ -41,6 +41,10 @@ public:
 	template <std::derived_from<Component> T, typename...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
 
+	template <std::derived_from<Component> T>
+	requires std::constructible_from<T>
+	peng::weak_ptr<T> require_component();
+
 	[[nodiscard]] peng::weak_ptr<Component> get_component(const peng::shared_ref<const ReflectedType>& component_type) const;
 	[[nodiscard]] peng::weak_ptr<Component> get_component_in_children(const peng::shared_ref<const ReflectedType>& component_type) const;
 
@@ -115,6 +119,18 @@ peng::weak_ptr<T> Entity::add_component(Args&&... args)
 	}
 
 	return component;
+}
+
+template <std::derived_from<Component> T>
+requires std::constructible_from<T>
+peng::weak_ptr<T> Entity::require_component()
+{
+	if (peng::weak_ptr<T> component = get_component<T>())
+	{
+		return component;
+	}
+
+	return add_component<T>();
 }
 
 template <std::derived_from<Component> T>

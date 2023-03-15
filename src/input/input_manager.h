@@ -1,10 +1,11 @@
 #pragma once
 
+#include <unordered_map>
+
+#include <math/vector2.h>
+
 #include "key_code.h"
 #include "key_state.h"
-
-#include <common/common.h>
-#include <math/vector2.h>
 
 struct GLFWwindow;
 
@@ -40,6 +41,6 @@ namespace input
 		bool _has_ticked = false;
 		math::Vector2i _cursor_pos;
 		math::Vector2i _last_cursor_pos;
-		common::unordered_map<KeyCode, KeyState> _key_states;
+		std::unordered_map<KeyCode, KeyState> _key_states;
 	};
 }

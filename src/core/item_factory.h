@@ -1,9 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <unordered_map>
 
 #include <memory/shared_ref.h>
-#include <common/common.h>
 #include <utils/strtools.h>
 
 #include "reflected_type.h"
@@ -25,7 +25,7 @@ public:
 	) const;
 
 private:
-	common::unordered_map<peng::shared_ref<const ReflectedType>, std::function<ItemBase(Args...)>> _type_to_factory;
+	std::unordered_map<peng::shared_ref<const ReflectedType>, std::function<ItemBase(Args...)>> _type_to_factory;
 };
 
 template <typename ItemBase, typename ... Args>

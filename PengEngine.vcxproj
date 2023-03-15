@@ -379,10 +379,6 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\libs\superluminal\PerformanceAPI.h" />
     <ClInclude Include="src\libs\superluminal\PerformanceAPI_capi.h" />
     <ClInclude Include="src\libs\superluminal\PerformanceAPI_loader.h" />
-    <ClInclude Include="src\libs\tsl\robin_growth_policy.h" />
-    <ClInclude Include="src\libs\tsl\robin_hash.h" />
-    <ClInclude Include="src\libs\tsl\robin_map.h" />
-    <ClInclude Include="src\libs\tsl\robin_set.h" />
     <ClInclude Include="src\math\json_support.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\matrix.h" />

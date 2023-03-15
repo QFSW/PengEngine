@@ -1,8 +1,9 @@
 #pragma once
 
 #include <tuple>
+#include <unordered_map>
+#include <unordered_set>
 
-#include <common/common.h>
 #include <memory/shared_ref.h>
 #include <utils/concepts.h>
 
@@ -71,8 +72,8 @@ namespace rendering
 		peng::shared_ref<const Shader> _shader;
 
 		std::vector<std::tuple<GLint, Shader::Parameter>> _set_parameters;
-		common::unordered_map<GLint, size_t> _existing_parameters;
-		common::unordered_set<std::string> _bad_parameter_names;
+		std::unordered_map<GLint, size_t> _existing_parameters;
+		std::unordered_set<std::string> _bad_parameter_names;
 		uint32_t _num_bound_textures;
 	};
 }

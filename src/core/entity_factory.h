@@ -32,7 +32,7 @@ private:
 
 	ItemFactory<peng::weak_ptr<Entity>> _default_factory;
 	ItemFactory<peng::weak_ptr<Entity>, const std::string&> _named_factory;
-	common::unordered_map<peng::shared_ref<const ReflectedType>, EntityConstructorSet> _type_to_constructor_set;
+	std::unordered_map<peng::shared_ref<const ReflectedType>, EntityConstructorSet> _type_to_constructor_set;
 };
 
 template <std::derived_from<Entity> T>

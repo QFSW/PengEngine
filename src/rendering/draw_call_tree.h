@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
 
-#include <common/common.h>
 #include <memory/shared_ref.h>
 #include <utils/hash_helpers.h>
 
@@ -48,10 +48,10 @@ namespace rendering
 
 		std::vector<ShaderDrawTree> _shader_draws;
 
-		common::unordered_map<peng::shared_ref<const Shader>, size_t> _shader_draw_indices;
+		std::unordered_map<peng::shared_ref<const Shader>, size_t> _shader_draw_indices;
 
 		// Maps from a (shader, mesh) key to a (shader_draw index, mesh_draw sub index) value
-		common::unordered_map<
+		std::unordered_map<
 			std::tuple<
 			peng::shared_ref<const Shader>,
 			peng::shared_ref<const Mesh>
