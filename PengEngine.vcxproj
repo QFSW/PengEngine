@@ -314,6 +314,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\math\transform.cpp" />
     <ClCompile Include="src\profiling\profiler_manager.cpp" />
     <ClCompile Include="src\profiling\scoped_event.cpp" />
+    <ClCompile Include="src\profiling\scoped_gpu_event.cpp" />
     <ClCompile Include="src\profiling\superluminal_profiler.cpp" />
     <ClCompile Include="src\rendering\draw_call_tree.cpp" />
     <ClCompile Include="src\rendering\frame_buffer.cpp" />
@@ -396,10 +397,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\memory\shared_ptr.h" />
     <ClInclude Include="src\memory\shared_ref.h" />
     <ClInclude Include="src\memory\weak_ptr.h" />
+    <ClInclude Include="src\profiling\concat_macro.h" />
     <ClInclude Include="src\profiling\event_data.h" />
     <ClInclude Include="src\profiling\profiler.h" />
     <ClInclude Include="src\profiling\profiler_manager.h" />
     <ClInclude Include="src\profiling\scoped_event.h" />
+    <ClInclude Include="src\profiling\scoped_gpu_event.h" />
     <ClInclude Include="src\profiling\stub_profiler.h" />
     <ClInclude Include="src\profiling\superluminal_profiler.h" />
     <ClInclude Include="src\rendering\draw_call.h" />

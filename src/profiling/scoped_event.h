@@ -3,6 +3,7 @@
 #ifndef NO_PROFILING
 
 #include "event_data.h"
+#include "concat_macro.h"
 
 namespace profiling
 {
@@ -15,9 +16,6 @@ namespace profiling
 		ScopedEvent(ScopedEvent&&) = delete;
 	};
 }
-
-#define CONCAT_INNER(a, b) a ## b
-#define CONCAT(a, b) CONCAT_INNER(a, b)
 
 #define SCOPED_EVENT(id, ...) profiling::ScopedEvent CONCAT(__PE_event_, __LINE__)({id, __VA_ARGS__})
 

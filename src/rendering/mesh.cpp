@@ -90,3 +90,8 @@ void Mesh::draw() const
 	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, nullptr);
 }
 
+const std::string& Mesh::name() const noexcept
+{
+	return _name;
+}
+

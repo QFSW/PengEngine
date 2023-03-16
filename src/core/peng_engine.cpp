@@ -6,6 +6,7 @@
 #include <utils/timing.h>
 #include <rendering/render_queue.h>
 #include <profiling/scoped_event.h>
+#include <profiling/scoped_gpu_event.h>
 
 #include "logger.h"
 
@@ -409,5 +410,7 @@ void PengEngine::finalize_frame()
 	timing::sleep_until_precise(sync_point);
 
 	_last_draw_time = sync_point;
+
+	SCOPED_GPU_EVENT("Finalize Frame");
 	glfwSwapBuffers(_glfw_window);
 }

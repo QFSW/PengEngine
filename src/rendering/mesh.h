@@ -36,6 +36,8 @@ namespace rendering
 		void unbind() const;
 		void draw() const;
 
+		[[nodiscard]] const std::string& name() const noexcept;
+
 	private:
 		std::string _name;
 		std::vector<Vertex> _vertex_buffer;

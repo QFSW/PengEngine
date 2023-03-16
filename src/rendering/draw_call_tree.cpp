@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include <profiling/scoped_event.h>
+#include <profiling/scoped_gpu_event.h>
 #include <utils/strtools.h>
 
 #include "draw_call.h"
@@ -37,14 +38,20 @@ DrawCallTree::DrawCallTree(const std::vector<DrawCall>& draw_calls)
 void DrawCallTree::execute() const
 {
 	SCOPED_EVENT("DrawCallTree - execute");
+	SCOPED_GPU_EVENT("Draw Scene");
 
 	for (const ShaderDrawTree& shader_draw : _shader_draws)
 	{
+		const peng::shared_ref<const Shader> shader = shader_draw.shader;
+
+		SCOPED_GPU_EVENT(strtools::catf_temp("Shader - %s", shader->name().c_str()));
 		shader_draw.shader->use();
 
 		for (const MeshDrawTree& mesh_draw : shader_draw.mesh_draws)
 		{
 			const peng::shared_ref<const Mesh> mesh = mesh_draw.mesh;
+
+			SCOPED_GPU_EVENT(strtools::catf_temp("Mesh - %s", mesh->name().c_str()));
 			mesh->bind();
 
 			for (const peng::shared_ref<Material>& material : mesh_draw.materials)
