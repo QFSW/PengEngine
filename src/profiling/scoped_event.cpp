@@ -1,3 +1,5 @@
+#ifndef NO_PROFILING
+
 #include "scoped_event.h"
 
 #include "profiler_manager.h"
@@ -13,3 +15,5 @@ ScopedEvent::~ScopedEvent()
 {
 	ProfilerManager::get().current_profiler()->end_event();
 }
+
+#endif

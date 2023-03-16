@@ -2,14 +2,19 @@
 
 #include <core/peng_engine.h>
 #include <profiling/profiler_manager.h>
-#include <profiling/superluminal_profiler.h>
 #include <world/world_loader.h>
+
+#ifndef NO_PROFILING
+#include <profiling/superluminal_profiler.h>
+#endif
 
 namespace demo
 {
     int demo_main()
     {
-        profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
+#ifndef NO_PROFILING
+            profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
+#endif
 
         PengEngine::get().on_engine_initialized().subscribe_once([]
         {

@@ -4,10 +4,14 @@
 
 using namespace profiling;
 
+#ifndef NO_PROFILING
 void ProfilerManager::load_profiler(std::unique_ptr<IProfiler>&& profiler)
 {
 	_current_profiler = std::move(profiler);
 }
+#else
+void ProfilerManager::load_profiler(std::unique_ptr<IProfiler>&&) { }
+#endif
 
 const std::unique_ptr<IProfiler>& ProfilerManager::current_profiler()
 {

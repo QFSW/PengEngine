@@ -12,6 +12,9 @@ namespace profiling
 		using Singleton::Singleton;
 
 	public:
+		// If profiling is enabled by the current build configuration
+		static consteval bool enabled();
+
 		// Loads a new profiler into the profiler manager releasing the existing profiler
 		void load_profiler(std::unique_ptr<IProfiler>&& profiler);
 
@@ -28,10 +31,21 @@ namespace profiling
 		std::unique_ptr<IProfiler> _current_profiler;
 	};
 
+	consteval bool ProfilerManager::enabled()
+	{
+#ifdef NO_PROFILING
+		return false;
+#else
+		return true;
+#endif
+	}
+
 	template <std::derived_from<IProfiler> T>
 	requires std::constructible_from<T>
 	void ProfilerManager::load_profiler()
 	{
+#ifndef NO_PROFILING
 		load_profiler(std::make_unique<T>());
+#endif
 	}
 }

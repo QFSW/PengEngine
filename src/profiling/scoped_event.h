@@ -1,5 +1,7 @@
 #pragma once
 
+#ifndef NO_PROFILING
+
 #include "event_data.h"
 
 namespace profiling
@@ -18,3 +20,9 @@ namespace profiling
 #define CONCAT(a, b) CONCAT_INNER(a, b)
 
 #define SCOPED_EVENT(id, ...) profiling::ScopedEvent CONCAT(__PE_event_, __LINE__)({id, __VA_ARGS__})
+
+#else
+
+#define SCOPED_EVENT(id, ...) ((void)0)
+
+#endif
