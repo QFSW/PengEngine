@@ -57,6 +57,14 @@ namespace components
 			int32_t max_strength = -1;
 		};
 
+		struct DirectionalLightUniformSet
+		{
+			int32_t dir = -1;
+			int32_t color = -1;
+			int32_t ambient = -1;
+			int32_t intensity = -1;
+		};
+
 		struct UniformSet
 		{
 			int32_t model_matrix = -1;
@@ -65,10 +73,12 @@ namespace components
 			int32_t view_pos = -1;
 
 			std::vector<PointLightUniformSet> point_lights;
+			std::vector<DirectionalLightUniformSet> directional_lights;
 		};
 
 		bool _uses_lighting = false;
 		int32_t _max_point_lights = 0;
+		int32_t _max_directional_lights = 0;
 		UniformSet _cached_uniforms;
 	};
 }

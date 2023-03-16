@@ -301,6 +301,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
     <ClCompile Include="src\demo\gravity\rock.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
+    <ClCompile Include="src\entities\directional_light.cpp" />
     <ClCompile Include="src\entities\point_light.cpp" />
     <ClCompile Include="src\entities\skybox.cpp" />
     <ClCompile Include="src\input\input_manager.cpp" />
@@ -364,6 +365,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\gravity\gravity_controller.h" />
     <ClInclude Include="src\demo\gravity\rock.h" />
     <ClInclude Include="src\entities\camera.h" />
+    <ClInclude Include="src\entities\directional_light.h" />
     <ClInclude Include="src\entities\point_light.h" />
     <ClInclude Include="src\entities\skybox.h" />
     <ClInclude Include="src\input\input_manager.h" />

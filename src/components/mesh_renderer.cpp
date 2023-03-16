@@ -2,6 +2,7 @@
 
 #include <entities/camera.h>
 #include <entities/point_light.h>
+#include <entities/directional_light.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <rendering/render_queue.h>
@@ -98,6 +99,29 @@ void MeshRenderer::tick(float delta_time)
 			_material->try_set_parameter(uniform_set.range, light_data.range);
 			_material->try_set_parameter(uniform_set.max_strength, 1.0f);
 		}
+
+		// TODO: support multiple directional lights
+		for (int32_t i = 0; i < _max_directional_lights; i++)
+		{
+			peng::weak_ptr<DirectionalLight> directional_light = i == 0
+				? DirectionalLight::current()
+				: peng::weak_ptr<DirectionalLight>{};
+
+			// TODO: this doesn't work if light has spatial parents that rotate it
+			const Vector3f light_dir = directional_light
+				? -directional_light->local_transform().local_up()
+				: Vector3f::zero();
+
+			const DirectionalLight::LightData light_data = directional_light
+				? directional_light->data()
+				: DirectionalLight::LightData();
+
+			const DirectionalLightUniformSet& uniform_set = _cached_uniforms.directional_lights[i];
+			_material->try_set_parameter(uniform_set.dir, light_dir);
+			_material->try_set_parameter(uniform_set.color, light_data.color);
+			_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
+			_material->try_set_parameter(uniform_set.intensity, light_data.intensity);
+		}
 	}
 
 	RenderQueue::get().enqueue_draw({
@@ -162,10 +186,10 @@ void MeshRenderer::cache_uniforms()
 		_cached_uniforms.normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
 		_cached_uniforms.view_pos = get_uniform_location_checked("view_pos", "SHADER_LIT");
 
-		const std::optional<std::string> max_num_lights_raw = _material->shader()->get_symbol_value("MAX_POINT_LIGHTS");
-		if (max_num_lights_raw)
+		const std::optional<std::string> max_point_lights_raw = _material->shader()->get_symbol_value("MAX_POINT_LIGHTS");
+		if (max_point_lights_raw)
 		{
-			_max_point_lights = std::stoi(*max_num_lights_raw);
+			_max_point_lights = std::stoi(*max_point_lights_raw);
 			for (int32_t i = 0; i < _max_point_lights; i++)
 			{
 				PointLightUniformSet uniform_set;
@@ -182,6 +206,29 @@ void MeshRenderer::cache_uniforms()
 		{
 			Logger::warning(
 				"Material '%s' has uses SHADER_LIT but has no defined value for MAX_POINT_LIGHTS",
+				_material->shader()->name().c_str()
+			);
+		}
+
+		const std::optional<std::string> max_directional_lights_raw = _material->shader()->get_symbol_value("MAX_DIRECTIONAL_LIGHTS");
+		if (max_directional_lights_raw)
+		{
+			_max_directional_lights = std::stoi(*max_directional_lights_raw);
+			for (int32_t i = 0; i < _max_directional_lights; i++)
+			{
+				DirectionalLightUniformSet uniform_set;
+				uniform_set.dir = get_uniform_location_checked(strtools::catf("directional_lights[%d].dir", i), "SHADER_LIT");
+				uniform_set.color = get_uniform_location_checked(strtools::catf("directional_lights[%d].color", i), "SHADER_LIT");
+				uniform_set.ambient = get_uniform_location_checked(strtools::catf("directional_lights[%d].ambient", i), "SHADER_LIT");
+				uniform_set.intensity = get_uniform_location_checked(strtools::catf("directional_lights[%d].intensity", i), "SHADER_LIT");
+
+				_cached_uniforms.directional_lights.push_back(uniform_set);
+			}
+		}
+		else
+		{
+			Logger::warning(
+				"Material '%s' has uses SHADER_LIT but has no defined value for MAX_DIRECTIONAL_LIGHTS",
 				_material->shader()->name().c_str()
 			);
 		}

@@ -13,9 +13,7 @@
       }
     },
     {
-      "type": "demo::DebugEntity",
-      "components": [
-      ]
+      "type": "demo::DebugEntity"
     },
     {
       "type": "entities::Camera",

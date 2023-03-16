@@ -327,7 +327,7 @@ peng::shared_ref<const Shader> Primitives::phong_shader()
 	{
 		return strong_shader.to_shared_ref();
 	}
-
+    \
 	peng::shared_ref<Shader> phong = peng::make_shared<Shader>(
 		"Phong",
 		"resources/shaders/core/projection.vert",

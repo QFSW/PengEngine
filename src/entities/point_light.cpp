@@ -1,6 +1,5 @@
 #include "point_light.h"
 
-#include <core/logger.h>
 #include <utils/vectools.h>
 #include <utils/utils.h>
 

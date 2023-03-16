@@ -71,10 +71,16 @@ public:
 
 	[[nodiscard]] math::Matrix4x4f transform_matrix() const noexcept;
 	[[nodiscard]] math::Matrix4x4f transform_matrix_inv() const noexcept;
-	[[nodiscard]] math::Vector3f world_position() const noexcept;
 	[[nodiscard]] math::Transform& local_transform() noexcept { return _local_transform; }
 	[[nodiscard]] const math::Transform& local_transform() const noexcept { return _local_transform; }
 	[[nodiscard]] const std::vector<peng::shared_ref<Component>>& components() const noexcept { return _components; }
+
+	[[nodiscard]] math::Vector3f world_position() const noexcept;
+	// TODO: implement world_rotation
+	// TODO: implement world_scale
+	// TODO: implement world_forwards
+	// TODO: implement world_up
+	// TODO: implement world_right
 
 	template <std::derived_from<Entity> T>
 	[[nodiscard]] static peng::weak_ptr<T> weak_from(T& entity);
