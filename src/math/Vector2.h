@@ -63,6 +63,8 @@ namespace math
 
 		static constexpr Vector2 zero() { return Vector2(0, 0); }
 		static constexpr Vector2 one() { return Vector2(1, 1); }
+		static constexpr Vector2 right() { return Vector2(1, 0); }
+		static constexpr Vector2 up() { return Vector2(0, 1); }
 	};
 
 	using Vector2f = Vector2<float>;

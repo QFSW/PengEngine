@@ -164,6 +164,15 @@ const KeyState& InputManager::operator[](KeyCode code) const
 	return get_key(code);
 }
 
+float InputManager::axis_value(const Axis& axis) const
+{
+	const float axis_raw = 
+		+(get_key(axis.positive).is_down() ? 1.0f : 0.0f)
+		-(get_key(axis.negative).is_down() ? 1.0f : 0.0f);
+
+	return axis_raw * axis.magnitude;
+}
+
 constexpr KeyCode InputManager::from_opengl(int32_t opengl_key)
 {
 	if (opengl_key >= GLFW_KEY_A && opengl_key <= GLFW_KEY_Z)

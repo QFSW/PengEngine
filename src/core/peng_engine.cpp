@@ -175,6 +175,12 @@ const math::Vector2i& PengEngine::resolution() const noexcept
 	return _resolution;
 }
 
+float PengEngine::aspect_ratio() const noexcept
+{
+	const math::Vector2f resolution_f = _resolution;
+	return resolution_f.x / resolution_f.y;
+}
+
 bool PengEngine::fullscreen() const noexcept
 {
 	return _fullscreen;

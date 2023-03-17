@@ -174,6 +174,12 @@
     <ClCompile Include="src\profiling\scoped_gpu_event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\demo\pong\peng_pong.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\pong\paddle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -479,6 +485,15 @@
     <ClInclude Include="src\profiling\concat_macro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\demo\pong\peng_pong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\demo\pong\paddle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\axis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -490,6 +505,7 @@
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\skybox.vert" />
+    <None Include="resources\scenes\demo\pong.json" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

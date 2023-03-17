@@ -300,6 +300,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\demo_main.cpp" />
     <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
     <ClCompile Include="src\demo\gravity\rock.cpp" />
+    <ClCompile Include="src\demo\pong\paddle.cpp" />
+    <ClCompile Include="src\demo\pong\peng_pong.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
     <ClCompile Include="src\entities\directional_light.cpp" />
     <ClCompile Include="src\entities\point_light.cpp" />
@@ -365,10 +367,13 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\demo_main.h" />
     <ClInclude Include="src\demo\gravity\gravity_controller.h" />
     <ClInclude Include="src\demo\gravity\rock.h" />
+    <ClInclude Include="src\demo\pong\paddle.h" />
+    <ClInclude Include="src\demo\pong\peng_pong.h" />
     <ClInclude Include="src\entities\camera.h" />
     <ClInclude Include="src\entities\directional_light.h" />
     <ClInclude Include="src\entities\point_light.h" />
     <ClInclude Include="src\entities\skybox.h" />
+    <ClInclude Include="src\input\axis.h" />
     <ClInclude Include="src\input\input_manager.h" />
     <ClInclude Include="src\input\key_code.h" />
     <ClInclude Include="src\input\key_state.h" />
@@ -441,6 +446,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\scene\scene_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\scenes\demo\pong.json" />
     <None Include="resources\shaders\core\skybox.vert" />
     <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\fallback.frag" />

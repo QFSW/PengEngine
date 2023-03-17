@@ -1,0 +1,11 @@
+{
+  "name": "PengPong",
+  "entities": [
+    {
+      "type": "demo::pong::PengPong"
+    },
+    {
+      "type": "demo::DebugEntity"
+    }
+  ]
+}

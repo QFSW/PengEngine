@@ -109,8 +109,7 @@ void Camera::validate_config() const noexcept
 
 Matrix4x4f Camera::calc_projection_matrix()
 {
-	const Vector2f resolution = PengEngine::get().resolution();
-	const float aspect_ratio = resolution.x / resolution.y;
+	const float aspect_ratio = PengEngine::get().aspect_ratio();
 
 	if (_projection == Projection::orthographic)
 	{

@@ -153,6 +153,36 @@ peng::shared_ref<const Mesh> Primitives::cube_uv()
     return cube;
 }
 
+peng::shared_ref<const Mesh> Primitives::quad()
+{
+    static peng::weak_ptr<const Mesh> weak_quad;
+    if (const peng::shared_ptr<const Mesh> strong_quad = weak_quad.lock())
+    {
+        return strong_quad.to_shared_ref();
+    }
+
+    const std::vector<Vertex> vertices =
+    {
+        Vertex(Vector3f(-1, -1, 0) / 2, Vector3f(0, 0, 1), Vector2f(0, 0)),
+        Vertex(Vector3f(1, -1, 0) / 2, Vector3f(0, 0, 1), Vector2f(1, 0)),
+        Vertex(Vector3f(1, 1, 0) / 2, Vector3f(0, 0, 1), Vector2f(1, 1)),
+        Vertex(Vector3f(-1, 1, 0) / 2, Vector3f(0, 0, 1), Vector2f(0, 1)),
+    };
+
+    const std::vector<Vector3u> indices =
+    {
+        Vector3u(0, 1, 3),
+        Vector3u(3, 1, 2),
+    };
+
+    peng::shared_ref<Mesh> quad = peng::make_shared<Mesh>(
+        "Quad", vertices, indices
+    );
+
+    weak_quad = quad;
+    return quad;
+}
+
 peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
 {
     static peng::weak_ptr<const Mesh> weak_quad;

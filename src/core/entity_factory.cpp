@@ -16,7 +16,7 @@ peng::weak_ptr<Entity> EntityFactory::create_entity(peng::shared_ref<const Refle
 
 			if (constructor_set.has_named)
 			{
-				return _named_factory.construct_item(entity_type, "NewEntity");
+				return _named_factory.construct_item(entity_type, entity_type->name);
 			}
 		}
 		else

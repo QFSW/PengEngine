@@ -19,7 +19,7 @@ namespace demo
         PengEngine::get().on_engine_initialized().subscribe_once([]
         {
             scene::SceneLoader scene_loader;
-            scene_loader.load_from_file("resources/scenes/demo/gravity.json");
+            scene_loader.load_from_file("resources/scenes/demo/pong.json");
         });
         
         PengEngine::get().set_resolution(math::Vector2i(1280, 720));

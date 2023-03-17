@@ -35,6 +35,7 @@ public:
 
 	[[nodiscard]] bool shutting_down() const;
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
+	[[nodiscard]] float aspect_ratio() const noexcept;
 	[[nodiscard]] bool fullscreen() const noexcept;
 
 	EntityManager& entity_manager() noexcept;

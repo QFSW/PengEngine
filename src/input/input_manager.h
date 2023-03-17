@@ -6,6 +6,7 @@
 
 #include "key_code.h"
 #include "key_state.h"
+#include "axis.h"
 
 struct GLFWwindow;
 
@@ -29,6 +30,7 @@ namespace input
 		[[nodiscard]] const math::Vector2i& last_cursor_pos() const noexcept;
 		[[nodiscard]] const KeyState& get_key(KeyCode code) const;
 		[[nodiscard]] const KeyState& operator[](KeyCode code) const;
+		[[nodiscard]] float axis_value(const Axis& axis) const;
 		// ----------------------------------
 
 	private:

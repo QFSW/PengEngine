@@ -4,6 +4,8 @@ namespace input
 {
 	enum class KeyCode
 	{
+		none,
+
 		a,
 		b,
 		c,

@@ -16,6 +16,7 @@ namespace rendering
 	public:
 		[[nodiscard]] static peng::shared_ref<const Mesh> cube();
 		[[nodiscard]] static peng::shared_ref<const Mesh> cube_uv();
+		[[nodiscard]] static peng::shared_ref<const Mesh> quad();
 		[[nodiscard]] static peng::shared_ref<const Mesh> fullscreen_quad();
 		[[nodiscard]] static peng::shared_ref<const Mesh> icosahedron();
 		[[nodiscard]] static peng::shared_ref<const Mesh> icosphere(uint32_t order = 3);
