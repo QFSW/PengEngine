@@ -5,9 +5,9 @@
 
 class Entity;
 
-namespace world
+namespace scene
 {
-	class WorldLoader
+	class SceneLoader
 	{
 	public:
 		void load_from_file(const std::string& path);
@@ -27,13 +27,13 @@ namespace world
 	};
 
 	template <typename T>
-	T WorldLoader::get_value(const nlohmann::json& obj, const std::string& key) const
+	T SceneLoader::get_value(const nlohmann::json& obj, const std::string& key) const
 	{
 		return obj.at(key).get<T>();
 	}
 
 	template <typename T>
-	T WorldLoader::get_value_or_default(const nlohmann::json& obj, const std::string& key, const T& value) const
+	T SceneLoader::get_value_or_default(const nlohmann::json& obj, const std::string& key, const T& value) const
 	{
 		if (const auto it = obj.find(key); it != obj.end())
 		{

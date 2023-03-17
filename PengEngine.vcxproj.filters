@@ -147,7 +147,7 @@
     <ClCompile Include="src\math\math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\world_loader.cpp">
+    <ClCompile Include="src\scene\scene_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\math\json_support.cpp">
@@ -440,7 +440,7 @@
     <ClInclude Include="src\libs\nlohmann\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\world\world_loader.h">
+    <ClInclude Include="src\scene\scene_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\json_support.h">
@@ -488,7 +488,7 @@
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
     <None Include="resources\shaders\core\phong.frag" />
-    <None Include="resources\worlds\demo\gravity.json" />
+    <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\skybox.vert" />
   </ItemGroup>
   <ItemGroup>

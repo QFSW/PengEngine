@@ -335,7 +335,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\utils\io.cpp" />
     <ClCompile Include="src\utils\strtools.cpp" />
     <ClCompile Include="src\utils\timing.cpp" />
-    <ClCompile Include="src\world\world_loader.cpp" />
+    <ClCompile Include="src\scene\scene_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Downloads\json.hpp" />
@@ -438,11 +438,11 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\utils\utils.h" />
     <ClInclude Include="src\utils\variadic.h" />
     <ClInclude Include="src\utils\vectools.h" />
-    <ClInclude Include="src\world\world_loader.h" />
+    <ClInclude Include="src\scene\scene_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\core\skybox.vert" />
-    <None Include="resources\worlds\demo\gravity.json" />
+    <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\shaders\core\projection.vert" />

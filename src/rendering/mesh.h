@@ -9,6 +9,7 @@
 
 namespace rendering
 {
+	// TODO: add object name for RenderDoc
 	class Mesh
 	{
 	public:

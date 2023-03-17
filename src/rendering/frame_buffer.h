@@ -10,6 +10,7 @@ namespace rendering
 {
 	class Texture;
 
+	// TODO: add object name for RenderDoc
 	class FrameBuffer
 	{
 	public:

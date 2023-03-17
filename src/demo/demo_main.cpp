@@ -2,7 +2,7 @@
 
 #include <core/peng_engine.h>
 #include <profiling/profiler_manager.h>
-#include <world/world_loader.h>
+#include <scene/scene_loader.h>
 
 #ifndef NO_PROFILING
 #include <profiling/superluminal_profiler.h>
@@ -18,8 +18,8 @@ namespace demo
 
         PengEngine::get().on_engine_initialized().subscribe_once([]
         {
-            world::WorldLoader world_loader;
-            world_loader.load_from_file("resources/worlds/demo/gravity.json");
+            scene::SceneLoader scene_loader;
+            scene_loader.load_from_file("resources/scenes/demo/gravity.json");
         });
         
         PengEngine::get().set_resolution(math::Vector2i(1280, 720));

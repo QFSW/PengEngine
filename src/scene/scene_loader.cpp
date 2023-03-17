@@ -1,4 +1,4 @@
-#include "world_loader.h"
+#include "scene_loader.h"
 
 #include <fstream>
 
@@ -11,12 +11,12 @@
 
 #include "core/entity.h"
 
-using namespace world;
+using namespace scene;
 
-void WorldLoader::load_from_file(const std::string& path)
+void SceneLoader::load_from_file(const std::string& path)
 {
-    SCOPED_EVENT("WorldLoader - load from file");
-    Logger::log("Loading world '%s'", path.c_str());
+    SCOPED_EVENT("SceneLoader - load from file");
+    Logger::log("Loading scene '%s'", path.c_str());
 
     std::ifstream file(path);
     if (!file.is_open())
@@ -32,22 +32,22 @@ void WorldLoader::load_from_file(const std::string& path)
     }
     catch (const nlohmann::json::parse_error& e)
     {
-        Logger::error("Error occurred while parsing JSON - terminating world loading");
+        Logger::error("Error occurred while parsing JSON - terminating scene loading");
         Logger::error(e.what());
         return;
     }
 
     load_from_json(world_def);
-    Logger::success("Loaded world '%s'", path.c_str());
+    Logger::success("Loaded scene '%s'", path.c_str());
 }
 
-void WorldLoader::load_from_json(const nlohmann::json& world_def)
+void SceneLoader::load_from_json(const nlohmann::json& world_def)
 {
-    SCOPED_EVENT("WorldLoader - load from json");
+    SCOPED_EVENT("SceneLoader - load from json");
     load_entities(world_def);
 }
 
-void WorldLoader::load_entities(const nlohmann::json& world_def)
+void SceneLoader::load_entities(const nlohmann::json& world_def)
 {
     if (const auto it = world_def.find("entities"); it != world_def.end())
     {
@@ -64,11 +64,11 @@ void WorldLoader::load_entities(const nlohmann::json& world_def)
     }
     else
     {
-        Logger::warning("Loading world with no entities");
+        Logger::warning("Loading scene with no entities");
     }
 }
 
-void WorldLoader::load_entity(const nlohmann::json& entity_def)
+void SceneLoader::load_entity(const nlohmann::json& entity_def)
 {
     // TODO: instead of crashing if no type is provided we should error out
     const std::string entity_type = get_value<std::string>(entity_def, "type");
@@ -91,7 +91,7 @@ void WorldLoader::load_entity(const nlohmann::json& entity_def)
     }
 }
 
-void WorldLoader::load_components(const nlohmann::json& entity_def, const peng::weak_ptr<Entity>& entity)
+void SceneLoader::load_components(const nlohmann::json& entity_def, const peng::weak_ptr<Entity>& entity)
 {
     if (const auto it = entity_def.find("components"); it != entity_def.end())
     {
@@ -108,7 +108,7 @@ void WorldLoader::load_components(const nlohmann::json& entity_def, const peng::
     }
 }
 
-void WorldLoader::load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity)
+void SceneLoader::load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity)
 {
     if (!component_def.is_string())
     {
