@@ -30,6 +30,7 @@ void PengPong::post_create()
 	const float ortho_width = ortho_size * PengEngine::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
+	// TODO: PengEngine::get().entity_manager().create_entity is far too long
 	peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
 	camera->make_orthographic(ortho_size, 0.01f, 2.0f);
 
@@ -52,9 +53,6 @@ void PengPong::post_create()
 	barrier_bottom->add_component<components::BoxCollider2D>();
 	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 0.5f, 0);
 	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
-
-	// TODO: PengEngine::get().entity_manager().create_entity is far too long
-	PengEngine::get().entity_manager().create_entity<Ball>();
 
 	Logger::success("PengPong started");
 }

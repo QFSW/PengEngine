@@ -45,14 +45,32 @@ public:
 	requires std::constructible_from<T>
 	peng::weak_ptr<T> require_component();
 
-	[[nodiscard]] peng::weak_ptr<Component> get_component(const peng::shared_ref<const ReflectedType>& component_type) const;
-	[[nodiscard]] peng::weak_ptr<Component> get_component_in_children(const peng::shared_ref<const ReflectedType>& component_type) const;
+	[[nodiscard]] peng::weak_ptr<Component> get_component(const peng::shared_ref<const ReflectedType>& component_type);
+	[[nodiscard]] peng::weak_ptr<Component> get_component_in_children(const peng::shared_ref<const ReflectedType>& component_type);
+
+	[[nodiscard]] peng::weak_ptr<const Component> get_component(const peng::shared_ref<const ReflectedType>& component_type) const;
+	[[nodiscard]] peng::weak_ptr<const Component> get_component_in_children(const peng::shared_ref<const ReflectedType>& component_type) const;
 
 	template <std::derived_from<Component> T>
-	[[nodiscard]] peng::weak_ptr<T> get_component() const;
+	[[nodiscard]] peng::weak_ptr<T> get_component();
 
 	template <std::derived_from<Component> T>
-	[[nodiscard]] peng::weak_ptr<T> get_component_in_children() const;
+	[[nodiscard]] peng::weak_ptr<const T> get_component() const;
+
+	template <std::derived_from<Component> T>
+	[[nodiscard]] peng::weak_ptr<T> get_component_in_children();
+
+	template <std::derived_from<Component> T>
+	[[nodiscard]] peng::weak_ptr<const T> get_component_in_children() const;
+
+	template <std::derived_from<Entity> T>
+	[[nodiscard]] bool is_type() const;
+
+	template <std::derived_from<Entity> T>
+	[[nodiscard]] peng::weak_ptr<T> as_type();
+
+	template <std::derived_from<Entity> T>
+	[[nodiscard]] peng::weak_ptr<const T> as_type() const;
 
 	[[nodiscard]] const std::string& name() const noexcept { return _name; }
 	[[nodiscard]] bool active_in_hierarchy() const noexcept { return _active_hierarchy; }
@@ -131,7 +149,7 @@ peng::weak_ptr<T> Entity::require_component()
 }
 
 template <std::derived_from<Component> T>
-peng::weak_ptr<T> Entity::get_component() const
+peng::weak_ptr<T> Entity::get_component()
 {
 	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
 	const peng::weak_ptr<Component> component = get_component(reflected_type);
@@ -139,9 +157,46 @@ peng::weak_ptr<T> Entity::get_component() const
 }
 
 template <std::derived_from<Component> T>
-peng::weak_ptr<T> Entity::get_component_in_children() const
+peng::weak_ptr<const T> Entity::get_component() const
+{
+	return const_cast<Entity*>(this)->get_component<T>();
+}
+
+template <std::derived_from<Component> T>
+peng::weak_ptr<T> Entity::get_component_in_children()
 {
 	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
 	const peng::weak_ptr<Component> component = get_component_in_children(reflected_type);
 	return peng::weak_ptr<T>(std::static_pointer_cast<T>(component.lock().get_impl()));
+}
+
+template <std::derived_from<Component> T>
+peng::weak_ptr<const T> Entity::get_component_in_children() const
+{
+	return const_cast<Entity*>(this)->get_component_in_children<T>();
+}
+
+template <std::derived_from<Entity> T>
+bool Entity::is_type() const
+{
+	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
+	return reflected_type == type();
+}
+
+template <std::derived_from<Entity> T>
+peng::weak_ptr<T> Entity::as_type()
+{
+	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
+	if (reflected_type == type())
+	{
+		return peng::weak_ptr<T>(std::static_pointer_cast<T>(shared_from_this()));
+	}
+
+	return {};
+}
+
+template <std::derived_from<Entity> T>
+peng::weak_ptr<const T> Entity::as_type() const
+{
+	return const_cast<Entity*>(this)->as_type<T>();
 }

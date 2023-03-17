@@ -113,7 +113,7 @@ void Entity::destroy()
 	PengEngine::get().entity_manager().destroy_entity(weak_this());
 }
 
-peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type) const
+peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type)
 {
 	for (const peng::shared_ref<Component>& component : _components)
 	{
@@ -127,7 +127,7 @@ peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const Ref
 }
 
 peng::weak_ptr<Component> Entity::get_component_in_children(
-	const peng::shared_ref<const ReflectedType>& component_type) const
+	const peng::shared_ref<const ReflectedType>& component_type)
 {
 	if (peng::weak_ptr<Component> component = get_component(component_type))
 	{
@@ -143,6 +143,17 @@ peng::weak_ptr<Component> Entity::get_component_in_children(
 	}
 
 	return {};
+}
+
+peng::weak_ptr<const Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type) const
+{
+	return const_cast<Entity*>(this)->get_component(component_type);
+}
+
+peng::weak_ptr<const Component> Entity::get_component_in_children(
+	const peng::shared_ref<const ReflectedType>& component_type) const
+{
+	return const_cast<Entity*>(this)->get_component_in_children(component_type);
 }
 
 bool Entity::has_parent() const noexcept

@@ -15,6 +15,8 @@ namespace demo::pong
 		void tick(float delta_time) override;
 
 		input::Axis input_axis;
+
 		float movement_speed = 30;
+		float attack_arc = 90;
 	};
 }

@@ -14,5 +14,6 @@ namespace physics
 		math::Vector3f size;
 
 		[[nodiscard]] bool overlaps(const AABB& other) const;
+		// TODO: implement an intersect function that finds where a line intersects the AABB
 	};
 }
