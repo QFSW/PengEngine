@@ -40,6 +40,7 @@ namespace math
 		[[nodiscard]] Vector2<F> normalized() const noexcept;
 		[[nodiscard]] Vector2<F> normalized_unsafe() const noexcept;
 		[[nodiscard]] Vector2<F> reciprocal() const noexcept;
+		[[nodiscard]] Vector2 abs() const noexcept;
 
 		bool operator==(const Vector2& other) const;
 		bool operator!=(const Vector2& other) const;
@@ -146,6 +147,12 @@ namespace math
 	{
 		constexpr F one_f = 1;
 		return Vector2<F>(one_f / x, one_f / y);
+	}
+
+	template <number T>
+	Vector2<T> Vector2<T>::abs() const noexcept
+	{
+		return Vector2(std::abs(x), std::abs(y));
 	}
 
 	template <number T>

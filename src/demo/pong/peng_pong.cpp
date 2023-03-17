@@ -18,6 +18,8 @@ void PengPong::post_create()
 	Entity::post_create();
 	Logger::log("PengPong starting...");
 
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	PengEngine::get().set_max_delta_time(50.0);
 	PengEngine::get().set_window_name("PengPong");
 

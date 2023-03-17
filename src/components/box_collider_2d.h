@@ -10,5 +10,7 @@ namespace components
 
 	public:
 		using Collider2D::Collider2D;
+
+		physics::AABB bounding_box() const override;
 	};
 }

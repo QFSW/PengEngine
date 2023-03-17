@@ -145,16 +145,6 @@ peng::weak_ptr<Component> Entity::get_component_in_children(
 	return {};
 }
 
-peng::weak_ptr<const Entity> Entity::weak_this() const
-{
-	return peng::shared_ref(shared_from_this());
-}
-
-peng::weak_ptr<Entity> Entity::weak_this()
-{
-	return peng::shared_ref(shared_from_this());
-}
-
 bool Entity::has_parent() const noexcept
 {
 	return _parent.valid();

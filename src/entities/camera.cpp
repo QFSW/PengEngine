@@ -46,7 +46,7 @@ void Camera::post_create()
 		Logger::warning("Camera entity created when a valid camera already exists");
 	}
 
-	_current = weak_from(*this);
+	_current = weak_this();
 	assert(_current);
 }
 

@@ -35,14 +35,14 @@ void PointLight::post_create()
 {
 	Entity::post_create();
 
-	_active_lights.push_back(weak_from(*this));
+	_active_lights.push_back(weak_this());
 }
 
 void PointLight::pre_destroy()
 {
 	Entity::pre_destroy();
 
-	vectools::remove(_active_lights, weak_from(*this));
+	vectools::remove(_active_lights, weak_this());
 }
 
 PointLight::LightData& PointLight::data() noexcept

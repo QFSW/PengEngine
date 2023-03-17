@@ -39,7 +39,7 @@ void DirectionalLight::post_create()
 		Logger::warning("Only one directional light can be used at a time");
 	}
 
-	_current = weak_from(*this);
+	_current = weak_this();
 	assert(_current);
 }
 

@@ -54,9 +54,6 @@ public:
 	template <std::derived_from<Component> T>
 	[[nodiscard]] peng::weak_ptr<T> get_component_in_children() const;
 
-	[[nodiscard]] peng::weak_ptr<const Entity> weak_this() const;
-	[[nodiscard]] peng::weak_ptr<Entity> weak_this();
-
 	[[nodiscard]] const std::string& name() const noexcept { return _name; }
 	[[nodiscard]] bool active_in_hierarchy() const noexcept { return _active_hierarchy; }
 	[[nodiscard]] bool active_self() const noexcept { return _active_self; }
@@ -81,12 +78,6 @@ public:
 	// TODO: implement world_forwards
 	// TODO: implement world_up
 	// TODO: implement world_right
-
-	template <std::derived_from<Entity> T>
-	[[nodiscard]] static peng::weak_ptr<T> weak_from(T& entity);
-
-	template <std::derived_from<Entity> T>
-	[[nodiscard]] static peng::weak_ptr<const T> weak_from(const T& entity);
 
 protected:
 	std::string _name;
@@ -153,16 +144,4 @@ peng::weak_ptr<T> Entity::get_component_in_children() const
 	const peng::shared_ref<const ReflectedType> reflected_type = ReflectionDatabase::get().reflect_type_checked<T>();
 	const peng::weak_ptr<Component> component = get_component_in_children(reflected_type);
 	return peng::weak_ptr<T>(std::static_pointer_cast<T>(component.lock().get_impl()));
-}
-
-template <std::derived_from<Entity> T>
-peng::weak_ptr<T> Entity::weak_from(T& entity)
-{
-	return peng::weak_ptr<T>(std::static_pointer_cast<T>(entity.shared_from_this()));
-}
-
-template <std::derived_from<Entity> T>
-peng::weak_ptr<const T> Entity::weak_from(const T& entity)
-{
-	return peng::weak_ptr<const T>(std::static_pointer_cast<const T>(entity.shared_from_this()));
 }

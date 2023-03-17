@@ -319,6 +319,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
+    <ClCompile Include="src\physics\aabb.cpp" />
+    <ClCompile Include="src\physics\aabb.h" />
     <ClCompile Include="src\profiling\profiler_manager.cpp" />
     <ClCompile Include="src\profiling\scoped_event.cpp" />
     <ClCompile Include="src\profiling\scoped_gpu_event.cpp" />

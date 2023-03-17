@@ -7,7 +7,7 @@
 
 class Entity;
 
-class Component : public ITickable
+class Component : public ITickable, public std::enable_shared_from_this<Component>
 {
 	friend Entity;
 
