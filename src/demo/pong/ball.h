@@ -10,7 +10,5 @@ namespace demo::pong
 
 	public:
 		Ball();
-
-		void tick(float delta_time) override;
 	};
 }

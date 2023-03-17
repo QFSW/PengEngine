@@ -18,34 +18,18 @@ Ball::Ball()
 	const Vector2f velocity = Vector2f(rand_range(-1, 1), rand_range(-1, 1)).normalized() * 20;
 
 	add_component<RigidBody2D>()->velocity = velocity;
-	add_component<BoxCollider2D>();
 	add_component<MeshRenderer>(
 		rendering::Primitives::quad(),
 		rendering::Primitives::unlit_material()
 	);
 
-	_local_transform.scale = Vector3f(1, 1, 1);
-}
-
-void Ball::tick(float delta_time)
-{
-	Entity::tick(delta_time);
-
-	peng::weak_ptr<Collider2D> this_collider = get_component<BoxCollider2D>();
-	const physics::AABB this_aabb = this_collider->bounding_box();
-
-	for (peng::weak_ptr<Collider2D> other_collider : Collider2D::active_colliders())
+	peng::weak_ptr<BoxCollider2D> collider = add_component<BoxCollider2D>();
+	collider->triggers_enabled() = true;
+	collider->on_trigger_enter().subscribe([this](const peng::weak_ptr<Collider2D>&)
 	{
-		if (this_collider != other_collider)
-		{
-			const physics::AABB other_aabb = other_collider->bounding_box();
-			if (this_aabb.overlaps(other_aabb))
-			{
-				// TODO: do an actual reflection
-				// TODO: can get stuck, move it outside the collider
-				get_component<RigidBody2D>()->velocity *= -1;
-				break;
-			}
-		}
-	}
+		// TODO: do an actual reflection
+		get_component<RigidBody2D>()->velocity *= -1;
+	});
+
+	_local_transform.scale = Vector3f(1, 1, 1);
 }

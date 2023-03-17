@@ -3,6 +3,7 @@
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 #include <entities/camera.h>
+#include <components/box_collider_2d.h>
 
 #include "paddle.h"
 #include "ball.h"
@@ -41,6 +42,16 @@ void PengPong::post_create()
 	paddle_2->input_axis.positive = input::KeyCode::up;
 	paddle_2->input_axis.negative = input::KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
+
+	peng::weak_ptr<Entity> barrier_top = PengEngine::get().entity_manager().create_entity<Entity>("BarrierTop");
+	barrier_top->add_component<components::BoxCollider2D>();
+	barrier_top->local_transform().position = Vector3f(0, ortho_size + 0.5f, 0);
+	barrier_top->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
+
+	peng::weak_ptr<Entity> barrier_bottom = PengEngine::get().entity_manager().create_entity<Entity>("BarrierBottom");
+	barrier_bottom->add_component<components::BoxCollider2D>();
+	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 0.5f, 0);
+	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
 
 	// TODO: PengEngine::get().entity_manager().create_entity is far too long
 	PengEngine::get().entity_manager().create_entity<Ball>();
