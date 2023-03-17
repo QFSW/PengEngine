@@ -5,6 +5,7 @@
 #include <entities/camera.h>
 
 #include "paddle.h"
+#include "ball.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -38,6 +39,9 @@ void PengPong::post_create()
 	paddle_2->input_axis.positive = input::KeyCode::up;
 	paddle_2->input_axis.negative = input::KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
+
+	// TODO: PengEngine::get().entity_manager().create_entity is far too long
+	PengEngine::get().entity_manager().create_entity<Ball>();
 
 	Logger::success("PengPong started");
 }

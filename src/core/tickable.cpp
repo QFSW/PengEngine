@@ -5,6 +5,7 @@ std::ostream& operator<<(std::ostream& os, TickGroup tick_group)
 	switch (tick_group)
 	{
 		case TickGroup::standard:		 os << "standard";			break;
+		case TickGroup::physics:		 os << "physics";			break;
 		case TickGroup::pre_render:		 os << "pre_render";		break;
 		case TickGroup::render:			 os << "render";			break;
 		case TickGroup::render_parallel: os << "render_parallel";	break;

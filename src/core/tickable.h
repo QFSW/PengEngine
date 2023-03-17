@@ -5,6 +5,7 @@
 enum class TickGroup
 {
 	standard,
+	physics,
 	pre_render,
 	render,
 	render_parallel,

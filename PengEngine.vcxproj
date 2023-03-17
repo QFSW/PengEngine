@@ -283,8 +283,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\box_collider_2d.cpp" />
+    <ClCompile Include="src\components\collider_2d.cpp" />
     <ClCompile Include="src\components\fly_cam_controller.cpp" />
     <ClCompile Include="src\components\mesh_renderer.cpp" />
+    <ClCompile Include="src\components\rigid_body.cpp" />
+    <ClCompile Include="src\components\rigid_body_2d.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\component_factory.cpp" />
     <ClCompile Include="src\core\entity_factory.cpp" />
@@ -300,6 +304,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\demo_main.cpp" />
     <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
     <ClCompile Include="src\demo\gravity\rock.cpp" />
+    <ClCompile Include="src\demo\pong\ball.cpp" />
     <ClCompile Include="src\demo\pong\paddle.cpp" />
     <ClCompile Include="src\demo\pong\peng_pong.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
@@ -342,8 +347,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   <ItemGroup>
     <ClInclude Include="..\..\..\Downloads\json.hpp" />
     <ClInclude Include="src\common\common.h" />
+    <ClInclude Include="src\components\box_collider_2d.h" />
+    <ClInclude Include="src\components\collider_2d.h" />
     <ClInclude Include="src\components\fly_cam_controller.h" />
     <ClInclude Include="src\components\mesh_renderer.h" />
+    <ClInclude Include="src\components\rigid_body.h" />
+    <ClInclude Include="src\components\rigid_body_2d.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\component_definition.h" />
     <ClInclude Include="src\core\component_factory.h" />
@@ -367,6 +376,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\demo_main.h" />
     <ClInclude Include="src\demo\gravity\gravity_controller.h" />
     <ClInclude Include="src\demo\gravity\rock.h" />
+    <ClInclude Include="src\demo\pong\ball.h" />
     <ClInclude Include="src\demo\pong\paddle.h" />
     <ClInclude Include="src\demo\pong\peng_pong.h" />
     <ClInclude Include="src\entities\camera.h" />
