@@ -5,6 +5,7 @@
 
 namespace demo::pong
 {
+	// TODO: stop paddle from being able to go off screen
 	class Paddle final : public Entity
 	{
 		DECLARE_ENTITY(Paddle);
@@ -16,7 +17,8 @@ namespace demo::pong
 
 		input::Axis input_axis;
 
-		float movement_speed = 30;
+		int32_t score = 0;
+		float movement_speed = 35;
 		float attack_arc = 90;
 	};
 }

@@ -6,6 +6,7 @@
 #include <rendering/primitives.h>
 #include <math/math.h>
 
+#include "goal.h"
 #include "paddle.h"
 
 IMPLEMENT_ENTITY(demo::pong::Ball);
@@ -16,11 +17,9 @@ using namespace math;
 
 Ball::Ball()
 	: Entity("Ball")
-	, _speed(30)
+	, _speed(50)
 {
-	const Vector2f velocity = Vector2f(rand_range(-1, 1), rand_range(-1, 1)).normalized() * _speed;
-
-	add_component<RigidBody2D>()->velocity = velocity;
+	add_component<RigidBody2D>();
 	add_component<MeshRenderer>(
 		rendering::Primitives::quad(),
 		rendering::Primitives::unlit_material()
@@ -34,6 +33,18 @@ Ball::Ball()
 		});
 
 	_local_transform.scale = Vector3f(1, 1, 1);
+	respawn();
+}
+
+void Ball::respawn()
+{
+	const float angle = rand_range(-1, 1);
+	const Vector2f dir = Vector2f(std::cos(angle), std::sin(angle));
+	const Vector2f reflector = Vector2f(rand() % 2 ? -1 : 1, 1);
+	const Vector2f velocity = dir * reflector * _speed;
+
+	get_component<RigidBody2D>()->velocity = velocity;
+	_local_transform.position = Vector3f::zero();
 }
 
 void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
@@ -41,7 +52,13 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 	const physics::AABB box = collider->bounding_box();
 	const Vector3f delta = box.center - world_position();
 
-	if (peng::weak_ptr<const Paddle> paddle = collider->owner().as_type<Paddle>())
+	if (peng::weak_ptr<const Goal> goal = collider->owner().as_type<Goal>())
+	{
+		// If it's a goal, increment score and respawn
+		goal->associated_paddle()->score++;
+		respawn();
+	}
+	else if (peng::weak_ptr<const Paddle> paddle = collider->owner().as_type<Paddle>())
 	{
 		// If it's a paddle, we need to bounce away in an arc based on the vertical hit position
 		constexpr float to_rads = 3.14f / 180.0f;

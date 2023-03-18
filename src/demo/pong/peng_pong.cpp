@@ -5,8 +5,8 @@
 #include <entities/camera.h>
 #include <components/box_collider_2d.h>
 
+#include "goal.h"
 #include "paddle.h"
-#include "ball.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -53,6 +53,14 @@ void PengPong::post_create()
 	barrier_bottom->add_component<components::BoxCollider2D>();
 	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 0.5f, 0);
 	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
+
+	peng::weak_ptr<Goal> goal_right = PengEngine::get().entity_manager().create_entity<Goal>(paddle_1);
+	goal_right->local_transform().position = Vector3f(ortho_width + 2, 0, 0);
+	goal_right->local_transform().scale = Vector3f(2, ortho_size * 3, 1);
+
+	peng::weak_ptr<Goal> goal_left = PengEngine::get().entity_manager().create_entity<Goal>(paddle_2);
+	goal_left->local_transform().position = Vector3f(-ortho_width - 2, 0, 0);
+	goal_left->local_transform().scale = Vector3f(2, ortho_size * 3, 1);
 
 	Logger::success("PengPong started");
 }

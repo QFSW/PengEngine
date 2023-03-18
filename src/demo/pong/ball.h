@@ -17,6 +17,7 @@ namespace demo::pong
 		Ball();
 
 	private:
+		void respawn();
 		void handle_collision(peng::weak_ptr<components::Collider2D> collider);
 
 		float _speed;

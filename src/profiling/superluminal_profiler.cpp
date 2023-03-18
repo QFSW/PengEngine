@@ -1,6 +1,9 @@
 #include "superluminal_profiler.h"
 
+#pragma warning( push, 0 )
 #include <windows.h>
+#pragma warning( pop )
+
 #include <libs/superluminal/PerformanceAPI_loader.h>
 #include <core/logger.h>
 

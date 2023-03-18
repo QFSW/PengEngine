@@ -209,6 +209,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\libs\glew\include;$(SolutionDir)src\libs\glfw\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>26451; 4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -237,6 +238,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\libs\glew\include;$(SolutionDir)src\libs\glfw\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>26451; 4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -267,6 +269,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\libs\glew\include;$(SolutionDir)src\libs\glfw\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>26451; 4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -305,6 +308,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
     <ClCompile Include="src\demo\gravity\rock.cpp" />
     <ClCompile Include="src\demo\pong\ball.cpp" />
+    <ClCompile Include="src\demo\pong\goal.cpp" />
     <ClCompile Include="src\demo\pong\paddle.cpp" />
     <ClCompile Include="src\demo\pong\peng_pong.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
@@ -379,6 +383,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\gravity\gravity_controller.h" />
     <ClInclude Include="src\demo\gravity\rock.h" />
     <ClInclude Include="src\demo\pong\ball.h" />
+    <ClInclude Include="src\demo\pong\goal.h" />
     <ClInclude Include="src\demo\pong\paddle.h" />
     <ClInclude Include="src\demo\pong\peng_pong.h" />
     <ClInclude Include="src\entities\camera.h" />
