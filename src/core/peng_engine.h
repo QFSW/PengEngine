@@ -31,6 +31,10 @@ public:
 	void set_msaa(uint32_t msaa_samples);
 	void set_window_name(const std::string& name);
 
+	void enter_fullscreen();
+	void exit_fullscreen();
+	void toggle_fullscreen();
+
 	void maximize_window() const;
 
 	[[nodiscard]] bool shutting_down() const;
@@ -62,6 +66,8 @@ private:
 	float _max_delta_time;
 
 	math::Vector2i _resolution;
+	math::Vector2i _windowed_resolution;
+	math::Vector2i _windowed_position;
 	bool _fullscreen;
 	bool _cursor_locked;
 	bool _vsync;

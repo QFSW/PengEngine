@@ -17,6 +17,8 @@ PengEngine::PengEngine()
 	, _target_frametime(1000 / 60.0f)
 	, _max_delta_time(0)
 	, _resolution(800, 600)
+	, _windowed_resolution(_resolution)
+	, _windowed_position(100, 100)
 	, _fullscreen(false)
 	, _cursor_locked(false)
 	, _vsync(false)
@@ -71,20 +73,24 @@ void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
 
 void PengEngine::set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept
 {
-	if (_executing)
+	// Cache the windowed resolution and position on fullscreen enter so we can restore it
+	if (fullscreen && !_fullscreen)
 	{
-		if (fullscreen != _fullscreen)
-		{
-			Logger::get().error("Changing fullscreen mode at runtime is not yet supported");
-			return;
-		}
-
-		glfwSetWindowSize(_glfw_window, resolution.x, resolution.y);
-		return;
+		_windowed_resolution = _resolution;
+		glfwGetWindowPos(_glfw_window, &_windowed_position.x, &_windowed_position.y);
 	}
 
 	_resolution = resolution;
 	_fullscreen = fullscreen;
+
+	if (_executing)
+	{
+		GLFWmonitor* monitor = _fullscreen ? glfwGetPrimaryMonitor() : nullptr;
+		const math::Vector2i position = _fullscreen ? math::Vector2i::zero() : _windowed_position;
+
+		glfwSetWindowSize(_glfw_window, _resolution.x, _resolution.y);
+		glfwSetWindowMonitor(_glfw_window, monitor, position.x, position.y, _resolution.x, _resolution.y, GLFW_DONT_CARE);
+	}
 }
 
 void PengEngine::set_cursor_locked(bool cursor_locked)
@@ -141,6 +147,31 @@ void PengEngine::set_window_name(const std::string& name)
 	if (_executing)
 	{
 		glfwSetWindowTitle(_glfw_window, _window_name.c_str());
+	}
+}
+
+void PengEngine::enter_fullscreen()
+{
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	set_resolution(math::Vector2i(mode->width, mode->height), true);
+}
+
+void PengEngine::exit_fullscreen()
+{
+	set_resolution(_windowed_resolution, false);
+}
+
+void PengEngine::toggle_fullscreen()
+{
+	if (_fullscreen)
+	{
+		exit_fullscreen();
+	}
+	else
+	{
+		enter_fullscreen();
 	}
 }
 

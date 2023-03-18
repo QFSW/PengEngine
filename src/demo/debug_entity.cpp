@@ -16,7 +16,7 @@ void demo::DebugEntity::tick(float delta_time)
 
 	if (input_manager[KeyCode::f11].pressed())
 	{
-		PengEngine::get().maximize_window();
+		PengEngine::get().toggle_fullscreen();
 	}
 
 	if (input_manager[KeyCode::escape].pressed())
