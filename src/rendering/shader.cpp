@@ -16,393 +16,393 @@ using namespace rendering;
 using namespace math;
 
 Shader::Shader(
-	const std::string& name,
-	const std::string& vert_shader_path,
-	const std::string& frag_shader_path
+    const std::string& name,
+    const std::string& vert_shader_path,
+    const std::string& frag_shader_path
 )
-	: Shader(utils::copy(name), vert_shader_path, frag_shader_path)
+    : Shader(utils::copy(name), vert_shader_path, frag_shader_path)
 { }
 
 Shader::Shader(
-	std::string&& name,
-	const std::string& vert_shader_path,
-	const std::string& frag_shader_path
+    std::string&& name,
+    const std::string& vert_shader_path,
+    const std::string& frag_shader_path
 )
-	: _name(std::move(name))
-	, _broken(false)
-	, _draw_order(0)
+    : _name(std::move(name))
+    , _broken(false)
+    , _draw_order(0)
 {
-	SCOPED_EVENT("Building shader", _name.c_str());
-	Logger::log("Building shader '%s'", _name.c_str());
+    SCOPED_EVENT("Building shader", _name.c_str());
+    Logger::log("Building shader '%s'", _name.c_str());
 
-	ShaderCompiler compiler;
-	PreprocessedShader preprocessed_vert_shader = compiler.preprocess_shader(vert_shader_path, ShaderType::vertex);
-	PreprocessedShader preprocessed_frag_shader = compiler.preprocess_shader(frag_shader_path, ShaderType::fragment);
+    ShaderCompiler compiler;
+    PreprocessedShader preprocessed_vert_shader = compiler.preprocess_shader(vert_shader_path, ShaderType::vertex);
+    PreprocessedShader preprocessed_frag_shader = compiler.preprocess_shader(frag_shader_path, ShaderType::fragment);
 
-	const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
-	const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
+    const GLuint vert_shader = compiler.compile_shader(preprocessed_vert_shader);
+    const GLuint frag_shader = compiler.compile_shader(preprocessed_frag_shader);
 
-	std::unordered_set<std::string> seen_symbols;
+    std::unordered_set<std::string> seen_symbols;
 
-	for (ShaderSymbol& symbol : preprocessed_vert_shader.symbols)
-	{
-		if (!seen_symbols.contains(symbol.identifier))
-		{
-			seen_symbols.insert(symbol.identifier);
-			_symbols.push_back(std::move(symbol));
-		}
-	}
+    for (ShaderSymbol& symbol : preprocessed_vert_shader.symbols)
+    {
+        if (!seen_symbols.contains(symbol.identifier))
+        {
+            seen_symbols.insert(symbol.identifier);
+            _symbols.push_back(std::move(symbol));
+        }
+    }
 
-	for (ShaderSymbol& symbol : preprocessed_frag_shader.symbols)
-	{
-		if (!seen_symbols.contains(symbol.identifier))
-		{
-			seen_symbols.insert(symbol.identifier);
-			_symbols.push_back(std::move(symbol));
-		}
-	}
+    for (ShaderSymbol& symbol : preprocessed_frag_shader.symbols)
+    {
+        if (!seen_symbols.contains(symbol.identifier))
+        {
+            seen_symbols.insert(symbol.identifier);
+            _symbols.push_back(std::move(symbol));
+        }
+    }
 
-	_broken |= !validate_shader_compile(vert_shader);
-	_broken |= !validate_shader_compile(frag_shader);
+    _broken |= !validate_shader_compile(vert_shader);
+    _broken |= !validate_shader_compile(frag_shader);
 
-	Logger::log("Linking shader program");
-	_program = glCreateProgram();
-	glAttachShader(_program, vert_shader);
-	glAttachShader(_program, frag_shader);
-	glLinkProgram(_program);
-	_broken |= !validate_shader_link(_program);
+    Logger::log("Linking shader program");
+    _program = glCreateProgram();
+    glAttachShader(_program, vert_shader);
+    glAttachShader(_program, frag_shader);
+    glLinkProgram(_program);
+    _broken |= !validate_shader_link(_program);
 
-	glDeleteShader(vert_shader);
-	glDeleteShader(frag_shader);
+    glDeleteShader(vert_shader);
+    glDeleteShader(frag_shader);
 
-	if (!_broken)
-	{
-		Logger::log("Extracting uniform information");
+    if (!_broken)
+    {
+        Logger::log("Extracting uniform information");
 
-		GLint num_uniforms;
-		glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
+        GLint num_uniforms;
+        glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
-		_uniforms.resize(num_uniforms);
-		for (GLint location = 0; location < num_uniforms; location++)
-		{
-			constexpr int32_t buf_size = 512;
-			char name_buf[buf_size];
-			GLint name_length;
-			GLint size;
-			GLenum type;
+        _uniforms.resize(num_uniforms);
+        for (GLint location = 0; location < num_uniforms; location++)
+        {
+            constexpr int32_t buf_size = 512;
+            char name_buf[buf_size];
+            GLint name_length;
+            GLint size;
+            GLenum type;
 
-			glGetActiveUniform(_program, location, buf_size, &name_length, &size, &type, name_buf);
+            glGetActiveUniform(_program, location, buf_size, &name_length, &size, &type, name_buf);
 
-			Uniform& uniform = _uniforms[location];
-			uniform.location = location;
-			uniform.name = name_buf;
-			uniform.type = type;
-			uniform.default_value = read_uniform(uniform);
-		}
-	}
+            Uniform& uniform = _uniforms[location];
+            uniform.location = location;
+            uniform.name = name_buf;
+            uniform.type = type;
+            uniform.default_value = read_uniform(uniform);
+        }
+    }
 }
 
 Shader::~Shader()
 {
-	SCOPED_EVENT("Destroying shader", _name.c_str());
-	Logger::log("Destroying shader '%s'", _name.c_str());
+    SCOPED_EVENT("Destroying shader", _name.c_str());
+    Logger::log("Destroying shader '%s'", _name.c_str());
 
-	glDeleteProgram(_program);
+    glDeleteProgram(_program);
 }
 
 peng::shared_ref<const Shader> Shader::fallback()
 {
-	static peng::weak_ptr<const Shader> weak_fallback;
-	if (const peng::shared_ptr<const Shader> fallback_locked = weak_fallback.lock())
-	{
-		return fallback_locked.to_shared_ref();
-	}
+    static peng::weak_ptr<const Shader> weak_fallback;
+    if (const peng::shared_ptr<const Shader> fallback_locked = weak_fallback.lock())
+    {
+        return fallback_locked.to_shared_ref();
+    }
 
-	const peng::shared_ref shader = peng::make_shared<Shader>(
-		"Fallback",
-		"resources/shaders/core/projection.vert",
-		"resources/shaders/core/fallback.frag"
-	);
+    const peng::shared_ref shader = peng::make_shared<Shader>(
+        "Fallback",
+        "resources/shaders/core/projection.vert",
+        "resources/shaders/core/fallback.frag"
+    );
 
-	assert(!shader->broken());
+    assert(!shader->broken());
 
-	weak_fallback = shader;
-	return shader;
+    weak_fallback = shader;
+    return shader;
 }
 
 void Shader::use() const
 {
-	assert(!_broken);
-	glUseProgram(_program);
+    assert(!_broken);
+    glUseProgram(_program);
 }
 
 int32_t& Shader::draw_order() noexcept
 {
-	return _draw_order;
+    return _draw_order;
 }
 
 const std::string& Shader::name() const noexcept
 {
-	return _name;
+    return _name;
 }
 
 bool Shader::broken() const noexcept
 {
-	return _broken;
+    return _broken;
 }
 
 int32_t Shader::draw_order() const noexcept
 {
-	return _draw_order;
+    return _draw_order;
 }
 
 GLint Shader::get_uniform_location(const std::string& name) const
 {
-	for (const Uniform& uniform : _uniforms)
-	{
-		if (uniform.name == name)
-		{
-			return uniform.location;
-		}
-	}
+    for (const Uniform& uniform : _uniforms)
+    {
+        if (uniform.name == name)
+        {
+            return uniform.location;
+        }
+    }
 
-	return -1;
+    return -1;
 }
 
 std::optional<std::string> Shader::get_symbol_value(const std::string& identifier) const noexcept
 {
-	for (const ShaderSymbol& symbol : _symbols)
-	{
-		if (symbol.identifier == identifier)
-		{
-			return symbol.value;
-		}
-	}
+    for (const ShaderSymbol& symbol : _symbols)
+    {
+        if (symbol.identifier == identifier)
+        {
+            return symbol.value;
+        }
+    }
 
-	return {};
+    return {};
 }
 
 bool Shader::has_symbol(const std::string& identifier) const noexcept
 {
-	for (const ShaderSymbol& symbol : _symbols)
-	{
-		if (symbol.identifier == identifier)
-		{
-			return true;
-		}
-	}
+    for (const ShaderSymbol& symbol : _symbols)
+    {
+        if (symbol.identifier == identifier)
+        {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 const std::vector<Shader::Uniform>& Shader::uniforms() const noexcept
 {
-	return _uniforms;
+    return _uniforms;
 }
 
 const std::vector<ShaderSymbol>& Shader::symbols() const noexcept
 {
-	return _symbols;
+    return _symbols;
 }
 
 bool Shader::validate_shader_compile(GLuint shader) const
 {
-	GLint success;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    GLint success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-	if constexpr (Logger::enabled())
-	{
-		if (!success)
-		{
-			GLint error_length;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &error_length);
+    if constexpr (Logger::enabled())
+    {
+        if (!success)
+        {
+            GLint error_length;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &error_length);
 
-			std::vector<GLchar> error_log(error_length);
-			glGetShaderInfoLog(shader, error_length, nullptr, error_log.data());
-			Logger::error(error_log.data());
-		}
-	}
+            std::vector<GLchar> error_log(error_length);
+            glGetShaderInfoLog(shader, error_length, nullptr, error_log.data());
+            Logger::error(error_log.data());
+        }
+    }
 
-	return success == GL_TRUE;
+    return success == GL_TRUE;
 }
 
 bool Shader::validate_shader_link(GLuint shader) const
 {
-	GLint success;
-	glGetProgramiv(shader, GL_LINK_STATUS, &success);
+    GLint success;
+    glGetProgramiv(shader, GL_LINK_STATUS, &success);
 
-	if constexpr (Logger::enabled())
-	{
-		if (!success)
-		{
-			GLint error_length;
-			glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &error_length);
+    if constexpr (Logger::enabled())
+    {
+        if (!success)
+        {
+            GLint error_length;
+            glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &error_length);
 
-			std::vector<GLchar> error_log(error_length);
-			glGetProgramInfoLog(shader, error_length, nullptr, error_log.data());
-			Logger::error(error_log.data());
-		}
-	}
+            std::vector<GLchar> error_log(error_length);
+            glGetProgramInfoLog(shader, error_length, nullptr, error_log.data());
+            Logger::error(error_log.data());
+        }
+    }
 
-	return success == GL_TRUE;
+    return success == GL_TRUE;
 }
 
 std::optional<Shader::Parameter> Shader::read_uniform(const Uniform& uniform) const
 {
-	switch (uniform.type)
-	{
-		case GL_INT:
-		{
-			int32_t value;
-			glGetnUniformiv(_program, uniform.location, sizeof(value), &value);
+    switch (uniform.type)
+    {
+        case GL_INT:
+        {
+            int32_t value;
+            glGetnUniformiv(_program, uniform.location, sizeof(value), &value);
 
-			return value;
-		}
-		case GL_UNSIGNED_INT:
-		{
-			uint32_t value;
-			glGetnUniformuiv(_program, uniform.location, sizeof(value), &value);
+            return value;
+        }
+        case GL_UNSIGNED_INT:
+        {
+            uint32_t value;
+            glGetnUniformuiv(_program, uniform.location, sizeof(value), &value);
 
-			return value;
-		}
-		case GL_FLOAT:
-		{
-			float value;
-			glGetnUniformfv(_program, uniform.location, sizeof(value), &value);
+            return value;
+        }
+        case GL_FLOAT:
+        {
+            float value;
+            glGetnUniformfv(_program, uniform.location, sizeof(value), &value);
 
-			return value;
-		}
-		case GL_DOUBLE:
-		{
-			double value;
-			glGetnUniformdv(_program, uniform.location, sizeof(value), &value);
+            return value;
+        }
+        case GL_DOUBLE:
+        {
+            double value;
+            glGetnUniformdv(_program, uniform.location, sizeof(value), &value);
 
-			return value;
-		}
-		case GL_INT_VEC2:
-		{
-			int32_t value[2];
-			glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            return value;
+        }
+        case GL_INT_VEC2:
+        {
+            int32_t value[2];
+            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector2i(value[0], value[1]);
-		}
-		case GL_UNSIGNED_INT_VEC2:
-		{
-			uint32_t value[2];
-			glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            return Vector2i(value[0], value[1]);
+        }
+        case GL_UNSIGNED_INT_VEC2:
+        {
+            uint32_t value[2];
+            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector2u(value[0], value[1]);
-		}
-		case GL_FLOAT_VEC2:
-		{
-			float value[2];
-			glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            return Vector2u(value[0], value[1]);
+        }
+        case GL_FLOAT_VEC2:
+        {
+            float value[2];
+            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
 
-			return Vector2f(value[0], value[1]);
-		}
-		case GL_DOUBLE_VEC2:
-		{
-			double value[2];
-			glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            return Vector2f(value[0], value[1]);
+        }
+        case GL_DOUBLE_VEC2:
+        {
+            double value[2];
+            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
 
-			return Vector2d(value[0], value[1]);
-		}
-		case GL_INT_VEC3:
-		{
-			int32_t value[3];
-			glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            return Vector2d(value[0], value[1]);
+        }
+        case GL_INT_VEC3:
+        {
+            int32_t value[3];
+            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector3i(value[0], value[1], value[2]);
-		}
-		case GL_UNSIGNED_INT_VEC3:
-		{
-			uint32_t value[3];
-			glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            return Vector3i(value[0], value[1], value[2]);
+        }
+        case GL_UNSIGNED_INT_VEC3:
+        {
+            uint32_t value[3];
+            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector3u(value[0], value[1], value[2]);
-		}
-		case GL_FLOAT_VEC3:
-		{
-			float value[3];
-			glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            return Vector3u(value[0], value[1], value[2]);
+        }
+        case GL_FLOAT_VEC3:
+        {
+            float value[3];
+            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
 
-			return Vector3f(value[0], value[1], value[2]);
-		}
-		case GL_DOUBLE_VEC3:
-		{
-			double value[3];
-			glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            return Vector3f(value[0], value[1], value[2]);
+        }
+        case GL_DOUBLE_VEC3:
+        {
+            double value[3];
+            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
 
-			return Vector3d(value[0], value[1], value[2]);
-		}
-		case GL_INT_VEC4:
-		{
-			int32_t value[4];
-			glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            return Vector3d(value[0], value[1], value[2]);
+        }
+        case GL_INT_VEC4:
+        {
+            int32_t value[4];
+            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector4i(value[0], value[1], value[2], value[3]);
-		}
-		case GL_UNSIGNED_INT_VEC4:
-		{
-			uint32_t value[4];
-			glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            return Vector4i(value[0], value[1], value[2], value[3]);
+        }
+        case GL_UNSIGNED_INT_VEC4:
+        {
+            uint32_t value[4];
+            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
 
-			return Vector4u(value[0], value[1], value[2], value[3]);
-		}
-		case GL_FLOAT_VEC4:
-		{
-			float value[4];
-			glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            return Vector4u(value[0], value[1], value[2], value[3]);
+        }
+        case GL_FLOAT_VEC4:
+        {
+            float value[4];
+            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
 
-			return Vector4f(value[0], value[1], value[2], value[3]);
-		}
-		case GL_DOUBLE_VEC4:
-		{
-			double value[4];
-			glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            return Vector4f(value[0], value[1], value[2], value[3]);
+        }
+        case GL_DOUBLE_VEC4:
+        {
+            double value[4];
+            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
 
-			return Vector4d(value[0], value[1], value[2], value[3]);
-		}
-		case GL_FLOAT_MAT3:
-		{
-			std::array<float, 9> value;
-			glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
+            return Vector4d(value[0], value[1], value[2], value[3]);
+        }
+        case GL_FLOAT_MAT3:
+        {
+            std::array<float, 9> value;
+            glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
 
-			return Matrix3x3f(value);
-		}
-		case GL_DOUBLE_MAT3:
-		{
-			std::array<double, 9> value;
-			glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+            return Matrix3x3f(value);
+        }
+        case GL_DOUBLE_MAT3:
+        {
+            std::array<double, 9> value;
+            glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
 
-			return Matrix3x3d(value);
-		}
-		case GL_FLOAT_MAT4:
-		{
-			std::array<float, 16> value;
-			glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
+            return Matrix3x3d(value);
+        }
+        case GL_FLOAT_MAT4:
+        {
+            std::array<float, 16> value;
+            glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
 
-			return Matrix4x4f(value);
-		}
-		case GL_DOUBLE_MAT4:
-		{
-			std::array<double, 16> value;
-			glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+            return Matrix4x4f(value);
+        }
+        case GL_DOUBLE_MAT4:
+        {
+            std::array<double, 16> value;
+            glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
 
-			return Matrix4x4d(value);
-		}
-		case GL_SAMPLER_2D:
-		{
-			return Primitives::white_tex();
-		}
-		default:
-		{
-			Logger::get().logf(LogSeverity::error,
-				"Unable to get default value of parameter %s due to unsupported uniform type 0x%x",
-				uniform.name.c_str(), uniform.type
-			);
+            return Matrix4x4d(value);
+        }
+        case GL_SAMPLER_2D:
+        {
+            return Primitives::white_tex();
+        }
+        default:
+        {
+            Logger::get().logf(LogSeverity::error,
+                "Unable to get default value of parameter %s due to unsupported uniform type 0x%x",
+                uniform.name.c_str(), uniform.type
+            );
 
-			return std::nullopt;
-		}
-	}
+            return std::nullopt;
+        }
+    }
 }

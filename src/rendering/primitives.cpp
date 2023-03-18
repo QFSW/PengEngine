@@ -16,10 +16,10 @@ using namespace math;
 peng::shared_ref<const Mesh> Primitives::cube()
 {
     static peng::weak_ptr<const Mesh> weak_cube;
-	if (const peng::shared_ptr<const Mesh> strong_cube = weak_cube.lock())
-	{
-		return strong_cube.to_shared_ref();
-	}
+    if (const peng::shared_ptr<const Mesh> strong_cube = weak_cube.lock())
+    {
+        return strong_cube.to_shared_ref();
+    }
 
     const std::vector<Vertex> vertices =
     {
@@ -75,7 +75,7 @@ peng::shared_ref<const Mesh> Primitives::cube()
         Vector3u(23, 21, 22),
     };
 
-	peng::shared_ref<Mesh> cube = peng::make_shared<Mesh>(
+    peng::shared_ref<Mesh> cube = peng::make_shared<Mesh>(
         "Cube", vertices, indices
     );
 
@@ -219,7 +219,7 @@ std::vector<Vertex> Primitives::icosahedron_vertices(float radius)
     const float r = radius;
     const float x = r / t;
 
-	std::vector<Vertex> vertices = {
+    std::vector<Vertex> vertices = {
         Vertex(Vector3f(-x, r, 0), Vector3f::zero(), Vector2f::zero()),
         Vertex(Vector3f(x, r, 0), Vector3f::zero(), Vector2f::zero()),
         Vertex(Vector3f(-x, -r, 0), Vector3f::zero(), Vector2f::zero()),
@@ -240,7 +240,7 @@ std::vector<Vertex> Primitives::icosahedron_vertices(float radius)
 std::vector<Vector3u> Primitives::icosahedron_indices()
 {
     return std::vector<Vector3u>
-	{
+    {
         Vector3u(0, 11, 5),
         Vector3u(0, 5, 1),
         Vector3u(0, 1, 7),
@@ -352,20 +352,20 @@ peng::shared_ref<const Shader> Primitives::unlit_shader()
 
 peng::shared_ref<const Shader> Primitives::phong_shader()
 {
-	static peng::weak_ptr<const Shader> weak_shader;
-	if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
-	{
-		return strong_shader.to_shared_ref();
-	}
+    static peng::weak_ptr<const Shader> weak_shader;
+    if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
+    {
+        return strong_shader.to_shared_ref();
+    }
     \
-	peng::shared_ref<Shader> phong = peng::make_shared<Shader>(
-		"Phong",
-		"resources/shaders/core/projection.vert",
-		"resources/shaders/core/phong.frag"
-	);
+    peng::shared_ref<Shader> phong = peng::make_shared<Shader>(
+        "Phong",
+        "resources/shaders/core/projection.vert",
+        "resources/shaders/core/phong.frag"
+    );
 
-	weak_shader = phong;
-	return phong;
+    weak_shader = phong;
+    return phong;
 }
 
 peng::shared_ref<const Shader> Primitives::skybox_shader()
@@ -398,9 +398,9 @@ peng::shared_ref<Material> Primitives::unlit_material()
 
 peng::shared_ref<Material> Primitives::phong_material()
 {
-	return peng::make_shared<Material>(
-		phong_shader()
-	);
+    return peng::make_shared<Material>(
+        phong_shader()
+    );
 }
 
 peng::shared_ref<Material> Primitives::skybox_material()

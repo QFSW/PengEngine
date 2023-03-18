@@ -4,8 +4,8 @@ using namespace physics;
 using namespace math;
 
 AABB::AABB(const Vector3f& center, const Vector3f& size)
-	: center(center)
-	, size(size)
+    : center(center)
+    , size(size)
 { }
 
 bool AABB::overlaps(const AABB& other) const

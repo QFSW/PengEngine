@@ -8,29 +8,29 @@
 
 namespace rendering
 {
-	class Texture;
+    class Texture;
 
-	// TODO: add object name for RenderDoc
-	class FrameBuffer
-	{
-	public:
-		FrameBuffer(const std::string& name, const math::Vector2i& resolution);
-		FrameBuffer(const FrameBuffer&) = delete;
-		FrameBuffer(FrameBuffer&&) = delete;
-		~FrameBuffer();
+    // TODO: add object name for RenderDoc
+    class FrameBuffer
+    {
+    public:
+        FrameBuffer(const std::string& name, const math::Vector2i& resolution);
+        FrameBuffer(const FrameBuffer&) = delete;
+        FrameBuffer(FrameBuffer&&) = delete;
+        ~FrameBuffer();
 
-		void add_color_attachment();
+        void add_color_attachment();
 
-		void bind() const;
-		void unbind() const;
+        void bind() const;
+        void unbind() const;
 
-		[[nodiscard]] const std::vector<peng::shared_ref<Texture>>& color_attachments() const noexcept;
+        [[nodiscard]] const std::vector<peng::shared_ref<Texture>>& color_attachments() const noexcept;
 
-	private:
-		GLuint _fbo;
+    private:
+        GLuint _fbo;
 
-		std::string _name;
-		math::Vector2i _resolution;
-		std::vector<peng::shared_ref<Texture>> _color_attachments;
-	};
+        std::string _name;
+        math::Vector2i _resolution;
+        std::vector<peng::shared_ref<Texture>> _color_attachments;
+    };
 }

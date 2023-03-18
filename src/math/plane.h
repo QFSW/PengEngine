@@ -4,13 +4,13 @@
 
 namespace math
 {
-	class Plane
-	{
-	public:
-		Vector3f normal;
-		float distance;
+    class Plane
+    {
+    public:
+        Vector3f normal;
+        float distance;
 
-		Plane();
-		Plane(const Vector3f& normal, float distance);
-	};
+        Plane();
+        Plane(const Vector3f& normal, float distance);
+    };
 }

@@ -8,12 +8,12 @@ using namespace profiling;
 
 ScopedGPUEvent::ScopedGPUEvent(const char* name)
 {
-	glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, name);
+    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, name);
 }
 
 ScopedGPUEvent::~ScopedGPUEvent()
 {
-	glPopDebugGroup();
+    glPopDebugGroup();
 }
 
 #endif

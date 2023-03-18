@@ -4,9 +4,9 @@
 
 namespace rendering
 {
-	struct ShaderSymbol
-	{
-		std::string identifier;
-		std::string value;
-	};
+    struct ShaderSymbol
+    {
+        std::string identifier;
+        std::string value;
+    };
 }

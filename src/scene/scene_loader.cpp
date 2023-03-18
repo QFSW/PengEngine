@@ -53,13 +53,13 @@ void SceneLoader::load_entities(const nlohmann::json& world_def)
     {
         if (!it->is_array())
         {
-	        Logger::error("The 'entities' entry in the world was not an array");
+            Logger::error("The 'entities' entry in the world was not an array");
             return;
         }
 
         for (const auto& entity_def : *it)
         {
-	        load_entity(entity_def);
+            load_entity(entity_def);
         }
     }
     else
@@ -77,7 +77,7 @@ void SceneLoader::load_entity(const nlohmann::json& entity_def)
 
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(entity_type))
     {
-	    const peng::weak_ptr<Entity> entity = EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
+        const peng::weak_ptr<Entity> entity = EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
 
         entity->local_transform() = entity_transform;
         load_components(entity_def, entity);
@@ -97,13 +97,13 @@ void SceneLoader::load_components(const nlohmann::json& entity_def, const peng::
     {
         if (!it->is_array())
         {
-	        Logger::error("The 'components' entry in the entity '%s' was not an array", entity->name().c_str());
+            Logger::error("The 'components' entry in the entity '%s' was not an array", entity->name().c_str());
             return;
         }
 
         for (const auto& component_def : *it)
         {
-	        load_component(component_def, entity);
+            load_component(component_def, entity);
         }
     }
 }
@@ -112,9 +112,9 @@ void SceneLoader::load_component(const nlohmann::json& component_def, const peng
 {
     if (!component_def.is_string())
     {
-	    Logger::error(
-		    "Could not load component '%s' on entity '%s' as it is not a component typename",
-		    component_def.dump().c_str(), entity->name().c_str()
+        Logger::error(
+            "Could not load component '%s' on entity '%s' as it is not a component typename",
+            component_def.dump().c_str(), entity->name().c_str()
         );
         return;
     }
@@ -126,9 +126,9 @@ void SceneLoader::load_component(const nlohmann::json& component_def, const peng
     }
     else
     {
-	    Logger::error(
-		    "Could not add component '%s' to entity '%s' as the type does not exist",
-		    component_type.c_str(), entity->name().c_str()
-	    );
+        Logger::error(
+            "Could not add component '%s' to entity '%s' as the type does not exist",
+            component_type.c_str(), entity->name().c_str()
+        );
     }
 }

@@ -26,13 +26,13 @@ namespace math
 
     template <number T>
     void to_json(nlohmann::json& j, const Vector4<T>& v)
-	{
+    {
         j = nlohmann::json({
-    		{"x", v.x},
-    		{"y", v.y},
-    		{"z", v.z},
+            {"x", v.x},
+            {"y", v.y},
+            {"z", v.z},
             {"w", v.w}
-    	});
+        });
     }
 
     template <number T>
@@ -56,7 +56,7 @@ namespace math
 
     template <number T>
     void from_json(const nlohmann::json& j, Vector4<T>& v)
-	{
+    {
         json_try_get_to(j, "x", v.x);
         json_try_get_to(j, "y", v.y);
         json_try_get_to(j, "z", v.z);
@@ -74,7 +74,7 @@ namespace math
     template <number T>
     void from_json(const nlohmann::json& j, Vector2<T>& v)
     {
-	    json_try_get_to(j, "x", v.x);
-	    json_try_get_to(j, "y", v.y);
+        json_try_get_to(j, "x", v.x);
+        json_try_get_to(j, "y", v.y);
     }
 }

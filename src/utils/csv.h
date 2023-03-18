@@ -55,11 +55,11 @@ namespace csv
     template <typename ... Args>
     std::tuple<Args...> CsvParser<std::tuple<Args...>>::parse_item(const std::string& item) const
     {
-	    constexpr size_t pack_size = sizeof...(Args);
-	    std::vector<std::string> sub_items = strtools::split(item, ',');
+        constexpr size_t pack_size = sizeof...(Args);
+        std::vector<std::string> sub_items = strtools::split(item, ',');
         sub_items.resize(std::min(sub_items.size(), pack_size));
 
-	    return parse<Args...>(sub_items, 0);
+        return parse<Args...>(sub_items, 0);
     }
 
     template <typename ... Args>

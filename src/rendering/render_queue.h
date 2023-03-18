@@ -9,19 +9,19 @@
 
 namespace rendering
 {
-	class RenderQueue : public utils::Singleton<RenderQueue>
-	{
-		using Singleton::Singleton;
+    class RenderQueue : public utils::Singleton<RenderQueue>
+    {
+        using Singleton::Singleton;
 
-	public:
-		// Executes all items in the render queue
-		void execute();
-		void enqueue_draw(DrawCall&& draw_call);
+    public:
+        // Executes all items in the render queue
+        void execute();
+        void enqueue_draw(DrawCall&& draw_call);
 
-	private:
-		void drain_queues();
+    private:
+        void drain_queues();
 
-		std::vector<DrawCall> _draw_calls;
-		common::concurrent_queue<DrawCall> _draw_call_queue;
-	};
+        std::vector<DrawCall> _draw_calls;
+        common::concurrent_queue<DrawCall> _draw_call_queue;
+    };
 }

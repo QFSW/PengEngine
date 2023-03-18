@@ -4,12 +4,12 @@
 
 namespace rendering
 {
-	class Mesh;
-	class Material;
+    class Mesh;
+    class Material;
 
-	struct DrawCall
-	{
-		peng::shared_ptr<const Mesh> mesh;
-		peng::shared_ptr<Material> material;
-	};
+    struct DrawCall
+    {
+        peng::shared_ptr<const Mesh> mesh;
+        peng::shared_ptr<Material> material;
+    };
 }
