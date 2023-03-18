@@ -2,6 +2,7 @@
 
 #include <core/component.h>
 #include <physics/aabb.h>
+#include <physics/layer.h>
 #include <utils/event.h>
 
 namespace components
@@ -25,13 +26,12 @@ namespace components
 
 		[[nodiscard]] virtual physics::AABB bounding_box() const = 0;
 
-		[[nodiscard]] bool triggers_enabled() const noexcept;
-		[[nodiscard]] bool& triggers_enabled() noexcept;
+		physics::Layer layer;
+		bool triggers_enabled;
 
 	private:
 		static std::vector<peng::weak_ptr<Collider2D>> _active_colliders;
 
-		bool _triggers_enabled;
 		std::vector<peng::weak_ptr<Collider2D>> _current_overlaps;
 	};
 }

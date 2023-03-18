@@ -9,7 +9,7 @@ std::vector<peng::weak_ptr<Collider2D>> Collider2D::_active_colliders;
 
 Collider2D::Collider2D()
 	: Component(TickGroup::physics)
-	, _triggers_enabled(false)
+	, triggers_enabled(false)
 { }
 
 const std::vector<peng::weak_ptr<Collider2D>>& Collider2D::active_colliders()
@@ -35,7 +35,7 @@ void Collider2D::tick(float delta_time)
 {
 	Component::tick(delta_time);
 
-	if (_triggers_enabled)
+	if (triggers_enabled)
 	{
 		const physics::AABB aabb = bounding_box();
 		std::vector<peng::weak_ptr<Collider2D>> old_overlaps = std::move(_current_overlaps);
@@ -74,14 +74,4 @@ void Collider2D::tick(float delta_time)
 			_on_trigger_exit(collider);
 		}
 	}
-}
-
-bool Collider2D::triggers_enabled() const noexcept
-{
-	return _triggers_enabled;
-}
-
-bool& Collider2D::triggers_enabled() noexcept
-{
-	return _triggers_enabled;
 }

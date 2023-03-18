@@ -2,6 +2,7 @@
 
 #include <core/entity.h>
 #include <input/axis.h>
+#include <components/box_collider_2d.h>
 
 namespace demo::pong
 {
@@ -20,5 +21,8 @@ namespace demo::pong
 		int32_t score = 0;
 		float movement_speed = 35;
 		float attack_arc = 90;
+
+	private:
+		void handle_collision(peng::weak_ptr<components::Collider2D> collider);
 	};
 }

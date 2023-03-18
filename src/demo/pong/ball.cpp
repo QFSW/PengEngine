@@ -26,7 +26,8 @@ Ball::Ball()
 	);
 
 	peng::weak_ptr<BoxCollider2D> collider = add_component<BoxCollider2D>();
-	collider->triggers_enabled() = true;
+	collider->triggers_enabled = true;
+	collider->layer = physics::Layer(2);
 	collider->on_trigger_enter().subscribe([this](const peng::weak_ptr<Collider2D>& collider)
 		{
 			handle_collision(collider);
@@ -41,7 +42,7 @@ void Ball::respawn()
 	const float angle = rand_range(-1, 1);
 	const Vector2f dir = Vector2f(std::cos(angle), std::sin(angle));
 	const Vector2f reflector = Vector2f(rand() % 2 ? -1 : 1, 1);
-	const Vector2f velocity = dir * reflector * _speed;
+	const Vector2f velocity = dir * reflector * _speed * 0.5f;
 
 	get_component<RigidBody2D>()->velocity = velocity;
 	_local_transform.position = Vector3f::zero();

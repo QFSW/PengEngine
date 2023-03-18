@@ -19,7 +19,7 @@ Goal::Goal(const peng::weak_ptr<Paddle>& associated_paddle)
 	)
 	, _associated_paddle(associated_paddle)
 {
-	add_component<components::BoxCollider2D>();
+	add_component<components::BoxCollider2D>()->layer = physics::Layer(1);
 }
 
 const peng::weak_ptr<Paddle>& Goal::associated_paddle() const noexcept
