@@ -12,6 +12,8 @@ namespace demo::pong
 		using Entity::Entity;
 
 		void post_create() override;
-		void tick(float delta_time) override;
+
+	private:
+		void build_world();
 	};
 }

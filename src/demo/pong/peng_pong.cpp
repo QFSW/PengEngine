@@ -3,7 +3,9 @@
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 #include <entities/camera.h>
+#include <components/mesh_renderer.h>
 #include <components/box_collider_2d.h>
+#include <rendering/primitives.h>
 
 #include "goal.h"
 #include "paddle.h"
@@ -23,6 +25,15 @@ void PengPong::post_create()
 
 	PengEngine::get().set_max_delta_time(50.0);
 	PengEngine::get().set_window_name("PengPong");
+
+	build_world();
+
+	Logger::success("PengPong started");
+}
+
+void PengPong::build_world()
+{
+	SCOPED_EVENT("PengPong - build world");
 
 	constexpr float ortho_size = 20;
 	constexpr float paddle_margin = 3;
@@ -62,11 +73,23 @@ void PengPong::post_create()
 	goal_left->local_transform().position = Vector3f(-ortho_width - 2, 0, 0);
 	goal_left->local_transform().scale = Vector3f(2, ortho_size * 3, 1);
 
-	Logger::success("PengPong started");
-}
+	peng::weak_ptr<Entity> background = PengEngine::get().entity_manager().create_entity<Entity>("Background");
 
-void PengPong::tick(float delta_time)
-{
-	SCOPED_EVENT("PengPong - tick");
-	Entity::tick(delta_time);
+	const Vector3f stripe_size = Vector3f(0.5f, 1.5f, 1);
+	const float stripe_padding = 1.5f;
+	const float stripe_spacing = stripe_size.y + stripe_padding;
+	const int32_t num_stripes = static_cast<int32_t>(ortho_size / stripe_spacing);
+
+	for (int i = -num_stripes; i <= num_stripes; i++)
+	{
+		peng::weak_ptr<Entity> stripe = PengEngine::get().entity_manager().create_entity<Entity>("Stripe");
+
+		stripe->local_transform().scale = stripe_size;
+		stripe->local_transform().position = Vector3f(0, i * stripe_spacing, 0);
+		stripe->set_parent(background, EntityRelationship::none);
+		stripe->add_component<components::MeshRenderer>(
+			rendering::Primitives::quad(),
+			rendering::Primitives::unlit_material()
+		);
+	}
 }
