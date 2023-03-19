@@ -14,8 +14,9 @@
 
 using namespace rendering;
 
-Texture::Texture(const std::string& name, const std::string& texture_path)
+Texture::Texture(const std::string& name, const std::string& texture_path, const Config& config)
     : _name(name)
+    , _config(config)
 {
     SCOPED_EVENT("Building texture", _name.c_str());
     Logger::log("Building texture '%s'", _name.c_str());
@@ -35,11 +36,13 @@ Texture::Texture(const std::string& name, const std::string& texture_path)
 Texture::Texture(
     const std::string& name,
     const std::vector<math::Vector3u8>& rgb_data,
-    const math::Vector2i& resolution
+    const math::Vector2i& resolution,
+    const Config& config
 )
     : _name(name)
     , _resolution(resolution)
     , _num_channels(3)
+    , _config(config)
 {
     SCOPED_EVENT("Building texture", _name.c_str());
     Logger::log("Building texture '%s'", _name.c_str());
@@ -51,11 +54,13 @@ Texture::Texture(
 Texture::Texture(
     const std::string& name,
     const std::vector<math::Vector4u8>& rgba_data,
-    const math::Vector2i& resolution
+    const math::Vector2i& resolution,
+    const Config& config
 )
     : _name(name)
     , _resolution(resolution)
     , _num_channels(4)
+    , _config(config)
 {
     SCOPED_EVENT("Building texture", _name.c_str());
     Logger::log("Building texture '%s'", _name.c_str());
@@ -67,11 +72,13 @@ Texture::Texture(
 Texture::Texture(
     const std::string& name,
     int32_t num_channels,
-    const math::Vector2i& resolution
+    const math::Vector2i& resolution,
+    const Config& config
 )
     : _name(name)
     , _resolution(resolution)
     , _num_channels(num_channels)
+    , _config(config)
 {
     SCOPED_EVENT("Building texture", _name.c_str());
     Logger::log("Building texture '%s'", _name.c_str());
@@ -114,10 +121,10 @@ void Texture::build_from_buffer(const void* texture_data)
     glGenTextures(1, &_tex);
     glBindTexture(GL_TEXTURE_2D, _tex);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _config.wrap_x);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_y);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _config.min_filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _config.max_filter);
 
     GLenum texture_format;
     switch (_num_channels)
@@ -139,5 +146,9 @@ void Texture::build_from_buffer(const void* texture_data)
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+
+    if (_config.generate_mipmaps)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
 }

@@ -43,13 +43,20 @@ void PengPong::build_world()
 	const float ortho_width = ortho_size * PengEngine::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
-	// TODO: digits look clapped, need to control filtering and wrap modes
+	rendering::Texture::Config digit_config;
+	digit_config.wrap_x = GL_CLAMP_TO_EDGE;
+	digit_config.wrap_y = GL_CLAMP_TO_EDGE;
+	digit_config.min_filter = GL_NEAREST;
+	digit_config.max_filter = GL_NEAREST;
+	digit_config.generate_mipmaps = false;
+
 	std::vector<peng::shared_ref<const rendering::Texture>> digit_textures;
 	for (uint8_t i = 0; i < 10; i++)
 	{
 		digit_textures.push_back(peng::make_shared<rendering::Texture>(
 			strtools::catf("Digit%d", i),
-			strtools::catf("resources/textures/demo/digits/%d.png", i)
+			strtools::catf("resources/textures/demo/digits/%d.png", i),
+			digit_config
 		));
 	}
 
