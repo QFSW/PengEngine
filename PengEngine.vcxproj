@@ -292,6 +292,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\components\mesh_renderer.cpp" />
     <ClCompile Include="src\components\rigid_body.cpp" />
     <ClCompile Include="src\components\rigid_body_2d.cpp" />
+    <ClCompile Include="src\components\sprite_renderer.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\component_factory.cpp" />
     <ClCompile Include="src\core\entity_factory.cpp" />
@@ -341,6 +342,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\rendering\shader_compiler.cpp" />
     <ClCompile Include="src\rendering\shader_type.cpp" />
+    <ClCompile Include="src\rendering\sprite.cpp" />
     <ClCompile Include="src\rendering\texture.cpp" />
     <ClCompile Include="src\rendering\utils.cpp" />
     <ClCompile Include="src\rendering\vertex.cpp" />
@@ -362,6 +364,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\mesh_renderer.h" />
     <ClInclude Include="src\components\rigid_body.h" />
     <ClInclude Include="src\components\rigid_body_2d.h" />
+    <ClInclude Include="src\components\sprite_renderer.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\component_definition.h" />
     <ClInclude Include="src\core\component_factory.h" />
@@ -445,6 +448,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\shader_compiler.h" />
     <ClInclude Include="src\rendering\shader_symbol.h" />
     <ClInclude Include="src\rendering\shader_type.h" />
+    <ClInclude Include="src\rendering\sprite.h" />
     <ClInclude Include="src\rendering\texture.h" />
     <ClInclude Include="src\rendering\utils.h" />
     <ClInclude Include="src\rendering\vertex.h" />

@@ -3,10 +3,10 @@
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 #include <entities/camera.h>
-#include <components/mesh_renderer.h>
+#include <components/sprite_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
-#include <rendering/primitives.h>
+#include <rendering/sprite.h>
 
 #include "goal.h"
 #include "paddle.h"
@@ -15,6 +15,7 @@
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
 using namespace demo::pong;
+using namespace rendering;
 using namespace entities;
 using namespace math;
 
@@ -43,21 +44,27 @@ void PengPong::build_world()
 	const float ortho_width = ortho_size * PengEngine::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
-	rendering::Texture::Config digit_config;
+    Texture::Config digit_config;
 	digit_config.wrap_x = GL_CLAMP_TO_EDGE;
 	digit_config.wrap_y = GL_CLAMP_TO_EDGE;
 	digit_config.min_filter = GL_NEAREST;
 	digit_config.max_filter = GL_NEAREST;
 	digit_config.generate_mipmaps = false;
 
-	std::vector<peng::shared_ref<const rendering::Texture>> digit_textures;
+	std::vector<peng::shared_ref<const Sprite>> digit_sprites;
 	for (uint8_t i = 0; i < 10; i++)
 	{
-		digit_textures.push_back(peng::make_shared<rendering::Texture>(
+		peng::shared_ref<const Texture> texture = peng::make_shared<Texture>(
 			strtools::catf("Digit%d", i),
 			strtools::catf("resources/textures/demo/digits/%d.png", i),
 			digit_config
-		));
+		);
+
+		peng::shared_ref<const Sprite> sprite = peng::make_shared<Sprite>(
+			texture, 9
+		);
+
+		digit_sprites.push_back(sprite);
 	}
 
 	// TODO: PengEngine::get().entity_manager().create_entity is far too long
@@ -79,12 +86,12 @@ void PengPong::build_world()
 	peng::weak_ptr<NumberDisplay> score_1 = PengEngine::get().entity_manager().create_entity<NumberDisplay>("Score1");
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
 	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
-	score_1->set_digit_textures(digit_textures);
+	score_1->set_digit_sprites(digit_sprites);
 
 	peng::weak_ptr<NumberDisplay> score_2 = PengEngine::get().entity_manager().create_entity<NumberDisplay>("Score2");
 	score_2->local_transform().scale = Vector3f::one() * 5;
 	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
-	score_2->set_digit_textures(digit_textures);
+	score_2->set_digit_sprites(digit_sprites);
 
 	// TODO: should use a subscribe_weak for better safety
 	paddle_1->on_score_changed().subscribe([score_1](int32_t score)
@@ -129,9 +136,6 @@ void PengPong::build_world()
 		stripe->local_transform().scale = stripe_size;
 		stripe->local_transform().position = Vector3f(0, i * stripe_spacing, 0);
 		stripe->set_parent(background, EntityRelationship::none);
-		stripe->add_component<components::MeshRenderer>(
-			rendering::Primitives::quad(),
-			rendering::Primitives::unlit_material()
-		);
+		stripe->add_component<components::SpriteRenderer>();
 	}
 }

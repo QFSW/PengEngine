@@ -53,6 +53,7 @@ namespace rendering
         void bind(GLenum slot) const;
 
         [[nodiscard]] GLuint raw() const noexcept;
+        [[nodiscard]] math::Vector2i resolution() const noexcept;
 
     private:
         void verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const;

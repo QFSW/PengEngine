@@ -7,6 +7,7 @@
 
 #include "mesh.h"
 #include "texture.h"
+#include "sprite.h"
 #include "shader.h"
 #include "material.h"
 
@@ -329,6 +330,22 @@ peng::shared_ref<const Texture> Primitives::white_tex()
 
     weak_tex = white_tex;
     return white_tex;
+}
+
+peng::shared_ref<const Sprite> Primitives::white_sprite()
+{
+    static peng::weak_ptr<const Sprite> weak_sprite;
+    if (const peng::shared_ptr<const Sprite> strong_sprite = weak_sprite.lock())
+    {
+        return strong_sprite.to_shared_ref();
+    }
+    
+    peng::shared_ref<Sprite> white_sprite = peng::make_shared<Sprite>(
+        white_tex(), 1
+    );
+
+    weak_sprite = white_sprite;
+    return white_sprite;
 }
 
 peng::shared_ref<const Shader> Primitives::unlit_shader()

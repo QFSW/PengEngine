@@ -1,6 +1,6 @@
 #include "paddle.h"
 
-#include <components/mesh_renderer.h>
+#include <components/sprite_renderer.h>
 #include <components/rigid_body_2d.h>
 #include <components/box_collider_2d.h>
 #include <rendering/primitives.h>
@@ -16,10 +16,7 @@ Paddle::Paddle(const std::string& name)
 	: Entity(name)
 {
 	add_component<RigidBody2D>();
-	add_component<MeshRenderer>(
-		rendering::Primitives::quad(),
-		rendering::Primitives::unlit_material()
-	);
+	add_component<SpriteRenderer>();
 
 	peng::weak_ptr<Collider2D> collider = add_component<BoxCollider2D>();
 	collider->triggers_enabled = true;

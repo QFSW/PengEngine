@@ -8,6 +8,7 @@ namespace rendering
 {
     class Mesh;
     class Texture;
+    class Sprite;
     class Shader;
     class Material;
 
@@ -22,6 +23,8 @@ namespace rendering
         [[nodiscard]] static peng::shared_ref<const Mesh> icosphere(uint32_t order = 3);
 
         [[nodiscard]] static peng::shared_ref<const Texture> white_tex();
+
+        [[nodiscard]] static peng::shared_ref<const Sprite> white_sprite();
 
         [[nodiscard]] static peng::shared_ref<const Shader> unlit_shader();
         [[nodiscard]] static peng::shared_ref<const Shader> phong_shader();

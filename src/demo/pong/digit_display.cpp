@@ -1,6 +1,6 @@
 #include "digit_display.h"
 
-#include <components/mesh_renderer.h>
+#include <components/sprite_renderer.h>
 #include <rendering/primitives.h>
 
 #include "rendering/material.h"
@@ -12,26 +12,23 @@ using namespace demo::pong;
 DigitDisplay::DigitDisplay(const std::string& name)
     : Entity(name, TickGroup::none)
 {
-    add_component<components::MeshRenderer>(
-        rendering::Primitives::quad(),
-        rendering::Primitives::unlit_material()
-    );
+    add_component<components::SpriteRenderer>();
 }
 
 void DigitDisplay::post_create()
 {
     Entity::post_create();
 
-    if (_digit_textures.size() == 10 && _current == 0xFF)
+    if (_digit_sprites.size() == 10 && _current == 0xFF)
     {
         set_digit(0);
     }
 }
 
-void DigitDisplay::set_digit_textures(const std::vector<peng::shared_ref<const rendering::Texture>>& textures)
+void DigitDisplay::set_digit_sprites(const std::vector<peng::shared_ref<const rendering::Sprite>>& sprites)
 {
-    assert(textures.size() == 10);
-    _digit_textures = textures;
+    assert(sprites.size() == 10);
+    _digit_sprites = sprites;
 }
 
 void DigitDisplay::set_digit(uint8_t digit)
@@ -43,9 +40,9 @@ void DigitDisplay::set_digit(uint8_t digit)
 
     _current = digit;
 
-    assert(_digit_textures.size() == 10);
-    assert(digit < _digit_textures.size());
+    assert(_digit_sprites.size() == 10);
+    assert(digit < _digit_sprites.size());
 
-    get_component<components::MeshRenderer>()->material()->set_parameter("color_tex", _digit_textures[digit]);
+    get_component<components::SpriteRenderer>()->sprite() = _digit_sprites[digit];
 
 }

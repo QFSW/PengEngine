@@ -4,7 +4,7 @@
 
 namespace rendering
 {
-    class Texture;
+    class Sprite;
 }
 
 
@@ -21,14 +21,14 @@ namespace demo::pong
 
 		void post_create() override;
 
-		void set_digit_textures(const std::vector<peng::shared_ref<const rendering::Texture>>& textures);
+		void set_digit_sprites(const std::vector<peng::shared_ref<const rendering::Sprite>>& sprites);
 		void set_number(int32_t number);
 
 	private:
 		peng::weak_ptr<DigitDisplay> get_nth_digit(int32_t n);
 
 		int32_t _current = -1;
-		std::vector<peng::shared_ref<const rendering::Texture>> _digit_textures;
+		std::vector<peng::shared_ref<const rendering::Sprite>> _digit_sprites;
 		std::vector<peng::weak_ptr<DigitDisplay>> _digits;
 	};
 }

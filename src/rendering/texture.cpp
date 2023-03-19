@@ -105,6 +105,11 @@ GLuint Texture::raw() const noexcept
     return _tex;
 }
 
+math::Vector2i Texture::resolution() const noexcept
+{
+    return _resolution;
+}
+
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
 {
     if (resolution.area() != num_pixels)
