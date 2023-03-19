@@ -20,6 +20,6 @@ namespace profiling
 
 #else
 
-#define SCOPED_EVENT(id, ...) ((void)0)
+#define SCOPED_GPU_EVENT(name) ((void)0)
 
 #endif

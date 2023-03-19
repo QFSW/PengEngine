@@ -410,6 +410,7 @@ void PengEngine::tick_render()
 {
 	SCOPED_EVENT("PengEngine - tick render");
 
+#ifndef PENG_MASTER
 	if (_input_manager[input::KeyCode::num_row_1].pressed())
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -424,6 +425,7 @@ void PengEngine::tick_render()
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	}
+#endif
 
 	rendering::RenderQueue::get().execute();
 }

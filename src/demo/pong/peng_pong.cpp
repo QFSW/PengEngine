@@ -5,10 +5,12 @@
 #include <entities/camera.h>
 #include <components/mesh_renderer.h>
 #include <components/box_collider_2d.h>
+#include <rendering/texture.h>
 #include <rendering/primitives.h>
 
 #include "goal.h"
 #include "paddle.h"
+#include "digit_display.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -41,9 +43,19 @@ void PengPong::build_world()
 	const float ortho_width = ortho_size * PengEngine::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
+	// TODO: digits look clapped, need to control filtering and wrap modes
+	std::vector<peng::shared_ref<const rendering::Texture>> digit_textures;
+	for (uint8_t i = 0; i < 10; i++)
+	{
+		digit_textures.push_back(peng::make_shared<rendering::Texture>(
+			strtools::catf("Digit%d", i),
+			strtools::catf("resources/textures/demo/digits/%d.png", i)
+		));
+	}
+
 	// TODO: PengEngine::get().entity_manager().create_entity is far too long
 	peng::weak_ptr<Camera> camera = PengEngine::get().entity_manager().create_entity<Camera>();
-	camera->make_orthographic(ortho_size, 0.01f, 2.0f);
+	camera->make_orthographic(ortho_size, 0.01f, 100.0f);
 
 	peng::weak_ptr<Paddle> paddle_1 = PengEngine::get().entity_manager().create_entity<Paddle>("Paddle1");
 	paddle_1->input_axis.positive = input::KeyCode::w;
@@ -54,6 +66,31 @@ void PengPong::build_world()
 	paddle_2->input_axis.positive = input::KeyCode::up;
 	paddle_2->input_axis.negative = input::KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
+
+	constexpr float digit_size = 5;
+
+	// TODO: we can't display more than 1 digit of score right now
+
+	peng::weak_ptr<DigitDisplay> score_1 = PengEngine::get().entity_manager().create_entity<DigitDisplay>("Score1");
+	score_1->local_transform().scale = Vector3f::one() * digit_size;
+	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
+	score_1->set_digit_textures(digit_textures);
+
+	peng::weak_ptr<DigitDisplay> score_2 = PengEngine::get().entity_manager().create_entity<DigitDisplay>("Score2");
+	score_2->local_transform().scale = Vector3f::one() * 5;
+	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
+	score_2->set_digit_textures(digit_textures);
+
+	// TODO: should use a subscribe_weak for better safety
+	paddle_1->on_score_changed().subscribe([score_1](int32_t score)
+		{
+			score_1->set_digit(score % 10);
+		});
+
+	paddle_2->on_score_changed().subscribe([score_2](int32_t score)
+		{
+			score_2->set_digit(score % 10);
+		});
 
 	peng::weak_ptr<Entity> barrier_top = PengEngine::get().entity_manager().create_entity<Entity>("BarrierTop");
 	barrier_top->add_component<components::BoxCollider2D>();

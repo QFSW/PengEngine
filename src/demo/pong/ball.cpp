@@ -56,7 +56,7 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 	if (peng::weak_ptr<const Goal> goal = collider->owner().as_type<Goal>())
 	{
 		// If it's a goal, increment score and respawn
-		goal->associated_paddle()->score++;
+		goal->associated_paddle()->score_point();
 		respawn();
 	}
 	else if (peng::weak_ptr<const Paddle> paddle = collider->owner().as_type<Paddle>())

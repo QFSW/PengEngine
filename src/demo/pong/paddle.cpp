@@ -40,6 +40,12 @@ void Paddle::tick(float delta_time)
 	get_component<RigidBody2D>()->velocity = Vector2f::up() * up_amount * movement_speed;
 }
 
+void Paddle::score_point()
+{
+	_score++;
+	_on_score_changed(_score);
+}
+
 void Paddle::handle_collision(peng::weak_ptr<Collider2D> collider)
 {
 	if (collider->layer == physics::Layer(0))
