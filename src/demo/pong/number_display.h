@@ -4,25 +4,31 @@
 
 namespace rendering
 {
-	class Texture;
+    class Texture;
 }
+
 
 namespace demo::pong
 {
-	class DigitDisplay final : public Entity
+	class DigitDisplay;
+
+	class NumberDisplay final : public Entity
 	{
-		DECLARE_ENTITY(DigitDisplay);
+		DECLARE_ENTITY(NumberDisplay);
 
 	public:
-        explicit DigitDisplay(const std::string& name);
+		using Entity::Entity;
 
 		void post_create() override;
 
 		void set_digit_textures(const std::vector<peng::shared_ref<const rendering::Texture>>& textures);
-		void set_digit(uint8_t digit);
+		void set_number(int32_t number);
 
 	private:
-		uint8_t _current = 0xFF;
+		peng::weak_ptr<DigitDisplay> get_nth_digit(int32_t n);
+
+		int32_t _current = -1;
 		std::vector<peng::shared_ref<const rendering::Texture>> _digit_textures;
+		std::vector<peng::weak_ptr<DigitDisplay>> _digits;
 	};
 }

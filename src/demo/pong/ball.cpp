@@ -42,7 +42,7 @@ void Ball::respawn()
 	const float angle = rand_range(-1, 1);
 	const Vector2f dir = Vector2f(std::cos(angle), std::sin(angle));
 	const Vector2f reflector = Vector2f(rand() % 2 ? -1 : 1, 1);
-	const Vector2f velocity = dir * reflector * _speed * 0.5f;
+	const Vector2f velocity = dir * reflector * _speed * 0.75f;
 
 	get_component<RigidBody2D>()->velocity = velocity;
 	_local_transform.position = Vector3f::zero();

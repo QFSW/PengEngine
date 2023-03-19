@@ -10,7 +10,7 @@
 
 #include "goal.h"
 #include "paddle.h"
-#include "digit_display.h"
+#include "number_display.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -76,14 +76,12 @@ void PengPong::build_world()
 
 	constexpr float digit_size = 5;
 
-	// TODO: we can't display more than 1 digit of score right now
-
-	peng::weak_ptr<DigitDisplay> score_1 = PengEngine::get().entity_manager().create_entity<DigitDisplay>("Score1");
+	peng::weak_ptr<NumberDisplay> score_1 = PengEngine::get().entity_manager().create_entity<NumberDisplay>("Score1");
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
 	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
 	score_1->set_digit_textures(digit_textures);
 
-	peng::weak_ptr<DigitDisplay> score_2 = PengEngine::get().entity_manager().create_entity<DigitDisplay>("Score2");
+	peng::weak_ptr<NumberDisplay> score_2 = PengEngine::get().entity_manager().create_entity<NumberDisplay>("Score2");
 	score_2->local_transform().scale = Vector3f::one() * 5;
 	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
 	score_2->set_digit_textures(digit_textures);
@@ -91,12 +89,12 @@ void PengPong::build_world()
 	// TODO: should use a subscribe_weak for better safety
 	paddle_1->on_score_changed().subscribe([score_1](int32_t score)
 		{
-			score_1->set_digit(score % 10);
+			score_1->set_number(score);
 		});
 
 	paddle_2->on_score_changed().subscribe([score_2](int32_t score)
 		{
-			score_2->set_digit(score % 10);
+			score_2->set_number(score);
 		});
 
 	peng::weak_ptr<Entity> barrier_top = PengEngine::get().entity_manager().create_entity<Entity>("BarrierTop");
