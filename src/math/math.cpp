@@ -26,3 +26,8 @@ float math::rand_range(float min, float max)
 {
     return min + randf() * (max - min);
 }
+
+float math::map(float val, const Vector2f& in_range, const Vector2f& out_range)
+{
+    return (val - in_range.x) / (in_range.y - in_range.x) * (out_range.y - out_range.x) + out_range.x;
+}

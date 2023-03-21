@@ -13,6 +13,7 @@ namespace math
     Vector4f rand4f();
 
     float rand_range(float min, float max);
+    float map(float val, const Vector2f& in_range, const Vector2f& out_range);
 
     template <number T>
     T sgn(T val)
