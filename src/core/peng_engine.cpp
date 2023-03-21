@@ -5,10 +5,12 @@
 
 #include <utils/timing.h>
 #include <rendering/render_queue.h>
+#include <audio/audio_subsystem.h>
 #include <profiling/scoped_event.h>
 #include <profiling/scoped_gpu_event.h>
 
 #include "logger.h"
+#include "entity_subsystem.h"
 
 PengEngine::PengEngine()
 	: Singleton()
@@ -28,7 +30,10 @@ PengEngine::PengEngine()
 	, _last_draw_time(timing::clock::now())
 	, _window_name("PengEngine")
 	, _glfw_window(nullptr)
-{ }
+{
+	Subsystem::load<EntitySubsystem>();
+	Subsystem::load<audio::AudioSubsystem>();
+}
 
 void PengEngine::run()
 {
@@ -217,11 +222,6 @@ bool PengEngine::fullscreen() const noexcept
 	return _fullscreen;
 }
 
-EntityManager& PengEngine::entity_manager() noexcept
-{
-	return _entity_manager;
-}
-
 input::InputManager& PengEngine::input_manager() noexcept
 {
 	return _input_manager;
@@ -272,8 +272,8 @@ void PengEngine::start()
 	Logger::log("PengEngine starting...");
 
 	start_opengl();
-	_audio_subsystem.start();
 	_input_manager.start(_glfw_window);
+	Subsystem::start_all();
 
 	Logger::success("PengEngine started");
 	_on_engine_initialized();
@@ -354,8 +354,7 @@ void PengEngine::shutdown()
 {
 	SCOPED_EVENT("PengEngine - shutdown");
 
-	_entity_manager.shutdown();
-	_audio_subsystem.shutdown();
+	Subsystem::shutdown_all();
 	shutdown_opengl();
 
 	_shutting_down = false;
@@ -403,7 +402,7 @@ void PengEngine::tick_main()
 	_on_frame_start();
 
 	_input_manager.tick();
-	_entity_manager.tick(delta_time);
+	EntitySubsystem::get().tick(delta_time);
 
 	_on_frame_end();
 }

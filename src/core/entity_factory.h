@@ -5,7 +5,7 @@
 #include "logger.h"
 #include "item_factory.h"
 #include "reflection_database.h"
-#include "peng_engine.h"
+#include "entity_subsystem.h"
 
 class Entity;
 
@@ -45,7 +45,7 @@ void EntityFactory::register_entity()
 	{
 		const auto entity_constructor = []() -> peng::weak_ptr<Entity>
 		{
-			return PengEngine::get().entity_manager().create_entity<T>();
+			return EntitySubsystem::get().create_entity<T>();
 		};
 
 		_default_factory.register_factory(entity_type, entity_constructor);
@@ -56,7 +56,7 @@ void EntityFactory::register_entity()
 	{
 		const auto entity_constructor = [](const std::string& entity_name) -> peng::weak_ptr<Entity>
 		{
-			return PengEngine::get().entity_manager().create_entity<T>(entity_name);
+			return EntitySubsystem::get().create_entity<T>(entity_name);
 		};
 
 		_named_factory.register_factory(entity_type, entity_constructor);

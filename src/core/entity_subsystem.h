@@ -7,6 +7,7 @@
 #include <memory/weak_ptr.h>
 #include <utils/event.h>
 
+#include "subsystem.h"
 #include "tickable.h"
 
 enum class EntityState
@@ -19,17 +20,20 @@ enum class EntityState
 
 class Entity;
 
-class EntityManager
+class EntitySubsystem final : public Subsystem
 {
+	DECLARE_SUBSYSTEM(EntitySubsystem)
+
 	DEFINE_EVENT(pre_tick_entity_group, TickGroup)
 	DEFINE_EVENT(post_tick_entity_group, TickGroup)
 
 public:
-	EntityManager();
+	EntitySubsystem();
 
 	// ----------- Engine API -----------
+	void start() override;
+	void shutdown() override;
 	void tick(float delta_time);
-	void shutdown();
 	// ----------------------------------
 
 	// ------------ User API ------------
@@ -79,7 +83,7 @@ private:
 
 template <std::derived_from<Entity> T, typename...Args>
 requires std::constructible_from<T, Args...>
-peng::weak_ptr<T> EntityManager::create_entity(Args&&...args)
+peng::weak_ptr<T> EntitySubsystem::create_entity(Args&&...args)
 {
 	peng::shared_ref<T> entity = peng::make_shared<T>(std::forward<Args>(args)...);
 	register_entity(entity);

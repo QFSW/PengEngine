@@ -37,7 +37,7 @@ void BlobEntity::post_create()
 		const peng::shared_ref<Material> child_material = Primitives::phong_material();
 		child_material->set_parameter("base_color", child_position * 2);
 
-		const peng::weak_ptr<Entity> entity = PengEngine::get().entity_manager().create_entity<Entity>("AxisMarker");
+		const peng::weak_ptr<Entity> entity = EntitySubsystem::get().create_entity<Entity>("AxisMarker");
 		entity->add_component<MeshRenderer>(Primitives::cube(), child_material);
 		entity->local_transform().scale = Vector3f::one() / 4;
 		entity->local_transform().position = child_position;

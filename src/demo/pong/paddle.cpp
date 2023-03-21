@@ -1,5 +1,6 @@
 #include "paddle.h"
 
+#include <core/peng_engine.h>
 #include <components/sprite_renderer.h>
 #include <components/rigid_body_2d.h>
 #include <components/box_collider_2d.h>

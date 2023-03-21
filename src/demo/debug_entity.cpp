@@ -1,5 +1,7 @@
 #include "debug_entity.h"
 
+#include <core/peng_engine.h>
+
 IMPLEMENT_ENTITY(demo::DebugEntity);
 
 void demo::DebugEntity::tick(float delta_time)
@@ -11,7 +13,7 @@ void demo::DebugEntity::tick(float delta_time)
 
 	if (input_manager[KeyCode::num_row_0].pressed())
 	{
-		PengEngine::get().entity_manager().dump_hierarchy();
+		EntitySubsystem::get().dump_hierarchy();
 	}
 
 	if (input_manager[KeyCode::f11].pressed())

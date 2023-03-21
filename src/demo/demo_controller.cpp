@@ -42,7 +42,7 @@ void DemoController::post_create()
 	auto material = peng::make_shared<Material>(shader);
 	material->set_parameter("color_tex", texture);
 
-	const auto blobs_entity = PengEngine::get().entity_manager().create_entity<Entity>("Blobs", TickGroup::none);
+	const auto blobs_entity = EntitySubsystem::get().create_entity<Entity>("Blobs", TickGroup::none);
 
 	const Vector2i blob_grid(7, 5);
 	for (int32_t blob_x = 0; blob_x < blob_grid.x; blob_x++)
@@ -57,7 +57,7 @@ void DemoController::post_create()
 				? Primitives::cube()
 				: Primitives::icosphere(blob_y);
 
-			PengEngine::get().entity_manager().create_entity<BlobEntity>(mesh, material, pos)
+			EntitySubsystem::get().create_entity<BlobEntity>(mesh, material, pos)
 				->set_parent(blobs_entity);
 		}
 	}
@@ -66,7 +66,7 @@ void DemoController::post_create()
 		"resources/textures/demo/skybox.jpg"
 	);
 
-	peng::weak_ptr<Skybox> skybox = PengEngine::get().entity_manager().create_entity<Skybox>();
+	peng::weak_ptr<Skybox> skybox = EntitySubsystem::get().create_entity<Skybox>();
 	skybox->material()->set_parameter("color_tex", skybox_texture);
 	skybox->set_parent(weak_this());
 
@@ -77,7 +77,7 @@ void DemoController::post_create()
 	floor_material->set_parameter("tex_scale", floor_size);
 	floor_material->set_parameter<float>("shinyness", 8);
 
-	const auto floor_entity = PengEngine::get().entity_manager().create_entity<Entity>("Floor", TickGroup::none);
+	const auto floor_entity = EntitySubsystem::get().create_entity<Entity>("Floor", TickGroup::none);
 	const auto floor_renderer = floor_entity->add_component<components::MeshRenderer>(Primitives::fullscreen_quad(), floor_material);
 	floor_entity->local_transform() = Transform(
 		Vector3f(0, -5, 0),
@@ -87,7 +87,7 @@ void DemoController::post_create()
 
 	for (int32_t i = 0; i < 4; i++)
 	{
-		_light_entities.push_back(PengEngine::get().entity_manager().create_entity<PointLight>());
+		_light_entities.push_back(EntitySubsystem::get().create_entity<PointLight>());
 		_light_entities[i]->data().range = 100;
 		_light_entities[i]->local_transform().position = Vector3f(i * 5.0f, 0, 0);
 		_light_renderers.push_back(_light_entities[i]->add_component<components::MeshRenderer>(Primitives::icosphere(4), Primitives::unlit_material()));
@@ -107,7 +107,7 @@ void DemoController::tick(float delta_time)
 
 	if (input_manager[KeyCode::num_row_9].pressed())
 	{
-		PengEngine::get().entity_manager().destroy_entity(PengEngine::get().entity_manager().find_entity("Blob", true));
+		EntitySubsystem::get().find_entity("Blob", true)->destroy();
 	}
 
 	Vector3f light_delta = Vector3f::zero();

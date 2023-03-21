@@ -3,16 +3,20 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
+#include <core/subsystem.h>
+
 namespace audio
 {
-    class AudioSubsystem
+    class AudioSubsystem final : public Subsystem
     {
+        DECLARE_SUBSYSTEM(AudioSubsystem)
+
     public:
         AudioSubsystem();
-        ~AudioSubsystem();
+        ~AudioSubsystem() override;
 
-        void start();
-        void shutdown();
+        void start() override;
+        void shutdown() override;
 
     private:
         ALCdevice* _device;

@@ -5,11 +5,9 @@
 #include <utils/timing.h>
 #include <utils/event.h>
 #include <utils/singleton.h>
-#include <audio/audio_subsystem.h>
-
-#include "entity_manager.h"
 
 // TODO: move opengl code into an RHI object
+// TODO: move input manager into subsystem
 class PengEngine : public utils::Singleton<PengEngine>
 {
 	friend Singleton;
@@ -42,8 +40,7 @@ public:
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
 	[[nodiscard]] float aspect_ratio() const noexcept;
 	[[nodiscard]] bool fullscreen() const noexcept;
-
-	EntityManager& entity_manager() noexcept;
+	
 	input::InputManager& input_manager() noexcept;
 
 private:
@@ -81,7 +78,5 @@ private:
 	std::string _window_name;
 	struct GLFWwindow* _glfw_window;
 
-	EntityManager _entity_manager;
 	input::InputManager _input_manager;
-	audio::AudioSubsystem _audio_subsystem;
 };

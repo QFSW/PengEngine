@@ -7,7 +7,8 @@
 using namespace audio;
 
 AudioSubsystem::AudioSubsystem()
-    : _device(nullptr)
+    : Subsystem()
+    , _device(nullptr)
     , _context(nullptr)
     , _active(false)
 { }

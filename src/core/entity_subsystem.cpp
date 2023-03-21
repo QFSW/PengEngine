@@ -1,4 +1,4 @@
-﻿#include "entity_manager.h"
+﻿#include "entity_subsystem.h"
 
 #include <execution>
 #include <algorithm>
@@ -9,7 +9,8 @@
 #include "component.h"
 #include "logger.h"
 
-EntityManager::EntityManager()
+EntitySubsystem::EntitySubsystem()
+    : Subsystem()
 {
 	constexpr int32_t start = static_cast<int32_t>(TickGroup::standard);
 	constexpr int32_t end = static_cast<int32_t>(TickGroup::none);
@@ -22,18 +23,14 @@ EntityManager::EntityManager()
 	}
 }
 
-void EntityManager::tick(float delta_time)
+void EntitySubsystem::start()
 {
-	SCOPED_EVENT("EntityManager - tick");
-
-	flush_pending_adds();
-	tick_entities(delta_time);
-	flush_pending_kills();
+    
 }
 
-void EntityManager::shutdown()
+void EntitySubsystem::shutdown()
 {
-	SCOPED_EVENT("EntityManager - shutdown");
+	SCOPED_EVENT("EntitySubsystem - shutdown");
 	Logger::log("Destroying all entities");
 
 	for (peng::shared_ref<Entity>& entity : _entities)
@@ -46,12 +43,21 @@ void EntityManager::shutdown()
 	_entities.clear();
 }
 
-void EntityManager::register_entity(const peng::shared_ref<Entity>& entity)
+void EntitySubsystem::tick(float delta_time)
+{
+	SCOPED_EVENT("EntitySubsystem - tick");
+
+	flush_pending_adds();
+	tick_entities(delta_time);
+	flush_pending_kills();
+}
+
+void EntitySubsystem::register_entity(const peng::shared_ref<Entity>& entity)
 {
 	_pending_adds.push_back(entity);
 }
 
-void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
+void EntitySubsystem::destroy_entity(const peng::weak_ptr<Entity>& entity)
 {
 	if (!entity.valid())
 	{
@@ -67,7 +73,7 @@ void EntityManager::destroy_entity(const peng::weak_ptr<Entity>& entity)
 	}
 }
 
-EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity) const
+EntityState EntitySubsystem::get_entity_state(const peng::weak_ptr<Entity>& entity) const
 {
 	if (vectools::contains(_pending_kills, entity))
 	{
@@ -90,7 +96,7 @@ EntityState EntityManager::get_entity_state(const peng::weak_ptr<Entity>& entity
 	return EntityState::invalid;
 }
 
-peng::weak_ptr<Entity> EntityManager::find_entity(const std::string& entity_name, bool include_inactive) const
+peng::weak_ptr<Entity> EntitySubsystem::find_entity(const std::string& entity_name, bool include_inactive) const
 {
 	for (const peng::shared_ref<Entity>& entity : _entities)
 	{
@@ -106,7 +112,7 @@ peng::weak_ptr<Entity> EntityManager::find_entity(const std::string& entity_name
 	return {};
 }
 
-void EntityManager::dump_hierarchy() const
+void EntitySubsystem::dump_hierarchy() const
 {
 	if constexpr (!Logger::enabled())
 	{
@@ -133,19 +139,19 @@ void EntityManager::dump_hierarchy() const
 	}
 }
 
-void EntityManager::tick_entities(float delta_time)
+void EntitySubsystem::tick_entities(float delta_time)
 {
 	for (size_t i = 0; i < _tick_groups.size(); i++)
 	{
 		const TickGroup tick_group = _tick_groups[i];
 
 		{
-			SCOPED_EVENT("EntityManager - pre tick entity group", _tick_group_names[i].c_str());
+			SCOPED_EVENT("EntitySubsystem - pre tick entity group", _tick_group_names[i].c_str());
 			_pre_tick_entity_group.invoke(tick_group);
 		}
 
 		{
-			SCOPED_EVENT("EntityManager - ticking entity group", _tick_group_names[i].c_str());
+			SCOPED_EVENT("EntitySubsystem - ticking entity group", _tick_group_names[i].c_str());
 
 			for_each_entity(
 				is_parallel_tick_group(tick_group),
@@ -170,14 +176,14 @@ void EntityManager::tick_entities(float delta_time)
 		}
 
 		{
-			SCOPED_EVENT("EntityManager - post tick entity group", _tick_group_names[i].c_str());
+			SCOPED_EVENT("EntitySubsystem - post tick entity group", _tick_group_names[i].c_str());
 			_post_tick_entity_group.invoke(tick_group);
 		}
 	}
 }
 
 template <typename F>
-void EntityManager::for_each_entity(bool parallel, F&& invocable)
+void EntitySubsystem::for_each_entity(bool parallel, F&& invocable)
 {
 	if (parallel)
 	{
@@ -189,9 +195,9 @@ void EntityManager::for_each_entity(bool parallel, F&& invocable)
 	}
 }
 
-void EntityManager::flush_pending_adds()
+void EntitySubsystem::flush_pending_adds()
 {
-	SCOPED_EVENT("EntityManager - flush pending adds");
+	SCOPED_EVENT("EntitySubsystem - flush pending adds");
 
 	const std::vector staged_adds(std::move(_pending_adds));
 
@@ -206,9 +212,9 @@ void EntityManager::flush_pending_adds()
 	}
 }
 
-void EntityManager::flush_pending_kills()
+void EntitySubsystem::flush_pending_kills()
 {
-	SCOPED_EVENT("EntityManager - flush pending kills");
+	SCOPED_EVENT("EntitySubsystem - flush pending kills");
 
 	auto kill_in_buffer = [&](std::vector<peng::shared_ref<Entity>>& entities, bool exists_yet)
 	{
@@ -243,7 +249,7 @@ void EntityManager::flush_pending_kills()
 	_pending_kills.clear();
 }
 
-std::string EntityManager::build_entity_hierarchy(const std::vector<peng::weak_ptr<Entity>>& root_entities) const
+std::string EntitySubsystem::build_entity_hierarchy(const std::vector<peng::weak_ptr<Entity>>& root_entities) const
 {
 	std::string result;
 	std::vector<bool> draw_vertical;
@@ -252,7 +258,7 @@ std::string EntityManager::build_entity_hierarchy(const std::vector<peng::weak_p
 	return result;
 }
 
-void EntityManager::build_entity_hierarchy(
+void EntitySubsystem::build_entity_hierarchy(
 	const std::vector<peng::weak_ptr<Entity>>& root_entities,
 	int32_t depth,
 	std::vector<bool>& draw_vertical,

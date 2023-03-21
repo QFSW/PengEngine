@@ -3,7 +3,7 @@
 #include <cassert>
 #include <utils/utils.h>
 
-#include "peng_engine.h"
+#include "entity_subsystem.h"
 #include "component.h"
 
 IMPLEMENT_ENTITY(Entity);
@@ -110,7 +110,7 @@ void Entity::destroy()
 		child->destroy();
 	}
 
-	PengEngine::get().entity_manager().destroy_entity(weak_this());
+	EntitySubsystem::get().destroy_entity(weak_this());
 }
 
 peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type)

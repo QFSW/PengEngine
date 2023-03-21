@@ -303,8 +303,9 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\core\logger.cpp" />
     <ClCompile Include="src\core\peng_engine.cpp" />
     <ClCompile Include="src\core\entity.cpp" />
-    <ClCompile Include="src\core\entity_manager.cpp" />
+    <ClCompile Include="src\core\entity_subsystem.cpp" />
     <ClCompile Include="src\core\reflection_database.cpp" />
+    <ClCompile Include="src\core\subsystem.cpp" />
     <ClCompile Include="src\core\tickable.cpp" />
     <ClCompile Include="src\demo\blob_entity.cpp" />
     <ClCompile Include="src\demo\debug_entity.cpp" />
@@ -382,10 +383,12 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\logger.h" />
     <ClInclude Include="src\core\peng_engine.h" />
     <ClInclude Include="src\core\entity.h" />
-    <ClInclude Include="src\core\entity_manager.h" />
+    <ClInclude Include="src\core\entity_subsystem.h" />
     <ClInclude Include="src\core\reflected_type.h" />
     <ClInclude Include="src\core\detail\reflection_bootstrap.h" />
     <ClInclude Include="src\core\reflection_database.h" />
+    <ClInclude Include="src\core\subsystem.h" />
+    <ClInclude Include="src\core\subsystem_definition.h" />
     <ClInclude Include="src\core\tickable.h" />
     <ClInclude Include="src\demo\blob_entity.h" />
     <ClInclude Include="src\demo\debug_entity.h" />

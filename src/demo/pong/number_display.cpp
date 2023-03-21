@@ -75,7 +75,7 @@ peng::weak_ptr<DigitDisplay> NumberDisplay::get_nth_digit(int32_t n)
         return _digits[n];
     }
 
-    peng::weak_ptr<DigitDisplay> digit = PengEngine::get().entity_manager().create_entity<DigitDisplay>(
+    peng::weak_ptr<DigitDisplay> digit = EntitySubsystem::get().create_entity<DigitDisplay>(
         strtools::catf("Digit%d", n)
     );
 
