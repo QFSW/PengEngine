@@ -31,8 +31,8 @@ PengEngine::PengEngine()
 	, _window_name("PengEngine")
 	, _glfw_window(nullptr)
 {
-	Subsystem::load<EntitySubsystem>();
 	Subsystem::load<audio::AudioSubsystem>();
+	Subsystem::load<EntitySubsystem>();
 }
 
 void PengEngine::run()

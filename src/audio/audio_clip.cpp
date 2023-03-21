@@ -6,7 +6,7 @@
 
 using namespace audio;
 
-AudioClip::AudioClip(const std::string& name)
+AudioClip::AudioClip(const std::string& name, float length, float frequency, float amplitude)
     : _name(name)
 {
     SCOPED_EVENT("Building audio clip", _name.c_str());
@@ -14,23 +14,24 @@ AudioClip::AudioClip(const std::string& name)
 
     // TODO: this is dummy data
     constexpr int32_t sample_rate = 44100;
-    constexpr float frequency = 8000;
-    constexpr float length = 0.5f;
 
-    const size_t num_samples = length * sample_rate;
-    std::vector<uint8_t> samples;
+    const size_t num_samples = static_cast<size_t>(length * static_cast<float>(sample_rate));
+    std::vector<int16_t> samples;
     samples.resize(num_samples);
 
     for (size_t i = 0; i < num_samples; i++)
     {
-        const float t = i * length / sample_rate;
-        const float val_f = std::sin(t * frequency / 6.2f);
+        const float t = i / static_cast<float>(sample_rate);
+        const float a = math::map(t, math::Vector2f(0, length), math::Vector2f(1, 0));
+        const float val_f = std::sin(t * 6.2f * frequency);
+        const float val_m = val_f * amplitude * std::pow(a, 3);
 
-        samples[i] = static_cast<uint8_t>(math::map(val_f, math::Vector2f(-1, 1), math::Vector2f(0, 0xFF)));
+        constexpr int16_t max_val = std::numeric_limits<int16_t>::max();
+        samples[i] = static_cast<int16_t>(math::map(val_m, math::Vector2f(-1, 1), math::Vector2f(-max_val, max_val)));
     }
 
     alGenBuffers(1, &_clip);
-    alBufferData(_clip, AL_FORMAT_MONO8, samples.data(), static_cast<ALsizei>(samples.size()), sample_rate);
+    alBufferData(_clip, AL_FORMAT_MONO16, samples.data(), static_cast<ALsizei>(samples.size()), sample_rate);
 }
 
 AudioClip::~AudioClip()
