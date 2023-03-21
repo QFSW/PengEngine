@@ -5,6 +5,7 @@
 #include <utils/timing.h>
 #include <utils/event.h>
 #include <utils/singleton.h>
+#include <audio/audio_subsystem.h>
 
 #include "entity_manager.h"
 
@@ -82,4 +83,5 @@ private:
 
 	EntityManager _entity_manager;
 	input::InputManager _input_manager;
+	audio::AudioSubsystem _audio_subsystem;
 };

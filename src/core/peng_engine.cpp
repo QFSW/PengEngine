@@ -272,6 +272,7 @@ void PengEngine::start()
 	Logger::log("PengEngine starting...");
 
 	start_opengl();
+	_audio_subsystem.start();
 	_input_manager.start(_glfw_window);
 
 	Logger::success("PengEngine started");
@@ -354,6 +355,7 @@ void PengEngine::shutdown()
 	SCOPED_EVENT("PengEngine - shutdown");
 
 	_entity_manager.shutdown();
+	_audio_subsystem.shutdown();
 	shutdown_opengl();
 
 	_shutting_down = false;
