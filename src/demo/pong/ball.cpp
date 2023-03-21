@@ -69,7 +69,7 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 		const float y_norm = -delta.y / box.size.y;
 		const float angle = y_norm * paddle->attack_arc / 2;
 		Vector2f dir = Vector2f(std::cos(angle * to_rads), std::sin(angle * to_rads));
-		if (delta.x > 0)
+		if (get_component<RigidBody2D>()->velocity.x > 0)
 		{
 			dir.x *= -1;
 		}

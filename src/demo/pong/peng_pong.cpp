@@ -107,13 +107,13 @@ void PengPong::build_world()
 
 	peng::weak_ptr<Entity> barrier_top = EntitySubsystem::get().create_entity<Entity>("BarrierTop");
 	barrier_top->add_component<components::BoxCollider2D>();
-	barrier_top->local_transform().position = Vector3f(0, ortho_size + 0.5f, 0);
-	barrier_top->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
+	barrier_top->local_transform().position = Vector3f(0, ortho_size + 2, 0);
+	barrier_top->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
 	peng::weak_ptr<Entity> barrier_bottom = EntitySubsystem::get().create_entity<Entity>("BarrierBottom");
 	barrier_bottom->add_component<components::BoxCollider2D>();
-	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 0.5f, 0);
-	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 1, 1);
+	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 2, 0);
+	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
 	peng::weak_ptr<Goal> goal_right = EntitySubsystem::get().create_entity<Goal>(paddle_1);
 	goal_right->local_transform().position = Vector3f(ortho_width + 2, 0, 0);
