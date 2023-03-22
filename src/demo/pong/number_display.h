@@ -7,7 +7,6 @@ namespace rendering
     class Sprite;
 }
 
-
 namespace demo::pong
 {
 	class DigitDisplay;
