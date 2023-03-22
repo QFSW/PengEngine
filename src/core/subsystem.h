@@ -16,6 +16,7 @@ public:
 
     static void start_all();
     static void shutdown_all();
+    static void tick_all(float delta_time);
 
     Subsystem() = default;
     Subsystem(const Subsystem&) = delete;
@@ -26,6 +27,7 @@ public:
 
     virtual void start() = 0;
     virtual void shutdown() = 0;
+    virtual void tick(float delta_time) = 0;
 
 protected:
     template <std::derived_from<Subsystem> T>

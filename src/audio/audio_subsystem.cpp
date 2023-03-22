@@ -44,3 +44,7 @@ void AudioSubsystem::shutdown()
     alcDestroyContext(_context);
     alcCloseDevice(_device);
 }
+
+void AudioSubsystem::tick(float)
+{
+}

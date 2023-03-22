@@ -1,9 +1,9 @@
 #include "paddle.h"
 
-#include <core/peng_engine.h>
 #include <components/sprite_renderer.h>
 #include <components/rigid_body_2d.h>
 #include <components/box_collider_2d.h>
+#include <input/input_subsystem.h>
 #include <rendering/primitives.h>
 #include <math/math.h>
 
@@ -34,7 +34,7 @@ void Paddle::tick(float delta_time)
 {
 	Entity::tick(delta_time);
 
-	const float up_amount = PengEngine::get().input_manager().axis_value(input_axis);
+	const float up_amount = input::InputSubsystem::get().axis_value(input_axis);
 	get_component<RigidBody2D>()->velocity = Vector2f::up() * up_amount * movement_speed;
 }
 

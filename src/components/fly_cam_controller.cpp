@@ -1,6 +1,6 @@
 #include "fly_cam_controller.h"
 
-#include <input/input_manager.h>
+#include <input/input_subsystem.h>
 #include <core/peng_engine.h>
 #include <entities/camera.h>
 
@@ -39,18 +39,16 @@ void FlyCamController::tick(float delta_time)
 	const Vector3f fly_right = camera_transform.local_right();
 	const Vector3f fly_up = Vector3f::up();
 
-	const InputManager& input_manager = PengEngine::get().input_manager();
-
-	const Vector2i cursor_delta = input_manager.cursor_delta();
+	const Vector2i cursor_delta = InputSubsystem::get().cursor_delta();
 	const Vector3f rot_input = Vector3i(cursor_delta.yx(), 0);
 
 	Vector3f fly_input;
-	fly_input += input_manager[KeyCode::d].is_down() ? +fly_right    : Vector3f::zero();
-	fly_input += input_manager[KeyCode::a].is_down() ? -fly_right    : Vector3f::zero();
-	fly_input += input_manager[KeyCode::w].is_down() ? +fly_forwards : Vector3f::zero();
-	fly_input += input_manager[KeyCode::s].is_down() ? -fly_forwards : Vector3f::zero();
-	fly_input += input_manager[KeyCode::e].is_down() ? +fly_up       : Vector3f::zero();
-	fly_input += input_manager[KeyCode::q].is_down() ? -fly_up       : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::d].is_down() ? +fly_right    : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::a].is_down() ? -fly_right    : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::w].is_down() ? +fly_forwards : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::s].is_down() ? -fly_forwards : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::e].is_down() ? +fly_up       : Vector3f::zero();
+	fly_input += InputSubsystem::get()[KeyCode::q].is_down() ? -fly_up       : Vector3f::zero();
 
 	camera_transform.position += fly_input.normalized() * _fly_speed * delta_time;
 	camera_transform.rotation += rot_input * _rot_sensitivity;

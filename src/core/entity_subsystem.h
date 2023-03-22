@@ -33,7 +33,7 @@ public:
 	// ----------- Engine API -----------
 	void start() override;
 	void shutdown() override;
-	void tick(float delta_time);
+	void tick(float delta_time) override;
 	// ----------------------------------
 
 	// ------------ User API ------------

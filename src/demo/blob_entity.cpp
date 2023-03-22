@@ -1,12 +1,13 @@
 #include "blob_entity.h"
 
 #include <entities/camera.h>
-#include <core/peng_engine.h>
+#include <input/input_subsystem.h>
 #include <rendering/primitives.h>
 
 using namespace math;
 using namespace components;
 using namespace rendering;
+using namespace input;
 
 IMPLEMENT_ENTITY(BlobEntity);
 
@@ -50,12 +51,12 @@ void BlobEntity::tick(float delta_time)
 	Entity::tick(delta_time);
 
 	Vector3f rotation;
-	if (PengEngine::get().input_manager()[input::KeyCode::u].is_down()) { rotation.x += 1; }
-	if (PengEngine::get().input_manager()[input::KeyCode::j].is_down()) { rotation.x -= 1; }
-	if (PengEngine::get().input_manager()[input::KeyCode::i].is_down()) { rotation.y += 1; }
-	if (PengEngine::get().input_manager()[input::KeyCode::k].is_down()) { rotation.y -= 1; }
-	if (PengEngine::get().input_manager()[input::KeyCode::o].is_down()) { rotation.z += 1; }
-	if (PengEngine::get().input_manager()[input::KeyCode::l].is_down()) { rotation.z -= 1; }
+	if (InputSubsystem::get()[KeyCode::u].is_down()) { rotation.x += 1; }
+	if (InputSubsystem::get()[KeyCode::j].is_down()) { rotation.x -= 1; }
+	if (InputSubsystem::get()[KeyCode::i].is_down()) { rotation.y += 1; }
+	if (InputSubsystem::get()[KeyCode::k].is_down()) { rotation.y -= 1; }
+	if (InputSubsystem::get()[KeyCode::o].is_down()) { rotation.z += 1; }
+	if (InputSubsystem::get()[KeyCode::l].is_down()) { rotation.z -= 1; }
 
 	_local_transform.rotation += rotation * 90 * delta_time;
 

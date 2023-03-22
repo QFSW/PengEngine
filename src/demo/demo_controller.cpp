@@ -1,13 +1,12 @@
 #include "demo_controller.h"
 
-#include <core/peng_engine.h>
 #include <core/logger.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
+#include <input/input_subsystem.h>
 #include <entities/point_light.h>
 #include <entities/skybox.h>
 #include <components/fly_cam_controller.h>
-#include <input/input_manager.h>
 
 #include "blob_entity.h"
 #include "rendering/utils.h"
@@ -18,6 +17,7 @@ using namespace demo;
 using namespace rendering;
 using namespace math;
 using namespace entities;
+using namespace input;
 
 DemoController::DemoController()
 	: Entity("DemoController")
@@ -99,28 +99,25 @@ void DemoController::post_create()
 void DemoController::tick(float delta_time)
 {
 	Entity::tick(delta_time);
-
-	using namespace input;
-	const InputManager& input_manager = PengEngine::get().input_manager();
-
+	
 	_age += delta_time;
 
-	if (input_manager[KeyCode::num_row_9].pressed())
+	if (InputSubsystem::get()[KeyCode::num_row_9].pressed())
 	{
 		EntitySubsystem::get().find_entity("Blob", true)->destroy();
 	}
 
 	Vector3f light_delta = Vector3f::zero();
-	light_delta += input_manager[KeyCode::up].is_down() ? +Vector3f::forwards() : Vector3f::zero();
-	light_delta += input_manager[KeyCode::down].is_down() ? -Vector3f::forwards() : Vector3f::zero();
-	light_delta += input_manager[KeyCode::right].is_down() ? +Vector3f::right() : Vector3f::zero();
-	light_delta += input_manager[KeyCode::left].is_down() ? -Vector3f::right() : Vector3f::zero();
-	light_delta += input_manager[KeyCode::n].is_down() ? +Vector3f::up() : Vector3f::zero();
-	light_delta += input_manager[KeyCode::m].is_down() ? -Vector3f::up() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::up].is_down() ? +Vector3f::forwards() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::down].is_down() ? -Vector3f::forwards() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::right].is_down() ? +Vector3f::right() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::left].is_down() ? -Vector3f::right() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::n].is_down() ? +Vector3f::up() : Vector3f::zero();
+	light_delta += InputSubsystem::get()[KeyCode::m].is_down() ? -Vector3f::up() : Vector3f::zero();
 
 	float light_range_delta = 0;
-	light_range_delta += input_manager[KeyCode::t].is_down() ? +1 : 0;
-	light_range_delta += input_manager[KeyCode::y].is_down() ? -1 : 0;
+	light_range_delta += InputSubsystem::get()[KeyCode::t].is_down() ? +1 : 0;
+	light_range_delta += InputSubsystem::get()[KeyCode::y].is_down() ? -1 : 0;
 
 	for (size_t i = 0; i < _light_entities.size(); i++)
 	{

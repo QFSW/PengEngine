@@ -6,6 +6,7 @@
 #include <utils/timing.h>
 #include <rendering/render_queue.h>
 #include <audio/audio_subsystem.h>
+#include <input/input_subsystem.h>
 #include <profiling/scoped_event.h>
 #include <profiling/scoped_gpu_event.h>
 
@@ -32,6 +33,7 @@ PengEngine::PengEngine()
 	, _glfw_window(nullptr)
 {
 	Subsystem::load<audio::AudioSubsystem>();
+	Subsystem::load<input::InputSubsystem>();
 	Subsystem::load<EntitySubsystem>();
 }
 
@@ -222,9 +224,9 @@ bool PengEngine::fullscreen() const noexcept
 	return _fullscreen;
 }
 
-input::InputManager& PengEngine::input_manager() noexcept
+GLFWwindow* PengEngine::window_handle() const noexcept
 {
-	return _input_manager;
+	return _glfw_window;
 }
 
 static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, GLenum, GLsizei, const char* message, const void*)
@@ -272,7 +274,6 @@ void PengEngine::start()
 	Logger::log("PengEngine starting...");
 
 	start_opengl();
-	_input_manager.start(_glfw_window);
 	Subsystem::start_all();
 
 	Logger::success("PengEngine started");
@@ -401,8 +402,7 @@ void PengEngine::tick_main()
 	
 	_on_frame_start();
 
-	_input_manager.tick();
-	EntitySubsystem::get().tick(delta_time);
+	Subsystem::tick_all(delta_time);
 
 	_on_frame_end();
 }
@@ -412,17 +412,17 @@ void PengEngine::tick_render()
 	SCOPED_EVENT("PengEngine - tick render");
 
 #ifndef PENG_MASTER
-	if (_input_manager[input::KeyCode::num_row_1].pressed())
+	if (input::InputSubsystem::get()[input::KeyCode::num_row_1].pressed())
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	if (_input_manager[input::KeyCode::num_row_2].pressed())
+	if (input::InputSubsystem::get()[input::KeyCode::num_row_2].pressed())
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
-	if (_input_manager[input::KeyCode::num_row_3].pressed())
+	if (input::InputSubsystem::get()[input::KeyCode::num_row_3].pressed())
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	}

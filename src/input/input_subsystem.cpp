@@ -1,13 +1,14 @@
-#include "input_manager.h"
+#include "input_subsystem.h"
 
 #include <cmath>
-#include <GLFW/glfw3.h>
 
+#include <GLFW/glfw3.h>
+#include <core/peng_engine.h>
 #include <utils/strtools.h>
 
 using namespace input;
 
-InputManager::InputManager()
+InputSubsystem::InputSubsystem()
 	: _window(nullptr)
 	, _opengl_keys
 	{
@@ -98,13 +99,19 @@ InputManager::InputManager()
 	}
 }
 
-void InputManager::start(GLFWwindow* window)
+void InputSubsystem::start()
 {
-	_window = window;
+	_window = PengEngine::get().window_handle();
 }
 
-void InputManager::tick()
+void InputSubsystem::shutdown()
 {
+}
+
+void InputSubsystem::tick(float)
+{
+	assert(_window);
+
 	for (const int32_t opengl_key : _opengl_keys)
 	{
 		const KeyCode code = from_opengl(opengl_key);
@@ -134,22 +141,22 @@ void InputManager::tick()
 	}
 }
 
-math::Vector2i InputManager::cursor_delta() const noexcept
+math::Vector2i InputSubsystem::cursor_delta() const noexcept
 {
 	return _cursor_pos - _last_cursor_pos;
 }
 
-const math::Vector2i& InputManager::cursor_pos() const noexcept
+const math::Vector2i& InputSubsystem::cursor_pos() const noexcept
 {
 	return _cursor_pos;
 }
 
-const math::Vector2i& InputManager::last_cursor_pos() const noexcept
+const math::Vector2i& InputSubsystem::last_cursor_pos() const noexcept
 {
 	return _last_cursor_pos;
 }
 
-const KeyState& InputManager::get_key(KeyCode code) const
+const KeyState& InputSubsystem::get_key(KeyCode code) const
 {
 	if (const auto it = _key_states.find(code); it != _key_states.end())
 	{
@@ -159,12 +166,12 @@ const KeyState& InputManager::get_key(KeyCode code) const
 	throw std::logic_error(strtools::catf("KeyCode %d is invalid", static_cast<int32_t>(code)));
 ;}
 
-const KeyState& InputManager::operator[](KeyCode code) const
+const KeyState& InputSubsystem::operator[](KeyCode code) const
 {
 	return get_key(code);
 }
 
-float InputManager::axis_value(const Axis& axis) const
+float InputSubsystem::axis_value(const Axis& axis) const
 {
 	const float axis_raw = 
 		+(get_key(axis.positive).is_down() ? 1.0f : 0.0f)
@@ -173,7 +180,7 @@ float InputManager::axis_value(const Axis& axis) const
 	return axis_raw * axis.magnitude;
 }
 
-constexpr KeyCode InputManager::from_opengl(int32_t opengl_key)
+constexpr KeyCode InputSubsystem::from_opengl(int32_t opengl_key)
 {
 	if (opengl_key >= GLFW_KEY_A && opengl_key <= GLFW_KEY_Z)
 	{

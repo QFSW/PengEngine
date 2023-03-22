@@ -1,13 +1,13 @@
 #pragma once
 
 #include <math/vector2.h>
-#include <input/input_manager.h>
 #include <utils/timing.h>
 #include <utils/event.h>
 #include <utils/singleton.h>
 
+struct GLFWwindow;
+
 // TODO: move opengl code into an RHI object
-// TODO: move input manager into subsystem
 class PengEngine : public utils::Singleton<PengEngine>
 {
 	friend Singleton;
@@ -40,8 +40,7 @@ public:
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
 	[[nodiscard]] float aspect_ratio() const noexcept;
 	[[nodiscard]] bool fullscreen() const noexcept;
-	
-	input::InputManager& input_manager() noexcept;
+	[[nodiscard]] GLFWwindow* window_handle() const noexcept;
 
 private:
 	PengEngine();
@@ -76,7 +75,5 @@ private:
 	timing::clock::time_point _last_draw_time;
 
 	std::string _window_name;
-	struct GLFWwindow* _glfw_window;
-
-	input::InputManager _input_manager;
+    GLFWwindow* _glfw_window;
 };

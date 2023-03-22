@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include <core/subsystem.h>
 #include <math/vector2.h>
 
 #include "key_code.h"
@@ -13,15 +14,17 @@ struct GLFWwindow;
 namespace input
 {
 	// TODO: Add "Action" for wrapping key bindings for actions 
-	// TODO: Add "Axis" for wrapping things like "forwards"
-	class InputManager
+	class InputSubsystem : public Subsystem
 	{
+        DECLARE_SUBSYSTEM(InputSubsystem)
+
 	public:
-		InputManager();
+		InputSubsystem();
 
 		// ----------- Engine API -----------
-		void start(GLFWwindow* window);
-		void tick();
+		void start() override;
+		void shutdown() override;
+		void tick(float delta_time) override;
 		// ----------------------------------
 
 		// ------------ User API ------------

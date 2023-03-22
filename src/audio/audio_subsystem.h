@@ -17,6 +17,7 @@ namespace audio
 
         void start() override;
         void shutdown() override;
+        void tick(float delta_time) override;
 
     private:
         ALCdevice* _device;
