@@ -65,12 +65,17 @@ Shader::Shader(
     _broken |= !validate_shader_compile(vert_shader);
     _broken |= !validate_shader_compile(frag_shader);
 
+    glObjectLabel(GL_SHADER, vert_shader, -1, strtools::catf_temp("%s (VS)", _name.c_str()));
+    glObjectLabel(GL_SHADER, frag_shader, -1, strtools::catf_temp("%s (FS)", _name.c_str()));
+
     Logger::log("Linking shader program");
     _program = glCreateProgram();
     glAttachShader(_program, vert_shader);
     glAttachShader(_program, frag_shader);
     glLinkProgram(_program);
     _broken |= !validate_shader_link(_program);
+
+    glObjectLabel(GL_PROGRAM, _program, -1, _name.c_str());
 
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);

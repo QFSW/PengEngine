@@ -125,6 +125,7 @@ void Texture::build_from_buffer(const void* texture_data)
 {
     glGenTextures(1, &_tex);
     glBindTexture(GL_TEXTURE_2D, _tex);
+    glObjectLabel(GL_TEXTURE, _tex, -1, _name.c_str());
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _config.wrap_x);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_y);
