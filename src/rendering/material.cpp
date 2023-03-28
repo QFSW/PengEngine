@@ -5,6 +5,7 @@
 #include <utils/utils.h>
 
 #include "texture.h"
+#include "texture_binding_cache.h"
 
 using namespace rendering;
 using namespace math;
@@ -189,13 +190,11 @@ void Material::apply_parameter(GLint location, const Matrix4x4d& value)
 
 void Material::apply_parameter(GLint location, const peng::shared_ref<const Texture>& texture)
 {
-    if (_num_bound_textures >= 16)
+    if (++_num_bound_textures >= 16)
     {
         throw std::runtime_error("Cannot bind more than 16 textures to a material");
     }
 
-    const GLint texture_slot = static_cast<GLint>(_num_bound_textures++);
-
-    texture->bind(GL_TEXTURE0 + texture_slot);
-    glUniform1i(location, texture_slot);
+    const GLint texture_slot = TextureBindingCache::get().bind_texture(texture);
+    glUniform1i(location, static_cast<GLint>(texture_slot));
 }

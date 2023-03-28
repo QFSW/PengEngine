@@ -258,6 +258,11 @@ static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, G
 			Logger::warning("OpenGL Performance: %s", message);
 			break;
 		}
+	    case GL_DEBUG_TYPE_PUSH_GROUP:
+	    case GL_DEBUG_TYPE_POP_GROUP:
+		{
+			break;
+		}
 		default:
 		{
 			Logger::log("OpenGL: %s", message);

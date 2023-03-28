@@ -94,10 +94,17 @@ Texture::~Texture()
     glDeleteTextures(1, &_tex);
 }
 
-void Texture::bind(GLenum slot) const
+void Texture::bind(GLint slot) const
 {
-    glActiveTexture(slot);
+    glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, _tex);
+}
+
+void Texture::unbind(GLint slot) const
+{
+    // TODO: slot should be stored from bind and used automatically
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 GLuint Texture::raw() const noexcept

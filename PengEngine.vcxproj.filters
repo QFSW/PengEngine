@@ -234,6 +234,9 @@
     <ClCompile Include="src\audio\audio_pool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\texture_binding_cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -597,6 +600,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\audio\audio_pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\texture_binding_cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

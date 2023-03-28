@@ -63,8 +63,6 @@ void SpriteRenderer::post_create()
 
 void SpriteRenderer::cache_uniforms()
 {
-	assert(_material);
-
 	auto get_uniform_location_checked = [&](const std::string& uniform_name, const std::string& required_symbol = "")
 	{
 		const int32_t location = _material->shader()->get_uniform_location(uniform_name);

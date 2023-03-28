@@ -25,9 +25,10 @@ Mesh::Mesh(
     glGenBuffers(1, &_vbo);
     glGenBuffers(1, &_ebo);
     glGenVertexArrays(1, &_vao);
-    glObjectLabel(GL_VERTEX_ARRAY, _vao, -1, _name.c_str());
 
     glBindVertexArray(_vao);
+    glObjectLabel(GL_VERTEX_ARRAY, _vao, -1, _name.c_str());
+
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, vectools::buffer_size(_vertex_buffer), _vertex_buffer.data(), GL_STATIC_DRAW);
 

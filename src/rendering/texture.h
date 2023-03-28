@@ -49,7 +49,8 @@ namespace rendering
         Texture(Texture&&) = delete;
         ~Texture();
 
-        void bind(GLenum slot) const;
+        void bind(GLint slot) const;
+        void unbind(GLint slot) const;
 
         [[nodiscard]] GLuint raw() const noexcept;
         [[nodiscard]] math::Vector2i resolution() const noexcept;
