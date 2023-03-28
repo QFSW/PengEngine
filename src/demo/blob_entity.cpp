@@ -20,7 +20,7 @@ BlobEntity::BlobEntity(
 	, _age(static_cast<float>(rand()) / static_cast<float>((RAND_MAX)))
 {
 	_local_transform = Transform(Vector3f(pos, pos.y + 2), Vector3f::one(), Vector3f::zero());
-	_mesh_renderer = add_component<MeshRenderer>(mesh, material);
+	_mesh_renderer = add_component<MeshRenderer>(mesh, peng::copy_shared(material));
 }
 
 void BlobEntity::post_create()

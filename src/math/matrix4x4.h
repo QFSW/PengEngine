@@ -33,6 +33,7 @@ namespace math
 		static constexpr Matrix4x4 identity();
 		static constexpr Matrix4x4 from_translation(const Vector3<T>& translation);
 		static constexpr Matrix4x4 from_scale(const Vector3<T>& scale);
+		static constexpr Matrix4x4 from_rotation(const Vector3<F>& rotation);
 	};
 
 	using Matrix4x4f = Matrix4x4<float>;
@@ -75,7 +76,28 @@ namespace math
 		});
 	}
 
-	template <number T>
+    template <number T>
+    constexpr Matrix4x4<T> Matrix4x4<T>::from_rotation(const Vector3<F>& rotation)
+    {
+		// x = pitch, y = yaw, z = roll
+		const Vector3<F> r = rotation * std::numbers::pi_v<T> / 180;
+
+		const F sx = std::sin(r.x);
+		const F sy = std::sin(r.y);
+		const F sz = std::sin(r.z);
+		const F cx = std::cos(r.x);
+		const F cy = std::cos(r.y);
+		const F cz = std::cos(r.z);
+
+		return Matrix4x4<F>({
+			cy * cz - sx * sy * sz,  cy * sz + sx * sy * cz,  -cx * sy,  0,
+			-cx * sz,                cx * cz,                 sx,        0,
+			sx * cy * sz + sy * cz,  sy * sz - sx * cy * cz,  cx * cy,   0,
+			0,                       0,                       0,         1
+		});
+    }
+
+    template <number T>
 	Matrix4x4<T>::Matrix4x4()
 		: Matrix<T, 4, 4>()
 	{ }
@@ -125,42 +147,7 @@ namespace math
 	Matrix4x4<make_floating_t<T>> Matrix4x4<T>::rotated(const Vector3<F>& rotation) const noexcept
 	{
 		// x = pitch, y = yaw, z = roll
-		const Vector3<F> r = rotation * std::numbers::pi_v<T> / 180;
-		Matrix4x4<F> pitch = identity();
-		Matrix4x4<F> yaw = identity();
-		Matrix4x4<F> roll = identity();
-
-		if (rotation.x != 0)
-		{
-			pitch = Matrix4x4<F>({
-				1,   0,		         0,		        0,
-				0,   std::cos(r.x),  std::sin(r.x), 0,
-				0,   -std::sin(r.x), std::cos(r.x), 0,
-				0,   0,		         0,		        1
-			});
-		}
-
-		if (rotation.y != 0)
-		{
-			yaw = Matrix4x4<F>({
-				std::cos(r.y), 0, -std::sin(r.y), 0,
-				0,             1, 0,              0,
-				std::sin(r.y), 0, std::cos(r.y),  0,
-				0,             0, 0,              1
-			});
-		}
-
-		if (rotation.z != 0)
-		{
-			roll = Matrix4x4<F>({
-				std::cos(r.z),  std::sin(r.z), 0, 0,
-				-std::sin(r.z), std::cos(r.z), 0, 0,
-				0,              0,             1, 0,
-				0,              0,		       0, 1
-			});
-		}
-
-		return roll * pitch * yaw * *this;
+		return from_rotation(rotation) * *this;
 	}
 
 	template <number T>
