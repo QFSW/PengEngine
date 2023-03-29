@@ -18,7 +18,11 @@ namespace math
         Vector3(T x, T y, T z);
 
         template <number U>
-        requires std::convertible_to<U, T>
+        requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+        explicit Vector3(const Vector3<U>& other);
+
+        template <number U>
+        requires losslessly_convertible_to<U, T>
         Vector3(const Vector3<U>& other);
 
 #pragma region Swizzling
@@ -127,7 +131,16 @@ namespace math
 
     template <number T>
     template <number U>
-    requires std::convertible_to<U, T>
+    requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+    Vector3<T>::Vector3(const Vector3<U>& other)
+        : x(static_cast<T>(other.x))
+        , y(static_cast<T>(other.y))
+        , z(static_cast<T>(other.z))
+    { }
+
+    template <number T>
+    template <number U>
+    requires losslessly_convertible_to<U, T>
     Vector3<T>::Vector3(const Vector3<U>& other)
         : x(static_cast<T>(other.x))
         , y(static_cast<T>(other.y))

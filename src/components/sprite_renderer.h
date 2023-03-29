@@ -38,6 +38,8 @@ namespace components
 			int32_t color_tex = -1;
 			int32_t model_matrix = -1;
 			int32_t view_matrix = -1;
+			int32_t tex_scale = -1;
+			int32_t tex_offset = -1;
 		};
 
 		UniformSet _cached_uniforms;

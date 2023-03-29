@@ -335,7 +335,7 @@
     <ClInclude Include="src\math\vector4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\math\number.h">
+    <ClInclude Include="src\math\concepts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\vector2.h">

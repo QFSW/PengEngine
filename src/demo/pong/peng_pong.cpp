@@ -52,17 +52,18 @@ void PengPong::build_world()
 	digit_config.max_filter = GL_NEAREST;
 	digit_config.generate_mipmaps = false;
 
+	peng::shared_ref<const Texture> digits_texture = peng::make_shared<Texture>(
+		"Digits",
+		"resources/textures/demo/digits.png",
+		digit_config
+	);
+
 	std::vector<peng::shared_ref<const Sprite>> digit_sprites;
 	for (uint8_t i = 0; i < 10; i++)
 	{
-		peng::shared_ref<const Texture> texture = peng::make_shared<Texture>(
-			strtools::catf("Digit%d", i),
-			strtools::catf("resources/textures/demo/digits/%d.png", i),
-			digit_config
-		);
-
+		const int32_t res_y = digits_texture->resolution().y;
 		peng::shared_ref<const Sprite> sprite = peng::make_shared<Sprite>(
-			texture, 9
+			digits_texture, res_y, Vector2i(res_y, 0) * i, Vector2i(res_y, res_y)
 		);
 
 		digit_sprites.push_back(sprite);

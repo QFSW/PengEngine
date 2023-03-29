@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "number.h"
+#include "concepts.h"
 
 namespace math
 {
@@ -18,7 +18,11 @@ namespace math
         explicit Matrix(const std::array<T, num>& elements);
 
         template <number U>
-        requires std::convertible_to<U, T>
+        requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+        explicit Matrix(const Matrix<U, Rows, Cols>& other);
+
+        template <number U>
+        requires losslessly_convertible_to<U, T>
         Matrix(const Matrix<U, Rows, Cols>& other);
 
         [[nodiscard]] T& get(uint8_t row, uint8_t col);
@@ -57,7 +61,18 @@ namespace math
 
     template <number T, uint8_t Rows, uint8_t Cols>
     template <number U>
-    requires std::convertible_to<U, T>
+    requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+    Matrix<T, Rows, Cols>::Matrix(const Matrix<U, Rows, Cols>& other)
+    {
+        for (uint8_t i = 0; i < num; i++)
+        {
+            elements[i] = static_cast<T>(other.elements[i]);
+        }
+    }
+
+    template <number T, uint8_t Rows, uint8_t Cols>
+    template <number U>
+    requires losslessly_convertible_to<U, T>
     Matrix<T, Rows, Cols>::Matrix(const Matrix<U, Rows, Cols>& other)
     {
         for (uint8_t i = 0; i < num; i++)

@@ -48,6 +48,15 @@ void SpriteRenderer::tick(float delta_time)
 		_material->set_parameter(_cached_uniforms.view_matrix, view_matrix);
 	}
 
+	if (_cached_uniforms.tex_scale >= 0 && _cached_uniforms.tex_offset >= 0)
+	{
+		const Vector2f texture_res = Vector2f(_sprite->texture()->resolution());
+		const Vector2f tex_scale = Vector2f(_sprite->resolution()) / texture_res;
+		const Vector2f tex_offset = Vector2f(_sprite->position()) / texture_res;
+		_material->set_parameter(_cached_uniforms.tex_scale, tex_scale);
+		_material->set_parameter(_cached_uniforms.tex_offset, tex_offset);
+	}
+
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,
 		.material = _material
@@ -82,4 +91,6 @@ void SpriteRenderer::cache_uniforms()
 	_cached_uniforms.color_tex = get_uniform_location_checked("color_tex");
 	_cached_uniforms.model_matrix = get_uniform_location_checked("model_matrix");
 	_cached_uniforms.view_matrix = get_uniform_location_checked("view_matrix");
+	_cached_uniforms.tex_scale = get_uniform_location_checked("tex_scale");
+	_cached_uniforms.tex_offset = get_uniform_location_checked("tex_offset");
 }

@@ -19,7 +19,11 @@ namespace math
         Vector4(T x, T y, T z, T w);
 
         template <number U>
-        requires std::convertible_to<U, T>
+        requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+        explicit Vector4(const Vector4<U>& other);
+
+        template <number U>
+        requires losslessly_convertible_to<U, T>
         Vector4(const Vector4<U>& other);
 
 #pragma region Swizzling
@@ -431,7 +435,17 @@ namespace math
 
     template <number T>
     template <number U>
-    requires std::convertible_to<U, T>
+    requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+    Vector4<T>::Vector4(const Vector4<U>& other)
+        : x(static_cast<T>(other.x))
+        , y(static_cast<T>(other.y))
+        , z(static_cast<T>(other.z))
+        , w(static_cast<T>(other.w))
+    { }
+
+    template <number T>
+    template <number U>
+    requires losslessly_convertible_to<U, T>
     Vector4<T>::Vector4(const Vector4<U>& other)
         : x(static_cast<T>(other.x))
         , y(static_cast<T>(other.y))

@@ -432,7 +432,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\math\matrix.h" />
     <ClInclude Include="src\math\matrix3x3.h" />
     <ClInclude Include="src\math\matrix4x4.h" />
-    <ClInclude Include="src\math\number.h" />
+    <ClInclude Include="src\math\concepts.h" />
     <ClInclude Include="src\math\quaternion.h" />
     <ClInclude Include="src\math\ray.h" />
     <ClInclude Include="src\math\transform.h" />

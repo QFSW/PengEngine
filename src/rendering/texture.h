@@ -52,6 +52,7 @@ namespace rendering
         void bind(GLint slot) const;
         void unbind(GLint slot) const;
 
+        [[nodiscard]] const std::string& name() const noexcept;
         [[nodiscard]] GLuint raw() const noexcept;
         [[nodiscard]] math::Vector2i resolution() const noexcept;
 

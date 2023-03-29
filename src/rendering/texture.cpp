@@ -107,6 +107,11 @@ void Texture::unbind(GLint slot) const
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+const std::string& Texture::name() const noexcept
+{
+    return _name;
+}
+
 GLuint Texture::raw() const noexcept
 {
     return _tex;
