@@ -21,6 +21,7 @@ IMPLEMENT_ENTITY(demo::pong::PengPong);
 using namespace demo::pong;
 using namespace rendering;
 using namespace entities;
+using namespace input;
 using namespace math;
 
 void PengPong::post_create()
@@ -44,12 +45,12 @@ void PengPong::tick(float delta_time)
 {
     Entity::tick(delta_time);
 
-	if (input::InputSubsystem::get()[input::KeyCode::r].pressed())
+	if (InputSubsystem::get()[KeyCode::r].pressed())
 	{
 		build_world();
 	}
 
-	PengEngine::get().set_time_scale(input::InputSubsystem::get()[input::KeyCode::y].is_down() ? 0.2f: 1);
+	PengEngine::get().set_time_scale(InputSubsystem::get()[KeyCode::y].is_down() ? 0.2f: 1);
 }
 
 void PengPong::load_resources()
@@ -105,13 +106,13 @@ void PengPong::build_world()
 	ball->goal_sfx = _goal_sfx;
 
 	peng::weak_ptr<Paddle> paddle_1 = _world_root->create_child<Paddle>("Paddle1");
-	paddle_1->input_axis.positive = input::KeyCode::w;
-	paddle_1->input_axis.negative = input::KeyCode::s;
+	paddle_1->input_axis.positive = KeyCode::w;
+	paddle_1->input_axis.negative = KeyCode::s;
 	paddle_1->local_transform().position = Vector3f(-paddle_delta_x, 0, 0);
 
 	peng::weak_ptr<Paddle> paddle_2 = _world_root->create_child<Paddle>("Paddle2");
-	paddle_2->input_axis.positive = input::KeyCode::up;
-	paddle_2->input_axis.negative = input::KeyCode::down;
+	paddle_2->input_axis.positive = KeyCode::up;
+	paddle_2->input_axis.negative = KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
 
 	constexpr float digit_size = 5;

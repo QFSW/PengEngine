@@ -52,6 +52,10 @@ void MeshRenderer::tick(float delta_time)
 		return;
 	}
 
+	const Vector3f view_pos = Camera::current()
+		? Camera::current()->world_position()
+		: Vector3f::zero();
+
 	if (_cached_uniforms.model_matrix >= 0)
 	{
 		const Matrix4x4f model_matrix = owner().transform_matrix();
@@ -75,10 +79,6 @@ void MeshRenderer::tick(float delta_time)
 
 	if (_uses_lighting)
 	{
-		const Vector3f view_pos = Camera::current()
-			? Camera::current()->world_position()
-			: Vector3f::zero();
-
 		_material->try_set_parameter(_cached_uniforms.view_pos, view_pos);
 
 		const std::vector<peng::shared_ref<const PointLight>> relevant_lights = get_relevant_point_lights();
@@ -124,9 +124,12 @@ void MeshRenderer::tick(float delta_time)
 		}
 	}
 
+	const float order = (owner().world_position() - view_pos).magnitude_sqr();
+
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,
-		.material = _material
+		.material = _material,
+		.order = order
 	});
 }
 

@@ -11,10 +11,8 @@ void RenderQueue::execute()
     SCOPED_EVENT("RenderQueue - execute");
     drain_queues();
 
-    const DrawCallTree tree(_draw_calls);
+    const DrawCallTree tree(std::move(_draw_calls));
     tree.execute();
-
-    _draw_calls.clear();
 }
 
 void RenderQueue::enqueue_draw(DrawCall&& draw_call)

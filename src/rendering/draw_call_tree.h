@@ -34,7 +34,7 @@ namespace rendering
     class DrawCallTree
     {
     public:
-        DrawCallTree(const std::vector<struct DrawCall>& draw_calls);
+        DrawCallTree(std::vector<struct DrawCall>&& draw_calls);
 
         void execute() const;
 

@@ -11,11 +11,18 @@
 
 using namespace rendering;
 
-DrawCallTree::DrawCallTree(const std::vector<DrawCall>& draw_calls)
+DrawCallTree::DrawCallTree(std::vector<DrawCall>&& draw_calls)
 {
     SCOPED_EVENT("Building DrawCallTree", strtools::catf_temp("%d draw calls", draw_calls.size()));
 
-    for (const DrawCall& draw_call : draw_calls)
+    std::vector<DrawCall> draw_calls_ordered(std::move(draw_calls));
+    std::ranges::sort(draw_calls_ordered,
+        [](const DrawCall& x, const DrawCall& y)
+        {
+            return x.order < y.order;
+        });
+
+    for (const DrawCall& draw_call : draw_calls_ordered)
     {
         check(draw_call.material);
         check(draw_call.mesh);
