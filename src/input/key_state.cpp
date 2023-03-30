@@ -7,6 +7,11 @@ bool KeyState::pressed() const noexcept
     return _is_down && !_was_down;
 }
 
+bool KeyState::released() const noexcept
+{
+    return !_is_down && _was_down;
+}
+
 bool KeyState::is_down() const noexcept
 {
     return _is_down;

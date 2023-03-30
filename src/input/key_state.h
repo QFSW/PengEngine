@@ -9,6 +9,10 @@ namespace input
         // @return true on the first frame the key was pressed, false otherwise
         [[nodiscard]] bool pressed() const noexcept;
 
+        // TODO: this doesn't work properly if the frametime is long enough
+        // @return true on the first frame the key was released, false otherwise
+        [[nodiscard]] bool released() const noexcept;
+
         // @return true if the key is currently held down
         [[nodiscard]] bool is_down() const noexcept;
 
