@@ -19,6 +19,7 @@ PengEngine::PengEngine()
 	, _shutting_down(false)
 	, _target_frametime(1000 / 60.0f)
 	, _max_delta_time(0)
+    , _time_scale(1)
 	, _resolution(800, 600)
 	, _windowed_resolution(_resolution)
 	, _windowed_position(100, 100)
@@ -71,6 +72,12 @@ void PengEngine::set_target_frametime(float frametime_ms) noexcept
 void PengEngine::set_max_delta_time(float frametime_ms) noexcept
 {
 	_max_delta_time = frametime_ms;
+}
+
+void PengEngine::set_time_scale(float time_scale) noexcept
+{
+	check(time_scale >= 0);
+	_time_scale = time_scale;
 }
 
 void PengEngine::set_resolution(const math::Vector2i& resolution) noexcept
@@ -206,6 +213,11 @@ bool PengEngine::shutting_down() const
 	}
 
 	return false;
+}
+
+float PengEngine::time_scale() const noexcept
+{
+	return _time_scale;
 }
 
 const math::Vector2i& PengEngine::resolution() const noexcept
@@ -400,7 +412,7 @@ void PengEngine::tick_main()
 
 	const float frametime_capped =
 		_max_delta_time > 0
-		? std::min(_last_frametime, _max_delta_time)
+		? std::min(_last_frametime * _time_scale, _max_delta_time)
 		: _last_frametime;
 
 	const float delta_time = frametime_capped / 1000.0f;

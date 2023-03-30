@@ -48,6 +48,8 @@ void PengPong::tick(float delta_time)
 	{
 		build_world();
 	}
+
+	PengEngine::get().set_time_scale(input::InputSubsystem::get()[input::KeyCode::y].is_down() ? 0.2f: 1);
 }
 
 void PengPong::load_resources()

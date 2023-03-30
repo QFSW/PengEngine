@@ -23,6 +23,7 @@ public:
 	void set_target_fps(float fps) noexcept;
 	void set_target_frametime(float frametime_ms) noexcept;
 	void set_max_delta_time(float frametime_ms) noexcept;
+	void set_time_scale(float time_scale) noexcept;
 	void set_resolution(const math::Vector2i& resolution) noexcept;
 	void set_resolution(const math::Vector2i& resolution, bool fullscreen) noexcept;
 	void set_cursor_locked(bool cursor_locked);
@@ -37,6 +38,7 @@ public:
 	void maximize_window() const;
 
 	[[nodiscard]] bool shutting_down() const;
+	[[nodiscard]] float time_scale() const noexcept;
 	[[nodiscard]] const math::Vector2i& resolution() const noexcept;
 	[[nodiscard]] float aspect_ratio() const noexcept;
 	[[nodiscard]] bool fullscreen() const noexcept;
@@ -61,6 +63,7 @@ private:
 	bool _shutting_down;
 	float _target_frametime;
 	float _max_delta_time;
+	float _time_scale;
 
 	math::Vector2i _resolution;
 	math::Vector2i _windowed_resolution;
