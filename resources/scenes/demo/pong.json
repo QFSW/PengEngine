@@ -5,9 +5,6 @@
       "type": "demo::pong::PengPong"
     },
     {
-      "type": "demo::pong::Ball"
-    },
-    {
       "type": "demo::DebugEntity"
     }
   ]

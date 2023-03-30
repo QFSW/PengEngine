@@ -22,15 +22,15 @@ namespace demo::pong
 	public:
 		Ball();
 
+		peng::shared_ptr<audio::AudioClip> bounce_wall_sfx;
+		peng::shared_ptr<audio::AudioClip> bounce_paddle_sfx;
+		peng::shared_ptr<audio::AudioClip> goal_sfx;
+
 	private:
 		void respawn();
 		void handle_collision(peng::weak_ptr<components::Collider2D> collider);
 
 		float _speed;
-
-		peng::shared_ref<audio::AudioClip> _bounce_wall_sfx;
-		peng::shared_ref<audio::AudioClip> _bounce_paddle_sfx;
-		peng::shared_ref<audio::AudioClip> _goal_sfx;
 		audio::AudioPool _audio_pool;
 	};
 }

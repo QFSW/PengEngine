@@ -4,7 +4,6 @@
 #include <components/rigid_body_2d.h>
 #include <components/box_collider_2d.h>
 #include <rendering/primitives.h>
-#include <audio/audio_clip.h>
 #include <math/math.h>
 
 #include "goal.h"
@@ -19,9 +18,6 @@ using namespace math;
 Ball::Ball()
 	: Entity("Ball")
 	, _speed(50)
-	, _bounce_wall_sfx(peng::make_shared<audio::AudioClip>("Bounce Wall", 1, 200, 0.6f))
-	, _bounce_paddle_sfx(peng::make_shared<audio::AudioClip>("Bounce Paddle", 1, 250, 0.5f))
-	, _goal_sfx(peng::make_shared<audio::AudioClip>("Goal", 1.5f, 400, 0.4f))
 {
 	add_component<RigidBody2D>();
 	add_component<SpriteRenderer>();
@@ -58,7 +54,10 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 	{
 		// If it's a goal, increment score and respawn
 		goal->associated_paddle()->score_point();
-		_audio_pool.play(_goal_sfx);
+		if (goal_sfx)
+		{
+			_audio_pool.play(goal_sfx.to_shared_ref());
+		}
 
 		respawn();
 	}
@@ -75,7 +74,10 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 		}
 
 		get_component<RigidBody2D>()->velocity = dir * _speed;
-		_audio_pool.play(_bounce_paddle_sfx);
+		if (bounce_paddle_sfx)
+		{
+			_audio_pool.play(bounce_paddle_sfx.to_shared_ref());
+		}
 	}
 	else
 	{
@@ -90,6 +92,9 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 		);
 
 		get_component<RigidBody2D>()->velocity *= reflector;
-		_audio_pool.play(_bounce_wall_sfx);
+		if (bounce_wall_sfx)
+		{
+			_audio_pool.play(bounce_wall_sfx.to_shared_ref());
+		}
 	}
 }
