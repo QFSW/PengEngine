@@ -7,7 +7,7 @@
 #include <components/sprite_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
-#include <rendering/sprite.h>
+#include <rendering/sprite_sheet.h>
 
 #include "goal.h"
 #include "paddle.h"
@@ -58,16 +58,10 @@ void PengPong::build_world()
 		digit_config
 	);
 
-	std::vector<peng::shared_ref<const Sprite>> digit_sprites;
-	for (uint8_t i = 0; i < 10; i++)
-	{
-		const int32_t res_y = digits_texture->resolution().y;
-		peng::shared_ref<const Sprite> sprite = peng::make_shared<Sprite>(
-			digits_texture, res_y, Vector2i(res_y, 0) * i, Vector2i(res_y, res_y)
-		);
-
-		digit_sprites.push_back(sprite);
-	}
+	constexpr int32_t digit_res = 9;
+    const std::vector<peng::shared_ref<const Sprite>> digit_sprites = SpriteSheet::slice_grid(
+	    digits_texture, digit_res, Vector2i::one() * digit_res, 10
+	);
 
 	// TODO: PengEngine::get().entity_manager().create_entity is far too long
 	peng::weak_ptr<Camera> camera = EntitySubsystem::get().create_entity<Camera>();

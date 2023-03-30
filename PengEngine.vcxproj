@@ -351,6 +351,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\shader_compiler.cpp" />
     <ClCompile Include="src\rendering\shader_type.cpp" />
     <ClCompile Include="src\rendering\sprite.cpp" />
+    <ClCompile Include="src\rendering\sprite_sheet.cpp" />
     <ClCompile Include="src\rendering\texture.cpp" />
     <ClCompile Include="src\rendering\texture_binding_cache.cpp" />
     <ClCompile Include="src\rendering\utils.cpp" />
@@ -464,6 +465,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\shader_symbol.h" />
     <ClInclude Include="src\rendering\shader_type.h" />
     <ClInclude Include="src\rendering\sprite.h" />
+    <ClInclude Include="src\rendering\sprite_sheet.h" />
     <ClInclude Include="src\rendering\texture.h" />
     <ClInclude Include="src\rendering\texture_binding_cache.h" />
     <ClInclude Include="src\rendering\utils.h" />
