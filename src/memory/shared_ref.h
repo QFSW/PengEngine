@@ -2,7 +2,8 @@
 
 #include <memory>
 #include <stdexcept>
-#include <cassert>
+
+#include <utils/check.h>
 
 namespace peng
 {
@@ -13,7 +14,7 @@ namespace peng
         explicit shared_ref(const std::shared_ptr<T>& ptr)
             : _ptr(ptr)
         {
-            assert(_ptr);
+            check(_ptr);
         }
 
         template <typename U>

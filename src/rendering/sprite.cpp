@@ -21,10 +21,10 @@ Sprite::Sprite(
     , _resolution(resolution)
 {
     [[maybe_unused]] const Vector2i texture_res = _texture->resolution();
-    assert(_position.x >= 0 && _position.y >= 0);
-    assert(_position.x < texture_res.x && _position.y < texture_res.y);
-    assert(_resolution.x >= 0 && _resolution.y >= 0);
-    assert(_position.x + _resolution.x <= texture_res.x && _position.y + _resolution.y <= texture_res.y);
+    check(_position.x >= 0 && _position.y >= 0);
+    check(_position.x < texture_res.x && _position.y < texture_res.y);
+    check(_resolution.x >= 0 && _resolution.y >= 0);
+    check(_position.x + _resolution.x <= texture_res.x && _position.y + _resolution.y <= texture_res.y);
 }
 
 peng::shared_ref<const Texture> Sprite::texture() const noexcept

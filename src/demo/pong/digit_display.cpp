@@ -27,7 +27,7 @@ void DigitDisplay::post_create()
 
 void DigitDisplay::set_digit_sprites(const std::vector<peng::shared_ref<const rendering::Sprite>>& sprites)
 {
-    assert(sprites.size() == 10);
+    check(sprites.size() == 10);
     _digit_sprites = sprites;
 }
 
@@ -40,8 +40,8 @@ void DigitDisplay::set_digit(uint8_t digit)
 
     _current = digit;
 
-    assert(_digit_sprites.size() == 10);
-    assert(digit < _digit_sprites.size());
+    check(_digit_sprites.size() == 10);
+    check(digit < _digit_sprites.size());
 
     get_component<components::SpriteRenderer>()->sprite() = _digit_sprites[digit];
 

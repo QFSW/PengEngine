@@ -158,7 +158,7 @@ void MeshRenderer::set_material(const peng::shared_ptr<Material>& material)
 
 void MeshRenderer::cache_uniforms()
 {
-	assert(_material);
+	check(_material);
 
 	auto get_uniform_location_checked = [&](const std::string& uniform_name, const std::string& required_symbol = "")
 	{

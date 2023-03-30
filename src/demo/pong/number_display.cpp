@@ -18,7 +18,7 @@ void NumberDisplay::post_create()
 
 void NumberDisplay::set_digit_sprites(const std::vector<peng::shared_ref<const rendering::Sprite>>& sprites)
 {
-    assert(sprites.size() == 10);
+    check(sprites.size() == 10);
     _digit_sprites = sprites;
 
     for (peng::weak_ptr<DigitDisplay> digit : _digits)

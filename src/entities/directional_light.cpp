@@ -40,7 +40,7 @@ void DirectionalLight::post_create()
 	}
 
 	_current = weak_this();
-	assert(_current);
+	check(_current);
 }
 
 DirectionalLight::LightData& DirectionalLight::data() noexcept

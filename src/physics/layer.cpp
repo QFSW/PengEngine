@@ -1,6 +1,6 @@
 #include "layer.h"
 
-#include <cassert>
+#include <utils/check.h>
 
 using namespace physics;
 
@@ -11,7 +11,7 @@ Layer::Layer()
 Layer::Layer(uint8_t index)
     : _index(index)
 {
-    assert(_index >= 0 && _index <= 63);
+    check(_index <= 63);
 }
 
 uint8_t Layer::index() const noexcept

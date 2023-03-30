@@ -1,7 +1,5 @@
 #include "component.h"
 
-#include <cassert>
-
 #include "logger.h"
 
 IMPLEMENT_COMPONENT(Component);
@@ -27,7 +25,7 @@ const Entity& Component::owner() const noexcept
 
 	// If the owner is no longer valid then something has gone wrong
 	// as the component should never outlive the owner
-	assert(owner_locked);
+	check(owner_locked);
 	return *owner_locked.get();
 }
 

@@ -1,8 +1,7 @@
 #include "audio_subsystem.h"
 
-#include <cassert>
-
 #include <core/logger.h>
+#include <utils/check.h>
 
 using namespace audio;
 
@@ -25,7 +24,7 @@ void AudioSubsystem::start()
 {
     Logger::log("Starting OpenAL");
 
-    assert(!_active);
+    check(!_active);
     _active = true;
 
     _device = alcOpenDevice(nullptr);
@@ -37,7 +36,7 @@ void AudioSubsystem::shutdown()
 {
     Logger::log("Shutting down OpenAL");
 
-    assert(_active);
+    check(_active);
     _active = false;
 
     alcMakeContextCurrent(nullptr);

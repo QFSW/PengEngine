@@ -1,9 +1,10 @@
 #pragma once
 
-#include <cassert>
 #include <concepts>
 #include <memory>
 #include <unordered_map>
+
+#include <utils/check.h>
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include "subsystem_definition.h"
@@ -42,7 +43,7 @@ template <std::derived_from<Subsystem> T>
 void Subsystem::load()
 {
     const type_info* id = &typeid(T);
-    assert(!_subsystem_map.contains(id));
+    check(!_subsystem_map.contains(id));
 
     _subsystem_map[id] = _subsystems.size();
     _subsystems.push_back(std::make_unique<T>());
@@ -52,7 +53,7 @@ template <std::derived_from<Subsystem> T>
 T& Subsystem::get()
 {
     const type_info* id = &typeid(T);
-    assert(_subsystem_map.contains(id));
+    check(_subsystem_map.contains(id));
 
     return static_cast<T&>(*_subsystems[_subsystem_map[id]]);
 }

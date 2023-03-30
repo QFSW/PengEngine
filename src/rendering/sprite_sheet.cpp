@@ -13,15 +13,15 @@ std::vector<peng::shared_ref<const Sprite>> SpriteSheet::slice_grid(
     int32_t cell_count
 )
 {
-    assert(cell_count > 0);
-    assert(cell_size.x > 0 && cell_size.y > 0);
-    assert(texture->resolution().x % cell_size.x == 0);
-    assert(texture->resolution().y % cell_size.y == 0);
+    check(cell_count > 0);
+    check(cell_size.x > 0 && cell_size.y > 0);
+    check(texture->resolution().x % cell_size.x == 0);
+    check(texture->resolution().y % cell_size.y == 0);
 
     std::vector<peng::shared_ref<const Sprite>> sprites;
     const Vector2i cell_count_xy = texture->resolution() / cell_size;
 
-    assert(cell_count_xy.area() >= cell_count);
+    check(cell_count_xy.area() >= cell_count);
 
     for (int32_t y = 0; y < cell_count_xy.y; y++)
     {

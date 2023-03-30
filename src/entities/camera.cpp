@@ -1,6 +1,5 @@
 #include "camera.h"
 
-#include <cassert>
 #include <numbers>
 
 #include <core/logger.h>
@@ -47,7 +46,7 @@ void Camera::post_create()
 	}
 
 	_current = weak_this();
-	assert(_current);
+	check(_current);
 }
 
 void Camera::tick(float delta_time)

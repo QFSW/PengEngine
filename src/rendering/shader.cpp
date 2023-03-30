@@ -1,6 +1,5 @@
 #include "shader.h"
 
-#include <cassert>
 #include <unordered_set>
 
 #include <memory/weak_ptr.h>
@@ -129,7 +128,7 @@ peng::shared_ref<const Shader> Shader::fallback()
         "resources/shaders/core/fallback.frag"
     );
 
-    assert(!shader->broken());
+    check(!shader->broken());
 
     weak_fallback = shader;
     return shader;
@@ -137,7 +136,7 @@ peng::shared_ref<const Shader> Shader::fallback()
 
 void Shader::use() const
 {
-    assert(!_broken);
+    check(!_broken);
     glUseProgram(_program);
 }
 

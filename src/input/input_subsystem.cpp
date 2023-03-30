@@ -110,7 +110,7 @@ void InputSubsystem::shutdown()
 
 void InputSubsystem::tick(float)
 {
-	assert(_window);
+	check(_window);
 
 	for (const int32_t opengl_key : _opengl_keys)
 	{

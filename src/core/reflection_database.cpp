@@ -2,9 +2,9 @@
 
 void ReflectionDatabase::register_type(const ReflectedType& reflected_type)
 {
-	assert(!reflected_type.name.empty());
-	assert(!_name_to_type.contains(reflected_type.name));
-	assert(!_info_to_type.contains(reflected_type.info));
+	check(!reflected_type.name.empty());
+	check(!_name_to_type.contains(reflected_type.name));
+	check(!_info_to_type.contains(reflected_type.info));
 
 	const peng::shared_ref<ReflectedType> reflected_type_ref = peng::make_shared<ReflectedType>(reflected_type);
 
@@ -36,7 +36,7 @@ peng::shared_ptr<const ReflectedType> ReflectionDatabase::reflect_type(const std
 peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(const std::type_info& type_info) const
 {
 	const peng::shared_ptr<const ReflectedType> reflected_type = reflect_type(type_info);
-	assert(reflected_type);
+	check(reflected_type);
 
 	return reflected_type.to_shared_ref();
 }
@@ -44,7 +44,7 @@ peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(c
 peng::shared_ref<const ReflectedType> ReflectionDatabase::reflect_type_checked(const std::string& type_name) const
 {
 	const peng::shared_ptr<const ReflectedType> reflected_type = reflect_type(type_name);
-	assert(reflected_type);
+	check(reflected_type);
 
 	return reflected_type.to_shared_ref();
 }

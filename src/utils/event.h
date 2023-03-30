@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cassert>
 #include <vector>
 #include <functional>
 #include <tuple>
 #include <string>
 
+#include "check.h"
 #include "vectools.h"
 
 namespace utils
@@ -136,7 +136,7 @@ namespace utils
     template <typename...Args>
     void EventInterface<Args...>::process_pending_actions()
     {
-        assert(!_is_invoking);
+        check(!_is_invoking);
 
         for (const std::function<void()>& action : _pending_actions)
         {

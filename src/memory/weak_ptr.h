@@ -57,7 +57,7 @@ namespace peng
 
         [[nodiscard]] T* operator->() const 
         {
-            assert(valid());
+            check(valid());
             return _ptr.lock().get();
         }
 

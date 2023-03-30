@@ -1,6 +1,5 @@
 #include "entity.h"
 
-#include <cassert>
 #include <utils/utils.h>
 
 #include "entity_subsystem.h"
@@ -23,7 +22,7 @@ Entity::Entity(const std::string& name, TickGroup tick_group)
 
 void Entity::tick(float)
 {
-	assert(_tick_group != TickGroup::none);
+	check(_tick_group != TickGroup::none);
 }
 
 TickGroup Entity::tick_group() const noexcept
