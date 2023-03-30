@@ -63,28 +63,27 @@ void PengPong::build_world()
 	    digits_texture, digit_res, Vector2i::one() * digit_res, 10
 	);
 
-	// TODO: PengEngine::get().entity_manager().create_entity is far too long
-	peng::weak_ptr<Camera> camera = EntitySubsystem::get().create_entity<Camera>();
+	peng::weak_ptr<Camera> camera = create_entity<Camera>();
 	camera->make_orthographic(ortho_size, 0.01f, 100.0f);
 
-	peng::weak_ptr<Paddle> paddle_1 = EntitySubsystem::get().create_entity<Paddle>("Paddle1");
+	peng::weak_ptr<Paddle> paddle_1 = create_entity<Paddle>("Paddle1");
 	paddle_1->input_axis.positive = input::KeyCode::w;
 	paddle_1->input_axis.negative = input::KeyCode::s;
 	paddle_1->local_transform().position = Vector3f(-paddle_delta_x, 0, 0);
 
-	peng::weak_ptr<Paddle> paddle_2 = EntitySubsystem::get().create_entity<Paddle>("Paddle2");
+	peng::weak_ptr<Paddle> paddle_2 = create_entity<Paddle>("Paddle2");
 	paddle_2->input_axis.positive = input::KeyCode::up;
 	paddle_2->input_axis.negative = input::KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
 
 	constexpr float digit_size = 5;
 
-	peng::weak_ptr<NumberDisplay> score_1 = EntitySubsystem::get().create_entity<NumberDisplay>("Score1");
+	peng::weak_ptr<NumberDisplay> score_1 = create_entity<NumberDisplay>("Score1");
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
 	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
 	score_1->set_digit_sprites(digit_sprites);
 
-	peng::weak_ptr<NumberDisplay> score_2 = EntitySubsystem::get().create_entity<NumberDisplay>("Score2");
+	peng::weak_ptr<NumberDisplay> score_2 = create_entity<NumberDisplay>("Score2");
 	score_2->local_transform().scale = Vector3f::one() * 5;
 	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
 	score_2->set_digit_sprites(digit_sprites);
@@ -100,25 +99,25 @@ void PengPong::build_world()
 			score_2->set_number(score);
 		});
 
-	peng::weak_ptr<Entity> barrier_top = EntitySubsystem::get().create_entity<Entity>("BarrierTop");
+	peng::weak_ptr<Entity> barrier_top = create_entity<Entity>("BarrierTop");
 	barrier_top->add_component<components::BoxCollider2D>();
 	barrier_top->local_transform().position = Vector3f(0, ortho_size + 2, 0);
 	barrier_top->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
-	peng::weak_ptr<Entity> barrier_bottom = EntitySubsystem::get().create_entity<Entity>("BarrierBottom");
+	peng::weak_ptr<Entity> barrier_bottom = create_entity<Entity>("BarrierBottom");
 	barrier_bottom->add_component<components::BoxCollider2D>();
 	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 2, 0);
 	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
-	peng::weak_ptr<Goal> goal_right = EntitySubsystem::get().create_entity<Goal>(paddle_1);
+	peng::weak_ptr<Goal> goal_right = create_entity<Goal>(paddle_1);
 	goal_right->local_transform().position = Vector3f(ortho_width + 2, 0, 0);
 	goal_right->local_transform().scale = Vector3f(2, ortho_size * 3, 1);
 
-	peng::weak_ptr<Goal> goal_left = EntitySubsystem::get().create_entity<Goal>(paddle_2);
+	peng::weak_ptr<Goal> goal_left = create_entity<Goal>(paddle_2);
 	goal_left->local_transform().position = Vector3f(-ortho_width - 2, 0, 0);
 	goal_left->local_transform().scale = Vector3f(2, ortho_size * 3, 1);
 
-	peng::weak_ptr<Entity> background = EntitySubsystem::get().create_entity<Entity>("Background");
+	peng::weak_ptr<Entity> background = create_entity<Entity>("Background");
 
 	const Vector3f stripe_size = Vector3f(0.5f, 1.5f, 1);
 	const float stripe_padding = 1.5f;
@@ -127,11 +126,9 @@ void PengPong::build_world()
 
 	for (int i = -num_stripes; i <= num_stripes; i++)
 	{
-		peng::weak_ptr<Entity> stripe = EntitySubsystem::get().create_entity<Entity>("Stripe");
-
+		peng::weak_ptr<Entity> stripe = background->create_child<Entity, EntityRelationship::none>("Stripe");
 		stripe->local_transform().scale = stripe_size;
 		stripe->local_transform().position = Vector3f(0, i * stripe_spacing, 0);
-		stripe->set_parent(background, EntityRelationship::none);
 		stripe->add_component<components::SpriteRenderer>();
 	}
 }

@@ -103,6 +103,11 @@ void Entity::set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship
 	}
 }
 
+void Entity::add_child(const peng::weak_ptr<Entity>& child, EntityRelationship relationship)
+{
+	child->set_parent(weak_this(), relationship);
+}
+
 void Entity::destroy()
 {
 	for (const peng::weak_ptr<Entity>& child : _children)

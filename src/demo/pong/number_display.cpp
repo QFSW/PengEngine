@@ -75,12 +75,11 @@ peng::weak_ptr<DigitDisplay> NumberDisplay::get_nth_digit(int32_t n)
         return _digits[n];
     }
 
-    peng::weak_ptr<DigitDisplay> digit = EntitySubsystem::get().create_entity<DigitDisplay>(
+    peng::weak_ptr<DigitDisplay> digit = create_child<DigitDisplay>(
         strtools::catf("Digit%d", n)
     );
 
     digit->set_digit_sprites(_digit_sprites);
-    digit->set_parent(weak_this());
     _digits.push_back(digit);
 
     return digit;

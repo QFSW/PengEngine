@@ -30,7 +30,7 @@ void GravityController::post_create()
 	create_rock_field(500, 5, 2);
 	create_rock_field(100, 10, 4);
 
-	peng::weak_ptr<DirectionalLight> light = EntitySubsystem::get().create_entity<DirectionalLight>();
+	peng::weak_ptr<DirectionalLight> light = create_entity<DirectionalLight>();
 	light->data().color = Vector3f(1, 1, 0.9f);
 	light->data().ambient = Vector3f(0.1f, 0.1f, 0.15f);
 	light->local_transform().rotation = Vector3f(20, 20, 0);
@@ -39,7 +39,7 @@ void GravityController::post_create()
 		"resources/textures/demo/skybox.jpg"
 	);
 
-	peng::weak_ptr<Skybox> skybox = EntitySubsystem::get().create_entity<Skybox>();
+	peng::weak_ptr<Skybox> skybox = create_entity<Skybox>();
 	skybox->material()->set_parameter("color_tex", skybox_texture);
 	skybox->set_parent(weak_this());
 	
@@ -97,7 +97,7 @@ void GravityController::create_rock_field(int32_t count, float radius, float spe
 	SCOPED_EVENT("GravityController - create rock field", strtools::catf_temp("%d rocks", count));
 	for (int32_t i = 0; i < count; i++)
 	{
-		auto rock = EntitySubsystem::get().create_entity<Rock>(strtools::catf("Rock#%d", i));
+		auto rock = create_entity<Rock>(strtools::catf("Rock#%d", i));
 
 		rock->mass = rand_range(0.001f, 0.05f);
 		rock->local_transform().position = Vector3f(

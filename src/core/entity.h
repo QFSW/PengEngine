@@ -36,7 +36,20 @@ public:
 
 	void set_active(bool active);
 	void set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship = EntityRelationship::full);
+	void add_child(const peng::weak_ptr<Entity>& child, EntityRelationship relationship = EntityRelationship::full);
 	void destroy();
+
+	template <std::derived_from<Entity> T, typename...Args>
+	requires std::constructible_from<T, Args...>
+	peng::weak_ptr<T> create_entity(Args&&...args);
+
+	template <std::derived_from<Entity> T, typename...Args>
+    requires std::constructible_from<T, Args...>
+	peng::weak_ptr<T> create_child(Args&&...args);
+
+	template <std::derived_from<Entity> T, EntityRelationship R, typename...Args>
+    requires std::constructible_from<T, Args...>
+	peng::weak_ptr<T> create_child(Args&&...args);
 
 	template <std::derived_from<Component> T, typename...Args>
 	peng::weak_ptr<T> add_component(Args&&...args);
@@ -117,8 +130,32 @@ private:
 	std::vector<peng::shared_ref<Component>> _deferred_components;
 };
 
-template <std::derived_from<Component> T, typename ... Args>
-peng::weak_ptr<T> Entity::add_component(Args&&... args)
+template <std::derived_from<Entity> T, typename...Args>
+requires std::constructible_from<T, Args...>
+peng::weak_ptr<T> Entity::create_entity(Args&&...args)
+{
+	return EntitySubsystem::get().create_entity<T>(std::forward<Args>(args)...);
+}
+
+template <std::derived_from<Entity> T, typename...Args>
+requires std::constructible_from<T, Args...>
+peng::weak_ptr<T> Entity::create_child(Args&&...args)
+{
+	return create_child<T, EntityRelationship::full, Args...>(std::forward<Args>(args)...);
+}
+
+template <std::derived_from<Entity> T, EntityRelationship R, typename...Args>
+requires std::constructible_from<T, Args...>
+peng::weak_ptr<T> Entity::create_child(Args&&... args)
+{
+	peng::weak_ptr<T> entity = create_entity<T>(std::forward<Args>(args)...);
+	add_child(entity, R);
+
+	return entity;
+}
+
+template <std::derived_from<Component> T, typename...Args>
+peng::weak_ptr<T> Entity::add_component(Args&&...args)
 {
 	peng::shared_ref<T> component = peng::make_shared<T>(std::forward<Args>(args)...);
 	_components.push_back(component);
