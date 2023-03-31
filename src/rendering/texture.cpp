@@ -1,10 +1,12 @@
 #include "texture.h"
 
 #include <stdexcept>
+#include <fstream>
 
 #include <core/logger.h>
 #include <utils/strtools.h>
 #include <common/common.h>
+#include <libs/nlohmann/json.hpp>
 #include <profiling/scoped_event.h>
 
 #pragma warning( push, 0 )
@@ -92,6 +94,23 @@ Texture::~Texture()
     Logger::log("Destroying texture '%s'", _name.c_str());
 
     glDeleteTextures(1, &_tex);
+}
+
+peng::shared_ref<Texture> Texture::load_asset(const std::string& path)
+{
+    std::ifstream file(path);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Could not open file " + path);
+    }
+
+    nlohmann::json asset_def = nlohmann::json::parse(file);
+
+    const std::string name = asset_def["name"].get<std::string>();
+    const std::string texture_path = asset_def["texture"].get<std::string>();
+
+    // TODO: add support for loading Config values
+    return peng::make_shared<Texture>(name, texture_path);
 }
 
 void Texture::bind(GLint slot) const

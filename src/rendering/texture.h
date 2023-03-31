@@ -3,8 +3,9 @@
 #include <string>
 #include <vector>
 
-#include <math/vector4.h>
 #include <GL/glew.h>
+#include <memory/shared_ref.h>
+#include <math/vector4.h>
 
 namespace rendering
 {
@@ -48,6 +49,8 @@ namespace rendering
         Texture(const Texture&) = delete;
         Texture(Texture&&) = delete;
         ~Texture();
+
+        static peng::shared_ref<Texture> load_asset(const std::string& path);
 
         void bind(GLint slot) const;
         void unbind(GLint slot) const;

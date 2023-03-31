@@ -29,6 +29,7 @@ public:
     explicit Asset(std::string&& path);
 
     [[nodiscard]] peng::shared_ref<T> load();
+    [[nodiscard]] peng::shared_ref<const T> load_const();
     [[nodiscard]] bool loaded() const noexcept override;
 
 private:
@@ -69,6 +70,12 @@ peng::shared_ref<T> Asset<T>::load()
 
         return loaded;
     }
+}
+
+template <CAsset T>
+peng::shared_ref<const T> Asset<T>::load_const()
+{
+    return load();
 }
 
 template <CAsset T>

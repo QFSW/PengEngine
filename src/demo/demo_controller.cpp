@@ -1,6 +1,6 @@
 #include "demo_controller.h"
 
-#include <core/logger.h>
+#include <core/asset.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <input/input_subsystem.h>
@@ -30,10 +30,6 @@ void DemoController::post_create()
 
 	Logger::log("Demo controller starting...");
 
-	const peng::shared_ref<const Texture> texture = peng::make_shared<Texture>("wall",
-		"resources/textures/demo/wall.jpg"
-	);
-
 	const auto blobs_entity = create_entity<Entity>("Blobs", TickGroup::none);
 
 	const Vector2i blob_grid(7, 5);
@@ -49,9 +45,7 @@ void DemoController::post_create()
 				? Primitives::cube()
 				: Primitives::icosphere(blob_y);
 
-			blobs_entity->create_child<BlobEntity>(mesh, pos)
-		        ->get_component<components::MeshRenderer>()->material()
-		            ->set_parameter("color_tex", texture);
+			blobs_entity->create_child<BlobEntity>(mesh, pos);
 		}
 	}
 
@@ -65,7 +59,7 @@ void DemoController::post_create()
 
 	const Vector2f floor_size(500, 500);
 	const auto floor_material = Primitives::phong_material();
-	floor_material->set_parameter("color_tex", texture);
+	floor_material->set_parameter("color_tex", Asset<Texture>("resources/textures/demo/wall.asset").load_const());
 	floor_material->set_parameter("base_color", Vector3f(0.7f, 1, 0.7f));
 	floor_material->set_parameter("tex_scale", floor_size);
 	floor_material->set_parameter<float>("shinyness", 8);

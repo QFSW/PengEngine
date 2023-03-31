@@ -634,6 +634,7 @@
     <None Include="resources\shaders\core\skybox.asset" />
     <None Include="resources\shaders\core\fallback.asset" />
     <None Include="resources\shaders\demo\blob.asset" />
+    <None Include="resources\textures\demo\wall.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />
@@ -643,5 +644,8 @@
     <Natvis Include="src\rendering\shader.natvis" />
     <Natvis Include="src\rendering\texture.natvis" />
     <Natvis Include="src\rendering\mesh.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\scenes\demo\sandbox.json" />
   </ItemGroup>
 </Project>
