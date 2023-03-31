@@ -1,0 +1,5 @@
+{
+    "name": "Rave",
+    "vert": "resources/shaders/demo/wobble.vert",
+    "frag": "resources/shaders/demo/rave.frag"
+}

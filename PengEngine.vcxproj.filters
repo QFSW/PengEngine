@@ -633,6 +633,7 @@
     <None Include="resources\shaders\core\phong.asset" />
     <None Include="resources\shaders\core\skybox.asset" />
     <None Include="resources\shaders\core\fallback.asset" />
+    <None Include="resources\shaders\demo\blob.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

@@ -7,6 +7,7 @@
 #include <entities/point_light.h>
 #include <entities/skybox.h>
 #include <components/fly_cam_controller.h>
+#include <components/mesh_renderer.h>
 
 #include "blob_entity.h"
 #include "rendering/utils.h"
@@ -29,18 +30,9 @@ void DemoController::post_create()
 
 	Logger::log("Demo controller starting...");
 
-	const peng::shared_ref<const Shader> shader = peng::make_shared<Shader>(
-		"Rave",
-		"resources/shaders/demo/wobble.vert",
-		"resources/shaders/demo/rave.frag"
-	);
-
 	const peng::shared_ref<const Texture> texture = peng::make_shared<Texture>("wall",
 		"resources/textures/demo/wall.jpg"
 	);
-
-	auto material = peng::make_shared<Material>(shader);
-	material->set_parameter("color_tex", texture);
 
 	const auto blobs_entity = create_entity<Entity>("Blobs", TickGroup::none);
 
@@ -57,7 +49,9 @@ void DemoController::post_create()
 				? Primitives::cube()
 				: Primitives::icosphere(blob_y);
 
-			blobs_entity->create_child<BlobEntity>(mesh, material, pos);
+			blobs_entity->create_child<BlobEntity>(mesh, pos)
+		        ->get_component<components::MeshRenderer>()->material()
+		            ->set_parameter("color_tex", texture);
 		}
 	}
 

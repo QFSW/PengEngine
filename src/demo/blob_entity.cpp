@@ -1,7 +1,9 @@
 #include "blob_entity.h"
 
+#include <core/asset.h>
 #include <entities/camera.h>
 #include <input/input_subsystem.h>
+#include <rendering/material.h>
 #include <rendering/primitives.h>
 
 using namespace math;
@@ -13,14 +15,17 @@ IMPLEMENT_ENTITY(BlobEntity);
 
 BlobEntity::BlobEntity(
 	const peng::shared_ref<const Mesh>& mesh,
-	const peng::shared_ref<Material>& material,
 	const Vector2f& pos
 )
 	: Entity("Blob")
 	, _age(static_cast<float>(rand()) / static_cast<float>((RAND_MAX)))
 {
+	Asset<Shader> blob_shader("resources/shaders/demo/blob.asset");
+	peng::shared_ref<Shader> shader = blob_shader.load();
+	peng::shared_ref<Material> material = peng::make_shared<Material>(shader);
+
 	_local_transform = Transform(Vector3f(pos, pos.y + 2), Vector3f::one(), Vector3f::zero());
-	_mesh_renderer = add_component<MeshRenderer>(mesh, peng::copy_shared(material));
+	_mesh_renderer = add_component<MeshRenderer>(mesh, material);
 }
 
 void BlobEntity::post_create()
