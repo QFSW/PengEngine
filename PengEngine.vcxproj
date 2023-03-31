@@ -477,6 +477,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\rigid_body_2d.h" />
     <ClInclude Include="src\components\sprite_renderer.h" />
     <ClInclude Include="src\core\asset.h" />
+    <ClInclude Include="src\core\asset_definition.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\component_definition.h" />
     <ClInclude Include="src\core\component_factory.h" />

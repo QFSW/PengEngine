@@ -1,15 +1,19 @@
 #pragma once
 
+#include <fstream>
+
 #include <core/logger.h>
 #include <memory/shared_ptr.h>
 #include <memory/weak_ptr.h>
 #include <profiling/scoped_event.h>
 
+#include "asset_definition.h"
+
 // Concept for an item that can be contained as an asset
 template <typename T>
-concept CAsset = requires(const std::string& path)
+concept CAsset = requires(const AssetDefinition& asset_def)
 {
-    { T::load_asset(path) } -> std::convertible_to<peng::shared_ref<T>>;
+    { T::load_asset(asset_def) } -> std::convertible_to<peng::shared_ref<T>>;
 };
 
 // Base interface for all Assets
@@ -65,7 +69,18 @@ peng::shared_ref<T> Asset<T>::load()
         SCOPED_EVENT("Loading asset", _path.c_str());
         Logger::log("Loading asset '%s'", _path.c_str());
 
-        peng::shared_ref<T> loaded = T::load_asset(_path);
+        // TODO: add better error handling
+        std::ifstream file(_path);
+        if (!file.is_open())
+        {
+            throw std::runtime_error("Could not open asset " + _path);
+        }
+
+        AssetDefinition asset_def;
+        asset_def.path = _path;
+        asset_def.json_def = nlohmann::json::parse(file);
+
+        peng::shared_ref<T> loaded = T::load_asset(asset_def);
         existing = loaded;
 
         return loaded;

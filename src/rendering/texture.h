@@ -7,6 +7,8 @@
 #include <memory/shared_ref.h>
 #include <math/vector4.h>
 
+struct AssetDefinition;
+
 namespace rendering
 {
     class Texture
@@ -50,7 +52,7 @@ namespace rendering
         Texture(Texture&&) = delete;
         ~Texture();
 
-        static peng::shared_ref<Texture> load_asset(const std::string& path);
+        static peng::shared_ref<Texture> load_asset(const AssetDefinition& asset_def);
 
         void bind(GLint slot) const;
         void unbind(GLint slot) const;

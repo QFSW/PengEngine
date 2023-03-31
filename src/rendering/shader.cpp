@@ -1,14 +1,11 @@
 #include "shader.h"
 
 #include <unordered_set>
-#include <fstream>
 
-#include <memory/weak_ptr.h>
 #include <core/asset.h>
 #include <utils/utils.h>
 #include <utils/io.h>
 #include <profiling/scoped_event.h>
-#include <libs/nlohmann/json.hpp>
 
 #include "shader_compiler.h"
 #include "primitives.h"
@@ -116,24 +113,14 @@ Shader::~Shader()
     glDeleteProgram(_program);
 }
 
-peng::shared_ref<Shader> Shader::load_asset(const std::string& path)
+peng::shared_ref<Shader> Shader::load_asset(const AssetDefinition& asset_def)
 {
-    // TODO: abstract out file and json loading to Asset
-    // TODO: add better error handling
-    std::ifstream file(path);
-    if (!file.is_open())
-    {
-        throw std::runtime_error("Could not open file " + path);
-    }
-
-    nlohmann::json asset_def = nlohmann::json::parse(file);
-
-    const std::string name = asset_def["name"].get<std::string>();
-    const std::string vert = asset_def["vert"].get<std::string>();
-    const std::string frag = asset_def["frag"].get<std::string>();
+    const std::string name = asset_def.json_def["name"].get<std::string>();
+    const std::string vert = asset_def.json_def["vert"].get<std::string>();
+    const std::string frag = asset_def.json_def["frag"].get<std::string>();
 
     peng::shared_ref<Shader> shader = peng::make_shared<Shader>(name, vert, frag);
-    shader->draw_order() = asset_def.value("draw_order", 0);
+    shader->draw_order() = asset_def.json_def.value("draw_order", 0);
 
     return shader;
 }
