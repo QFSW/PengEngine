@@ -1,0 +1,5 @@
+{
+    "name": "Phong",
+    "vert": "resources/shaders/core/projection.vert",
+    "frag": "resources/shaders/core/phong.frag"
+}

@@ -1,12 +1,14 @@
 #include "shader.h"
 
 #include <unordered_set>
+#include <fstream>
 
 #include <memory/weak_ptr.h>
-#include <core/logger.h>
+#include <core/asset.h>
 #include <utils/utils.h>
 #include <utils/io.h>
 #include <profiling/scoped_event.h>
+#include <libs/nlohmann/json.hpp>
 
 #include "shader_compiler.h"
 #include "primitives.h"
@@ -114,23 +116,34 @@ Shader::~Shader()
     glDeleteProgram(_program);
 }
 
-peng::shared_ref<const Shader> Shader::fallback()
+peng::shared_ref<Shader> Shader::load_asset(const std::string& path)
 {
-    static peng::weak_ptr<const Shader> weak_fallback;
-    if (const peng::shared_ptr<const Shader> fallback_locked = weak_fallback.lock())
+    // TODO: abstract out file and json loading to Asset
+    // TODO: add better error handling
+    std::ifstream file(path);
+    if (!file.is_open())
     {
-        return fallback_locked.to_shared_ref();
+        throw std::runtime_error("Could not open file " + path);
     }
 
-    const peng::shared_ref shader = peng::make_shared<Shader>(
-        "Fallback",
-        "resources/shaders/core/projection.vert",
-        "resources/shaders/core/fallback.frag"
-    );
+    nlohmann::json asset_def = nlohmann::json::parse(file);
+
+    const std::string name = asset_def["name"].get<std::string>();
+    const std::string vert = asset_def["vert"].get<std::string>();
+    const std::string frag = asset_def["frag"].get<std::string>();
+
+    peng::shared_ref<Shader> shader = peng::make_shared<Shader>(name, vert, frag);
+    shader->draw_order() = asset_def.value("draw_order", 0);
+
+    return shader;
+}
+
+peng::shared_ref<const Shader> Shader::fallback()
+{
+    static Asset<Shader> asset("resources/shaders/core/fallback.asset");
+    peng::shared_ref<Shader> shader = asset.load();
 
     check(!shader->broken());
-
-    weak_fallback = shader;
     return shader;
 }
 

@@ -1,0 +1,6 @@
+{
+    "name": "Skybox",
+    "vert": "resources/shaders/core/skybox.vert",
+    "frag": "resources/shaders/core/unlit.frag",
+    "draw_order": 1
+}

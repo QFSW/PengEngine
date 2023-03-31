@@ -476,6 +476,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\rigid_body.h" />
     <ClInclude Include="src\components\rigid_body_2d.h" />
     <ClInclude Include="src\components\sprite_renderer.h" />
+    <ClInclude Include="src\core\asset.h" />
     <ClInclude Include="src\core\component.h" />
     <ClInclude Include="src\core\component_definition.h" />
     <ClInclude Include="src\core\component_factory.h" />
@@ -590,11 +591,15 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\scenes\demo\pong.json" />
+    <None Include="resources\shaders\core\fallback.asset" />
+    <None Include="resources\shaders\core\phong.asset" />
+    <None Include="resources\shaders\core\skybox.asset" />
     <None Include="resources\shaders\core\skybox.vert" />
     <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\fallback.frag" />
     <None Include="resources\shaders\core\phong.frag" />
     <None Include="resources\shaders\core\projection.vert" />
+    <None Include="resources\shaders\core\unlit.asset" />
     <None Include="resources\shaders\core\unlit.frag" />
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />

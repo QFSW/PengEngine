@@ -66,6 +66,7 @@ namespace rendering
         Shader(Shader&&) = delete;
         ~Shader();
 
+        static peng::shared_ref<Shader> load_asset(const std::string& path);
         static peng::shared_ref<const Shader> fallback();
 
         void use() const;

@@ -1,6 +1,6 @@
 #include "primitives.h"
 
-#include <memory/shared_ref.h>
+#include <core/asset.h>
 #include <math/vector3.h>
 #include <rendering/utils.h>
 #include <utils/strtools.h>
@@ -350,60 +350,20 @@ peng::shared_ref<const Sprite> Primitives::white_sprite()
 
 peng::shared_ref<const Shader> Primitives::unlit_shader()
 {
-    // TODO: work out a way to de-duplicate all this caching boilerplate
-    static peng::weak_ptr<const Shader> weak_shader;
-    if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
-    {
-        return strong_shader.to_shared_ref();
-    }
-
-    peng::shared_ref<Shader> unlit = peng::make_shared<Shader>(
-        "Unlit",
-        "resources/shaders/core/projection.vert",
-        "resources/shaders/core/unlit.frag"
-    );
-
-    weak_shader = unlit;
-    return unlit;
+    static Asset<Shader> shader("resources/shaders/core/unlit.asset");
+    return shader.load();
 }
 
 peng::shared_ref<const Shader> Primitives::phong_shader()
 {
-    static peng::weak_ptr<const Shader> weak_shader;
-    if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
-    {
-        return strong_shader.to_shared_ref();
-    }
-    \
-    peng::shared_ref<Shader> phong = peng::make_shared<Shader>(
-        "Phong",
-        "resources/shaders/core/projection.vert",
-        "resources/shaders/core/phong.frag"
-    );
-
-    weak_shader = phong;
-    return phong;
+    static Asset<Shader> shader("resources/shaders/core/phong.asset");
+    return shader.load();
 }
 
 peng::shared_ref<const Shader> Primitives::skybox_shader()
 {
-    static peng::weak_ptr<const Shader> weak_shader;
-    if (const peng::shared_ptr<const Shader> strong_shader = weak_shader.lock())
-    {
-        return strong_shader.to_shared_ref();
-    }
-
-    peng::shared_ref<Shader> skybox = peng::make_shared<Shader>(
-        "Skybox",
-        "resources/shaders/core/skybox.vert",
-        "resources/shaders/core/unlit.frag"
-    );
-#
-    // Needs to be drawn after most other entities
-    skybox->draw_order() = 100;
-
-    weak_shader = skybox;
-    return skybox;
+    static Asset<Shader> shader("resources/shaders/core/skybox.asset");
+    return shader.load();
 }
 
 peng::shared_ref<Material> Primitives::unlit_material()

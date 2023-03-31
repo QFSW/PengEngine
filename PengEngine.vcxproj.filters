@@ -614,6 +614,9 @@
     <ClInclude Include="src\utils\check.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\asset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -626,6 +629,10 @@
     <None Include="resources\scenes\demo\gravity.json" />
     <None Include="resources\shaders\core\skybox.vert" />
     <None Include="resources\scenes\demo\pong.json" />
+    <None Include="resources\shaders\core\unlit.asset" />
+    <None Include="resources\shaders\core\phong.asset" />
+    <None Include="resources\shaders\core\skybox.asset" />
+    <None Include="resources\shaders\core\fallback.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />
