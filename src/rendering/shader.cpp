@@ -29,6 +29,7 @@ Shader::Shader(
     : _name(std::move(name))
     , _broken(false)
     , _draw_order(0)
+    , _blend_mode(BlendMode::opaque)
 {
     SCOPED_EVENT("Building shader", _name.c_str());
     Logger::log("Building shader '%s'", _name.c_str());
@@ -138,11 +139,34 @@ void Shader::use() const
 {
     check(!_broken);
     glUseProgram(_program);
+
+    switch (_blend_mode)
+    {
+        case BlendMode::opaque:
+        {
+            glBlendFunc(GL_ONE, GL_ZERO);
+            break;
+        }
+        case BlendMode::alpha_blend:
+        {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error(strtools::catf("Invalid blend mode %d", _blend_mode));
+        }
+    }
 }
 
 int32_t& Shader::draw_order() noexcept
 {
     return _draw_order;
+}
+
+BlendMode& Shader::blend_mode() noexcept
+{
+    return _blend_mode;
 }
 
 const std::string& Shader::name() const noexcept
@@ -158,6 +182,11 @@ bool Shader::broken() const noexcept
 int32_t Shader::draw_order() const noexcept
 {
     return _draw_order;
+}
+
+BlendMode Shader::blend_mode() const noexcept
+{
+    return _blend_mode;
 }
 
 GLint Shader::get_uniform_location(const std::string& name) const

@@ -551,6 +551,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\profiling\scoped_gpu_event.h" />
     <ClInclude Include="src\profiling\stub_profiler.h" />
     <ClInclude Include="src\profiling\superluminal_profiler.h" />
+    <ClInclude Include="src\rendering\blend_mode.h" />
     <ClInclude Include="src\rendering\draw_call.h" />
     <ClInclude Include="src\rendering\draw_call_tree.h" />
     <ClInclude Include="src\rendering\frame_buffer.h" />
