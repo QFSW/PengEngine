@@ -45,12 +45,26 @@ void PengPong::tick(float delta_time)
 {
     Entity::tick(delta_time);
 
-	if (InputSubsystem::get()[KeyCode::r].pressed())
+	if (InputSubsystem::get()[KeyCode::p].pressed())
 	{
-		build_world();
+		if (_game_state == GameState::playing)
+		{
+			pause();
+		}
+		else if (_game_state == GameState::paused)
+		{
+			unpause();
+		}
 	}
 
-	PengEngine::get().set_time_scale(InputSubsystem::get()[KeyCode::y].is_down() ? 0.2f: 1);
+	if (_game_state == GameState::paused)
+	{
+		if (InputSubsystem::get()[KeyCode::r].pressed())
+		{
+			build_world();
+			unpause();
+		}
+	}
 }
 
 void PengPong::load_resources()
@@ -170,4 +184,16 @@ void PengPong::build_world()
 		stripe->local_transform().position = Vector3f(0, i * stripe_spacing, 0);
 		stripe->add_component<components::SpriteRenderer>();
 	}
+}
+
+void PengPong::pause()
+{
+	_game_state = GameState::paused;
+	PengEngine::get().set_time_scale(0);
+}
+
+void PengPong::unpause()
+{
+	_game_state = GameState::playing;
+	PengEngine::get().set_time_scale(1);
 }
