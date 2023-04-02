@@ -180,7 +180,7 @@ void Texture::build_from_buffer(const void* texture_data)
         }
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(texture_format), _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
 
     if (_config.generate_mipmaps)
     {
