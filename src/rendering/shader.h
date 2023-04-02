@@ -79,6 +79,7 @@ namespace rendering
 
         [[nodiscard]] const std::string& name() const noexcept;
         [[nodiscard]] bool broken() const noexcept;
+        [[nodiscard]] bool requires_blending() const noexcept;
         [[nodiscard]] int32_t draw_order() const noexcept;
         [[nodiscard]] BlendMode blend_mode() const noexcept;
 

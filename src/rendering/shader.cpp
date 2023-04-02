@@ -122,6 +122,7 @@ peng::shared_ref<Shader> Shader::load_asset(const AssetDefinition& asset_def)
 
     peng::shared_ref<Shader> shader = peng::make_shared<Shader>(name, vert, frag);
     shader->draw_order() = asset_def.json_def.value("draw_order", 0);
+    shader->blend_mode() = static_cast<BlendMode>(asset_def.json_def.value("blend_mode", 0));
 
     return shader;
 }
@@ -144,11 +145,13 @@ void Shader::use() const
     {
         case BlendMode::opaque:
         {
+            glDisable(GL_BLEND);
             glBlendFunc(GL_ONE, GL_ZERO);
             break;
         }
         case BlendMode::alpha_blend:
         {
+            glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             break;
         }
@@ -177,6 +180,15 @@ const std::string& Shader::name() const noexcept
 bool Shader::broken() const noexcept
 {
     return _broken;
+}
+
+bool Shader::requires_blending() const noexcept
+{
+    switch (_blend_mode)
+    {
+        case BlendMode::alpha_blend: return true;
+        default:                     return false;
+    }
 }
 
 int32_t Shader::draw_order() const noexcept

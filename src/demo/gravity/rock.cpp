@@ -17,7 +17,7 @@ void Rock::post_create()
 	add_component<MeshRenderer>(
 		rendering::Primitives::icosphere(1),
 		rendering::Primitives::phong_material()
-	)->material()->set_parameter("base_color", math::rand3f());
+	)->material()->set_parameter("base_color", math::Vector4f(math::rand3f(), 1));
 }
 
 void Rock::tick(float delta_time)

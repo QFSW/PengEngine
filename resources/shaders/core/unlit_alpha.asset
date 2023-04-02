@@ -1,0 +1,7 @@
+{
+    "name": "Unlit(Alpha)",
+    "vert": "resources/shaders/core/projection.vert",
+    "frag": "resources/shaders/core/unlit.frag",
+    "draw_order": 2,
+    "blend_mode": 1
+}

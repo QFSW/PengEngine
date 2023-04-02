@@ -641,6 +641,7 @@
     <None Include="resources\shaders\core\fallback.asset" />
     <None Include="resources\shaders\demo\blob.asset" />
     <None Include="resources\textures\demo\wall.asset" />
+    <None Include="resources\shaders\core\unlit_alpha.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

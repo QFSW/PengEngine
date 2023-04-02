@@ -4,7 +4,7 @@ namespace rendering
 {
     enum class BlendMode
     {
-        opaque,
-        alpha_blend
+        opaque      = 0,
+        alpha_blend = 1
     };
 }

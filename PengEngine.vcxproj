@@ -603,6 +603,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="resources\shaders\core\projection.vert" />
     <None Include="resources\shaders\core\unlit.asset" />
     <None Include="resources\shaders\core\unlit.frag" />
+    <None Include="resources\shaders\core\unlit_alpha.asset" />
     <None Include="resources\shaders\demo\blob.asset" />
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />

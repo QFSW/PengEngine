@@ -60,7 +60,7 @@ void DemoController::post_create()
 	const Vector2f floor_size(500, 500);
 	const auto floor_material = Primitives::phong_material();
 	floor_material->set_parameter("color_tex", Asset<Texture>("resources/textures/demo/wall.asset").load_const());
-	floor_material->set_parameter("base_color", Vector3f(0.7f, 1, 0.7f));
+	floor_material->set_parameter("base_color", Vector4f(0.7f, 1, 0.7f, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
 	floor_material->set_parameter<float>("shinyness", 8);
 
@@ -119,7 +119,7 @@ void DemoController::tick(float delta_time)
 			light_data.color = Vector3f::one() * 0.5 + Vector3f(std::sin(age), std::sin(age * 1.2f), std::sin(age * 1.4f)) / 2;
 
 			_light_entities[i]->local_transform().scale = Vector3f::one() * 0.2f * std::powf(light_data.range, 0.33f);
-			_light_renderers[i]->material()->set_parameter("base_color", light_data.color);
+			_light_renderers[i]->material()->set_parameter("base_color", Vector4f(light_data.color, 1));
 		}
 	}
 }

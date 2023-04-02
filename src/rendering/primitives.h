@@ -27,10 +27,12 @@ namespace rendering
         [[nodiscard]] static peng::shared_ref<const Sprite> white_sprite();
 
         [[nodiscard]] static peng::shared_ref<const Shader> unlit_shader();
+        [[nodiscard]] static peng::shared_ref<const Shader> unlit_alpha_shader();
         [[nodiscard]] static peng::shared_ref<const Shader> phong_shader();
         [[nodiscard]] static peng::shared_ref<const Shader> skybox_shader();
 
         [[nodiscard]] static peng::shared_ref<Material> unlit_material();
+        [[nodiscard]] static peng::shared_ref<Material> unlit_alpha_material();
         [[nodiscard]] static peng::shared_ref<Material> phong_material();
         [[nodiscard]] static peng::shared_ref<Material> skybox_material();
 

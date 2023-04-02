@@ -57,7 +57,10 @@ void SpriteRenderer::tick(float delta_time)
 		_material->set_parameter(_cached_uniforms.tex_offset, tex_offset);
 	}
 
-	const float order = owner().world_position().z;
+	const float z_depth = owner().world_position().z;
+	const float order = _material->shader()->requires_blending()
+		? -z_depth
+		: +z_depth;
 
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,

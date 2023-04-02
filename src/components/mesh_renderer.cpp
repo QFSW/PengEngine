@@ -124,7 +124,10 @@ void MeshRenderer::tick(float delta_time)
 		}
 	}
 
-	const float order = (owner().world_position() - view_pos).magnitude_sqr();
+	const float dist_sqr = (owner().world_position() - view_pos).magnitude_sqr();
+	const float order = _material->shader()->requires_blending()
+		? -dist_sqr
+		: +dist_sqr;
 
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,

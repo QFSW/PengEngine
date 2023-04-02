@@ -354,6 +354,12 @@ peng::shared_ref<const Shader> Primitives::unlit_shader()
     return shader.load();
 }
 
+peng::shared_ref<const Shader> Primitives::unlit_alpha_shader()
+{
+    static Asset<Shader> shader("resources/shaders/core/unlit_alpha.asset");
+    return shader.load();
+}
+
 peng::shared_ref<const Shader> Primitives::phong_shader()
 {
     static Asset<Shader> shader("resources/shaders/core/phong.asset");
@@ -370,6 +376,13 @@ peng::shared_ref<Material> Primitives::unlit_material()
 {
     return peng::make_shared<Material>(
         unlit_shader()
+    );
+}
+
+peng::shared_ref<Material> Primitives::unlit_alpha_material()
+{
+    return peng::make_shared<Material>(
+        unlit_alpha_shader()
     );
 }
 

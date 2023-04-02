@@ -28,7 +28,7 @@ in vec2 tex_coord;
 
 out vec4 frag_color;
 
-uniform vec3 base_color = vec3(1);
+uniform vec4 base_color = vec4(1);
 uniform sampler2D color_tex;
 
 uniform vec3 view_pos = vec3(0);
@@ -58,7 +58,7 @@ vec3 calc_specular(vec3 light_dir, vec3 light_col)
 
 void main()
 {
-	vec4 obj_color = texture(color_tex, tex_coord) * vec4(base_color, 1);
+	vec4 obj_color = texture(color_tex, tex_coord) * base_color;
 	vec3 lighting = vec3(0);
 
 	for (int i = 0; i < MAX_POINT_LIGHTS; i++)
