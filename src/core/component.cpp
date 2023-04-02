@@ -31,7 +31,7 @@ const Entity& Component::owner() const noexcept
 
 void Component::set_owner(peng::shared_ref<Entity>&& entity)
 {
-	if (_owner.valid())
+	if (_owner.valid() && _owner != entity)
 	{
 		Logger::error("Component already has an owner");
 	}

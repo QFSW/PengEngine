@@ -54,6 +54,7 @@ void EntitySubsystem::tick(float delta_time)
 
 void EntitySubsystem::register_entity(const peng::shared_ref<Entity>& entity)
 {
+	entity->_constructed = true;
 	_pending_adds.push_back(entity);
 }
 

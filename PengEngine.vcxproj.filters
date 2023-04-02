@@ -207,12 +207,6 @@
     <ClCompile Include="src\physics\layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\pong\digit_display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\pong\number_display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering\sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -238,6 +232,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\sprite_sheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\bitmap_font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\text_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -575,12 +575,6 @@
     <ClInclude Include="src\physics\layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\demo\pong\digit_display.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\demo\pong\number_display.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\rendering\sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -621,6 +615,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\blend_mode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\bitmap_font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\text_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

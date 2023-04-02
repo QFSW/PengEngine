@@ -160,7 +160,7 @@ void Texture::build_from_buffer(const void* texture_data)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_y);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _config.min_filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _config.max_filter);
-
+    
     GLenum texture_format;
     switch (_num_channels)
     {

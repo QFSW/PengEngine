@@ -10,6 +10,7 @@ IMPLEMENT_ENTITY(Entity);
 Entity::Entity(std::string&& name, TickGroup tick_group)
 	: _name(std::move(name))
 	, _tick_group(tick_group)
+    , _constructed(false)
 	, _created(false)
 	, _active_self(true)
 	, _active_hierarchy(true)
@@ -34,6 +35,7 @@ void Entity::post_create()
 {
 	// TODO: entities should receive post_enable() when created
 
+	check(_constructed);
 	_created = true;
 
 	for (const peng::shared_ref<Component>& component : _deferred_components)

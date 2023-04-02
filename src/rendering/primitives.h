@@ -11,6 +11,7 @@ namespace rendering
     class Sprite;
     class Shader;
     class Material;
+    class BitmapFont;
 
     class Primitives
     {
@@ -35,6 +36,8 @@ namespace rendering
         [[nodiscard]] static peng::shared_ref<Material> unlit_alpha_material();
         [[nodiscard]] static peng::shared_ref<Material> phong_material();
         [[nodiscard]] static peng::shared_ref<Material> skybox_material();
+
+        [[nodiscard]] static peng::shared_ref<const BitmapFont> peng_font();
 
     private:
         static std::vector<Vertex> icosahedron_vertices(float radius);

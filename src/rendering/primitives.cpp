@@ -10,6 +10,8 @@
 #include "sprite.h"
 #include "shader.h"
 #include "material.h"
+#include "bitmap_font.h"
+#include "sprite_sheet.h"
 
 using namespace rendering;
 using namespace math;
@@ -398,4 +400,62 @@ peng::shared_ref<Material> Primitives::skybox_material()
     return peng::make_shared<Material>(
         skybox_shader()
     );
+}
+
+peng::shared_ref<const BitmapFont> Primitives::peng_font()
+{
+    static peng::weak_ptr<const BitmapFont> weak_font;
+    if (const peng::shared_ptr<const BitmapFont> strong_font = weak_font.lock())
+    {
+        return strong_font.to_shared_ref();
+    }
+
+    Texture::Config font_config;
+    font_config.wrap_x = GL_CLAMP_TO_EDGE;
+    font_config.wrap_y = GL_CLAMP_TO_EDGE;
+    font_config.min_filter = GL_NEAREST;
+    font_config.max_filter = GL_NEAREST;
+    font_config.generate_mipmaps = false;
+
+    peng::shared_ref<const Texture> font_tex = peng::make_shared<Texture>(
+        "PengFont",
+        "resources/textures/core/peng_font.png",
+        font_config
+    );
+
+    std::vector<peng::shared_ref<const Sprite>> sprites = SpriteSheet::slice_grid(
+        font_tex, 9, Vector2i::one() * 9, 12 * 12
+    );
+
+    int32_t num_chars = 0;
+    std::unordered_map<char, peng::shared_ptr<const Sprite>> char_map;
+
+    for (char c = '0'; c <= '9'; c++)
+    {
+        char_map[c] = sprites[num_chars++];
+    }
+
+    // biang biang
+    num_chars++;
+
+    for (char c = 'a'; c <= 'z'; c++)
+    {
+        char c_upper = c + 'A' - 'a';
+        char_map[c] = char_map[c_upper] = sprites[num_chars++];
+    }
+
+    const std::array symbols = { '?', '!', '+', '-', '.', ',', '[', ']'};
+    for (const char c : symbols)
+    {
+        char_map[c] = sprites[num_chars++];
+    }
+
+    char_map[' '] = sprites[sprites.size() - 2];
+
+    peng::shared_ref<const BitmapFont> font = peng::make_shared<BitmapFont>(
+        "PengFont", std::move(char_map), sprites.back()
+    );
+
+    weak_font = font;
+    return font;
 }

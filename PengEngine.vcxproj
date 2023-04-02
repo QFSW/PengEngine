@@ -397,6 +397,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\components\rigid_body.cpp" />
     <ClCompile Include="src\components\rigid_body_2d.cpp" />
     <ClCompile Include="src\components\sprite_renderer.cpp" />
+    <ClCompile Include="src\components\text_renderer.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\component_factory.cpp" />
     <ClCompile Include="src\core\entity_factory.cpp" />
@@ -414,9 +415,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\gravity\gravity_controller.cpp" />
     <ClCompile Include="src\demo\gravity\rock.cpp" />
     <ClCompile Include="src\demo\pong\ball.cpp" />
-    <ClCompile Include="src\demo\pong\digit_display.cpp" />
     <ClCompile Include="src\demo\pong\goal.cpp" />
-    <ClCompile Include="src\demo\pong\number_display.cpp" />
     <ClCompile Include="src\demo\pong\paddle.cpp" />
     <ClCompile Include="src\demo\pong\peng_pong.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
@@ -438,6 +437,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\profiling\scoped_event.cpp" />
     <ClCompile Include="src\profiling\scoped_gpu_event.cpp" />
     <ClCompile Include="src\profiling\superluminal_profiler.cpp" />
+    <ClCompile Include="src\rendering\bitmap_font.cpp" />
     <ClCompile Include="src\rendering\draw_call_tree.cpp" />
     <ClCompile Include="src\rendering\frame_buffer.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
@@ -476,6 +476,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\components\rigid_body.h" />
     <ClInclude Include="src\components\rigid_body_2d.h" />
     <ClInclude Include="src\components\sprite_renderer.h" />
+    <ClInclude Include="src\components\text_renderer.h" />
     <ClInclude Include="src\core\asset.h" />
     <ClInclude Include="src\core\asset_definition.h" />
     <ClInclude Include="src\core\component.h" />
@@ -504,9 +505,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\gravity\gravity_controller.h" />
     <ClInclude Include="src\demo\gravity\rock.h" />
     <ClInclude Include="src\demo\pong\ball.h" />
-    <ClInclude Include="src\demo\pong\digit_display.h" />
     <ClInclude Include="src\demo\pong\goal.h" />
-    <ClInclude Include="src\demo\pong\number_display.h" />
     <ClInclude Include="src\demo\pong\paddle.h" />
     <ClInclude Include="src\demo\pong\peng_pong.h" />
     <ClInclude Include="src\entities\camera.h" />
@@ -551,6 +550,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\profiling\scoped_gpu_event.h" />
     <ClInclude Include="src\profiling\stub_profiler.h" />
     <ClInclude Include="src\profiling\superluminal_profiler.h" />
+    <ClInclude Include="src\rendering\bitmap_font.h" />
     <ClInclude Include="src\rendering\blend_mode.h" />
     <ClInclude Include="src\rendering\draw_call.h" />
     <ClInclude Include="src\rendering\draw_call_tree.h" />

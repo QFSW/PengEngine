@@ -16,6 +16,8 @@ class Entity : public ITickable, public std::enable_shared_from_this<Entity>
 {
 	DECLARE_ENTITY(Entity);
 
+	friend EntitySubsystem;
+
 public:
 	explicit Entity(std::string&& name, TickGroup tick_group = TickGroup::standard);
 	explicit Entity(const std::string& name, TickGroup tick_group = TickGroup::standard);
@@ -118,6 +120,7 @@ protected:
 private:
 	void propagate_active_change(bool parent_active);
 
+	bool _constructed;
 	bool _created;
 	bool _active_self;
 	bool _active_hierarchy;
@@ -160,9 +163,13 @@ peng::weak_ptr<T> Entity::add_component(Args&&...args)
 	peng::shared_ref<T> component = peng::make_shared<T>(std::forward<Args>(args)...);
 	_components.push_back(component);
 
-	if (_created)
+	if (_constructed)
 	{
 		component->set_owner(peng::shared_ref(shared_from_this()));
+	}
+
+	if (_created)
+	{
 		component->post_create();
 	}
 	else

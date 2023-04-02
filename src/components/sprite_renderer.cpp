@@ -67,9 +67,13 @@ void SpriteRenderer::tick(float delta_time)
 
 	if (cached_uniforms.tex_scale >= 0 && cached_uniforms.tex_offset >= 0)
 	{
+		// Texture coordinates have an inverted y compared to the pixel position
+	    Vector2i pos_corrected = _sprite->position();
+		pos_corrected.y = _sprite->texture()->resolution().y - (pos_corrected.y + _sprite->resolution().y);
+
 		const Vector2f texture_res = Vector2f(_sprite->texture()->resolution());
 		const Vector2f tex_scale = Vector2f(_sprite->resolution()) / texture_res;
-		const Vector2f tex_offset = Vector2f(_sprite->position()) / texture_res;
+		const Vector2f tex_offset = Vector2f(pos_corrected) / texture_res;
 		material->set_parameter(cached_uniforms.tex_scale, tex_scale);
 		material->set_parameter(cached_uniforms.tex_offset, tex_offset);
 	}

@@ -2,11 +2,6 @@
 
 #include <core/entity.h>
 
-namespace rendering
-{
-	class Sprite;
-}
-
 namespace audio
 {
 	class AudioClip;
@@ -44,7 +39,6 @@ namespace demo::pong
 		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
 		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;
 		peng::shared_ptr<audio::AudioClip> _goal_sfx;
-		std::vector<peng::shared_ref<const rendering::Sprite>> _digit_sprites;
 
 		static constexpr float ortho_size = 20;
 		static constexpr float paddle_margin = 3;

@@ -11,6 +11,8 @@ namespace peng
     class shared_ref
     {
     public:
+        shared_ref() = delete;
+
         explicit shared_ref(const std::shared_ptr<T>& ptr)
             : _ptr(ptr)
         {

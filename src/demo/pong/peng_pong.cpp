@@ -6,23 +6,23 @@
 #include <profiling/scoped_event.h>
 #include <entities/camera.h>
 #include <components/sprite_renderer.h>
+#include <components/text_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
 #include <rendering/sprite.h>
-#include <rendering/sprite_sheet.h>
 #include <input/input_subsystem.h>
 #include <audio/audio_clip.h>
 
 #include "ball.h"
 #include "goal.h"
 #include "paddle.h"
-#include "number_display.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
 using namespace demo::pong;
 using namespace rendering;
 using namespace entities;
+using namespace components;
 using namespace input;
 using namespace math;
 
@@ -76,24 +76,6 @@ void PengPong::load_resources()
 	_bounce_wall_sfx = peng::make_shared<audio::AudioClip>("Bounce Wall", 1, 200, 0.6f);
 	_bounce_paddle_sfx = peng::make_shared<audio::AudioClip>("Bounce Paddle", 1, 250, 0.5f);
 	_goal_sfx = peng::make_shared<audio::AudioClip>("Goal", 1.5f, 400, 0.4f);
-
-	Texture::Config digit_config;
-	digit_config.wrap_x = GL_CLAMP_TO_EDGE;
-	digit_config.wrap_y = GL_CLAMP_TO_EDGE;
-	digit_config.min_filter = GL_NEAREST;
-	digit_config.max_filter = GL_NEAREST;
-	digit_config.generate_mipmaps = false;
-
-	peng::shared_ref<const Texture> digits_texture = peng::make_shared<Texture>(
-		"Digits",
-		"resources/textures/demo/digits.png",
-		digit_config
-	);
-
-	constexpr int32_t digit_res = 9;
-	_digit_sprites = SpriteSheet::slice_grid(
-		digits_texture, digit_res, Vector2i::one() * digit_res, 10
-	);
 }
 
 void PengPong::build_camera()
@@ -131,25 +113,27 @@ void PengPong::build_world()
 	paddle_2->input_axis.negative = KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
 
-	peng::weak_ptr<NumberDisplay> score_1 = _world_root->create_child<NumberDisplay>("Score1");
+	peng::weak_ptr<Entity> score_1 = _world_root->create_child<Entity>("Score1");
+	peng::weak_ptr<TextRenderer> score_1_text = score_1->add_component<TextRenderer>();
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
 	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
-	score_1->set_digit_sprites(_digit_sprites);
+	score_1_text->set_text("0");
 
-	peng::weak_ptr<NumberDisplay> score_2 = _world_root->create_child<NumberDisplay>("Score2");
+	peng::weak_ptr<Entity> score_2 = _world_root->create_child<Entity>("Score2");
+	peng::weak_ptr<TextRenderer> score_2_text = score_2->add_component<TextRenderer>();
 	score_2->local_transform().scale = Vector3f::one() * 5;
 	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
-	score_2->set_digit_sprites(_digit_sprites);
+	score_2_text->set_text("0");
 
 	// TODO: should use a subscribe_weak for better safety
-	paddle_1->on_score_changed().subscribe([score_1](int32_t score)
+	paddle_1->on_score_changed().subscribe([score_1_text](int32_t score)
 		{
-			score_1->set_number(score);
+			score_1_text->set_text(strtools::catf("%d", score));
 		});
 
-	paddle_2->on_score_changed().subscribe([score_2](int32_t score)
+	paddle_2->on_score_changed().subscribe([score_2_text](int32_t score)
 		{
-			score_2->set_number(score);
+			score_2_text->set_text(strtools::catf("%d", score));
 		});
 
 	peng::weak_ptr<Entity> barrier_top = _world_root->create_child<Entity>("BarrierTop");
@@ -205,24 +189,9 @@ void PengPong::pause()
 		pause_background->local_transform().scale = Vector3f::one() * 100;
 		pause_background->add_component<components::SpriteRenderer>()->color() = Vector4f(0, 0, 0, 0.75f);
 
-		Texture::Config pause_config;
-		pause_config.wrap_x = GL_CLAMP_TO_EDGE;
-		pause_config.wrap_y = GL_CLAMP_TO_EDGE;
-		pause_config.min_filter = GL_NEAREST;
-		pause_config.max_filter = GL_NEAREST;
-		pause_config.generate_mipmaps = false;
-
-		peng::shared_ref<const Texture> pause_texture = peng::make_shared<Texture>(
-			"Paused",
-            "resources/textures/demo/paused.png",
-			pause_config
-		);
-
-		peng::shared_ref<Sprite> text_sprite = peng::make_shared<Sprite>(pause_texture, 9);
-
 		peng::weak_ptr<Entity> text = _pause_root->create_child<Entity>("Text");
 		text->local_transform().scale = Vector3f::one() * digit_size;
-		text->add_component<components::SpriteRenderer>()->sprite() = text_sprite;
+		text->add_component<TextRenderer>()->set_text("paused");
 	}
 }
 

@@ -18,7 +18,7 @@ namespace components
 
 	public:
 		SpriteRenderer();
-		SpriteRenderer(const peng::shared_ref<const rendering::Sprite>& sprite);
+		explicit SpriteRenderer(const peng::shared_ref<const rendering::Sprite>& sprite);
 
 		void tick(float delta_time) override;
 		void post_create() override;
