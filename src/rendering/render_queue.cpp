@@ -2,6 +2,7 @@
 
 #include <profiling/scoped_event.h>
 
+#include "texture_binding_cache.h"
 #include "draw_call_tree.h"
 
 using namespace rendering;
@@ -13,6 +14,9 @@ void RenderQueue::execute()
 
     const DrawCallTree tree(std::move(_draw_calls));
     tree.execute();
+
+    // TODO: for some reason the texture binding cache breaks after pause if you don't clear it
+    TextureBindingCache::get().unbind_all();
 }
 
 void RenderQueue::enqueue_draw(DrawCall&& draw_call)

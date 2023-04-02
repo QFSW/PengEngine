@@ -60,6 +60,7 @@ namespace rendering
         [[nodiscard]] const std::string& name() const noexcept;
         [[nodiscard]] GLuint raw() const noexcept;
         [[nodiscard]] math::Vector2i resolution() const noexcept;
+        [[nodiscard]] bool has_alpha() const noexcept;
 
     private:
         void verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const;

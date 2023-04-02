@@ -38,8 +38,9 @@ namespace demo::pong
 		void pause();
 		void unpause();
 
-		GameState _game_state;
+		GameState _game_state = GameState::playing;
 		peng::weak_ptr<Entity> _world_root;
+		peng::weak_ptr<Entity> _pause_root;
 		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
 		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;
 		peng::shared_ptr<audio::AudioClip> _goal_sfx;
@@ -47,5 +48,6 @@ namespace demo::pong
 
 		static constexpr float ortho_size = 20;
 		static constexpr float paddle_margin = 3;
+		static constexpr float digit_size = 5;
 	};
 }

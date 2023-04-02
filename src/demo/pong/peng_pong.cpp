@@ -1,5 +1,6 @@
 #include "peng_pong.h"
 
+#include <core/asset.h>
 #include <core/logger.h>
 #include <core/peng_engine.h>
 #include <profiling/scoped_event.h>
@@ -7,6 +8,7 @@
 #include <components/sprite_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
+#include <rendering/sprite.h>
 #include <rendering/sprite_sheet.h>
 #include <input/input_subsystem.h>
 #include <audio/audio_clip.h>
@@ -129,8 +131,6 @@ void PengPong::build_world()
 	paddle_2->input_axis.negative = KeyCode::down;
 	paddle_2->local_transform().position = Vector3f(+paddle_delta_x, 0, 0);
 
-	constexpr float digit_size = 5;
-
 	peng::weak_ptr<NumberDisplay> score_1 = _world_root->create_child<NumberDisplay>("Score1");
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
 	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
@@ -190,10 +190,49 @@ void PengPong::pause()
 {
 	_game_state = GameState::paused;
 	PengEngine::get().set_time_scale(0);
+
+	if (_pause_root)
+	{
+		_pause_root->set_active(true);
+	}
+	else
+	{
+		_pause_root = create_entity<Entity>("PauseMenu");
+		_pause_root->local_transform().position = Vector3f(0, 0, 5);
+
+		peng::weak_ptr<Entity> pause_background = _pause_root->create_child<Entity>("Background");
+		pause_background->local_transform().position = Vector3f(0, 0, -1);
+		pause_background->local_transform().scale = Vector3f::one() * 100;
+		pause_background->add_component<components::SpriteRenderer>()->color() = Vector4f(0, 0, 0, 0.75f);
+
+		Texture::Config pause_config;
+		pause_config.wrap_x = GL_CLAMP_TO_EDGE;
+		pause_config.wrap_y = GL_CLAMP_TO_EDGE;
+		pause_config.min_filter = GL_NEAREST;
+		pause_config.max_filter = GL_NEAREST;
+		pause_config.generate_mipmaps = false;
+
+		peng::shared_ref<const Texture> pause_texture = peng::make_shared<Texture>(
+			"Paused",
+            "resources/textures/demo/paused.png",
+			pause_config
+		);
+
+		peng::shared_ref<Sprite> text_sprite = peng::make_shared<Sprite>(pause_texture, 9);
+
+		peng::weak_ptr<Entity> text = _pause_root->create_child<Entity>("Text");
+		text->local_transform().scale = Vector3f::one() * digit_size;
+		text->add_component<components::SpriteRenderer>()->sprite() = text_sprite;
+	}
 }
 
 void PengPong::unpause()
 {
 	_game_state = GameState::playing;
 	PengEngine::get().set_time_scale(1);
+
+	if (_pause_root)
+	{
+		_pause_root->set_active(false);
+	}
 }

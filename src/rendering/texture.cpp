@@ -133,6 +133,12 @@ math::Vector2i Texture::resolution() const noexcept
     return _resolution;
 }
 
+// TODO: improve texture loading to discard alpha channel if its not actually used
+bool Texture::has_alpha() const noexcept
+{
+    return _num_channels == 4;
+}
+
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
 {
     if (resolution.area() != num_pixels)

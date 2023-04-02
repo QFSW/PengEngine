@@ -11,6 +11,8 @@
 
 namespace rendering
 {
+    // TODO: refactor out UniformSet into its own object so that a draw call can be created
+    //       without requiring that objects use unique copies of the material
     class Material
     {
     public:
