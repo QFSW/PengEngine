@@ -43,6 +43,7 @@ public:
 	[[nodiscard]] float aspect_ratio() const noexcept;
 	[[nodiscard]] bool fullscreen() const noexcept;
 	[[nodiscard]] GLFWwindow* window_handle() const noexcept;
+	[[nodiscard]] float last_frametime() const noexcept;
 
 private:
 	PengEngine();

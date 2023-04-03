@@ -241,6 +241,11 @@ GLFWwindow* PengEngine::window_handle() const noexcept
 	return _glfw_window;
 }
 
+float PengEngine::last_frametime() const noexcept
+{
+	return _last_frametime;
+}
+
 static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, GLenum, GLsizei, const char* message, const void*)
 {
 	switch (type)
