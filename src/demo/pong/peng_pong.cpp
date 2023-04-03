@@ -38,7 +38,7 @@ void PengPong::post_create()
 
 	load_resources();
 	build_camera();
-	build_world();
+	build_main_menu();
 
 	Logger::success("PengPong started");
 }
@@ -46,6 +46,16 @@ void PengPong::post_create()
 void PengPong::tick(float delta_time)
 {
     Entity::tick(delta_time);
+
+	if (_game_state == GameState::main_menu)
+	{
+	    if (InputSubsystem::get()[KeyCode::enter].pressed())
+	    {
+			_menu_root->set_active(false);
+			_game_state = GameState::playing;
+			build_world();
+	    }
+	}
 
 	if (InputSubsystem::get()[KeyCode::p].pressed())
 	{
@@ -82,6 +92,26 @@ void PengPong::build_camera()
 {
 	peng::weak_ptr<Camera> camera = create_entity<Camera>();
 	camera->make_orthographic(ortho_size, 0.01f, 100.0f);
+}
+
+void PengPong::build_main_menu()
+{
+	_menu_root = create_entity<Entity>("MainMenu");
+	_menu_root->local_transform().position = Vector3f(0, 0, 5);
+
+	peng::weak_ptr<Entity> text = _menu_root->create_child<Entity>("Text");
+	text->local_transform().scale = Vector3f::one() * digit_size;
+	text->add_component<TextRenderer>()->set_text("Peng Pong");
+
+	peng::weak_ptr<Entity> play_text = _menu_root->create_child<Entity>("RestartText");
+	play_text->local_transform().position = Vector3f(0, -5, 0);
+	play_text->local_transform().scale = Vector3f::one() * digit_size / 4;
+	play_text->add_component<TextRenderer>()->set_text("Press Enter to play");
+
+	peng::weak_ptr<Entity> credits = _menu_root->create_child<Entity>("Credits");
+	credits->local_transform().position = Vector3f(0, -ortho_size + 1, 0);
+	credits->local_transform().scale = Vector3f::one() * digit_size / 6;
+	credits->add_component<TextRenderer>()->set_text("Made with Peng Engine by QFSW");
 }
 
 void PengPong::build_world()
@@ -192,6 +222,11 @@ void PengPong::pause()
 		peng::weak_ptr<Entity> text = _pause_root->create_child<Entity>("Text");
 		text->local_transform().scale = Vector3f::one() * digit_size;
 		text->add_component<TextRenderer>()->set_text("paused");
+
+		peng::weak_ptr<Entity> restart_text = _pause_root->create_child<Entity>("RestartText");
+		restart_text->local_transform().position = Vector3f(0, -5, 0);
+		restart_text->local_transform().scale = Vector3f::one() * digit_size / 4;
+		restart_text->add_component<TextRenderer>()->set_text("Press R to restart");
 	}
 }
 

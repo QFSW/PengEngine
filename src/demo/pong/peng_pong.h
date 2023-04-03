@@ -22,20 +22,23 @@ namespace demo::pong
 	private:
 		enum class GameState
 		{
+			main_menu,
 		    playing,
 			paused
 		};
 
 		void load_resources();
 		void build_camera();
+		void build_main_menu();
 		void build_world();
 
 		void pause();
 		void unpause();
 
-		GameState _game_state = GameState::playing;
+		GameState _game_state = GameState::main_menu;
 		peng::weak_ptr<Entity> _world_root;
 		peng::weak_ptr<Entity> _pause_root;
+		peng::weak_ptr<Entity> _menu_root;
 		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
 		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;
 		peng::shared_ptr<audio::AudioClip> _goal_sfx;
