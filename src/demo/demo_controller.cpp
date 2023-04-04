@@ -59,7 +59,7 @@ void DemoController::post_create()
 
 	const Vector2f floor_size(500, 500);
 	const auto floor_material = Primitives::phong_material();
-	floor_material->set_parameter("color_tex", Asset<Texture>("resources/textures/demo/wall.asset").load_const());
+	floor_material->set_parameter("color_tex", Asset<Texture>("resources/textures/demo/wall.asset").load());
 	floor_material->set_parameter("base_color", Vector4f(0.7f, 1, 0.7f, 1));
 	floor_material->set_parameter("tex_scale", floor_size);
 	floor_material->set_parameter<float>("shinyness", 8);

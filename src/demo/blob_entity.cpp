@@ -23,9 +23,9 @@ BlobEntity::BlobEntity(
 	Asset<Shader> blob_shader("resources/shaders/demo/blob.asset");
 	Asset<Texture> wall_texture("resources/textures/demo/wall.asset");
 
-	peng::shared_ref<Shader> shader = blob_shader.load();
+	peng::shared_ref<const Shader> shader = blob_shader.load();
 	peng::shared_ref<Material> material = peng::make_shared<Material>(shader);
-	material->set_parameter("color_tex", wall_texture.load_const());
+	material->set_parameter("color_tex", wall_texture.load());
 
 	_local_transform = Transform(Vector3f(pos, pos.y + 2), Vector3f::one(), Vector3f::zero());
 	_mesh_renderer = add_component<MeshRenderer>(mesh, material);

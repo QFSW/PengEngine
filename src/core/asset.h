@@ -32,8 +32,8 @@ public:
     explicit Asset(const std::string& path);
     explicit Asset(std::string&& path);
 
-    [[nodiscard]] peng::shared_ref<T> load();
-    [[nodiscard]] peng::shared_ref<const T> load_const();
+    [[nodiscard]] peng::shared_ref<T> load_mutable();
+    [[nodiscard]] peng::shared_ref<const T> load();
     [[nodiscard]] bool loaded() const noexcept override;
 
 private:
@@ -56,7 +56,7 @@ Asset<T>::Asset(std::string&& path)
 { }
 
 template <CAsset T>
-peng::shared_ref<T> Asset<T>::load()
+peng::shared_ref<T> Asset<T>::load_mutable()
 {
     peng::weak_ptr<T>& existing = _asset_map[_path];
 
@@ -88,9 +88,9 @@ peng::shared_ref<T> Asset<T>::load()
 }
 
 template <CAsset T>
-peng::shared_ref<const T> Asset<T>::load_const()
+peng::shared_ref<const T> Asset<T>::load()
 {
-    return load();
+    return load_mutable();
 }
 
 template <CAsset T>

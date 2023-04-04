@@ -130,7 +130,7 @@ peng::shared_ref<Shader> Shader::load_asset(const AssetDefinition& asset_def)
 peng::shared_ref<const Shader> Shader::fallback()
 {
     static Asset<Shader> asset("resources/shaders/core/fallback.asset");
-    peng::shared_ref<Shader> shader = asset.load();
+    peng::shared_ref<const Shader> shader = asset.load();
 
     check(!shader->broken());
     return shader;
