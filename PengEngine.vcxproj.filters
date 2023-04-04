@@ -642,6 +642,7 @@
     <None Include="resources\shaders\demo\blob.asset" />
     <None Include="resources\textures\demo\wall.asset" />
     <None Include="resources\shaders\core\unlit_alpha.asset" />
+    <None Include="resources\textures\core\peng_font.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

@@ -410,21 +410,10 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
         return strong_font.to_shared_ref();
     }
 
-    Texture::Config font_config;
-    font_config.wrap_x = GL_CLAMP_TO_EDGE;
-    font_config.wrap_y = GL_CLAMP_TO_EDGE;
-    font_config.min_filter = GL_NEAREST;
-    font_config.max_filter = GL_NEAREST;
-    font_config.generate_mipmaps = false;
-
-    peng::shared_ref<const Texture> font_tex = peng::make_shared<Texture>(
-        "PengFont",
-        "resources/textures/core/peng_font.png",
-        font_config
-    );
+    Asset<Texture> font_texture("resources/textures/core/peng_font.asset");
 
     std::vector<peng::shared_ref<const Sprite>> sprites = SpriteSheet::slice_grid(
-        font_tex, 9, Vector2i::one() * 9, 12 * 12
+        font_texture.load(), 9, Vector2i::one() * 9, 12 * 12
     );
 
     int32_t num_chars = 0;
@@ -444,12 +433,13 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
         char_map[c] = char_map[c_upper] = sprites[num_chars++];
     }
 
-    const std::array symbols = { '?', '!', '+', '-', '.', ',', '[', ']'};
+    const std::string symbols = "?!+-.,[](){}:;'\"/\\@=_$*`~";
     for (const char c : symbols)
     {
         char_map[c] = sprites[num_chars++];
     }
 
+    // TODO: this still gets rendered with a sprite even though the draw could be skipped
     char_map[' '] = sprites[sprites.size() - 2];
 
     peng::shared_ref<const BitmapFont> font = peng::make_shared<BitmapFont>(

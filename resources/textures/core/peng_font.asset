@@ -1,0 +1,8 @@
+{
+    "name": "PengFont",
+    "texture": "resources/textures/core/peng_font.png",
+    "wrap_x": 33071,
+    "wrap_y": 33071,
+    "min_filter": 9728,
+    "max_filter": 9728
+}

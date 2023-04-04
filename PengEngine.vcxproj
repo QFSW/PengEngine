@@ -607,6 +607,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="resources\shaders\demo\blob.asset" />
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
+    <None Include="resources\textures\core\peng_font.asset" />
     <None Include="resources\textures\demo\wall.asset" />
     <None Include="src\libs\moodycamel\LICENSE.md" />
     <UpToDateCheckInput Include="resources\**\*" />

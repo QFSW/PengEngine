@@ -101,8 +101,14 @@ peng::shared_ref<Texture> Texture::load_asset(const AssetDefinition& asset_def)
     const std::string name = asset_def.json_def["name"].get<std::string>();
     const std::string texture_path = asset_def.json_def["texture"].get<std::string>();
 
-    // TODO: add support for loading Config values
-    return peng::make_shared<Texture>(name, texture_path);
+    // TODO: support parsing named items and not just raw decimal literals
+    Config config;
+    config.wrap_x = asset_def.json_def.value("wrap_x", config.wrap_x);
+    config.wrap_y = asset_def.json_def.value("wrap_y", config.wrap_y);
+    config.min_filter = asset_def.json_def.value("min_filter", config.min_filter);
+    config.max_filter = asset_def.json_def.value("max_filter", config.max_filter);
+
+    return peng::make_shared<Texture>(name, texture_path, config);
 }
 
 void Texture::bind(GLint slot) const
