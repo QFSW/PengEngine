@@ -107,6 +107,7 @@ peng::shared_ref<Texture> Texture::load_asset(const AssetDefinition& asset_def)
     config.wrap_y = asset_def.json_def.value("wrap_y", config.wrap_y);
     config.min_filter = asset_def.json_def.value("min_filter", config.min_filter);
     config.max_filter = asset_def.json_def.value("max_filter", config.max_filter);
+    config.generate_mipmaps = asset_def.json_def.value("generate_mipmaps", config.generate_mipmaps);
 
     return peng::make_shared<Texture>(name, texture_path, config);
 }

@@ -196,7 +196,7 @@ void PengPong::build_world()
 		peng::weak_ptr<Entity> stripe = background->create_child<Entity, EntityRelationship::activity>("Stripe");
 		stripe->local_transform().scale = stripe_size;
 		stripe->local_transform().position = Vector3f(0, i * stripe_spacing, 0);
-		stripe->add_component<components::SpriteRenderer>();
+		stripe->add_component<SpriteRenderer>();
 	}
 }
 

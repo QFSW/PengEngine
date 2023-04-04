@@ -326,8 +326,11 @@ peng::shared_ref<const Texture> Primitives::white_tex()
     }
 
     const std::vector<Vector3u8> rgb_data = { Vector3u8(0xFF, 0xFF, 0xFF) };
+    Texture::Config config;
+    config.generate_mipmaps = false;
+
     peng::shared_ref<Texture> white_tex = peng::make_shared<Texture>(
-        "White 1x1px", rgb_data, Vector2i::one()
+        "White 1x1px", rgb_data, Vector2i::one(), config
     );
 
     weak_tex = white_tex;

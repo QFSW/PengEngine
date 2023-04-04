@@ -24,7 +24,7 @@ AudioClip::AudioClip(const std::string& name, float length, float frequency, flo
         const float t = i / static_cast<float>(sample_rate);
         const float a = math::map(t, math::Vector2f(0, length), math::Vector2f(1, 0));
         const float val_f = std::sin(t * 6.2f * frequency);
-        const float val_m = val_f * amplitude * std::pow(a, 3);
+        const float val_m = val_f * amplitude * a * a * a;
 
         constexpr int16_t max_val = std::numeric_limits<int16_t>::max();
         samples[i] = static_cast<int16_t>(math::map(val_m, math::Vector2f(-1, 1), math::Vector2f(-max_val, max_val)));

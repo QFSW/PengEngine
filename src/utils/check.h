@@ -19,8 +19,11 @@
     }                                                                                            \
     while (0)
 
+#define verify(expression) check(expression)
+
 #else
 
 #define check(expression) ((void)0)
+#define verify(expression) expression
 
 #endif
