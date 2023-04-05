@@ -113,6 +113,17 @@ peng::weak_ptr<Entity> EntitySubsystem::find_entity(const std::string& entity_na
 	return {};
 }
 
+std::vector<peng::weak_ptr<Entity>> EntitySubsystem::all_entities()
+{
+	std::vector<peng::weak_ptr<Entity>> result;
+	std::ranges::transform(_entities, result.begin(), [&](const peng::shared_ref<Entity>& x)
+    {
+        return x;
+    });
+
+	return result;
+}
+
 void EntitySubsystem::dump_hierarchy() const
 {
 	if constexpr (!Logger::enabled())

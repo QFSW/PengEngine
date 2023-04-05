@@ -54,6 +54,8 @@ public:
 	[[nodiscard]] peng::weak_ptr<Entity> find_entity(const std::string& entity_name, bool include_inactive) const;
 	// TODO: add templated and non templated functions for finding entity/entities via type
 
+	[[nodiscard]] std::vector<peng::weak_ptr<Entity>> all_entities();
+
 	void dump_hierarchy() const;
 	// ----------------------------------
 
