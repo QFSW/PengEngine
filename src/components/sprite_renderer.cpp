@@ -80,8 +80,8 @@ void SpriteRenderer::tick(float delta_time)
 
 	const float z_depth = owner().world_position().z;
 	const float order = material->shader()->requires_blending()
-		? +z_depth
-		: -z_depth;
+		? -z_depth
+		: +z_depth;
 
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,

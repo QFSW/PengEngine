@@ -146,13 +146,13 @@ void PengPong::build_world()
 	peng::weak_ptr<Entity> score_1 = _world_root->create_child<Entity>("Score1");
 	peng::weak_ptr<TextRenderer> score_1_text = score_1->add_component<TextRenderer>();
 	score_1->local_transform().scale = Vector3f::one() * digit_size;
-	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, -5);
+	score_1->local_transform().position = Vector3f(-digit_size * 2, ortho_size * 0.75f, 5);
 	score_1_text->set_text("0");
 
 	peng::weak_ptr<Entity> score_2 = _world_root->create_child<Entity>("Score2");
 	peng::weak_ptr<TextRenderer> score_2_text = score_2->add_component<TextRenderer>();
 	score_2->local_transform().scale = Vector3f::one() * 5;
-	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, -5);
+	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, 5);
 	score_2_text->set_text("0");
 
 	// TODO: should use a subscribe_weak for better safety
@@ -212,10 +212,10 @@ void PengPong::pause()
 	else
 	{
 		_pause_root = create_entity<Entity>("PauseMenu");
-		_pause_root->local_transform().position = Vector3f(0, 0, 5);
+		_pause_root->local_transform().position = Vector3f(0, 0, -5);
 
 		peng::weak_ptr<Entity> pause_background = _pause_root->create_child<Entity>("Background");
-		pause_background->local_transform().position = Vector3f(0, 0, -1);
+		pause_background->local_transform().position = Vector3f(0, 0, 1);
 		pause_background->local_transform().scale = Vector3f::one() * 100;
 		pause_background->add_component<components::SpriteRenderer>()->color() = Vector4f(0, 0, 0, 0.75f);
 

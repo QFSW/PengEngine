@@ -53,11 +53,14 @@ void Camera::tick(float delta_time)
 {
 	Entity::tick(delta_time);
 
-	static const Matrix4x4f z_reverse =
-		Matrix4x4f::identity()
-		.scaled(Vector3f(1, 1, -1));
+	Matrix4x4f transform_inv = transform_matrix_inv();
+	if (_projection == Projection::perspective)
+	{
+		// Perform z_reverse on perspective transform
+		transform_inv = transform_inv.scaled(Vector3f(1, 1, -1));
+	}
 
-	_view_matrix = calc_projection_matrix() * z_reverse * transform_matrix_inv();
+	_view_matrix = calc_projection_matrix() * transform_inv;
 }
 
 void Camera::make_perspective(float fov, float near_clip, float far_clip)
