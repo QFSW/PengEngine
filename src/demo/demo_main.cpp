@@ -3,6 +3,8 @@
 #include <core/peng_engine.h>
 #include <profiling/profiler_manager.h>
 #include <scene/scene_loader.h>
+#include <input/input_subsystem.h>
+#include <entities/debug/bootloader.h>
 
 #ifndef NO_PROFILING
 #include <profiling/superluminal_profiler.h>
@@ -21,6 +23,15 @@ namespace demo
             scene::SceneLoader scene_loader;
             scene_loader.load_from_file("resources/scenes/demo/pong.json");
         });
+
+#ifndef PENG_MASTER
+        PengEngine::get().on_frame_start().subscribe([] {
+            if (input::InputSubsystem::get()[input::KeyCode::f2].pressed())
+            {
+                entities::debug::Bootloader::initiate();
+            }
+        });
+#endif
         
         PengEngine::get().set_resolution(math::Vector2i(1280, 720));
         PengEngine::get().set_vsync(false);

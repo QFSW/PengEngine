@@ -436,7 +436,7 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
         char_map[c] = char_map[c_upper] = sprites[num_chars++];
     }
 
-    const std::string symbols = "?!+-.,[](){}:;'\"/\\@=_$*`~";
+    const std::string symbols = "?!+-.,[](){}:;'\"|/\\@=_$*`~<>";
     for (const char c : symbols)
     {
         char_map[c] = sprites[num_chars++];

@@ -25,6 +25,7 @@ namespace entities::debug
 		};
 
 		std::string shorten_path(const std::string& scene_path) const;
+		void update_entries_display();
 		void load_entry(const Entry& entry);
 
 		std::vector<Entry> _entries;
