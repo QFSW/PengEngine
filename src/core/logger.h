@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include <threading/worker_thread.h>
 #include <utils/strtools.h>
 #include <utils/singleton.h>
 
@@ -15,7 +16,7 @@ enum class LogSeverity
 
 class Logger : public utils::Singleton<Logger>
 {
-	using Singleton::Singleton;
+	friend Singleton;
 
 public:
 	void log(LogSeverity severity, const std::string& message);
@@ -41,6 +42,13 @@ public:
 	static void success(const char* format, Args&&...args);
 
 	consteval static bool enabled();
+
+private:
+	Logger();
+
+	static void log_internal(LogSeverity severity, const std::string& message);
+
+	threading::WorkerThread _worker_thread;
 };
 
 consteval bool Logger::enabled()

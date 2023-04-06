@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+Logger::Logger()
+    : Singleton()
+    , _worker_thread("Logger")
+{ }
+
 void Logger::log(LogSeverity severity, const std::string& message)
 {
 	if constexpr (!enabled())
@@ -12,40 +17,49 @@ void Logger::log(LogSeverity severity, const std::string& message)
 		return;
 	}
 
+	_worker_thread.schedule_job(threading::Job([severity, message]
+	{
+		log_internal(severity, message);
+	}));
+}
+
+void Logger::log_internal(LogSeverity severity, const std::string& message)
+{
 	switch (severity)
 	{
-		case LogSeverity::log: break;
-		case LogSeverity::warning:
-		{
-			std::cout << "\033[0;93m";
-			break;
-		}
-		case LogSeverity::error:
-		{
-			std::cout << "\033[1;31m";
-			break;
-		}
-		case LogSeverity::success:
-		{
-			std::cout << "\033[1;32m";
-			break;
-		}
+	    case LogSeverity::log: break;
+	    case LogSeverity::warning:
+	    {
+		    std::cout << "\033[0;93m";
+		    break;
+	    }
+	    case LogSeverity::error:
+	    {
+		    std::cout << "\033[1;31m";
+		    break;
+	    }
+	    case LogSeverity::success:
+	    {
+		    std::cout << "\033[1;32m";
+		    break;
+	    }
 	}
 
 	std::cout << message << "\n";
 
 	switch (severity)
 	{
-		case LogSeverity::log: break;
-		case LogSeverity::warning:
-		case LogSeverity::error:
-		case LogSeverity::success:
-		{
-			std::cout << "\033[0m";
-			break;
-		}
+	    case LogSeverity::log: break;
+	    case LogSeverity::warning:
+	    case LogSeverity::error:
+	    case LogSeverity::success:
+	    {
+		    std::cout << "\033[0m";
+		    break;
+	    }
 	}
 }
+
 
 void Logger::log(const std::string& message)
 {
