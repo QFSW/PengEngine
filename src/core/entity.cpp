@@ -64,6 +64,11 @@ void Entity::pre_destroy()
 
 void Entity::set_active(bool active)
 {
+	if (active == _active_self)
+	{
+		return;
+	}
+
 	_active_self = active;
 	propagate_active_change(true);
 }

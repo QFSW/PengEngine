@@ -26,17 +26,25 @@ void TextRenderer::set_text(const std::string& str)
 
     _current = str;
 
-    const std::vector<peng::shared_ref<const Sprite>> sprites = _font->get_sprites(str);
+    const std::vector<peng::shared_ptr<const Sprite>> sprites = _font->get_sprites(str);
     const int32_t num_chars = static_cast<int32_t>(sprites.size());
 
     for (int32_t char_index = 0; char_index < num_chars; char_index++)
     {
-        const math::Vector3f char_pos = math::Vector3f(char_index - 0.5f * (num_chars - 1), 0, 0);
-
         peng::weak_ptr<Entity> char_renderer = get_nth_char(char_index);
-        char_renderer->get_component<SpriteRenderer>()->sprite() = sprites[char_index];
-        char_renderer->local_transform().position = char_pos;
-        char_renderer->set_active(true);
+
+        // Only setup this character if it is visible,
+        if (sprites[char_index])
+        {
+            const math::Vector3f char_pos = math::Vector3f(char_index - 0.5f * (num_chars - 1), 0, 0);
+            char_renderer->get_component<SpriteRenderer>()->sprite() = sprites[char_index].to_shared_ref();
+            char_renderer->local_transform().position = char_pos;
+            char_renderer->set_active(true);
+        }
+        else
+        {
+            char_renderer->set_active(false);
+        }
     }
 
     // Disable characters not in use 

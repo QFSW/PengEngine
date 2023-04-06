@@ -422,6 +422,7 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
     int32_t num_chars = 0;
     std::unordered_map<char, peng::shared_ptr<const Sprite>> char_map;
 
+    // Numbers
     for (char c = '0'; c <= '9'; c++)
     {
         char_map[c] = sprites[num_chars++];
@@ -430,20 +431,20 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
     // biang biang
     num_chars++;
 
+    // Letters
     for (char c = 'a'; c <= 'z'; c++)
     {
         char c_upper = c + 'A' - 'a';
         char_map[c] = char_map[c_upper] = sprites[num_chars++];
     }
 
-    const std::string symbols = "?!+-.,[](){}:;'\"|/\\@=_$*`~<>";
-    for (const char c : symbols)
+    // Symbols
+    for (const char c : "?!+-.,[](){}:;'\"|/\\@=_$*`~<>")
     {
         char_map[c] = sprites[num_chars++];
     }
 
-    // TODO: this still gets rendered with a sprite even though the draw could be skipped
-    char_map[' '] = sprites[sprites.size() - 2];
+    char_map[' '] = {};
 
     peng::shared_ref<const BitmapFont> font = peng::make_shared<BitmapFont>(
         "PengFont", std::move(char_map), sprites.back()
