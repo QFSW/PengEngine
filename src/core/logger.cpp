@@ -4,24 +4,22 @@
 
 Logger::Logger()
     : Singleton()
+#ifndef NO_LOGGING
     , _worker_thread("Logger")
+#endif
 { }
 
+#ifdef NO_LOGGING
+void Logger::log(LogSeverity, const std::string&) {}
+#else
 void Logger::log(LogSeverity severity, const std::string& message)
 {
-	if constexpr (!enabled())
-	{
-		// Suppress unused warnings on parameters
-		static_cast<void>(severity);
-		static_cast<void>(message);
-		return;
-	}
-
-	_worker_thread.schedule_job(threading::Job([severity, message]
+    _worker_thread.schedule_job(threading::Job([severity, message]
 	{
 		log_internal(severity, message);
 	}));
 }
+#endif
 
 void Logger::log_internal(LogSeverity severity, const std::string& message)
 {

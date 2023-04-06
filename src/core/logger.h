@@ -2,7 +2,10 @@
 
 #include <string>
 
+#ifndef NO_LOGGING
 #include <threading/worker_thread.h>
+#endif
+
 #include <utils/strtools.h>
 #include <utils/singleton.h>
 
@@ -48,7 +51,9 @@ private:
 
 	static void log_internal(LogSeverity severity, const std::string& message);
 
+#ifndef NO_LOGGING
 	threading::WorkerThread _worker_thread;
+#endif
 };
 
 consteval bool Logger::enabled()
