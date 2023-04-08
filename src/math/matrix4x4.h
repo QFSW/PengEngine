@@ -146,6 +146,12 @@ namespace math
 	template <number T>
 	Matrix4x4<make_floating_t<T>> Matrix4x4<T>::rotated(const Vector3<F>& rotation) const noexcept
 	{
+		// Skip applying rotation if it's sufficiently small
+		if (rotation.magnitude_sqr() < 0.01f)
+		{
+			return *this;
+		}
+
 		// x = pitch, y = yaw, z = roll
 		return from_rotation(rotation) * *this;
 	}
