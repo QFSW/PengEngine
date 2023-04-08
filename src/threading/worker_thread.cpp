@@ -12,8 +12,11 @@ WorkerThread::WorkerThread(std::string&& thread_name)
     , _num_pending_jobs(0)
 {
     _worker = std::make_unique<std::thread>([this, name = std::move(thread_name)] {
-        const std::wstring w_name = std::wstring(name.begin(), name.end());
-        SetThreadDescription(GetCurrentThread(), w_name.c_str());
+        if (GetProcAddress(GetModuleHandle(L"kernel32.dll"), "SetThreadDescription"))
+        {
+            const std::wstring w_name = std::wstring(name.begin(), name.end());
+            SetThreadDescription(GetCurrentThread(), w_name.c_str());
+        }
 
         worker_routine();
     });
