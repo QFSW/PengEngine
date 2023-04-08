@@ -67,6 +67,10 @@ void PengPong::tick(float delta_time)
 		{
 			unpause();
 		}
+	    else if (_game_state == GameState::main_menu)
+		{
+			quit();
+		}
 	}
 }
 
@@ -217,9 +221,9 @@ void PengPong::pause()
 			weak_this->unpause();
 		});
 
-		_pause_root->on_quit().subscribe([]
+		_pause_root->on_quit().subscribe([weak_this = weak_this()]
 		{
-			PengEngine::get().request_shutdown();
+			weak_this->quit();
 		});
 	}
 }
@@ -233,4 +237,9 @@ void PengPong::unpause()
 	{
 		_pause_root->hide();
 	}
+}
+
+void PengPong::quit()
+{
+	PengEngine::get().request_shutdown();
 }

@@ -36,6 +36,7 @@ namespace demo::pong
 
 		void pause();
 		void unpause();
+		void quit();
 
 		GameState _game_state = GameState::main_menu;
 		peng::weak_ptr<Entity> _world_root;
