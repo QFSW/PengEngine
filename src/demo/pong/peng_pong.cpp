@@ -9,13 +9,13 @@
 #include <components/text_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
-#include <rendering/sprite.h>
 #include <input/input_subsystem.h>
 #include <audio/audio_clip.h>
 
 #include "ball.h"
 #include "goal.h"
 #include "paddle.h"
+#include "pause_menu.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -57,7 +57,7 @@ void PengPong::tick(float delta_time)
 	    }
 	}
 
-	if (InputSubsystem::get()[KeyCode::p].pressed())
+	if (InputSubsystem::get()[KeyCode::escape].pressed())
 	{
 		if (_game_state == GameState::playing)
 		{
@@ -65,15 +65,6 @@ void PengPong::tick(float delta_time)
 		}
 		else if (_game_state == GameState::paused)
 		{
-			unpause();
-		}
-	}
-
-	if (_game_state == GameState::paused)
-	{
-		if (InputSubsystem::get()[KeyCode::r].pressed())
-		{
-			build_world();
 			unpause();
 		}
 	}
@@ -207,26 +198,29 @@ void PengPong::pause()
 
 	if (_pause_root)
 	{
-		_pause_root->set_active(true);
+		_pause_root->show();
 	}
 	else
 	{
-		_pause_root = create_entity<Entity>("PauseMenu");
-		_pause_root->local_transform().position = Vector3f(0, 0, -5);
+		_pause_root = create_entity<PauseMenu>();
+		_pause_root->pause_size = digit_size;
+		_pause_root->btn_size = digit_size / 4;
 
-		peng::weak_ptr<Entity> pause_background = _pause_root->create_child<Entity>("Background");
-		pause_background->local_transform().position = Vector3f(0, 0, 1);
-		pause_background->local_transform().scale = Vector3f::one() * 100;
-		pause_background->add_component<components::SpriteRenderer>()->color() = Vector4f(0, 0, 0, 0.75f);
+		_pause_root->on_resume().subscribe([weak_this = weak_this()]
+		{
+			weak_this->unpause();
+		});
 
-		peng::weak_ptr<Entity> text = _pause_root->create_child<Entity>("Text");
-		text->local_transform().scale = Vector3f::one() * digit_size;
-		text->add_component<TextRenderer>()->set_text("paused");
+		_pause_root->on_restart().subscribe([weak_this = weak_this()]
+		{
+			weak_this->build_world();
+			weak_this->unpause();
+		});
 
-		peng::weak_ptr<Entity> restart_text = _pause_root->create_child<Entity>("RestartText");
-		restart_text->local_transform().position = Vector3f(0, -5, 0);
-		restart_text->local_transform().scale = Vector3f::one() * digit_size / 4;
-		restart_text->add_component<TextRenderer>()->set_text("Press R to restart");
+		_pause_root->on_quit().subscribe([]
+		{
+			PengEngine::get().request_shutdown();
+		});
 	}
 }
 
@@ -237,6 +231,6 @@ void PengPong::unpause()
 
 	if (_pause_root)
 	{
-		_pause_root->set_active(false);
+		_pause_root->hide();
 	}
 }

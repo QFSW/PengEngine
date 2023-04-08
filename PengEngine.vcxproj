@@ -417,6 +417,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\demo\pong\ball.cpp" />
     <ClCompile Include="src\demo\pong\goal.cpp" />
     <ClCompile Include="src\demo\pong\paddle.cpp" />
+    <ClCompile Include="src\demo\pong\pause_menu.cpp" />
     <ClCompile Include="src\demo\pong\peng_pong.cpp" />
     <ClCompile Include="src\entities\camera.cpp" />
     <ClCompile Include="src\entities\debug\bootloader.cpp" />
@@ -508,6 +509,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\demo\pong\ball.h" />
     <ClInclude Include="src\demo\pong\goal.h" />
     <ClInclude Include="src\demo\pong\paddle.h" />
+    <ClInclude Include="src\demo\pong\pause_menu.h" />
     <ClInclude Include="src\demo\pong\peng_pong.h" />
     <ClInclude Include="src\entities\camera.h" />
     <ClInclude Include="src\entities\debug\bootloader.h" />

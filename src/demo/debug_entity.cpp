@@ -22,7 +22,7 @@ void DebugEntity::tick(float delta_time)
 		PengEngine::get().toggle_fullscreen();
 	}
 
-	if (InputSubsystem::get()[KeyCode::escape].pressed())
+	if (InputSubsystem::get()[KeyCode::f10].pressed())
 	{
 		PengEngine::get().request_shutdown();
 	}

@@ -9,6 +9,8 @@ namespace audio
 
 namespace demo::pong
 {
+	class PauseMenu;
+
 	class PengPong final : public Entity
 	{
 		DECLARE_ENTITY(PengPong);
@@ -37,7 +39,7 @@ namespace demo::pong
 
 		GameState _game_state = GameState::main_menu;
 		peng::weak_ptr<Entity> _world_root;
-		peng::weak_ptr<Entity> _pause_root;
+		peng::weak_ptr<PauseMenu> _pause_root;
 		peng::weak_ptr<Entity> _menu_root;
 		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
 		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;

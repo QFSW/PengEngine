@@ -63,6 +63,7 @@ void Bootloader::tick(float delta_time)
         return;
     }
 
+    // TODO: Refactor out this button selection system into something more re-usable
     if (InputSubsystem::get()[KeyCode::down].pressed())
     {
         _selected_entry = ++_selected_entry % num_entries;
