@@ -20,6 +20,7 @@ namespace rendering
 
         static peng::shared_ref<WindowIcon> load_asset(const AssetDefinition& asset_def);
 
+        void use() const;
         void use(GLFWwindow* window) const;
 
         [[nodiscard]] const std::string& name() const noexcept;

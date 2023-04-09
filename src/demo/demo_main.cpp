@@ -5,8 +5,9 @@
 #include <profiling/profiler_manager.h>
 #include <scene/scene_loader.h>
 #include <input/input_subsystem.h>
-#include <entities/debug/bootloader.h>
+#include <rendering/window_subsystem.h>
 #include <rendering/window_icon.h>
+#include <entities/debug/bootloader.h>
 
 #ifndef NO_PROFILING
 #include <profiling/superluminal_profiler.h>
@@ -23,7 +24,7 @@ namespace demo
         PengEngine::get().on_engine_initialized().subscribe_once([]
         {
             Asset<rendering::WindowIcon> icon("resources/textures/core/peng_engine_64.asset");
-            icon.load()->use(PengEngine::get().window_handle());
+            icon.load()->use();
 
             scene::SceneLoader scene_loader;
             scene_loader.load_from_file("resources/scenes/demo/pong.json");
@@ -38,8 +39,8 @@ namespace demo
         });
 #endif
         
-        PengEngine::get().set_resolution(math::Vector2i(1280, 720));
-        PengEngine::get().set_vsync(false);
+        rendering::WindowSubsystem::get().set_resolution(math::Vector2i(1280, 720));
+        rendering::WindowSubsystem::get().set_vsync(false);
         PengEngine::get().set_target_frametime(0);
         PengEngine::get().run();
 

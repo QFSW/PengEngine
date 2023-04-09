@@ -1,7 +1,7 @@
 #include "fly_cam_controller.h"
 
 #include <input/input_subsystem.h>
-#include <core/peng_engine.h>
+#include <rendering/window_subsystem.h>
 #include <entities/camera.h>
 
 IMPLEMENT_COMPONENT(components::FlyCamController);
@@ -20,7 +20,7 @@ void FlyCamController::post_create()
 {
 	Component::post_create();
 
-	PengEngine::get().set_cursor_locked(true);
+	rendering::WindowSubsystem::get().set_cursor_locked(true);
 }
 
 void FlyCamController::tick(float delta_time)

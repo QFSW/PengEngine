@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include <GLFW/glfw3.h>
-#include <core/peng_engine.h>
+#include <rendering/window_subsystem.h>
 #include <utils/strtools.h>
 
 using namespace input;
@@ -101,7 +101,7 @@ InputSubsystem::InputSubsystem()
 
 void InputSubsystem::start()
 {
-	_window = PengEngine::get().window_handle();
+	_window = rendering::WindowSubsystem::get().window_handle();
 }
 
 void InputSubsystem::shutdown()

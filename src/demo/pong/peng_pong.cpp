@@ -9,6 +9,7 @@
 #include <components/text_renderer.h>
 #include <components/box_collider_2d.h>
 #include <rendering/texture.h>
+#include <rendering/window_subsystem.h>
 #include <input/input_subsystem.h>
 #include <audio/audio_clip.h>
 
@@ -34,7 +35,7 @@ void PengPong::post_create()
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	PengEngine::get().set_max_delta_time(50.0);
-	PengEngine::get().set_window_name("Peng Pong");
+	WindowSubsystem::get().set_window_name("Peng Pong");
 
 	load_resources();
 	build_camera();
@@ -124,7 +125,7 @@ void PengPong::build_world()
 
 	_world_root = create_entity<Entity>("World");
 
-	const float ortho_width = ortho_size * PengEngine::get().aspect_ratio();
+	const float ortho_width = ortho_size * WindowSubsystem::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
 	peng::weak_ptr<Ball> ball = _world_root->create_child<Ball>();

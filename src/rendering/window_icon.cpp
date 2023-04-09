@@ -12,6 +12,8 @@
 #include <libs/stb/stb_image.h>
 #pragma warning( pop )
 
+#include "window_subsystem.h"
+
 using namespace rendering;
 
 WindowIcon::WindowIcon(const std::string& name, const std::string& texture_path)
@@ -42,6 +44,11 @@ peng::shared_ref<WindowIcon> WindowIcon::load_asset(const AssetDefinition& asset
     const std::string texture_path = asset_def.json_def["texture"].get<std::string>();
 
     return peng::make_shared<WindowIcon>(name, texture_path);
+}
+
+void WindowIcon::use() const
+{
+    use(WindowSubsystem::get().window_handle());
 }
 
 void WindowIcon::use(GLFWwindow* window) const

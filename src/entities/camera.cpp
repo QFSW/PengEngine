@@ -3,12 +3,13 @@
 #include <numbers>
 
 #include <core/logger.h>
-#include <core/peng_engine.h>
+#include <rendering/window_subsystem.h>
 #include <utils/utils.h>
 
 IMPLEMENT_ENTITY(entities::Camera);
 
 using namespace entities;
+using namespace rendering;
 using namespace math;
 
 peng::weak_ptr<Camera> Camera::_current;
@@ -111,7 +112,7 @@ void Camera::validate_config() const noexcept
 
 Matrix4x4f Camera::calc_projection_matrix()
 {
-	const float aspect_ratio = PengEngine::get().aspect_ratio();
+	const float aspect_ratio = WindowSubsystem::get().aspect_ratio();
 
 	if (_projection == Projection::orthographic)
 	{

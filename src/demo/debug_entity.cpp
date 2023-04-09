@@ -2,11 +2,13 @@
 
 #include <core/peng_engine.h>
 #include <input/input_subsystem.h>
+#include <rendering/window_subsystem.h>
 
 IMPLEMENT_ENTITY(demo::DebugEntity);
 
 using namespace demo;
 using namespace input;
+using namespace rendering;
 
 void DebugEntity::tick(float delta_time)
 {
@@ -19,7 +21,7 @@ void DebugEntity::tick(float delta_time)
 
 	if (InputSubsystem::get()[KeyCode::f11].pressed())
 	{
-		PengEngine::get().toggle_fullscreen();
+		WindowSubsystem::get().toggle_fullscreen();
 	}
 
 	if (InputSubsystem::get()[KeyCode::f10].pressed())
