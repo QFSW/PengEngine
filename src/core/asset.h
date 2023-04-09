@@ -21,6 +21,7 @@ class IAsset
 {
 public:
     [[nodiscard]] virtual bool loaded() const noexcept = 0;
+    [[nodiscard]] virtual bool exists() const noexcept = 0;
 };
 
 // Generalized resource container for an asset T that meets the CAsset criteria
@@ -35,6 +36,7 @@ public:
     [[nodiscard]] peng::shared_ref<T> load_mutable();
     [[nodiscard]] peng::shared_ref<const T> load();
     [[nodiscard]] bool loaded() const noexcept override;
+    [[nodiscard]] bool exists() const noexcept override;
 
 private:
     std::string _path;
@@ -97,4 +99,10 @@ template <CAsset T>
 bool Asset<T>::loaded() const noexcept
 {
     return _asset_map[_path].valid();
+}
+
+template <CAsset T>
+bool Asset<T>::exists() const noexcept
+{
+    return std::filesystem::exists(_path);
 }

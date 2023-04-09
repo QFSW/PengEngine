@@ -63,16 +63,23 @@ void PauseMenu::tick(float delta_time)
         return;
     }
 
+    int32_t new_selection = _selected_entry;
+
     if (InputSubsystem::get()[KeyCode::down].pressed())
     {
-        _selected_entry = ++_selected_entry % num_entries;
-        update_buttons();
+        new_selection = ++new_selection % num_entries;
     }
 
     if (InputSubsystem::get()[KeyCode::up].pressed())
     {
-        _selected_entry = (--_selected_entry + num_entries) % num_entries;
+        new_selection = (--new_selection + num_entries) % num_entries;
+    }
+
+    if (new_selection != _selected_entry)
+    {
+        _selected_entry = new_selection;
         update_buttons();
+        _on_selection_change();
     }
 
     if (InputSubsystem::get()[KeyCode::enter].pressed())

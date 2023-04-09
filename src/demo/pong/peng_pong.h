@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/entity.h>
+#include <audio/audio_pool.h>
 
 namespace audio
 {
@@ -45,6 +46,8 @@ namespace demo::pong
 		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
 		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;
 		peng::shared_ptr<audio::AudioClip> _goal_sfx;
+		peng::shared_ptr<audio::AudioClip> _menu_sfx;
+		audio::AudioPool _audio_pool;
 
 		static constexpr float ortho_size = 20;
 		static constexpr float paddle_margin = 3;

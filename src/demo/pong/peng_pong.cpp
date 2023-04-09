@@ -34,7 +34,7 @@ void PengPong::post_create()
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	PengEngine::get().set_max_delta_time(50.0);
-	PengEngine::get().set_window_name("PengPong");
+	PengEngine::get().set_window_name("Peng Pong");
 
 	load_resources();
 	build_camera();
@@ -81,6 +81,7 @@ void PengPong::load_resources()
 	_bounce_wall_sfx = peng::make_shared<audio::AudioClip>("Bounce Wall", 1, 200, 0.6f);
 	_bounce_paddle_sfx = peng::make_shared<audio::AudioClip>("Bounce Paddle", 1, 250, 0.5f);
 	_goal_sfx = peng::make_shared<audio::AudioClip>("Goal", 1.5f, 400, 0.4f);
+	_menu_sfx = peng::make_shared<audio::AudioClip>("Menu", 0.3f, 600, 0.1f);
 }
 
 void PengPong::build_camera()
@@ -209,6 +210,11 @@ void PengPong::pause()
 		_pause_root = create_entity<PauseMenu>();
 		_pause_root->pause_size = digit_size;
 		_pause_root->btn_size = digit_size / 4;
+
+		_pause_root->on_selection_change().subscribe([weak_this = weak_this()]
+		{
+		    weak_this->_audio_pool.play(weak_this->_menu_sfx.to_shared_ref());
+		});
 
 		_pause_root->on_resume().subscribe([weak_this = weak_this()]
 		{
