@@ -72,4 +72,28 @@ namespace strtools
 
         return true;
     }
+
+    std::string trim(const std::string& str)
+    {
+        size_t start = 0;
+        size_t end = str.size() - 1;
+
+        for (; start < str.size(); start++)
+        {
+            if (!::isspace(str[start]))
+            {
+                break;
+            }
+        }
+
+        for (; end >= 0; end--)
+        {
+            if (!::isspace(str[end]))
+            {
+                break;
+            }
+        }
+
+        return str.substr(start, end - start + 1);
+    }
 }

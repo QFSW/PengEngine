@@ -17,6 +17,7 @@ enum class LogSeverity
 	success
 };
 
+// TODO: automatically enable virtual terminal to get colors on standard windows terminal
 class Logger : public utils::Singleton<Logger>
 {
 	friend Singleton;

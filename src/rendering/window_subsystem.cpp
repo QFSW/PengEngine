@@ -127,9 +127,9 @@ void WindowSubsystem::start()
 	glfwMakeContextCurrent(_window);
 
 	Logger::log("OpenGL context created - %s", glGetString(GL_VERSION));
-	Logger::log("GPU selected - %s(%s)",
-		reinterpret_cast<const char*>(glGetString(GL_RENDERER)),
-		reinterpret_cast<const char*>(glGetString(GL_VENDOR))
+	Logger::log("GPU selected - %s (%s)",
+		strtools::trim(reinterpret_cast<const char*>(glGetString(GL_RENDERER))).c_str(),
+		strtools::trim(reinterpret_cast<const char*>(glGetString(GL_VENDOR))).c_str()
 	);
 
 	glewExperimental = GL_TRUE;
