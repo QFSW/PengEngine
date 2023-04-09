@@ -2,12 +2,23 @@
 
 #include <stdexcept>
 
+#pragma warning( push, 0 )
+#define NOMINMAX
+#include <windows.h>
+#pragma warning( pop )
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
 #include <profiling/scoped_gpu_event.h>
+
+// Causes the NVIDIA GPU to be used over integrated graphics on dual GPU systems (such as laptops)
+// https://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
 
 using namespace rendering;
 
@@ -116,6 +127,10 @@ void WindowSubsystem::start()
 	glfwMakeContextCurrent(_window);
 
 	Logger::log("OpenGL context created - %s", glGetString(GL_VERSION));
+	Logger::log("GPU selected - %s(%s)",
+		reinterpret_cast<const char*>(glGetString(GL_RENDERER)),
+		reinterpret_cast<const char*>(glGetString(GL_VENDOR))
+	);
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
