@@ -455,6 +455,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\texture_binding_cache.cpp" />
     <ClCompile Include="src\rendering\utils.cpp" />
     <ClCompile Include="src\rendering\vertex.cpp" />
+    <ClCompile Include="src\rendering\window_icon.cpp" />
     <ClCompile Include="src\threading\job.cpp" />
     <ClCompile Include="src\threading\thread_pool.cpp" />
     <ClCompile Include="src\threading\worker_thread.cpp" />
@@ -559,6 +560,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\draw_call.h" />
     <ClInclude Include="src\rendering\draw_call_tree.h" />
     <ClInclude Include="src\rendering\frame_buffer.h" />
+    <ClInclude Include="src\rendering\window_icon.h" />
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />
     <ClInclude Include="src\math\plane.h" />
@@ -611,6 +613,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="resources\shaders\demo\blob.asset" />
     <None Include="resources\shaders\demo\rave.frag" />
     <None Include="resources\shaders\demo\wobble.vert" />
+    <None Include="resources\textures\core\peng_engine.asset" />
     <None Include="resources\textures\core\peng_font.asset" />
     <None Include="resources\textures\demo\wall.asset" />
     <None Include="src\libs\moodycamel\LICENSE.md" />

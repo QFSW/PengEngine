@@ -246,6 +246,9 @@
     <ClCompile Include="src\demo\pong\pause_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\window_icon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -635,6 +638,9 @@
     <ClInclude Include="src\demo\pong\pause_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering\window_icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -655,6 +661,7 @@
     <None Include="resources\textures\demo\wall.asset" />
     <None Include="resources\shaders\core\unlit_alpha.asset" />
     <None Include="resources\textures\core\peng_font.asset" />
+    <None Include="resources\textures\core\peng_engine.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

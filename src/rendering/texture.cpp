@@ -1,7 +1,6 @@
 #include "texture.h"
 
 #include <stdexcept>
-#include <fstream>
 
 #include <core/asset_definition.h>
 #include <core/logger.h>

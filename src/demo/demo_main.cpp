@@ -1,10 +1,12 @@
 #include "demo_main.h"
 
 #include <core/peng_engine.h>
+#include <core/asset.h>
 #include <profiling/profiler_manager.h>
 #include <scene/scene_loader.h>
 #include <input/input_subsystem.h>
 #include <entities/debug/bootloader.h>
+#include <rendering/window_icon.h>
 
 #ifndef NO_PROFILING
 #include <profiling/superluminal_profiler.h>
@@ -20,6 +22,9 @@ namespace demo
 
         PengEngine::get().on_engine_initialized().subscribe_once([]
         {
+            Asset<rendering::WindowIcon> icon("resources/textures/core/peng_engine_64.asset");
+            icon.load()->use(PengEngine::get().window_handle());
+
             scene::SceneLoader scene_loader;
             scene_loader.load_from_file("resources/scenes/demo/pong.json");
         });
