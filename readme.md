@@ -6,7 +6,7 @@
   <img src=https://img.shields.io/github/issues-raw/QFSW/PengEngine.svg?color=c41414&style=popout>
 </p>
 
-**Peng Engine** is a custom game engine built with C++23 and OpenGL 4.3+
+**Peng Engine** is a custom game engine built with C++23 and OpenGL 4.3+ with minimal use of [third party](docs/third-party.md) libraries.
 
 Requires Visual Studio 2022 to compile
 
