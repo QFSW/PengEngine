@@ -84,6 +84,7 @@ void PauseMenu::tick(float delta_time)
 
     if (InputSubsystem::get()[KeyCode::enter].pressed())
     {
+        _on_selection_click();
         _button_events[_selected_entry]->invoke();
     }
 }

@@ -9,6 +9,7 @@ namespace demo::pong
 		DECLARE_ENTITY(PauseMenu);
 
 		DEFINE_EVENT(on_selection_change)
+		DEFINE_EVENT(on_selection_click)
 
 		DEFINE_EVENT(on_resume)
 		DEFINE_EVENT(on_restart)

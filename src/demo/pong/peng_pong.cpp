@@ -51,6 +51,8 @@ void PengPong::tick(float delta_time)
 	{
 	    if (InputSubsystem::get()[KeyCode::enter].pressed())
 	    {
+			_audio_pool.play(_menu_click_sfx.to_shared_ref());
+
 			_menu_root->set_active(false);
 			_game_state = GameState::playing;
 			build_world();
@@ -77,11 +79,12 @@ void PengPong::tick(float delta_time)
 void PengPong::load_resources()
 {
 	SCOPED_EVENT("PengPong - load resources");
-
-	_bounce_wall_sfx = peng::make_shared<audio::AudioClip>("Bounce Wall", 1, 200, 0.6f);
-	_bounce_paddle_sfx = peng::make_shared<audio::AudioClip>("Bounce Paddle", 1, 250, 0.5f);
-	_goal_sfx = peng::make_shared<audio::AudioClip>("Goal", 1.5f, 400, 0.4f);
-	_menu_sfx = peng::make_shared<audio::AudioClip>("Menu", 0.3f, 600, 0.1f);
+	
+	_bounce_wall_sfx	= peng::make_shared<audio::AudioClip>("Bounce Wall",	1,		200, 0.6f);
+	_bounce_paddle_sfx	= peng::make_shared<audio::AudioClip>("Bounce Paddle",	1,		250, 0.5f);
+	_goal_sfx			= peng::make_shared<audio::AudioClip>("Goal",			1.5f,	400, 0.4f);
+	_menu_select_sfx	= peng::make_shared<audio::AudioClip>("MenuSelect",		0.3f,	600, 0.1f);
+	_menu_click_sfx		= peng::make_shared<audio::AudioClip>("MenuClick",		0.28f,	700, 0.07f);
 }
 
 void PengPong::build_camera()
@@ -213,7 +216,12 @@ void PengPong::pause()
 
 		_pause_root->on_selection_change().subscribe([weak_this = weak_this()]
 		{
-		    weak_this->_audio_pool.play(weak_this->_menu_sfx.to_shared_ref());
+		    weak_this->_audio_pool.play(weak_this->_menu_select_sfx.to_shared_ref());
+		});
+
+		_pause_root->on_selection_click().subscribe([weak_this = weak_this()]
+		{
+		    weak_this->_audio_pool.play(weak_this->_menu_click_sfx.to_shared_ref());
 		});
 
 		_pause_root->on_resume().subscribe([weak_this = weak_this()]
