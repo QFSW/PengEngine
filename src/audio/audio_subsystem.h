@@ -19,10 +19,14 @@ namespace audio
         void shutdown() override;
         void tick(float delta_time) override;
 
+        void set_volume(float volume);
+        [[nodiscard]] float volume() const noexcept;
+
     private:
         ALCdevice* _device;
         ALCcontext* _context;
 
         bool _active;
+        float _volume;
     };
 }

@@ -10,6 +10,7 @@ AudioSubsystem::AudioSubsystem()
     , _device(nullptr)
     , _context(nullptr)
     , _active(false)
+    , _volume(1)
 { }
 
 AudioSubsystem::~AudioSubsystem()
@@ -30,6 +31,8 @@ void AudioSubsystem::start()
     _device = alcOpenDevice(nullptr);
     _context = alcCreateContext(_device, nullptr);
     alcMakeContextCurrent(_context);
+
+    set_volume(_volume);
 }
 
 void AudioSubsystem::shutdown()
@@ -46,4 +49,20 @@ void AudioSubsystem::shutdown()
 
 void AudioSubsystem::tick(float)
 {
+}
+
+void AudioSubsystem::set_volume(float volume)
+{
+    check(volume >= 0 && volume <= 1);
+    _volume = volume;
+
+    if (_active)
+    {
+        alListenerf(AL_GAIN, volume);
+    }
+}
+
+float AudioSubsystem::volume() const noexcept
+{
+    return _volume;
 }
