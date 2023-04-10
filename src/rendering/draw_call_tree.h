@@ -11,6 +11,7 @@ namespace rendering
     class Mesh;
     class Shader;
     class Material;
+    struct RenderQueueStats;
 
     // Draw calls aggregated by the mesh, only differing in the uniforms applied
     // It is illegal for the materials to use different underlying shaders
@@ -36,7 +37,7 @@ namespace rendering
     public:
         DrawCallTree(std::vector<struct DrawCall>&& draw_calls);
 
-        void execute() const;
+        void execute(RenderQueueStats& stats) const;
 
     private:
         ShaderDrawTree& find_add_shader_draw(const peng::shared_ref<const Shader>& shader);

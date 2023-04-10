@@ -10,18 +10,26 @@ using namespace rendering;
 void RenderQueue::execute()
 {
     SCOPED_EVENT("RenderQueue - execute");
+    RenderQueueStats stats;
+
     drain_queues();
 
     const DrawCallTree tree(std::move(_draw_calls));
-    tree.execute();
+    tree.execute(stats);
 
     // TODO: for some reason the texture binding cache breaks after pause if you don't clear it
     TextureBindingCache::get().unbind_all();
+    _queue_stats = stats;
 }
 
 void RenderQueue::enqueue_draw(DrawCall&& draw_call)
 {
     _draw_call_queue.enqueue(draw_call);
+}
+
+const RenderQueueStats& RenderQueue::last_frame_stats() const noexcept
+{
+    return _queue_stats;
 }
 
 void RenderQueue::drain_queues()

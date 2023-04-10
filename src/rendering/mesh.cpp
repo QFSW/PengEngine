@@ -97,3 +97,8 @@ const std::string& Mesh::name() const noexcept
     return _name;
 }
 
+int32_t Mesh::num_triangles() const noexcept
+{
+    return _index_buffer.size();
+}
+

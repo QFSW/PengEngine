@@ -37,6 +37,7 @@ namespace rendering
         void draw() const;
 
         [[nodiscard]] const std::string& name() const noexcept;
+        [[nodiscard]] int32_t num_triangles() const noexcept;
 
     private:
         std::string _name;

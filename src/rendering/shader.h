@@ -18,6 +18,7 @@ struct AssetDefinition;
 
 namespace rendering
 {
+    // TODO: add back-face culling
     class Shader
     {
     public:

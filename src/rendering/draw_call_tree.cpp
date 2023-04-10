@@ -8,6 +8,7 @@
 #include "mesh.h"
 #include "shader.h"
 #include "material.h"
+#include "render_queue_stats.h"
 
 using namespace rendering;
 
@@ -40,7 +41,7 @@ DrawCallTree::DrawCallTree(std::vector<DrawCall>&& draw_calls)
         });
 }
 
-void DrawCallTree::execute() const
+void DrawCallTree::execute(RenderQueueStats& stats) const
 {
     SCOPED_EVENT("DrawCallTree - execute");
     SCOPED_GPU_EVENT("Draw Scene");
@@ -51,6 +52,7 @@ void DrawCallTree::execute() const
 
         SCOPED_GPU_EVENT(strtools::catf_temp("Shader - %s", shader->name().c_str()));
         shader_draw.shader->use();
+        stats.shader_switches++;
 
         for (const MeshDrawTree& mesh_draw : shader_draw.mesh_draws)
         {
@@ -58,11 +60,14 @@ void DrawCallTree::execute() const
 
             SCOPED_GPU_EVENT(strtools::catf_temp("Mesh - %s", mesh->name().c_str()));
             mesh->bind();
+            stats.mesh_switches++;
 
             for (const peng::shared_ref<Material>& material : mesh_draw.materials)
             {
                 material->apply_uniforms();
                 mesh->draw();
+                stats.draw_calls++;
+                stats.triangles += mesh->num_triangles();
             }
         }
     }
