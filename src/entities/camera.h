@@ -17,6 +17,13 @@ namespace entities
 			perspective
 		};
 
+		enum class PixelPerfectMode
+		{
+		    nearest,
+			increase_size,
+			decrease_size
+		};
+
 		Camera();
 		explicit Camera(const std::string& name);
 		explicit Camera(std::string&& name);
@@ -28,6 +35,11 @@ namespace entities
 
 		void make_perspective(float fov, float near_clip, float far_clip);
 		void make_orthographic(float ortho_size, float near_clip, float far_clip);
+
+		// Specifies if pixel perfect rendering should be used (orthographic only)
+		// If enabled, then all sprites with a location/size that is some multiple of the specified basis
+		// Are guaranteed to be rendered pixel perfect regardless of the viewport resolution
+		void set_pixel_perfect(bool enabled, float basis = 1, PixelPerfectMode mode = PixelPerfectMode::nearest);
 
 		float& ortho_size() noexcept;
 
@@ -44,6 +56,9 @@ namespace entities
 		float _ortho_size;
 		float _near_clip;
 		float _far_clip;
+		bool _pixel_perfect_enabled;
+		float _pixel_perfect_basis;
+		PixelPerfectMode _pixel_perfect_mode;
 		Projection _projection;
 		math::Matrix4x4f _view_matrix;
 	};

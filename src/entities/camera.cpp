@@ -28,6 +28,9 @@ Camera::Camera(std::string&& name)
 	, _ortho_size(20)
 	, _near_clip(0.01f)
 	, _far_clip(1000.0f)
+    , _pixel_perfect_enabled(false)
+    , _pixel_perfect_basis(1)
+    , _pixel_perfect_mode(PixelPerfectMode::nearest)
 	, _projection(Projection::perspective)
 	, _view_matrix(Matrix4x4f::identity())
 { }
@@ -84,6 +87,16 @@ void Camera::make_orthographic(float ortho_size, float near_clip, float far_clip
 	validate_config();
 }
 
+void Camera::set_pixel_perfect(bool enabled, float basis, PixelPerfectMode mode)
+{
+	check(_projection == Projection::orthographic);
+	check(basis > 0);
+
+	_pixel_perfect_enabled = enabled;
+	_pixel_perfect_basis = basis;
+	_pixel_perfect_mode = mode;
+}
+
 float& Camera::ortho_size() noexcept
 {
 	return _ortho_size;
@@ -112,13 +125,32 @@ void Camera::validate_config() const noexcept
 
 Matrix4x4f Camera::calc_projection_matrix()
 {
+	const Vector2i resolution = WindowSubsystem::get().resolution();
 	const float aspect_ratio = WindowSubsystem::get().aspect_ratio();
 
 	if (_projection == Projection::orthographic)
 	{
+		float effective_ortho_size = _ortho_size;
+		if (_pixel_perfect_enabled)
+		{
+			const float res_y = static_cast<float>(resolution.y);
+			const float px_per_basis = res_y / _ortho_size * _pixel_perfect_basis;
+
+		    float px_rounded = px_per_basis;
+            switch (_pixel_perfect_mode)
+		    {
+			    case PixelPerfectMode::nearest:			px_rounded = std::round(px_rounded); break;
+				case PixelPerfectMode::increase_size:	px_rounded = std::floor(px_rounded); break;
+				case PixelPerfectMode::decrease_size:	px_rounded = std::ceilf(px_rounded); break;
+                default: check(false);
+            }
+
+			effective_ortho_size = res_y / (px_rounded / _pixel_perfect_basis);
+		}
+
 		Transform ortho_transform;
 		ortho_transform.position = Vector3f(0, 0, _near_clip);
-		ortho_transform.scale = Vector3f(_ortho_size * aspect_ratio, _ortho_size, _far_clip - _near_clip);
+		ortho_transform.scale = Vector3f(effective_ortho_size * aspect_ratio, effective_ortho_size, _far_clip - _near_clip);
 
 		Vector3f& scale = _local_transform.scale;
 		if (scale.x * scale.y * scale.z == 0.0f)

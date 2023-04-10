@@ -10,11 +10,13 @@ using namespace rendering;
 BitmapFont::BitmapFont(
     std::string&& name,
     std::unordered_map<char, peng::shared_ptr<const Sprite>>&& char_map,
-    peng::shared_ptr<const Sprite>&& fallback_sprite
+    peng::shared_ptr<const Sprite>&& fallback_sprite,
+    bool pixel_perfect
 )
     : _name(std::move(name))
     , _char_map(std::move(char_map))
     , _fallback_sprite(std::move(fallback_sprite))
+    , _pixel_perfect(pixel_perfect)
 {
     check(validate_sprite(_fallback_sprite));
     for (auto& sprite : _char_map | std::views::values)
@@ -26,12 +28,14 @@ BitmapFont::BitmapFont(
 BitmapFont::BitmapFont(
     const std::string& name,
     const std::unordered_map<char, peng::shared_ptr<const Sprite>>& char_map,
-    const peng::shared_ptr<const Sprite>& fallback_sprite
+    const peng::shared_ptr<const Sprite>& fallback_sprite,
+    bool pixel_perfect
 )
     : BitmapFont(
         utils::copy(name),
         utils::copy(char_map),
-        utils::copy(fallback_sprite)
+        utils::copy(fallback_sprite),
+        pixel_perfect
     )
 { }
 

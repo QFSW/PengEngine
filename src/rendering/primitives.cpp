@@ -447,7 +447,7 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
     char_map[' '] = {};
 
     peng::shared_ref<const BitmapFont> font = peng::make_shared<BitmapFont>(
-        "PengFont", std::move(char_map), sprites.back()
+        "PengFont", std::move(char_map), sprites.back(), true
     );
 
     weak_font = font;
