@@ -12,6 +12,7 @@ namespace rendering
 namespace components
 {
 	// TODO: make a simpler sprite material to be used instead of unlit
+	// TODO: add a pixel perfect mode
 	class SpriteRenderer final : public Component
 	{
 		DECLARE_COMPONENT(SpriteRenderer);

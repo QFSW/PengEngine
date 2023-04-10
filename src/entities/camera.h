@@ -37,8 +37,9 @@ namespace entities
 		void make_orthographic(float ortho_size, float near_clip, float far_clip);
 
 		// Specifies if pixel perfect rendering should be used (orthographic only)
-		// If enabled, then all sprites with a location/size that is some multiple of the specified basis
-		// Are guaranteed to be rendered pixel perfect regardless of the viewport resolution
+		// If enabled, then the orthographic size will automatically be adjusted such that
+		// all sprites with a location/size that is some multiple of the specified basis
+		// are guaranteed to be rendered pixel perfect regardless of the viewport resolution
 		void set_pixel_perfect(bool enabled, float basis = 1, PixelPerfectMode mode = PixelPerfectMode::nearest);
 
 		float& ortho_size() noexcept;
