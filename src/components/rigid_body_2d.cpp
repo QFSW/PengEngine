@@ -1,5 +1,7 @@
 #include "rigid_body_2d.h"
 
+#include <core/serialized_member.h>
+
 IMPLEMENT_COMPONENT(components::RigidBody2D);
 
 using namespace components;
@@ -7,7 +9,9 @@ using namespace math;
 
 RigidBody2D::RigidBody2D()
 	: Component(TickGroup::physics)
-{ }
+{
+	SERIALIZED_MEMBER(velocity);
+}
 
 void RigidBody2D::tick(float delta_time)
 {

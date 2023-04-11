@@ -3,7 +3,6 @@
 #include <core/logger.h>
 #include <core/serialized_member.h>
 #include <utils/utils.h>
-#include <math/json_support.h>
 
 IMPLEMENT_ENTITY(entities::DirectionalLight);
 

@@ -3,6 +3,7 @@
 #include <string>
 
 #include <libs/nlohmann/json.hpp>
+#include <math/json_support.h>
 
 // Data archive used for serializing/deserializing items
 struct Archive

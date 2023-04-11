@@ -1,11 +1,11 @@
 #include "sprite_renderer.h"
 
+#include <core/serialized_member.h>
 #include <entities/camera.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <rendering/sprite.h>
 #include <rendering/render_queue.h>
-#include <core/logger.h>
 
 IMPLEMENT_COMPONENT(components::SpriteRenderer);
 
@@ -25,7 +25,10 @@ SpriteRenderer::SpriteRenderer(const peng::shared_ref<const Sprite>& sprite)
 	, _mesh(Primitives::quad())
 	, _material_opaque(Primitives::unlit_material())
 	, _material_transparent(Primitives::unlit_alpha_material())
-{ }
+{
+	// TODO: serialize _sprite;
+	SERIALIZED_MEMBER(_color);
+}
 
 void SpriteRenderer::tick(float delta_time)
 {

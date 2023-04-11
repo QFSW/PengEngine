@@ -114,6 +114,7 @@ const std::string& Asset<T>::path() const noexcept
 }
 
 // JSON support for assets
+// TODO: add automatic json support to the CAsset itself
 #pragma region JSON
 
 template <CAsset T>
@@ -126,26 +127,6 @@ template <CAsset T>
 void from_json(const nlohmann::json& j, Asset<T>& out)
 {
     out = Asset<T>(j.get<std::string>());
-}
-
-template <CAsset T>
-void to_json(nlohmann::json& j, const peng::shared_ref<const T>& in)
-{
-    // TODO: implement asset serialization
-}
-
-template <CAsset T>
-void from_json(const nlohmann::json& j, peng::shared_ref<const T>& out)
-{
-    Asset<T> asset(j.get<std::string>());
-    out = asset.load();
-}
-
-template <CAsset T>
-void from_json(const nlohmann::json& j, peng::shared_ref<T>& out)
-{
-    Asset<T> asset(j.get<std::string>());
-    out = asset.load_mutable();
 }
 
 #pragma endregion

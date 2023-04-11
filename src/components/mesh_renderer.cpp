@@ -30,7 +30,10 @@ MeshRenderer::MeshRenderer(
 	: Component(TickGroup::render_parallel)
 	, _mesh(std::move(mesh))
 	, _material(std::move(material))
-{ }
+{
+    // TODO: serialize _mesh
+	// TODO: serailize _material
+}
 
 MeshRenderer::MeshRenderer(
 	const peng::shared_ref<const Mesh>& mesh,

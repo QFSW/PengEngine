@@ -3,6 +3,7 @@
 #include <numbers>
 
 #include <core/logger.h>
+#include <core/serialized_member.h>
 #include <rendering/window_subsystem.h>
 #include <utils/utils.h>
 
@@ -33,7 +34,13 @@ Camera::Camera(std::string&& name)
     , _pixel_perfect_mode(PixelPerfectMode::nearest)
 	, _projection(Projection::perspective)
 	, _view_matrix(Matrix4x4f::identity())
-{ }
+{
+	SERIALIZED_MEMBER(_fov);
+	SERIALIZED_MEMBER(_ortho_size);
+	SERIALIZED_MEMBER(_near_clip);
+	SERIALIZED_MEMBER(_far_clip);
+	SERIALIZED_MEMBER(_projection);
+}
 
 const peng::weak_ptr<Camera>& Camera::current()
 {

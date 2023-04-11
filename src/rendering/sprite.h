@@ -3,6 +3,8 @@
 #include <memory/shared_ref.h>
 #include <math/vector2.h>
 
+struct Archive;
+
 namespace rendering
 {
     class Texture;
@@ -17,6 +19,8 @@ namespace rendering
             const math::Vector2i& position,
             const math::Vector2i& resolution
         );
+
+        static peng::shared_ref<Sprite> load_asset(const Archive& archive);
 
         [[nodiscard]] peng::shared_ref<const Texture> texture() const noexcept;
         [[nodiscard]] float px_per_unit() const noexcept;

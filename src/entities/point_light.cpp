@@ -3,7 +3,6 @@
 #include <core/serialized_member.h>
 #include <utils/vectools.h>
 #include <utils/utils.h>
-#include <math/json_support.h>
 
 IMPLEMENT_ENTITY(entities::PointLight);
 
