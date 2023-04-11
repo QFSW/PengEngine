@@ -1,6 +1,7 @@
 #include "sprite_renderer.h"
 
 #include <core/serialized_member.h>
+#include <core/asset.h>
 #include <entities/camera.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
@@ -26,7 +27,7 @@ SpriteRenderer::SpriteRenderer(const peng::shared_ref<const Sprite>& sprite)
 	, _material_opaque(Primitives::unlit_material())
 	, _material_transparent(Primitives::unlit_alpha_material())
 {
-	// TODO: serialize _sprite;
+	SERIALIZED_MEMBER(_sprite);
 	SERIALIZED_MEMBER(_color);
 }
 
