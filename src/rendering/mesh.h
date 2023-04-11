@@ -9,6 +9,7 @@
 
 namespace rendering
 {
+    // TODO: generate bounds for the mesh to be used in culling
     class Mesh
     {
     public:
