@@ -3,14 +3,13 @@
 #include <fstream>
 
 #include <core/archive.h>
+#include <core/component.h>
+#include <core/entity.h>
 #include <core/reflection_database.h>
 #include <core/entity_factory.h>
 #include <core/component_factory.h>
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
-#include <math/json_support.h>
-
-#include "core/entity.h"
 
 using namespace scene;
 
@@ -106,27 +105,39 @@ void SceneLoader::load_components(const nlohmann::json& entity_def, const peng::
 
         for (const auto& component_def : *it)
         {
-            load_component(component_def, entity);
+            Archive archive;
+            archive.json_def = component_def;
+
+            load_component(archive, entity);
         }
     }
 }
 
-void SceneLoader::load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity)
+void SceneLoader::load_component(const Archive& archive, const peng::weak_ptr<Entity>& entity)
 {
-    if (!component_def.is_string())
+    const bool inline_def = archive.json_def.is_string();
+
+    if (!(inline_def || archive.json_def.is_object()))
     {
         Logger::error(
-            "Could not load component '%s' on entity '%s' as it is not a component typename",
-            component_def.dump().c_str(), entity->name().c_str()
+            "Could not load component '%s' on entity '%s' as it is not a component typename or definition",
+            archive.json_def.dump().c_str(), entity->name().c_str()
         );
         return;
     }
 
-    const std::string component_type = component_def.get<std::string>();
+    const std::string component_type =
+        inline_def
+        ? archive.json_def.get<std::string>()
+        : archive.read<std::string>("type");
+
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(component_type))
     {
-        // TODO: add support for calling deserialize on the component
-        ComponentFactory::get().create_component(reflected_type.to_shared_ref(), entity);
+        const peng::weak_ptr<Component> component = ComponentFactory::get().create_component(reflected_type.to_shared_ref(), entity);
+        if (!inline_def)
+        {
+            component->deserialize(archive);
+        }
     }
     else
     {

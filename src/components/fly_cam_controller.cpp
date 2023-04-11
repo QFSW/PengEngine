@@ -1,5 +1,6 @@
 #include "fly_cam_controller.h"
 
+#include <core/serialized_member.h>
 #include <input/input_subsystem.h>
 #include <rendering/window_subsystem.h>
 #include <entities/camera.h>
@@ -14,7 +15,10 @@ using namespace math;
 FlyCamController::FlyCamController()
 	: _rot_sensitivity(0.1f)
 	, _fly_speed(10)
-{ }
+{
+	SERIALIZED_MEMBER(_rot_sensitivity);
+	SERIALIZED_MEMBER(_fly_speed);
+}
 
 void FlyCamController::post_create()
 {

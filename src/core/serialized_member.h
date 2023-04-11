@@ -2,6 +2,8 @@
 
 #include <string_view>
 
+#include "archive.h"
+
 namespace detail
 {
     using Str = const char*;
