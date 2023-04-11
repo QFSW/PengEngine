@@ -680,6 +680,7 @@
     <None Include="resources\shaders\core\unlit_alpha.asset" />
     <None Include="resources\textures\core\peng_font.asset" />
     <None Include="resources\textures\core\peng_engine.asset" />
+    <None Include="resources\textures\demo\skybox.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

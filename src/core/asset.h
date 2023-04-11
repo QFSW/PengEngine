@@ -22,6 +22,7 @@ class IAsset
 public:
     [[nodiscard]] virtual bool loaded() const noexcept = 0;
     [[nodiscard]] virtual bool exists() const noexcept = 0;
+    [[nodiscard]] virtual const std::string& path() const noexcept = 0;
 };
 
 // Generalized resource container for an asset T that meets the CAsset criteria
@@ -37,6 +38,7 @@ public:
     [[nodiscard]] peng::shared_ref<const T> load();
     [[nodiscard]] bool loaded() const noexcept override;
     [[nodiscard]] bool exists() const noexcept override;
+    [[nodiscard]] const std::string& path() const noexcept override;
 
 private:
     std::string _path;
@@ -73,10 +75,7 @@ peng::shared_ref<T> Asset<T>::load_mutable()
 
         // TODO: add better error handling
         std::ifstream file(_path);
-        if (!file.is_open())
-        {
-            throw std::runtime_error("Could not open asset " + _path);
-        }
+        check(exists());
 
         Archive archive;
         archive.path = _path;
@@ -106,3 +105,46 @@ bool Asset<T>::exists() const noexcept
 {
     return std::filesystem::exists(_path);
 }
+
+template <CAsset T>
+const std::string& Asset<T>::path() const noexcept
+{
+    return _path;
+}
+
+// JSON support for assets
+#pragma region JSON
+
+template <CAsset T>
+void to_json(nlohmann::json& j, const Asset<T>& in)
+{
+    j = in.path();
+}
+
+template <CAsset T>
+void from_json(const nlohmann::json& j, Asset<T>& out)
+{
+    out = Asset<T>(j.get<std::string>());
+}
+
+template <CAsset T>
+void to_json(nlohmann::json& j, const peng::shared_ref<const T>& in)
+{
+    // TODO: implement asset serialization
+}
+
+template <CAsset T>
+void from_json(const nlohmann::json& j, peng::shared_ref<const T>& out)
+{
+    Asset<T> asset(j.get<std::string>());
+    out = asset.load();
+}
+
+template <CAsset T>
+void from_json(const nlohmann::json& j, peng::shared_ref<T>& out)
+{
+    Asset<T> asset(j.get<std::string>());
+    out = asset.load_mutable();
+}
+
+#pragma endregion

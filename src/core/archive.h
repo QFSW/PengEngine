@@ -14,38 +14,41 @@ struct Archive
     nlohmann::json json_def;
 
     template <typename T>
-    T read(const char* name) const;
+    T read(const char* key) const;
 
     template <typename T>
-    void write(const char* name, const T& in);
+    void write(const char* key, const T& in);
 
     template <typename T>
-    T read_or(const char* name, const T& default_val = T()) const;
+    T read_or(const char* key, const T& default_val = T()) const;
 
     template <typename T>
-    void try_read(const char* name, T& out) const;
+    void try_read(const char* key, T& out) const;
 };
 
 template <typename T>
-T Archive::read(const char* name) const
+T Archive::read(const char* key) const
 {
-    return json_def[name].get<T>();
+    return json_def[key].get<T>();
 }
 
 template <typename T>
-void Archive::write(const char* name, const T& in)
+void Archive::write(const char* key, const T& in)
 {
-    json_def[name] = in;
+    json_def[key] = in;
 }
 
 template <typename T>
-T Archive::read_or(const char* name, const T& default_val) const
+T Archive::read_or(const char* key, const T& default_val) const
 {
-    return json_def.value(name, default_val);
+    return json_def.value(key, default_val);
 }
 
 template <typename T>
-void Archive::try_read(const char* name, T& out) const
+void Archive::try_read(const char* key, T& out) const
 {
-    out = json_def.value(name, out);
+    if (const auto it = json_def.find(key); it != json_def.end())
+    {
+        it->get_to(out);
+    }
 }
