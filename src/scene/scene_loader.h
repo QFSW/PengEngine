@@ -3,6 +3,7 @@
 #include <memory/weak_ptr.h>
 #include <libs/nlohmann/json.hpp>
 
+struct Archive;
 class Entity;
 
 namespace scene
@@ -15,7 +16,7 @@ namespace scene
 
     private:
         void load_entities(const nlohmann::json& world_def);
-        void load_entity(const nlohmann::json& entity_def);
+        void load_entity(const Archive& archive);
         void load_components(const nlohmann::json& entity_def, const peng::weak_ptr<Entity>& entity);
         void load_component(const nlohmann::json& component_def, const peng::weak_ptr<Entity>& entity);
 

@@ -650,6 +650,9 @@
     <ClInclude Include="src\rendering\render_queue_stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\serialized_member.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />

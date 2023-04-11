@@ -10,6 +10,7 @@
 #include "entity_relationship.h"
 #include "entity_definition.h"
 
+struct Archive;
 class Component;
 
 class Entity : public ITickable, public std::enable_shared_from_this<Entity>
@@ -34,7 +35,8 @@ public:
 	virtual void post_enable() { }
 	virtual void post_disable() { }
 
-	// TODO: add a deserialize function so entities can extract extra information from their json def
+	virtual void serialize(Archive& archive) const;
+	virtual void deserialize(const Archive& archive);
 
 	void set_active(bool active);
 	void set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship = EntityRelationship::full);
@@ -113,6 +115,9 @@ public:
 	// TODO: implement world_right
 
 protected:
+	void add_serializer(std::function<void(Archive& archive)>&& serializer);
+	void add_deserializer(std::function<void(const Archive& archive)>&& deserializer);
+
 	std::string _name;
 	TickGroup _tick_group;
 	math::Transform _local_transform;
@@ -131,6 +136,9 @@ private:
 	std::vector<peng::weak_ptr<Entity>> _children;
 	std::vector<peng::shared_ref<Component>> _components;
 	std::vector<peng::shared_ref<Component>> _deferred_components;
+
+	std::vector<std::function<void(Archive& archive)>> _serializers;
+	std::vector<std::function<void(const Archive& archive)>> _deserializers;
 };
 
 template <std::derived_from<Entity> T, typename...Args>

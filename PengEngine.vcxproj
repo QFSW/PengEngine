@@ -499,6 +499,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\core\reflected_type.h" />
     <ClInclude Include="src\core\detail\reflection_bootstrap.h" />
     <ClInclude Include="src\core\reflection_database.h" />
+    <ClInclude Include="src\core\serialized_member.h" />
     <ClInclude Include="src\core\subsystem.h" />
     <ClInclude Include="src\core\subsystem_definition.h" />
     <ClInclude Include="src\core\tickable.h" />

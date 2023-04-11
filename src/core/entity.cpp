@@ -1,7 +1,10 @@
 #include "entity.h"
 
 #include <utils/utils.h>
+#include <math/json_support.h>
 
+#include "archive.h"
+#include "serialized_member.h"
 #include "entity_subsystem.h"
 #include "component.h"
 
@@ -15,7 +18,9 @@ Entity::Entity(std::string&& name, TickGroup tick_group)
 	, _active_self(true)
 	, _active_hierarchy(true)
 	, _parent_relationship(EntityRelationship::full)
-{ }
+{
+	SERIALIZED_MEMBER(_local_transform, "transform");
+}
 
 Entity::Entity(const std::string& name, TickGroup tick_group)
 	: Entity(utils::copy(name), tick_group)
@@ -59,6 +64,22 @@ void Entity::pre_destroy()
 	if (_parent)
 	{
 		vectools::remove(_parent->_children, weak_this());
+	}
+}
+
+void Entity::serialize([[maybe_unused]] Archive& archive) const
+{
+	for (const auto& serializer : _serializers)
+	{
+		serializer(archive);
+	}
+}
+
+void Entity::deserialize(const Archive& archive)
+{
+	for (const auto& deserializer : _deserializers)
+	{
+		deserializer(archive);
 	}
 }
 
@@ -214,6 +235,18 @@ math::Vector3f Entity::world_position() const noexcept
 	}
 
 	return _local_transform.position;
+}
+
+void Entity::add_serializer(std::function<void(Archive& archive)>&& serializer)
+{
+	check(!_constructed);
+	_serializers.push_back(serializer);
+}
+
+void Entity::add_deserializer(std::function<void(const Archive& archive)>&& deserializer)
+{
+	check(!_constructed);
+	_deserializers.push_back(deserializer);
 }
 
 void Entity::propagate_active_change(bool parent_active)

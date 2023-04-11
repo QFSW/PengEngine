@@ -2,6 +2,7 @@
 
 #include <fstream>
 
+#include <core/archive.h>
 #include <core/reflection_database.h>
 #include <core/entity_factory.h>
 #include <core/component_factory.h>
@@ -59,7 +60,10 @@ void SceneLoader::load_entities(const nlohmann::json& world_def)
 
         for (const auto& entity_def : *it)
         {
-            load_entity(entity_def);
+            Archive archive;
+            archive.json_def = entity_def;
+
+            load_entity(archive);
         }
     }
     else
@@ -68,19 +72,18 @@ void SceneLoader::load_entities(const nlohmann::json& world_def)
     }
 }
 
-void SceneLoader::load_entity(const nlohmann::json& entity_def)
+void SceneLoader::load_entity(const Archive& archive)
 {
     // TODO: instead of crashing if no type is provided we should error out
-    const std::string entity_type = get_value<std::string>(entity_def, "type");
-    const std::string entity_name = get_value_or_default<std::string>(entity_def, "name");
-    const math::Transform entity_transform = get_value_or_default<math::Transform>(entity_def, "transform");
+    const std::string entity_type = archive.read<std::string>("type");
+    const std::string entity_name = archive.read_or<std::string>("name");
 
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(entity_type))
     {
         const peng::weak_ptr<Entity> entity = EntityFactory::get().create_entity(reflected_type.to_shared_ref(), entity_name);
 
-        entity->local_transform() = entity_transform;
-        load_components(entity_def, entity);
+        entity->deserialize(archive);
+        load_components(archive.json_def, entity);
     }
     else
     {
