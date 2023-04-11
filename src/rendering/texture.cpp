@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include <core/asset_definition.h>
+#include <core/archive.h>
 #include <core/logger.h>
 #include <utils/strtools.h>
 #include <libs/nlohmann/json.hpp>
@@ -95,18 +95,18 @@ Texture::~Texture()
     glDeleteTextures(1, &_tex);
 }
 
-peng::shared_ref<Texture> Texture::load_asset(const AssetDefinition& asset_def)
+peng::shared_ref<Texture> Texture::load_asset(const Archive& archive)
 {
-    const std::string name = asset_def.json_def["name"].get<std::string>();
-    const std::string texture_path = asset_def.json_def["texture"].get<std::string>();
+    const std::string name = archive.read<std::string>("name");
+    const std::string texture_path = archive.read<std::string>("texture");
 
     // TODO: support parsing named items and not just raw decimal literals
     Config config;
-    config.wrap_x = asset_def.json_def.value("wrap_x", config.wrap_x);
-    config.wrap_y = asset_def.json_def.value("wrap_y", config.wrap_y);
-    config.min_filter = asset_def.json_def.value("min_filter", config.min_filter);
-    config.max_filter = asset_def.json_def.value("max_filter", config.max_filter);
-    config.generate_mipmaps = asset_def.json_def.value("generate_mipmaps", config.generate_mipmaps);
+    archive.try_read("wrap_x", config.wrap_x);
+    archive.try_read("wrap_y", config.wrap_y);
+    archive.try_read("min_filter", config.min_filter);
+    archive.try_read("max_filter", config.max_filter);
+    archive.try_read("generate_mipmaps", config.generate_mipmaps);
 
     return peng::make_shared<Texture>(name, texture_path, config);
 }

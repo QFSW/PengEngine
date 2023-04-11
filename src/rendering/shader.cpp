@@ -114,15 +114,15 @@ Shader::~Shader()
     glDeleteProgram(_program);
 }
 
-peng::shared_ref<Shader> Shader::load_asset(const AssetDefinition& asset_def)
+peng::shared_ref<Shader> Shader::load_asset(const Archive& archive)
 {
-    const std::string name = asset_def.json_def["name"].get<std::string>();
-    const std::string vert = asset_def.json_def["vert"].get<std::string>();
-    const std::string frag = asset_def.json_def["frag"].get<std::string>();
+    const std::string name = archive.read<std::string>("name");
+    const std::string vert = archive.read<std::string>("vert");
+    const std::string frag = archive.read<std::string>("frag");
 
     peng::shared_ref<Shader> shader = peng::make_shared<Shader>(name, vert, frag);
-    shader->draw_order() = asset_def.json_def.value("draw_order", 0);
-    shader->blend_mode() = static_cast<BlendMode>(asset_def.json_def.value("blend_mode", 0));
+    shader->draw_order() = archive.read_or("draw_order", 0);
+    shader->blend_mode() = static_cast<BlendMode>(archive.read_or("blend_mode", 0));
 
     return shader;
 }

@@ -7,13 +7,13 @@
 #include <memory/weak_ptr.h>
 #include <profiling/scoped_event.h>
 
-#include "asset_definition.h"
+#include "archive.h"
 
 // Concept for an item that can be contained as an asset
 template <typename T>
-concept CAsset = requires(const AssetDefinition& asset_def)
+concept CAsset = requires(const Archive& archive)
 {
-    { T::load_asset(asset_def) } -> std::convertible_to<peng::shared_ref<T>>;
+    { T::load_asset(archive) } -> std::convertible_to<peng::shared_ref<T>>;
 };
 
 // Base interface for all Assets
@@ -78,11 +78,11 @@ peng::shared_ref<T> Asset<T>::load_mutable()
             throw std::runtime_error("Could not open asset " + _path);
         }
 
-        AssetDefinition asset_def;
-        asset_def.path = _path;
-        asset_def.json_def = nlohmann::json::parse(file);
+        Archive archive;
+        archive.path = _path;
+        archive.json_def = nlohmann::json::parse(file);
 
-        peng::shared_ref<T> loaded = T::load_asset(asset_def);
+        peng::shared_ref<T> loaded = T::load_asset(archive);
         existing = loaded;
 
         return loaded;

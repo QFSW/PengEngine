@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include <core/asset_definition.h>
+#include <core/archive.h>
 #include <core/logger.h>
 #include <utils/strtools.h>
 #include <libs/nlohmann/json.hpp>
@@ -38,10 +38,10 @@ WindowIcon::~WindowIcon()
     stbi_image_free(_image.pixels);
 }
 
-peng::shared_ref<WindowIcon> WindowIcon::load_asset(const AssetDefinition& asset_def)
+peng::shared_ref<WindowIcon> WindowIcon::load_asset(const Archive& archive)
 {
-    const std::string name = asset_def.json_def["name"].get<std::string>();
-    const std::string texture_path = asset_def.json_def["texture"].get<std::string>();
+    const std::string name = archive.read<std::string>("name");
+    const std::string texture_path = archive.read<std::string>("texture");
 
     return peng::make_shared<WindowIcon>(name, texture_path);
 }

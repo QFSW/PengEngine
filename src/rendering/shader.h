@@ -14,7 +14,7 @@
 #include "shader_symbol.h"
 #include "texture.h"
 
-struct AssetDefinition;
+struct Archive;
 
 namespace rendering
 {
@@ -70,7 +70,7 @@ namespace rendering
         Shader(Shader&&) = delete;
         ~Shader();
 
-        static peng::shared_ref<Shader> load_asset(const AssetDefinition& asset_def);
+        static peng::shared_ref<Shader> load_asset(const Archive& archive);
         static peng::shared_ref<const Shader> fallback();
 
         void use() const;

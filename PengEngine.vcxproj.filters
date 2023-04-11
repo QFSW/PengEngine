@@ -623,7 +623,7 @@
     <ClInclude Include="src\core\asset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\asset_definition.h">
+    <ClInclude Include="src\core\archive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\blend_mode.h">
@@ -645,6 +645,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\window_subsystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\render_queue_stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

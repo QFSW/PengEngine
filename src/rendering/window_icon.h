@@ -6,7 +6,7 @@
 #include <memory/shared_ref.h>
 #include <math/vector2.h>
 
-struct AssetDefinition;
+struct Archive;
 
 namespace rendering
 {
@@ -18,7 +18,7 @@ namespace rendering
         WindowIcon(WindowIcon&&) = delete;
         ~WindowIcon();
 
-        static peng::shared_ref<WindowIcon> load_asset(const AssetDefinition& asset_def);
+        static peng::shared_ref<WindowIcon> load_asset(const Archive& archive);
 
         void use() const;
         void use(GLFWwindow* window) const;
