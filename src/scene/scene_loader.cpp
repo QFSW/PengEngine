@@ -125,6 +125,7 @@ void SceneLoader::load_component(const nlohmann::json& component_def, const peng
     const std::string component_type = component_def.get<std::string>();
     if (const auto reflected_type = ReflectionDatabase::get().reflect_type(component_type))
     {
+        // TODO: add support for calling deserialize on the component
         ComponentFactory::get().create_component(reflected_type.to_shared_ref(), entity);
     }
     else

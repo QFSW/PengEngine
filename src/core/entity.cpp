@@ -67,22 +67,6 @@ void Entity::pre_destroy()
 	}
 }
 
-void Entity::serialize([[maybe_unused]] Archive& archive) const
-{
-	for (const auto& serializer : _serializers)
-	{
-		serializer(archive);
-	}
-}
-
-void Entity::deserialize(const Archive& archive)
-{
-	for (const auto& deserializer : _deserializers)
-	{
-		deserializer(archive);
-	}
-}
-
 void Entity::set_active(bool active)
 {
 	if (active == _active_self)
@@ -235,18 +219,6 @@ math::Vector3f Entity::world_position() const noexcept
 	}
 
 	return _local_transform.position;
-}
-
-void Entity::add_serializer(std::function<void(Archive& archive)>&& serializer)
-{
-	check(!_constructed);
-	_serializers.push_back(serializer);
-}
-
-void Entity::add_deserializer(std::function<void(const Archive& archive)>&& deserializer)
-{
-	check(!_constructed);
-	_deserializers.push_back(deserializer);
 }
 
 void Entity::propagate_active_change(bool parent_active)

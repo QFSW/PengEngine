@@ -7,13 +7,16 @@
 #include <math/transform.h>
 
 #include "tickable.h"
+#include "serializable.h"
 #include "entity_relationship.h"
 #include "entity_definition.h"
 
-struct Archive;
 class Component;
 
-class Entity : public ITickable, public std::enable_shared_from_this<Entity>
+class Entity :
+    public ITickable,
+    public Serializable,
+    public std::enable_shared_from_this<Entity>
 {
 	DECLARE_ENTITY(Entity);
 
@@ -25,7 +28,6 @@ public:
 
 	Entity(const Entity&) = delete;
 	Entity(Entity&&) = delete;
-	virtual ~Entity() = default;
 
 	void tick(float delta_time) override;
 	[[nodiscard]] TickGroup tick_group() const noexcept override;
@@ -34,9 +36,6 @@ public:
 	virtual void pre_destroy();
 	virtual void post_enable() { }
 	virtual void post_disable() { }
-
-	virtual void serialize(Archive& archive) const;
-	virtual void deserialize(const Archive& archive);
 
 	void set_active(bool active);
 	void set_parent(const peng::weak_ptr<Entity>& parent, EntityRelationship relationship = EntityRelationship::full);
@@ -115,9 +114,6 @@ public:
 	// TODO: implement world_right
 
 protected:
-	void add_serializer(std::function<void(Archive& archive)>&& serializer);
-	void add_deserializer(std::function<void(const Archive& archive)>&& deserializer);
-
 	std::string _name;
 	TickGroup _tick_group;
 	math::Transform _local_transform;
@@ -136,9 +132,6 @@ private:
 	std::vector<peng::weak_ptr<Entity>> _children;
 	std::vector<peng::shared_ref<Component>> _components;
 	std::vector<peng::shared_ref<Component>> _deferred_components;
-
-	std::vector<std::function<void(Archive& archive)>> _serializers;
-	std::vector<std::function<void(const Archive& archive)>> _deserializers;
 };
 
 template <std::derived_from<Entity> T, typename...Args>

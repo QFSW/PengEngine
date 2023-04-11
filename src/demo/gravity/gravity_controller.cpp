@@ -40,9 +40,8 @@ void GravityController::post_create()
 		"resources/textures/demo/skybox.jpg"
 	);
 
-	peng::weak_ptr<Skybox> skybox = create_entity<Skybox>();
+	peng::weak_ptr<Skybox> skybox = create_child<Skybox>();
 	skybox->material()->set_parameter("color_tex", skybox_texture);
-	skybox->set_parent(weak_this());
 	
 	Logger::success("Gravity demo started");
 }
