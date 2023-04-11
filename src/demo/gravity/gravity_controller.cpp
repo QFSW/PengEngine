@@ -5,7 +5,6 @@
 
 #include <core/peng_engine.h>
 #include <profiling/scoped_event.h>
-#include <entities/directional_light.h>
 #include <entities/skybox.h>
 #include <rendering/texture.h>
 #include <rendering/material.h>
@@ -30,11 +29,6 @@ void GravityController::post_create()
 
 	create_rock_field(500, 5, 2);
 	create_rock_field(100, 10, 4);
-
-	peng::weak_ptr<DirectionalLight> light = create_entity<DirectionalLight>();
-	light->data().color = Vector3f(1, 1, 0.9f);
-	light->data().ambient = Vector3f(0.1f, 0.1f, 0.15f);
-	light->local_transform().rotation = Vector3f(20, 20, 0);
 
 	peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
 		"resources/textures/demo/skybox.jpg"

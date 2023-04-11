@@ -1,9 +1,19 @@
 #include "directional_light.h"
 
 #include <core/logger.h>
+#include <core/serialized_member.h>
 #include <utils/utils.h>
+#include <math/json_support.h>
 
 IMPLEMENT_ENTITY(entities::DirectionalLight);
+
+namespace entities
+{
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(
+		DirectionalLight::LightData,
+		color, ambient, intensity
+	);
+}
 
 using namespace entities;
 
@@ -23,7 +33,9 @@ DirectionalLight::DirectionalLight(std::string&& name)
 		math::Vector3f::one(),
 		math::Vector3f::one() * 0.01f,
 	})
-{ }
+{
+	SERIALIZED_MEMBER(_data);
+}
 
 const peng::weak_ptr<DirectionalLight>& DirectionalLight::current()
 {

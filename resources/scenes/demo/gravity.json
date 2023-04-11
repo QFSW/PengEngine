@@ -1,51 +1,73 @@
 {
   "name":  "Gravity Demo",
-  "entities": [
-    {
-      "type": "demo::gravity::GravityController",
-      "name": "GravityController",
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 5,
-          "z": 10
-        }
-      }
-    },
-    {
-      "type": "demo::DebugEntity"
-    },
-    {
-      "type": "entities::Camera",
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": -10
-        }
-      },
-      "components": [
-        "components::FlyCamController"
-      ]
-    },
-    {
-      "type": "Entity",
-      "name": "Floor",
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": -10,
-          "z": 0
+    "entities": [
+        {
+            "type": "demo::gravity::GravityController",
+            "name": "GravityController",
+            "transform": {
+                "position": {
+                    "x": 0,
+                    "y": 5,
+                    "z": 10
+                }
+            }
         },
-        "scale": {
-          "x": 30,
-          "y": 0.1,
-          "z": 30
+        {
+            "type": "demo::DebugEntity"
+        },
+        {
+            "type": "entities::Camera",
+            "transform": {
+                "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": -10
+                }
+            },
+            "components": [
+                "components::FlyCamController"
+            ]
+        },
+        {
+            "type": "entities::DirectionalLight",
+            "data": {
+                "color": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0.9
+                },
+                "ambient": {
+                    "x": 0.1,
+                    "y": 0.1,
+                    "z": 0.15
+                }
+            },
+            "transform": {
+                "rotation": {
+                    "x": 20,
+                    "y": 20,
+                    "z": 0
+                }
+            }
+        },
+        {
+            "type": "Entity",
+            "name": "Floor",
+            "transform": {
+                "position": {
+                    "x": 0,
+                    "y": -10,
+                    "z": 0
+                },
+                "scale": {
+                    "x": 30,
+                    "y": 0.1,
+                    "z": 30
+                }
+            },
+            "components": [
+                "components::MeshRenderer"
+            ]
         }
-      },
-      "components": [
-        "components::MeshRenderer"
-      ]
-    }
-  ]
+    ]
 }

@@ -1,9 +1,19 @@
 #include "point_light.h"
 
+#include <core/serialized_member.h>
 #include <utils/vectools.h>
 #include <utils/utils.h>
+#include <math/json_support.h>
 
 IMPLEMENT_ENTITY(entities::PointLight);
+
+namespace entities
+{
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(
+		PointLight::LightData,
+		color, ambient, range
+	);
+}
 
 using namespace entities;
 
@@ -24,7 +34,9 @@ PointLight::PointLight(std::string&& name)
 		math::Vector3f::one() * 0.01f,
 		10
 	})
-{ }
+{
+	SERIALIZED_MEMBER(_data);
+}
 
 const std::vector<peng::weak_ptr<PointLight>>& PointLight::active_lights()
 {
