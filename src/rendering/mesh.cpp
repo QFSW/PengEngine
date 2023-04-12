@@ -99,6 +99,6 @@ const std::string& Mesh::name() const noexcept
 
 int32_t Mesh::num_triangles() const noexcept
 {
-    return _index_buffer.size();
+    return static_cast<int32_t>(_index_buffer.size());
 }
 

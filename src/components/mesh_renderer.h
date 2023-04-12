@@ -5,6 +5,7 @@
 namespace entities
 {
 	class PointLight;
+	class SpotLight;
 }
 
 namespace rendering
@@ -15,6 +16,8 @@ namespace rendering
 
 namespace components
 {
+	// TODO: set the actual number of lights in the shader (point, spot, directional) as uniforms so it can skip
+	//       non required calculations
 	class MeshRenderer final : public Component
 	{
 		DECLARE_COMPONENT(MeshRenderer);
@@ -44,6 +47,7 @@ namespace components
 	private:
 		void cache_uniforms();
 		std::vector<peng::shared_ref<const entities::PointLight>> get_relevant_point_lights();
+		std::vector<peng::shared_ref<const entities::SpotLight>> get_relevant_spot_lights();
 
 		peng::shared_ptr<const rendering::Mesh> _mesh;
 		peng::shared_ptr<rendering::Material> _material;
@@ -55,6 +59,17 @@ namespace components
 			int32_t ambient = -1;
 			int32_t range = -1;
 			int32_t max_strength = -1;
+		};
+
+		struct SpotLightUniformSet
+		{
+			int32_t pos = -1;
+			int32_t dir = -1;
+			int32_t color = -1;
+			int32_t ambient = -1;
+			int32_t range = -1;
+			int32_t umbra = -1;
+			int32_t penumbra = -1;
 		};
 
 		struct DirectionalLightUniformSet
@@ -73,11 +88,13 @@ namespace components
 			int32_t view_pos = -1;
 
 			std::vector<PointLightUniformSet> point_lights;
+			std::vector<SpotLightUniformSet> spot_lights;
 			std::vector<DirectionalLightUniformSet> directional_lights;
 		};
 
 		bool _uses_lighting = false;
 		int32_t _max_point_lights = 0;
+		int32_t _max_spot_lights = 0;
 		int32_t _max_directional_lights = 0;
 		UniformSet _cached_uniforms;
 	};

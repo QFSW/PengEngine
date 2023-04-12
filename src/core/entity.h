@@ -42,6 +42,8 @@ public:
 	void add_child(const peng::weak_ptr<Entity>& child, EntityRelationship relationship = EntityRelationship::full);
 	void destroy();
 
+	// TODO: add a way to clone entities
+
 	template <std::derived_from<Entity> T, typename...Args>
 	requires std::constructible_from<T, Args...>
 	peng::weak_ptr<T> create_entity(Args&&...args);

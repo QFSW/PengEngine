@@ -14,6 +14,8 @@ namespace math
 
     float rand_range(float min, float max);
     float map(float val, const Vector2f& in_range, const Vector2f& out_range);
+    float degs_to_rads(float degrees);
+    float rads_to_degs(float radians);
 
     template <number T>
     T sgn(T val)

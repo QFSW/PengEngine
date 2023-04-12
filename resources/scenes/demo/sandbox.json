@@ -8,6 +8,32 @@
             "type": "demo::DebugEntity"
         },
         {
+            "type": "entities::SpotLight",
+            "transform": {
+                "position": {
+                    "x": -30,
+                    "y": 0,
+                    "z": 0
+                },
+                "rotation": {
+                    "x": 60
+                }
+            },
+            "data": {
+                "color": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                "range": 100,
+                "umbra": 10,
+                "penumbra": 11
+            },
+            "components": [
+                "components::MeshRenderer"
+            ]
+        },
+        {
             "type": "entities::Camera",
             "transform": {
                 "position": {

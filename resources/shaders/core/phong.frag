@@ -3,6 +3,7 @@
 #pragma symbol SHADER_LIT
 
 #define MAX_POINT_LIGHTS 4
+#define MAX_SPOT_LIGHTS 2
 #define MAX_DIRECTIONAL_LIGHTS 1
 
 struct PointLight
@@ -13,6 +14,18 @@ struct PointLight
 	float range;
 	float max_strength;
 };
+
+struct SpotLight
+{
+	vec3 pos;
+	vec3 dir;
+	vec3 color;
+	vec3 ambient;
+	float range;
+	float umbra;
+	float penumbra;
+};
+
 
 struct DirectionalLight
 {
@@ -33,6 +46,7 @@ uniform sampler2D color_tex;
 
 uniform vec3 view_pos = vec3(0);
 uniform PointLight point_lights[MAX_POINT_LIGHTS];
+uniform SpotLight spot_lights[MAX_SPOT_LIGHTS];
 uniform DirectionalLight directional_lights[MAX_DIRECTIONAL_LIGHTS];
 uniform float specular_strength = 0.5;
 uniform float shinyness = 32;
@@ -56,6 +70,10 @@ vec3 calc_specular(vec3 light_dir, vec3 light_col)
 	return specular_color;
 }
 
+float map(float value, float min1, float max1, float min2, float max2) {
+  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
+
 void main()
 {
 	vec4 obj_color = texture(color_tex, tex_coord) * base_color;
@@ -73,6 +91,24 @@ void main()
 		float attenuation = min(light.max_strength, light.range / (1 + light_dist * light_dist));
 
 		lighting += attenuation * (light.ambient + diffuse_color + specular_color);
+	}
+
+	for (int i = 0; i < MAX_SPOT_LIGHTS; i++)
+	{
+		SpotLight light = spot_lights[i];
+
+		vec3 light_dir = normalize(light.pos - pos);
+		vec3 diffuse_color = calc_diffuse(light_dir, light.color);
+		vec3 specular_color = calc_specular(light_dir, light.color);
+
+		float light_dist = length(light.pos - pos);
+		float attenuation = min(1, light.range / (1 + light_dist * light_dist));
+
+		// TODO: use a better interp between umbra and penumbra than linear
+		float theta = 1 - dot(light_dir, -light.dir);
+		float cone_falloff = clamp(map(theta, light.penumbra, light.umbra, 0, 1), 0, 1);
+
+		lighting += cone_falloff * attenuation * (light.ambient + diffuse_color + specular_color);
 	}
 
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++)

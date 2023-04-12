@@ -2,12 +2,14 @@
 
 #include <entities/camera.h>
 #include <entities/point_light.h>
+#include <entities/spot_light.h>
 #include <entities/directional_light.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <rendering/render_queue.h>
 #include <core/logger.h>
 #include <utils/utils.h>
+#include <math/math.h>
 
 IMPLEMENT_COMPONENT(components::MeshRenderer);
 
@@ -45,6 +47,7 @@ MeshRenderer::MeshRenderer(
 	)
 { }
 
+// TODO: majorly needs breaking up into some sub functions
 void MeshRenderer::tick(float delta_time)
 {
 	Component::tick(delta_time);
@@ -84,46 +87,81 @@ void MeshRenderer::tick(float delta_time)
 	{
 		_material->try_set_parameter(_cached_uniforms.view_pos, view_pos);
 
-		const std::vector<peng::shared_ref<const PointLight>> relevant_lights = get_relevant_point_lights();
-		for (int32_t i = 0; i < _max_point_lights; i++)
+		// Point lights
 		{
-			const Vector3f light_pos = i < relevant_lights.size()
-				? relevant_lights[i]->world_position()
-				: Vector3f::zero();
+			const std::vector<peng::shared_ref<const PointLight>> point_lights = get_relevant_point_lights();
+			for (int32_t i = 0; i < _max_point_lights; i++)
+			{
+				const Vector3f light_pos = i < point_lights.size()
+					? point_lights[i]->world_position()
+					: Vector3f::zero();
 
-			const PointLight::LightData light_data = i < relevant_lights.size()
-				? relevant_lights[i]->data()
-				: PointLight::LightData();
+				const PointLight::LightData light_data = i < point_lights.size()
+					? point_lights[i]->data()
+					: PointLight::LightData();
 
-			const PointLightUniformSet& uniform_set = _cached_uniforms.point_lights[i];
-			_material->try_set_parameter(uniform_set.pos, light_pos);
-			_material->try_set_parameter(uniform_set.color, light_data.color);
-			_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
-			_material->try_set_parameter(uniform_set.range, light_data.range);
-			_material->try_set_parameter(uniform_set.max_strength, 1.0f);
+				const PointLightUniformSet& uniform_set = _cached_uniforms.point_lights[i];
+				_material->try_set_parameter(uniform_set.pos, light_pos);
+				_material->try_set_parameter(uniform_set.color, light_data.color);
+				_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
+				_material->try_set_parameter(uniform_set.range, light_data.range);
+				_material->try_set_parameter(uniform_set.max_strength, 1.0f);
+			}
 		}
 
-		// TODO: support multiple directional lights
-		for (int32_t i = 0; i < _max_directional_lights; i++)
+		// Spot lights
 		{
-			peng::weak_ptr<DirectionalLight> directional_light = i == 0
-				? DirectionalLight::current()
-				: peng::weak_ptr<DirectionalLight>{};
+			const std::vector<peng::shared_ref<const SpotLight>> spot_lights = get_relevant_spot_lights();
+			for (int32_t i = 0; i < _max_spot_lights; i++)
+			{
+				const Vector3f light_pos = i < spot_lights.size()
+					? spot_lights[i]->world_position()
+					: Vector3f::zero();
 
-			// TODO: this doesn't work if light has spatial parents that rotate it
-			const Vector3f light_dir = directional_light
-				? -directional_light->local_transform().local_up()
-				: Vector3f::zero();
+				// TODO: this doesn't work if light has spatial parents that rotate it
+				const Vector3f light_dir = i < spot_lights.size()
+					? spot_lights[i]->local_transform().local_forwards()
+					: Vector3f::forwards();
 
-			const DirectionalLight::LightData light_data = directional_light
-				? directional_light->data()
-				: DirectionalLight::LightData();
+				const SpotLight::LightData light_data = i < spot_lights.size()
+					? spot_lights[i]->data()
+					: SpotLight::LightData();
 
-			const DirectionalLightUniformSet& uniform_set = _cached_uniforms.directional_lights[i];
-			_material->try_set_parameter(uniform_set.dir, light_dir);
-			_material->try_set_parameter(uniform_set.color, light_data.color);
-			_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
-			_material->try_set_parameter(uniform_set.intensity, light_data.intensity);
+				const SpotLightUniformSet& uniform_set = _cached_uniforms.spot_lights[i];
+				_material->try_set_parameter(uniform_set.pos, light_pos);
+				_material->try_set_parameter(uniform_set.dir, light_dir);
+				_material->try_set_parameter(uniform_set.color, light_data.color);
+				_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
+				_material->try_set_parameter(uniform_set.range, light_data.range);
+				_material->try_set_parameter(uniform_set.umbra, math::degs_to_rads(light_data.umbra));
+				_material->try_set_parameter(uniform_set.penumbra, math::degs_to_rads(light_data.penumbra));
+			}
+		}
+
+		// Directional lights
+		{
+			// TODO: support multiple directional lights
+			for (int32_t i = 0; i < _max_directional_lights; i++)
+			{
+				peng::weak_ptr<DirectionalLight> directional_light = i == 0
+					? DirectionalLight::current()
+					: peng::weak_ptr<DirectionalLight>{};
+
+				// TODO: this doesn't work if light has spatial parents that rotate it
+				const Vector3f light_dir = directional_light
+					? -directional_light->local_transform().local_up()
+					: -Vector3f::up();
+
+				const DirectionalLight::LightData light_data = directional_light
+					? directional_light->data()
+					: DirectionalLight::LightData();
+
+				const DirectionalLightUniformSet& uniform_set = _cached_uniforms.directional_lights[i];
+				_material->try_set_parameter(uniform_set.dir, light_dir);
+				_material->try_set_parameter(uniform_set.color, light_data.color);
+				_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
+				_material->try_set_parameter(uniform_set.intensity, light_data.intensity);
+			}
 		}
 	}
 
@@ -190,6 +228,7 @@ void MeshRenderer::cache_uniforms()
 
 	_uses_lighting = _material->shader()->has_symbol("SHADER_LIT");
 
+	// TODO: lot of duplication happening for lighting parameters
 	if (_uses_lighting)
 	{
 		_cached_uniforms.normal_matrix = get_uniform_location_checked("normal_matrix", "SHADER_LIT");
@@ -215,6 +254,32 @@ void MeshRenderer::cache_uniforms()
 		{
 			Logger::warning(
 				"Material '%s' has uses SHADER_LIT but has no defined value for MAX_POINT_LIGHTS",
+				_material->shader()->name().c_str()
+			);
+		}
+
+		const std::optional<std::string> max_spot_lights_raw = _material->shader()->get_symbol_value("MAX_SPOT_LIGHTS");
+		if (max_spot_lights_raw)
+		{
+			_max_spot_lights = std::stoi(*max_spot_lights_raw);
+			for (int32_t i = 0; i < _max_spot_lights; i++)
+			{
+				SpotLightUniformSet uniform_set;
+				uniform_set.pos = get_uniform_location_checked(strtools::catf("spot_lights[%d].pos", i), "SHADER_LIT");
+				uniform_set.dir = get_uniform_location_checked(strtools::catf("spot_lights[%d].dir", i), "SHADER_LIT");
+				uniform_set.color = get_uniform_location_checked(strtools::catf("spot_lights[%d].color", i), "SHADER_LIT");
+				uniform_set.ambient = get_uniform_location_checked(strtools::catf("spot_lights[%d].ambient", i), "SHADER_LIT");
+				uniform_set.range = get_uniform_location_checked(strtools::catf("spot_lights[%d].range", i), "SHADER_LIT");
+				uniform_set.umbra = get_uniform_location_checked(strtools::catf("spot_lights[%d].umbra", i), "SHADER_LIT");
+				uniform_set.penumbra = get_uniform_location_checked(strtools::catf("spot_lights[%d].penumbra", i), "SHADER_LIT");
+
+				_cached_uniforms.spot_lights.push_back(uniform_set);
+			}
+		}
+		else
+		{
+			Logger::warning(
+				"Material '%s' has uses SHADER_LIT but has no defined value for MAX_SPOT_LIGHTS",
 				_material->shader()->name().c_str()
 			);
 		}
@@ -286,6 +351,25 @@ std::vector<peng::shared_ref<const PointLight>> MeshRenderer::get_relevant_point
 	for (size_t i = 0; i < std::min<size_t>(considerations.size(), _max_point_lights); i++)
 	{
 		relevant_lights.push_back(considerations[i].light);
+	}
+
+	return relevant_lights;
+}
+
+// TODO: this just returns the first n lights - make a proper implementation
+std::vector<peng::shared_ref<const SpotLight>> MeshRenderer::get_relevant_spot_lights()
+{
+	std::vector<peng::shared_ref<const SpotLight>> relevant_lights;
+	for (peng::weak_ptr<SpotLight> spot_light : SpotLight::active_lights())
+	{
+	    if (spot_light)
+	    {
+			relevant_lights.push_back(spot_light.lock().to_shared_ref());
+			if (relevant_lights.size() >= _max_spot_lights)
+			{
+			    break;
+			}
+	    }
 	}
 
 	return relevant_lights;

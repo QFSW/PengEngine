@@ -425,6 +425,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\entities\directional_light.cpp" />
     <ClCompile Include="src\entities\point_light.cpp" />
     <ClCompile Include="src\entities\skybox.cpp" />
+    <ClCompile Include="src\entities\spot_light.cpp" />
     <ClCompile Include="src\input\input_subsystem.cpp" />
     <ClCompile Include="src\input\key_state.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -521,6 +522,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\entities\directional_light.h" />
     <ClInclude Include="src\entities\point_light.h" />
     <ClInclude Include="src\entities\skybox.h" />
+    <ClInclude Include="src\entities\spot_light.h" />
     <ClInclude Include="src\input\axis.h" />
     <ClInclude Include="src\input\input_subsystem.h" />
     <ClInclude Include="src\input\key_code.h" />

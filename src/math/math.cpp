@@ -1,6 +1,7 @@
 #include "math.h"
 
 #include <cmath>
+#include <numbers>
 
 float math::randf()
 {
@@ -30,4 +31,14 @@ float math::rand_range(float min, float max)
 float math::map(float val, const Vector2f& in_range, const Vector2f& out_range)
 {
     return (val - in_range.x) / (in_range.y - in_range.x) * (out_range.y - out_range.x) + out_range.x;
+}
+
+float math::degs_to_rads(float degrees)
+{
+    return degrees / 180 * std::numbers::pi_v<float>;
+}
+
+float math::rads_to_degs(float radians)
+{
+    return radians * 180 / std::numbers::pi_v<float>;
 }
