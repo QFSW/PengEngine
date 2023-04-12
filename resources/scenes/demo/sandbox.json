@@ -26,8 +26,8 @@
                     "z": 1
                 },
                 "range": 100,
-                "umbra": 10,
-                "penumbra": 11
+                "umbra": 24,
+                "penumbra": 25
             },
             "components": [
                 "components::MeshRenderer"

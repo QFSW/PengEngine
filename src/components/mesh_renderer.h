@@ -68,8 +68,8 @@ namespace components
 			int32_t color = -1;
 			int32_t ambient = -1;
 			int32_t range = -1;
-			int32_t umbra = -1;
-			int32_t penumbra = -1;
+			int32_t umbra_cos = -1;
+			int32_t penumbra_cos = -1;
 		};
 
 		struct DirectionalLightUniformSet

@@ -18,10 +18,10 @@ namespace entities
 			float range = 1;
 
 			// Inner angle of the spotlight cone in degrees
-			float umbra = 23;
+			float umbra = 43;
 
 			// Outer angle of the spotlight cone in degrees
-			float penumbra = 25;
+			float penumbra = 45;
 		};
 
 		SpotLight();

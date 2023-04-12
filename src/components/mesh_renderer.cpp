@@ -127,14 +127,17 @@ void MeshRenderer::tick(float delta_time)
 					? spot_lights[i]->data()
 					: SpotLight::LightData();
 
+				const float umbra_cos = std::cos(math::degs_to_rads(light_data.umbra));
+				const float penumbra_cos = std::cos(math::degs_to_rads(light_data.penumbra));
+
 				const SpotLightUniformSet& uniform_set = _cached_uniforms.spot_lights[i];
 				_material->try_set_parameter(uniform_set.pos, light_pos);
 				_material->try_set_parameter(uniform_set.dir, light_dir);
 				_material->try_set_parameter(uniform_set.color, light_data.color);
 				_material->try_set_parameter(uniform_set.ambient, light_data.ambient);
 				_material->try_set_parameter(uniform_set.range, light_data.range);
-				_material->try_set_parameter(uniform_set.umbra, math::degs_to_rads(light_data.umbra));
-				_material->try_set_parameter(uniform_set.penumbra, math::degs_to_rads(light_data.penumbra));
+				_material->try_set_parameter(uniform_set.umbra_cos, umbra_cos);
+				_material->try_set_parameter(uniform_set.penumbra_cos, penumbra_cos);
 			}
 		}
 
@@ -270,8 +273,8 @@ void MeshRenderer::cache_uniforms()
 				uniform_set.color = get_uniform_location_checked(strtools::catf("spot_lights[%d].color", i), "SHADER_LIT");
 				uniform_set.ambient = get_uniform_location_checked(strtools::catf("spot_lights[%d].ambient", i), "SHADER_LIT");
 				uniform_set.range = get_uniform_location_checked(strtools::catf("spot_lights[%d].range", i), "SHADER_LIT");
-				uniform_set.umbra = get_uniform_location_checked(strtools::catf("spot_lights[%d].umbra", i), "SHADER_LIT");
-				uniform_set.penumbra = get_uniform_location_checked(strtools::catf("spot_lights[%d].penumbra", i), "SHADER_LIT");
+				uniform_set.umbra_cos = get_uniform_location_checked(strtools::catf("spot_lights[%d].umbra_cos", i), "SHADER_LIT");
+				uniform_set.penumbra_cos = get_uniform_location_checked(strtools::catf("spot_lights[%d].penumbra_cos", i), "SHADER_LIT");
 
 				_cached_uniforms.spot_lights.push_back(uniform_set);
 			}

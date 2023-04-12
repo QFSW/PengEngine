@@ -22,8 +22,8 @@ struct SpotLight
 	vec3 color;
 	vec3 ambient;
 	float range;
-	float umbra;
-	float penumbra;
+	float umbra_cos;
+	float penumbra_cos;
 };
 
 
@@ -105,8 +105,8 @@ void main()
 		float attenuation = min(1, light.range / (1 + light_dist * light_dist));
 
 		// TODO: use a better interp between umbra and penumbra than linear
-		float theta = 1 - dot(light_dir, -light.dir);
-		float cone_falloff = clamp(map(theta, light.penumbra, light.umbra, 0, 1), 0, 1);
+		float theta = dot(light_dir, -light.dir);
+		float cone_falloff = clamp(map(theta, light.penumbra_cos, light.umbra_cos, 0, 1), 0, 1);
 
 		lighting += cone_falloff * attenuation * (light.ambient + diffuse_color + specular_color);
 	}
