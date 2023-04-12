@@ -10,4 +10,6 @@
 
 Requires Visual Studio 2022 to compile
 
+Follow the [devlog](https://qfsw.itch.io/peng-engine/devlog) on itch.io
+
 _more details coming soon_
