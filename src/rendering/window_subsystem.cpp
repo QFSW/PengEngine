@@ -45,45 +45,47 @@ WindowSubsystem::~WindowSubsystem()
 	}
 }
 
-static void APIENTRY handle_gl_debug_output(GLenum, GLenum type, unsigned int, GLenum, GLsizei, const char* message, const void*)
+static void APIENTRY handle_gl_debug_output(
+	GLenum, GLenum type, GLuint id, GLenum /*severity*/, GLsizei /*length*/, const char* message, const void* /*userParam*/
+)
 {
 	switch (type)
 	{
-	case GL_DEBUG_TYPE_ERROR:
-	{
-		Logger::error("OpenGL Error: %s", message);
-		break;
-	}
-	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-	{
-		Logger::error("OpenGL Deprecation: %s", message);
-		break;
-	}
-	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-	{
-		Logger::error("OpenGL UB: %s", message);
-		break;
-	}
-	case GL_DEBUG_TYPE_PORTABILITY:
-	{
-		Logger::warning("OpenGL Portability: %s", message);
-		break;
-	}
-	case GL_DEBUG_TYPE_PERFORMANCE:
-	{
-		Logger::warning("OpenGL Performance: %s", message);
-		break;
-	}
-	case GL_DEBUG_TYPE_PUSH_GROUP:
-	case GL_DEBUG_TYPE_POP_GROUP:
-	{
-		break;
-	}
-	default:
-	{
-		Logger::log("OpenGL: %s", message);
-		break;
-	}
+	    case GL_DEBUG_TYPE_ERROR:
+	    {
+		    Logger::error("OpenGL Error [%x]: %s", id, message);
+		    break;
+	    }
+	    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+	    {
+		    Logger::error("OpenGL Deprecation [%x]: %s", id, message);
+		    break;
+	    }
+	    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+	    {
+		    Logger::error("OpenGL UB [%x]: %s", id, message);
+		    break;
+	    }
+	    case GL_DEBUG_TYPE_PORTABILITY:
+	    {
+		    Logger::warning("OpenGL Portability [%x]: %s", id, message);
+		    break;
+	    }
+	    case GL_DEBUG_TYPE_PERFORMANCE:
+	    {
+		    Logger::warning("OpenGL Performance [%x]: %s", id, message);
+		    break;
+	    }
+	    case GL_DEBUG_TYPE_PUSH_GROUP:
+	    case GL_DEBUG_TYPE_POP_GROUP:
+	    {
+		    break;
+	    }
+	    default:
+	    {
+		    Logger::log("OpenGL [%x]: %s", id, message);
+		    break;
+	    }
 	}
 }
 
@@ -154,10 +156,10 @@ void WindowSubsystem::start()
 
 	glViewport(0, 0, _resolution.x, _resolution.y);
 	glfwSetFramebufferSizeCallback(_window, [](GLFWwindow*, int32_t width, int32_t height)
-		{
-			get()._resolution = math::Vector2i(width, height);
-			glViewport(0, 0, width, height);
-		});
+	{
+		get()._resolution = math::Vector2i(width, height);
+		glViewport(0, 0, width, height);
+	});
 
 	if (_msaa_samples > 0)
 	{

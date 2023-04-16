@@ -58,6 +58,8 @@ void DrawCallTree::execute(RenderQueueStats& stats) const
         {
             const peng::shared_ref<const Mesh> mesh = mesh_draw.mesh;
 
+            // TODO: we can skip a mesh switch if the mesh already happens to be bound
+            //       from the previous shader draw
             SCOPED_GPU_EVENT(strtools::catf_temp("Mesh - %s", mesh->name().c_str()));
             mesh->bind();
             stats.mesh_switches++;
