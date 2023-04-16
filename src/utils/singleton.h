@@ -14,10 +14,23 @@ namespace utils
         static T& get()
         {
             static T instance;
+            exists_mutable() = true;
+
             return instance;
+        }
+
+        static bool exists()
+        {
+            return exists_mutable();
         }
 
     protected:
         Singleton() = default;
+
+        static bool& exists_mutable()
+        {
+            static bool e = false;
+            return e;
+        }
     };
 }

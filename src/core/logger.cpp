@@ -25,17 +25,24 @@ void Logger::log(LogSeverity, const std::string&) {}
 #else
 void Logger::log(LogSeverity severity, const std::string& message)
 {
-    _worker_thread.schedule_job(threading::Job([this, severity, message]
+	Log log = {
+		.severity = severity,
+		.message = message,
+		.timestamp = time_now_info(),
+		.frame_number = PengEngine::exists()
+			? PengEngine::get().frame_number()
+			: 0
+	};
+
+    _worker_thread.schedule_job(threading::Job([this, log = std::move(log)]
 	{
-		log_internal(severity, message);
+		log_internal(log);
 	}));
 }
 #endif
 
-void Logger::log_internal(LogSeverity severity, const std::string& message)
+void Logger::log_internal(const Log& log)
 {
-	const tm time_info = time_now_info();
-
 	// Open the log file if we haven't already
 	// TODO: we might want to limit the number of old log files to keep
 	if (!_log_file.is_open())
@@ -43,8 +50,8 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 		// Logger path = logs/YYYY-MM-DD/HH-MM-SS.log
 		const std::string log_path = strtools::catf(
 			"logs/%04d-%02d-%02d/%02d-%02d-%02d.log",
-			1900 + time_info.tm_year, 1 + time_info.tm_mon, time_info.tm_mday,
-			time_info.tm_hour, time_info.tm_min, time_info.tm_sec
+			1900 + log.timestamp.tm_year, 1 + log.timestamp.tm_mon, log.timestamp.tm_mday,
+			log.timestamp.tm_hour, log.timestamp.tm_min, log.timestamp.tm_sec
 		);
 
 		io::create_directories_for_file(log_path);
@@ -56,7 +63,7 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 		}
 	}
 
-	switch (severity)
+	switch (log.severity)
 	{
 	    case LogSeverity::log:
 	    {
@@ -91,14 +98,14 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 	// [HH:MM:SS][F]
 	const std::string time_code = strtools::catf(
 		"[%02d:%02d:%02d][%d] ",
-		time_info.tm_hour, time_info.tm_min, time_info.tm_sec,
-		PengEngine::get().frame_number()
+		log.timestamp.tm_hour, log.timestamp.tm_min, log.timestamp.tm_sec,
+		log.frame_number
 	);
 
-	std::cout << message;
-	_log_file << time_code << message << std::endl;
+	std::cout << log.message;
+	_log_file << time_code << log.message << std::endl;
 
-	switch (severity)
+	switch (log.severity)
 	{
 	    case LogSeverity::log: break;
 	    case LogSeverity::warning:

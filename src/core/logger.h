@@ -51,10 +51,18 @@ public:
 	consteval static bool enabled();
 
 private:
+	struct Log
+	{
+		LogSeverity severity;
+		std::string message;
+		tm timestamp;
+		int32_t frame_number;
+	};
+
 	Logger();
 	~Logger();
 
-    void log_internal(LogSeverity severity, const std::string& message);
+    void log_internal(const Log& log);
 	[[nodiscard]] tm time_now_info() const;
 
 #ifndef NO_LOGGING
