@@ -90,6 +90,11 @@ float PengEngine::time_scale() const noexcept
 	return _time_scale;
 }
 
+int32_t PengEngine::frame_number() const noexcept
+{
+	return _frame_number;
+}
+
 float PengEngine::last_frametime() const noexcept
 {
 	return _last_frametime;

@@ -4,6 +4,8 @@
 
 #include <utils/io.h>
 
+#include "peng_engine.h"
+
 Logger::Logger()
     : Singleton()
 #ifndef NO_LOGGING
@@ -32,14 +34,12 @@ void Logger::log(LogSeverity severity, const std::string& message)
 
 void Logger::log_internal(LogSeverity severity, const std::string& message)
 {
+	const tm time_info = time_now_info();
+
 	// Open the log file if we haven't already
 	// TODO: we might want to limit the number of old log files to keep
 	if (!_log_file.is_open())
 	{
-        const time_t time_now = time(nullptr);
-		tm time_info{};
-	    localtime_s(&time_info, &time_now);
-
 		// Logger path = logs/YYYY-MM-DD/HH-MM-SS.log
 		const std::string log_path = strtools::catf(
 			"logs/%04d-%02d-%02d/%02d-%02d-%02d.log",
@@ -60,31 +60,43 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 	{
 	    case LogSeverity::log:
 	    {
-			_log_file << "[LOG] ";
+			_log_file << "[LOG]";
 			break;
 	    }
 	    case LogSeverity::warning:
 	    {
 		    std::cout << "\033[0;93m";
-			_log_file << "[WRN] ";
+			_log_file << "[WRN]";
 		    break;
 	    }
 	    case LogSeverity::error:
 	    {
 		    std::cout << "\033[1;31m";
-			_log_file << "[ERR] ";
+			_log_file << "[ERR]";
 		    break;
 	    }
 	    case LogSeverity::success:
 	    {
 		    std::cout << "\033[1;32m";
-			_log_file << "[SCS] ";
+			_log_file << "[SCS]";
 		    break;
+	    }
+		default:
+	    {
+			_log_file << "[???]";
+			break;
 	    }
 	}
 
+	// [HH:MM:SS][F]
+	const std::string time_code = strtools::catf(
+		"[%02d:%02d:%02d][%d] ",
+		time_info.tm_hour, time_info.tm_min, time_info.tm_sec,
+		PengEngine::get().frame_number()
+	);
+
 	std::cout << message;
-	_log_file << message << std::endl;
+	_log_file << time_code << message << std::endl;
 
 	switch (severity)
 	{
@@ -99,6 +111,15 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 	}
 
 	std::cout << "\n";
+}
+
+tm Logger::time_now_info() const
+{
+	const time_t time_now = time(nullptr);
+	tm time_info = {};
+	localtime_s(&time_info, &time_now);
+
+	return time_info;
 }
 
 

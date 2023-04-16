@@ -55,6 +55,7 @@ private:
 	~Logger();
 
     void log_internal(LogSeverity severity, const std::string& message);
+	[[nodiscard]] tm time_now_info() const;
 
 #ifndef NO_LOGGING
 	std::ofstream _log_file;

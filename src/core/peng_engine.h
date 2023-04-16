@@ -23,6 +23,7 @@ public:
 
 	[[nodiscard]] bool shutting_down() const;
 	[[nodiscard]] float time_scale() const noexcept;
+	[[nodiscard]] int32_t frame_number() const noexcept;
 	[[nodiscard]] float last_frametime() const noexcept;
 
 private:
