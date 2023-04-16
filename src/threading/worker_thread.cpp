@@ -24,7 +24,10 @@ WorkerThread::WorkerThread(std::string&& thread_name)
 
 WorkerThread::~WorkerThread()
 {
-    shutdown();
+    if (_running)
+    {
+        shutdown();
+    }
 }
 
 void WorkerThread::schedule_job(Job&& job)

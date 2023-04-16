@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 
 #ifndef NO_LOGGING
 #include <threading/worker_thread.h>
@@ -51,10 +52,12 @@ public:
 
 private:
 	Logger();
+	~Logger();
 
-	static void log_internal(LogSeverity severity, const std::string& message);
+    void log_internal(LogSeverity severity, const std::string& message);
 
 #ifndef NO_LOGGING
+	std::ofstream _log_file;
 	threading::WorkerThread _worker_thread;
 #endif
 };
