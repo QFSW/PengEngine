@@ -56,23 +56,29 @@ void Logger::log_internal(LogSeverity severity, const std::string& message)
 		}
 	}
 
-	// TODO: Add log type codes for logfile since colors aren't there
 	switch (severity)
 	{
-	    case LogSeverity::log: break;
+	    case LogSeverity::log:
+	    {
+			_log_file << "[LOG] ";
+			break;
+	    }
 	    case LogSeverity::warning:
 	    {
 		    std::cout << "\033[0;93m";
+			_log_file << "[WRN] ";
 		    break;
 	    }
 	    case LogSeverity::error:
 	    {
 		    std::cout << "\033[1;31m";
+			_log_file << "[ERR] ";
 		    break;
 	    }
 	    case LogSeverity::success:
 	    {
 		    std::cout << "\033[1;32m";
+			_log_file << "[SCS] ";
 		    break;
 	    }
 	}

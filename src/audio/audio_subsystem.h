@@ -7,6 +7,7 @@
 
 namespace audio
 {
+    // TODO: OpenAL crashes on shutdown seemingly randomly
     class AudioSubsystem final : public Subsystem
     {
         DECLARE_SUBSYSTEM(AudioSubsystem)
