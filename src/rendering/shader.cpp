@@ -1,6 +1,7 @@
 #include "shader.h"
 
 #include <unordered_set>
+#include <filesystem>
 
 #include <core/asset.h>
 #include <utils/utils.h>
@@ -65,8 +66,11 @@ Shader::Shader(
     _broken |= !validate_shader_compile(vert_shader);
     _broken |= !validate_shader_compile(frag_shader);
 
-    glObjectLabel(GL_SHADER, vert_shader, -1, strtools::catf_temp("%s (VS)", _name.c_str()));
-    glObjectLabel(GL_SHADER, frag_shader, -1, strtools::catf_temp("%s (FS)", _name.c_str()));
+    {
+        namespace fs = std::filesystem;
+        glObjectLabel(GL_SHADER, vert_shader, -1, fs::path(vert_shader_path).filename().string().c_str());
+        glObjectLabel(GL_SHADER, frag_shader, -1, fs::path(frag_shader_path).filename().string().c_str());
+    }
 
     Logger::log("Linking shader program");
     _program = glCreateProgram();
