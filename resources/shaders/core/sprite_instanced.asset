@@ -1,0 +1,5 @@
+{
+    "name": "Sprite(Instanced)",
+    "vert": "resources/shaders/core/sprite_instanced.vert",
+    "frag": "resources/shaders/core/sprite.frag"
+}

@@ -1,6 +1,7 @@
 #include "render_queue.h"
 
 #include <profiling/scoped_event.h>
+#include <utils/functional.h>
 
 #include "texture_binding_cache.h"
 #include "draw_call_tree.h"
@@ -14,6 +15,9 @@ void RenderQueue::execute()
 
     drain_queues();
 
+    _sprite_batcher.convert_draws(_sprite_draw_calls, _draw_calls);
+    _sprite_draw_calls.clear();
+
     const DrawCallTree tree(std::move(_draw_calls));
     tree.execute(stats);
 
@@ -22,9 +26,9 @@ void RenderQueue::execute()
     _queue_stats = stats;
 }
 
-void RenderQueue::enqueue_draw(DrawCall&& draw_call)
+void RenderQueue::enqueue_command(RenderCommand&& command)
 {
-    _draw_call_queue.enqueue(draw_call);
+    _command_queue.enqueue(command);
 }
 
 const RenderQueueStats& RenderQueue::last_frame_stats() const noexcept
@@ -34,10 +38,13 @@ const RenderQueueStats& RenderQueue::last_frame_stats() const noexcept
 
 void RenderQueue::drain_queues()
 {
-    DrawCall draw_call;
-    while (_draw_call_queue.try_dequeue(draw_call))
+    RenderCommand command;
+    while (_command_queue.try_dequeue(command))
     {
-        _draw_calls.push_back(draw_call);
+        std::visit(functional::overload{
+            [&](DrawCall& x)        { _draw_calls.push_back(std::move(x)); },
+            [&](SpriteDrawCall& x)  { _sprite_draw_calls.push_back(std::move(x)); }
+        }, command);
     }
 }
 

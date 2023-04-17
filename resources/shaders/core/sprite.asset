@@ -1,0 +1,5 @@
+{
+    "name": "Sprite",
+    "vert": "resources/shaders/core/sprite.vert",
+    "frag": "resources/shaders/core/sprite.frag"
+}

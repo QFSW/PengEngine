@@ -5,8 +5,9 @@
 #include <common/common.h>
 #include <utils/singleton.h>
 
-#include "draw_call.h"
+#include "render_command.h"
 #include "render_queue_stats.h"
+#include "sprite_batcher.h"
 
 namespace rendering
 {
@@ -17,7 +18,9 @@ namespace rendering
     public:
         // Executes all items in the render queue
         void execute();
-        void enqueue_draw(DrawCall&& draw_call);
+
+        // Enqueues a render command to the queue
+        void enqueue_command(RenderCommand&& command);
 
         // Various stats about the render queue from the previous frame
         [[nodiscard]] const RenderQueueStats& last_frame_stats() const noexcept;
@@ -25,8 +28,10 @@ namespace rendering
     private:
         void drain_queues();
 
+        SpriteBatcher _sprite_batcher;
         std::vector<DrawCall> _draw_calls;
-        common::concurrent_queue<DrawCall> _draw_call_queue;
+        std::vector<SpriteDrawCall> _sprite_draw_calls;
+        common::concurrent_queue<RenderCommand> _command_queue;
         RenderQueueStats _queue_stats;
     };
 }

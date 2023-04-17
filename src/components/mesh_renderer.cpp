@@ -173,7 +173,7 @@ void MeshRenderer::tick(float delta_time)
 		? -dist_sqr
 		: +dist_sqr;
 
-	RenderQueue::get().enqueue_draw({
+	RenderQueue::get().enqueue_command(DrawCall{
 		.mesh = _mesh,
 		.material = _material,
 		.order = order,

@@ -371,6 +371,30 @@ peng::shared_ref<const Shader> Primitives::phong_shader()
     return shader.load();
 }
 
+peng::shared_ref<const Shader> Primitives::sprite_shader()
+{
+    static Asset<Shader> shader("resources/shaders/core/sprite.asset");
+    return shader.load();
+}
+
+peng::shared_ref<const Shader> Primitives::sprite_alpha_shader()
+{
+    static Asset<Shader> shader("resources/shaders/core/sprite_alpha.asset");
+    return shader.load();
+}
+
+peng::shared_ref<const Shader> Primitives::sprite_instanced_shader()
+{
+    static Asset<Shader> shader("resources/shaders/core/sprite_instanced.asset");
+    return shader.load();
+}
+
+peng::shared_ref<const Shader> Primitives::sprite_instanced_alpha_shader()
+{
+    static Asset<Shader> shader("resources/shaders/core/sprite_instanced_alpha.asset");
+    return shader.load();
+}
+
 peng::shared_ref<const Shader> Primitives::skybox_shader()
 {
     static Asset<Shader> shader("resources/shaders/core/skybox.asset");

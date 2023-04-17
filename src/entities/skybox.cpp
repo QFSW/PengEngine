@@ -34,7 +34,7 @@ void Skybox::tick(float delta_time)
 	// TODO: cache parameter name
 	_material->set_parameter("view_matrix", view_matrix_shifted);
 
-	RenderQueue::get().enqueue_draw({
+	RenderQueue::get().enqueue_command(DrawCall{
 		.mesh = _mesh,
 		.material = _material
 	});

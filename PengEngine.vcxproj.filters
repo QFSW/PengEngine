@@ -258,6 +258,9 @@
     <ClCompile Include="src\entities\spot_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\sprite_batcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -671,6 +674,15 @@
     <ClInclude Include="src\rendering\shader_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering\sprite_draw_call.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\render_command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\sprite_batcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\libs\moodycamel\LICENSE.md" />
@@ -694,6 +706,13 @@
     <None Include="resources\textures\core\peng_engine.asset" />
     <None Include="resources\textures\demo\skybox.asset" />
     <None Include="resources\sprites\core\peng_engine_64.asset" />
+    <None Include="resources\shaders\core\sprite_instanced.vert" />
+    <None Include="resources\shaders\core\sprite_instanced.asset" />
+    <None Include="resources\shaders\core\sprite.frag" />
+    <None Include="resources\shaders\core\sprite_instanced_alpha.asset" />
+    <None Include="resources\shaders\core\sprite.vert" />
+    <None Include="resources\shaders\core\sprite.asset" />
+    <None Include="resources\shaders\core\sprite_alpha.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

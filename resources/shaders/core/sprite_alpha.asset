@@ -1,0 +1,7 @@
+{
+    "name": "Sprite(Alpha)",
+    "vert": "resources/shaders/core/sprite.vert",
+    "frag": "resources/shaders/core/sprite.frag",
+    "draw_order": 2,
+    "blend_mode": 1
+}

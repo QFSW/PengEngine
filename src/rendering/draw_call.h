@@ -7,6 +7,10 @@ namespace rendering
     class Mesh;
     class Material;
 
+    // Draw calls specify an object to draw and its corresponding material
+    // They should be used instead of drawing objects directly to allow the
+    // draw call tree to automatically sort draw calls minimize state switches
+    // for maximum efficiency
     struct DrawCall
     {
         peng::shared_ptr<const Mesh> mesh;

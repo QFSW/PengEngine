@@ -35,63 +35,19 @@ void SpriteRenderer::tick(float delta_time)
 {
 	Component::tick(delta_time);
 
-	const peng::shared_ref<Material>& material =
-		has_alpha()
-		? _material_transparent
-		: _material_opaque;
-
-	const UniformSet& cached_uniforms =
-		has_alpha()
-		? _cached_uniforms_opaque
-		: _cached_uniforms_transparent;
-
-	if (cached_uniforms.color_tex >= 0)
+	if (!Camera::current())
 	{
-		material->set_parameter(cached_uniforms.color_tex, _sprite->texture());
+		return;
 	}
 
-	if (cached_uniforms.base_color >= 0)
-	{
-		material->set_parameter(cached_uniforms.base_color, _color);
-	}
+	const Matrix4x4f model_matrix = owner().transform_matrix();
+	const Matrix4x4f view_matrix = Camera::current()->view_matrix();
 
-	if (cached_uniforms.model_matrix >= 0)
-	{
-		const Vector3f sprite_scale = Vector3f(_sprite->size(), 1);
-		const Matrix4x4f sprite_matrix = Matrix4x4f::from_scale(sprite_scale);
-		const Matrix4x4f model_matrix = owner().transform_matrix() * sprite_matrix;
-		material->set_parameter(cached_uniforms.model_matrix, model_matrix);
-	}
-
-	if (cached_uniforms.view_matrix >= 0)
-	{
-		const Matrix4x4f view_matrix = Camera::current() ? Camera::current()->view_matrix() : Matrix4x4f::identity();
-		material->set_parameter(cached_uniforms.view_matrix, view_matrix);
-	}
-
-	if (cached_uniforms.tex_scale >= 0 && cached_uniforms.tex_offset >= 0)
-	{
-		// Texture coordinates have an inverted y compared to the pixel position
-	    Vector2i pos_corrected = _sprite->position();
-		pos_corrected.y = _sprite->texture()->resolution().y - (pos_corrected.y + _sprite->resolution().y);
-
-		const Vector2f texture_res = Vector2f(_sprite->texture()->resolution());
-		const Vector2f tex_scale = Vector2f(_sprite->resolution()) / texture_res;
-		const Vector2f tex_offset = Vector2f(pos_corrected) / texture_res;
-		material->set_parameter(cached_uniforms.tex_scale, tex_scale);
-		material->set_parameter(cached_uniforms.tex_offset, tex_offset);
-	}
-
-	const float z_depth = owner().world_position().z;
-	const float order = material->shader()->requires_blending()
-		? -z_depth
-		: +z_depth;
-
-	RenderQueue::get().enqueue_draw({
-		.mesh = _mesh,
-		.material = material,
-		.order = order,
-		.instance_count = 1
+	RenderQueue::get().enqueue_command(SpriteDrawCall{
+		.sprite = _sprite,
+		.model_matrix = model_matrix,
+		.view_matrix = view_matrix,
+		.color = _color
 	});
 }
 
