@@ -23,14 +23,14 @@ DrawCallTree::DrawCallTree(std::vector<DrawCall>&& draw_calls)
             return x.order < y.order;
         });
 
-    for (const DrawCall& draw_call : draw_calls_ordered)
+    for (DrawCall& draw_call : draw_calls_ordered)
     {
         check(draw_call.material);
         check(draw_call.mesh);
 
         const peng::shared_ref<const Shader> shader = draw_call.material->shader();
         MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh.to_shared_ref());
-        mesh_draw.materials.push_back(draw_call.material.to_shared_ref());
+        mesh_draw.draw_calls.push_back(std::move(draw_call));
     }
 
     std::ranges::sort(
@@ -64,12 +64,23 @@ void DrawCallTree::execute(RenderQueueStats& stats) const
             mesh->bind();
             stats.mesh_switches++;
 
-            for (const peng::shared_ref<Material>& material : mesh_draw.materials)
+            for (const DrawCall& draw_call : mesh_draw.draw_calls)
             {
-                material->apply_uniforms();
-                mesh->draw();
+                check(draw_call.material);
+                check(draw_call.material->shader() == shader_draw.shader);
+
+                draw_call.material->apply_uniforms();
+                if (draw_call.instance_count == 1)
+                {
+                    mesh->draw();
+                }
+                else
+                {
+                    mesh->draw_instanced(draw_call.instance_count);
+                }
+
                 stats.draw_calls++;
-                stats.triangles += mesh->num_triangles();
+                stats.triangles += draw_call.instance_count * mesh->num_triangles();
             }
         }
     }

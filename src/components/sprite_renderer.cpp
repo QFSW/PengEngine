@@ -90,7 +90,8 @@ void SpriteRenderer::tick(float delta_time)
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,
 		.material = material,
-		.order = order
+		.order = order,
+		.instance_count = 1
 	});
 }
 

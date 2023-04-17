@@ -12,5 +12,6 @@ namespace rendering
         peng::shared_ptr<const Mesh> mesh;
         peng::shared_ptr<Material> material;
         float order = 0;
+        int32_t instance_count = 1;
     };
 }

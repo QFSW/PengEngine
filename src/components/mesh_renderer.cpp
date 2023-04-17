@@ -176,7 +176,8 @@ void MeshRenderer::tick(float delta_time)
 	RenderQueue::get().enqueue_draw({
 		.mesh = _mesh,
 		.material = _material,
-		.order = order
+		.order = order,
+		.instance_count = 1
 	});
 }
 

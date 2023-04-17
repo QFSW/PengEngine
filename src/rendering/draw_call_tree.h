@@ -6,6 +6,8 @@
 #include <memory/shared_ref.h>
 #include <utils/hash_helpers.h>
 
+#include "draw_call.h"
+
 namespace rendering
 {
     class Mesh;
@@ -19,7 +21,7 @@ namespace rendering
     {
         size_t index;
         peng::shared_ref<const Mesh> mesh;
-        std::vector<peng::shared_ref<Material>> materials;
+        std::vector<DrawCall> draw_calls;
     };
 
     // Draw calls aggregated by the shader. Each draw may differ by mesh and uniforms
@@ -35,7 +37,7 @@ namespace rendering
     class DrawCallTree
     {
     public:
-        DrawCallTree(std::vector<struct DrawCall>&& draw_calls);
+        explicit DrawCallTree(std::vector<DrawCall>&& draw_calls);
 
         void execute(RenderQueueStats& stats) const;
 
