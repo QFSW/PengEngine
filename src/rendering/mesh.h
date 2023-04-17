@@ -36,6 +36,7 @@ namespace rendering
         void bind() const;
         void unbind() const;
         void draw() const;
+        void draw_instanced(int32_t num) const;
 
         [[nodiscard]] const std::string& name() const noexcept;
         [[nodiscard]] int32_t num_triangles() const noexcept;

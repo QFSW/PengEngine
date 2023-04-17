@@ -1,6 +1,7 @@
 #include "mesh.h"
 
 #include <utils/utils.h>
+#include <utils/check.h>
 #include <utils/strtools.h>
 #include <utils/vectools.h>
 #include <core/logger.h>
@@ -90,6 +91,12 @@ void Mesh::unbind() const
 void Mesh::draw() const
 {
     glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, nullptr);
+}
+
+void Mesh::draw_instanced(int32_t num) const
+{
+    check(num >= 0);
+    glDrawElementsInstanced(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, nullptr, num);
 }
 
 const std::string& Mesh::name() const noexcept

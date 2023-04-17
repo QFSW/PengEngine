@@ -16,16 +16,14 @@ Transform::Transform(const Vector3f& position, const Vector3f& scale, const Vect
 
 Matrix4x4f Transform::to_matrix() const noexcept
 {
-    return Matrix4x4f::identity()
-        .scaled(scale)
+    return Matrix4x4f::from_scale(scale)
         .rotated(rotation)
         .translated(position);
 }
 
 Matrix4x4f Transform::to_inverse_matrix() const noexcept
 {
-    return Matrix4x4f::identity()
-        .translated(-position)
+    return Matrix4x4f::from_translation(-position)
         .rotated(-rotation)
         .scaled(scale.reciprocal());
 }
