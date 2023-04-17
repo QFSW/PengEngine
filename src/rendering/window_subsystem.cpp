@@ -45,10 +45,20 @@ WindowSubsystem::~WindowSubsystem()
 	}
 }
 
+#ifndef NO_LOGGING
 static void APIENTRY handle_gl_debug_output(
 	GLenum, GLenum type, GLuint id, GLenum /*severity*/, GLsizei /*length*/, const char* message, const void* /*userParam*/
 )
 {
+	// Filter out some overly verbose and not helpful "errors"
+	// Typically driver implementations logging about how something will be used
+	switch (id)
+	{
+	    case 0x20071:
+		case 0x20084: return;
+		default: break;
+	}
+
 	switch (type)
 	{
 	    case GL_DEBUG_TYPE_ERROR:
@@ -88,6 +98,7 @@ static void APIENTRY handle_gl_debug_output(
 	    }
 	}
 }
+#endif
 
 void WindowSubsystem::start()
 {
