@@ -40,8 +40,7 @@ namespace rendering
         struct SpriteInstanceData
         {
             math::Vector4f color;
-            math::Matrix4x4f view_matrix;
-            math::Matrix4x4f model_matrix;
+            math::Matrix4x4f mvp_matrix;
             math::Vector2f tex_scale;
             math::Vector2f tex_offset;
         };

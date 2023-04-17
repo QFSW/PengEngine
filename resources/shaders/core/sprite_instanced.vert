@@ -6,8 +6,7 @@ layout(location = 2) in vec2 a_tex_coord;
 struct SpriteInstanceData
 {
     vec4 color;
-    mat4 view_matrix;
-    mat4 model_matrix;
+    mat4 mvp_matrix;
     vec2 tex_scale;
     vec2 tex_offset;
 };
@@ -22,8 +21,7 @@ out vec4 vertex_color;
 
 void main()
 {
-    vec4 pos = instance_data[gl_InstanceID].model_matrix * vec4(a_pos, 1.0);
-    gl_Position = instance_data[gl_InstanceID].view_matrix * pos;
+    gl_Position = instance_data[gl_InstanceID].mvp_matrix * vec4(a_pos, 1.0);
     
     tex_coord = instance_data[gl_InstanceID].tex_offset + a_tex_coord * instance_data[gl_InstanceID].tex_scale;
     vertex_color = instance_data[gl_InstanceID].color;

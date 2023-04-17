@@ -42,11 +42,11 @@ void SpriteRenderer::tick(float delta_time)
 
 	const Matrix4x4f model_matrix = owner().transform_matrix();
 	const Matrix4x4f view_matrix = Camera::current()->view_matrix();
+	const Matrix4x4f mvp_matrix = view_matrix * model_matrix;
 
 	RenderQueue::get().enqueue_command(SpriteDrawCall{
 		.sprite = _sprite,
-		.model_matrix = model_matrix,
-		.view_matrix = view_matrix,
+		.mvp_matrix = mvp_matrix,
 		.color = _color
 	});
 }

@@ -106,15 +106,15 @@ DrawCall SpriteBatcher::emit_simple_draw(ProcessedSpriteDraw&& processed_draw, b
     const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
     peng::shared_ref<Material> material = get_pooled_material(pool_key);
 
+
     // TODO: use uniform caches
     material->set_parameter("color_tex", processed_draw.texture);
     material->set_parameter("base_color", processed_draw.instance_data.color);
-    material->set_parameter("view_matrix", processed_draw.instance_data.view_matrix);
-    material->set_parameter("model_matrix", processed_draw.instance_data.model_matrix);
+    material->set_parameter("mvp_matrix", processed_draw.instance_data.mvp_matrix);
     material->set_parameter("tex_scale", processed_draw.instance_data.tex_scale);
     material->set_parameter("tex_offset", processed_draw.instance_data.tex_offset);
 
-    const float z_depth = processed_draw.instance_data.model_matrix.get_translation().z;
+    const float z_depth = processed_draw.instance_data.mvp_matrix.get_translation().z;
     const float order = material->shader()->requires_blending()
         ? -z_depth
         : +z_depth;
@@ -166,10 +166,10 @@ SpriteBatcher::ProcessedSpriteDraw SpriteBatcher::preprocess_draw(const SpriteDr
 {
     const peng::shared_ref<const Sprite>& sprite = sprite_draw.sprite;
 
-    // Determine model matrix of sprite with sprite size accounted for
+    // Determine mvp matrix of sprite with sprite size accounted for
     const Vector3f sprite_scale = Vector3f(sprite->size(), 1);
     const Matrix4x4f sprite_matrix = Matrix4x4f::from_scale(sprite_scale);
-    const Matrix4x4f model_matrix = sprite_draw.model_matrix * sprite_matrix;
+    const Matrix4x4f mvp_matrix = sprite_draw.mvp_matrix * sprite_matrix;
 
     // Calculate texture coordinates of sprite
     // Texture coordinates have an inverted y compared to the pixel position
@@ -184,8 +184,7 @@ SpriteBatcher::ProcessedSpriteDraw SpriteBatcher::preprocess_draw(const SpriteDr
         .texture = sprite->texture(),
         .instance_data = SpriteInstanceData{
             .color = sprite_draw.color,
-            .view_matrix = sprite_draw.view_matrix,
-            .model_matrix = model_matrix,
+            .mvp_matrix = mvp_matrix,
             .tex_scale = tex_scale,
             .tex_offset = tex_offset
         }

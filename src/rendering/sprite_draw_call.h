@@ -14,8 +14,7 @@ namespace rendering
     struct SpriteDrawCall
     {
         peng::shared_ref<const Sprite> sprite;
-        math::Matrix4x4f model_matrix;
-        math::Matrix4x4f view_matrix;
+        math::Matrix4x4f mvp_matrix;
         math::Vector4f color = math::Vector4f::one();
 
         // TODO: add a material override
