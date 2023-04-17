@@ -1,5 +1,8 @@
 #pragma once
 
+// TODO: add a checkf macro
+// TODO: add an unreachable macro
+
 #ifndef NO_CHECKS
 
 #include <intrin.h>

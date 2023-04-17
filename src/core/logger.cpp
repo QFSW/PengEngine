@@ -39,7 +39,6 @@ void Logger::log(LogSeverity severity, const std::string& message)
 		log_internal(log);
 	}));
 }
-#endif
 
 void Logger::log_internal(const Log& log)
 {
@@ -128,7 +127,7 @@ tm Logger::time_now_info() const
 
 	return time_info;
 }
-
+#endif
 
 void Logger::log(const std::string& message)
 {

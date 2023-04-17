@@ -62,10 +62,10 @@ private:
 	Logger();
 	~Logger();
 
+#ifndef NO_LOGGING
     void log_internal(const Log& log);
 	[[nodiscard]] tm time_now_info() const;
 
-#ifndef NO_LOGGING
 	std::ofstream _log_file;
 	threading::WorkerThread _worker_thread;
 #endif
