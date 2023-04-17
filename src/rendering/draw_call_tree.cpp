@@ -70,6 +70,8 @@ void DrawCallTree::execute(RenderQueueStats& stats) const
                 check(draw_call.material->shader() == shader_draw.shader);
 
                 draw_call.material->apply_uniforms();
+                draw_call.material->bind_buffers();
+
                 if (draw_call.instance_count == 1)
                 {
                     mesh->draw();

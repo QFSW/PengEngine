@@ -46,6 +46,7 @@ namespace rendering
             set_parameter(parameter_name, Shader::Parameter(parameter));
         }
 
+        // TODO: add a way to unset/unbind buffers
         void set_buffer(GLint buffer_index, const peng::shared_ref<const IShaderBuffer>& buffer);
         void set_buffer(const std::string& buffer_name, const peng::shared_ref<const IShaderBuffer>& buffer);
 

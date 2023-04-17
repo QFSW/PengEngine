@@ -60,6 +60,7 @@ namespace rendering
         if (data.size() <= _capacity)
         {
             // If the data fits in our existing buffer then just upload new data
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
             glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, data.size() * sizeof(T), data.data());
             _size = data.size();
         }
@@ -71,6 +72,7 @@ namespace rendering
 
             glGenBuffers(1, &_ssbo);
             glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+            glObjectLabel(GL_BUFFER, _ssbo, -1, _name.c_str());
             glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(T), data.data(), _usage);
 
             _size = data.size();

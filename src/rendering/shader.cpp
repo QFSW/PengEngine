@@ -166,7 +166,9 @@ void Shader::use() const
 void Shader::bind_buffer(GLint index, const peng::shared_ref<const IShaderBuffer>& buffer) const
 {
     check(index >= 0);
-    glShaderStorageBlockBinding(_program, index, buffer->get_ssbo());
+
+    glShaderStorageBlockBinding(_program, index, index);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, buffer->get_ssbo());
 }
 
 int32_t& Shader::draw_order() noexcept
