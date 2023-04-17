@@ -37,6 +37,37 @@ Material::Material(const peng::shared_ref<const Shader>& shader)
     : Material(utils::copy(shader))
 { }
 
+void Material::set_buffer(GLint buffer_index, const peng::shared_ref<const IShaderBuffer>& buffer)
+{
+    for (auto& [index, buf] : _bound_buffers)
+    {
+        if (index == buffer_index)
+        {
+            buf = buffer;
+            return;
+        }
+    }
+
+    _bound_buffers.emplace_back(buffer_index, buffer);
+}
+
+void Material::set_buffer(const std::string& buffer_name, const peng::shared_ref<const IShaderBuffer>& buffer)
+{
+    const GLint buffer_index = _shader->get_buffer_location(buffer_name);
+    if (buffer_index >= 0)
+    {
+        set_buffer(buffer_index, buffer);
+    }
+    else if (!_bad_buffer_names.contains(buffer_name))
+    {
+        _bad_buffer_names.insert(buffer_name);
+        Logger::error(
+            "Could not set buffer '%s' as no matching buffer could be found in the shader '%s'",
+            buffer_name.c_str(), _shader->name().c_str()
+        );
+    }
+}
+
 void Material::set_parameter(GLint uniform_location, const Shader::Parameter& parameter)
 {
     if (const auto it = _existing_parameters.find(uniform_location); it != _existing_parameters.end())
@@ -56,7 +87,7 @@ void Material::set_parameter(const std::string& parameter_name, const Shader::Pa
     {
         set_parameter(parameter_index, parameter);
     }
-    else if (_bad_parameter_names.find(parameter_name) == _bad_parameter_names.end())
+    else if (!_bad_parameter_names.contains(parameter_name))
     {
         _bad_parameter_names.insert(parameter_name);
         Logger::error(
@@ -70,6 +101,7 @@ void Material::use()
 {
     _shader->use();
     apply_uniforms();
+    bind_buffers();
 }
 
 void Material::apply_uniforms()
@@ -80,6 +112,14 @@ void Material::apply_uniforms()
         std::visit(functional::overload{
             [&](const auto& x) { apply_parameter(location, x); }
         }, parameter);
+    }
+}
+
+void Material::bind_buffers()
+{
+    for (const auto& [index, buffer] : _bound_buffers)
+    {
+        _shader->bind_buffer(index, buffer);
     }
 }
 

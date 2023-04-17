@@ -8,6 +8,7 @@
 #include <profiling/scoped_event.h>
 
 #include "shader_compiler.h"
+#include "shader_buffer.h"
 #include "primitives.h"
 
 using namespace rendering;
@@ -162,6 +163,12 @@ void Shader::use() const
     }
 }
 
+void Shader::bind_buffer(GLint index, const peng::shared_ref<const IShaderBuffer>& buffer) const
+{
+    check(index >= 0);
+    glShaderStorageBlockBinding(_program, index, buffer->get_ssbo());
+}
+
 int32_t& Shader::draw_order() noexcept
 {
     return _draw_order;
@@ -212,6 +219,14 @@ GLint Shader::get_uniform_location(const std::string& name) const
     }
 
     return -1;
+}
+
+GLint Shader::get_buffer_location(const std::string& name) const
+{
+    const GLuint index = glGetProgramResourceIndex(_program, GL_SHADER_STORAGE_BLOCK, name.c_str());
+    return index == GL_INVALID_INDEX
+        ? -1
+        : index;
 }
 
 std::optional<std::string> Shader::get_symbol_value(const std::string& identifier) const noexcept

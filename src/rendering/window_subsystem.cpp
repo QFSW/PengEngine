@@ -50,7 +50,7 @@ static void APIENTRY handle_gl_debug_output(
 	GLenum, GLenum type, GLuint id, GLenum /*severity*/, GLsizei /*length*/, const char* message, const void* /*userParam*/
 )
 {
-	// Filter out some overly verbose and not helpful "errors"
+	// Filter out some overly verbose and not helpful debug output
 	// Typically driver implementations logging about how something will be used
 	switch (id)
 	{

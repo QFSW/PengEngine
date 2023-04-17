@@ -567,6 +567,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\draw_call_tree.h" />
     <ClInclude Include="src\rendering\frame_buffer.h" />
     <ClInclude Include="src\rendering\render_queue_stats.h" />
+    <ClInclude Include="src\rendering\shader_buffer.h" />
     <ClInclude Include="src\rendering\structured_buffer.h" />
     <ClInclude Include="src\rendering\window_icon.h" />
     <ClInclude Include="src\rendering\material.h" />

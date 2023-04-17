@@ -3,18 +3,19 @@
 #include <vector>
 #include <string>
 
-#include <GL/glew.h>
 #include <profiling/scoped_event.h>
 #include <utils/check.h>
+
+#include "shader_buffer.h"
 
 namespace rendering
 {
     template <typename T>
-    class StructuredBuffer
+    class StructuredBuffer : public IShaderBuffer
     {
     public:
         StructuredBuffer(const std::string& name, GLenum usage);
-        ~StructuredBuffer();
+        ~StructuredBuffer() override;
 
         StructuredBuffer(const StructuredBuffer&) = delete;
         StructuredBuffer(StructuredBuffer&&) = delete;
@@ -23,9 +24,7 @@ namespace rendering
 
         void upload(const std::vector<T>& data);
 
-        // Gets the SSBO for this structured buffer
-        // Requires that data has already been uploaded
-        [[nodiscard]] GLuint get_ssbo() const;
+        [[nodiscard]] GLuint get_ssbo() const override;
 
     private:
         void release_ssbo();

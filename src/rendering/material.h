@@ -8,6 +8,7 @@
 #include <utils/concepts.h>
 
 #include "shader.h"
+#include "shader_buffer.h"
 
 namespace rendering
 {
@@ -22,6 +23,7 @@ namespace rendering
 
         void use();
         void apply_uniforms();
+        void bind_buffers();
 
         template <utils::variant_member<Shader::Parameter> T>
         void try_set_parameter(GLint uniform_location, const T& parameter)
@@ -43,6 +45,9 @@ namespace rendering
         {
             set_parameter(parameter_name, Shader::Parameter(parameter));
         }
+
+        void set_buffer(GLint buffer_index, const peng::shared_ref<const IShaderBuffer>& buffer);
+        void set_buffer(const std::string& buffer_name, const peng::shared_ref<const IShaderBuffer>& buffer);
 
         [[nodiscard]] peng::shared_ref<const Shader> shader() const;
 
@@ -75,8 +80,10 @@ namespace rendering
         peng::shared_ref<const Shader> _shader;
 
         std::vector<std::tuple<GLint, Shader::Parameter>> _set_parameters;
+        std::vector<std::tuple<GLint, peng::shared_ref<const IShaderBuffer>>> _bound_buffers;
         std::unordered_map<GLint, size_t> _existing_parameters;
         std::unordered_set<std::string> _bad_parameter_names;
+        std::unordered_set<std::string> _bad_buffer_names;
         uint32_t _num_bound_textures;
     };
 }

@@ -18,6 +18,8 @@ struct Archive;
 
 namespace rendering
 {
+    class IShaderBuffer;
+
     // TODO: add back-face culling
     class Shader
     {
@@ -74,6 +76,7 @@ namespace rendering
         static peng::shared_ref<const Shader> fallback();
 
         void use() const;
+        void bind_buffer(GLint index, const peng::shared_ref<const IShaderBuffer>& buffer) const;
 
         [[nodiscard]] int32_t& draw_order() noexcept;
         [[nodiscard]] BlendMode& blend_mode() noexcept;
@@ -85,6 +88,7 @@ namespace rendering
         [[nodiscard]] BlendMode blend_mode() const noexcept;
 
         [[nodiscard]] GLint get_uniform_location(const std::string& name) const;
+        [[nodiscard]] GLint get_buffer_location(const std::string& name) const;
         [[nodiscard]] std::optional<std::string> get_symbol_value(const std::string& identifier) const noexcept;
         [[nodiscard]] bool has_symbol(const std::string& identifier) const noexcept;
 
