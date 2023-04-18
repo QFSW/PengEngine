@@ -7,7 +7,11 @@
 
 namespace rendering
 {
+    // Dummy null op render command
+    struct RenderCommandNullOp {};
+
     using RenderCommand = std::variant<
+        RenderCommandNullOp,
         DrawCall,
         SpriteDrawCall
     >;

@@ -16,6 +16,8 @@ namespace rendering
         using Singleton::Singleton;
 
     public:
+        RenderQueue();
+
         // Executes all items in the render queue
         void execute();
 
@@ -26,13 +28,19 @@ namespace rendering
         [[nodiscard]] const RenderQueueStats& last_frame_stats() const noexcept;
 
     private:
-        void drain_queues();
+        void flush_queue();
         void consume_command(RenderCommand& command);
 
         SpriteBatcher _sprite_batcher;
+
+        common::concurrent_queue<RenderCommand> _command_queue;
+        moodycamel::ConsumerToken _command_queue_consumer;
+        std::vector<RenderCommand> _command_buffer;
+        size_t _command_buffer_size;
+        size_t _last_command_buffer_usage;
+
         std::vector<DrawCall> _draw_calls;
         std::vector<SpriteDrawCall> _sprite_draw_calls;
-        common::concurrent_queue<RenderCommand> _command_queue;
         RenderQueueStats _queue_stats;
     };
 }
