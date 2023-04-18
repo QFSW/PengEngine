@@ -30,10 +30,10 @@ void SpriteBatcher::convert_draws(
 
     _buffer_pool.num_used = 0;
 
-    std::vector<ProcessedSpriteDraw> processed_draws = preprocess_draws(sprite_draws_in);
-    std::vector<DrawBin> draw_bins = bin_draws(std::move(processed_draws));
-
-    emit_draws(std::move(draw_bins), draws_out);
+    preprocess_draws(sprite_draws_in, _processed_draw_buffer);
+    sort_draws(_processed_draw_buffer);
+    bin_draws(_processed_draw_buffer, _draw_bin_buffer);
+    emit_draws(_draw_bin_buffer, draws_out);
 }
 
 void SpriteBatcher::flush()
@@ -48,7 +48,7 @@ SpriteBatcher::DrawBin::DrawBin()
     : depth_range(std::numeric_limits<float>::min(), std::numeric_limits<float>::min())
 { }
 
-void SpriteBatcher::DrawBin::add_draw(ProcessedSpriteDraw&& processed_draw, const BinKey& bin_key)
+void SpriteBatcher::DrawBin::add_draw(const ProcessedSpriteDraw& processed_draw, const BinKey& bin_key)
 {
     if (processed_draws.empty())
     {
@@ -60,7 +60,7 @@ void SpriteBatcher::DrawBin::add_draw(ProcessedSpriteDraw&& processed_draw, cons
         depth_range.y = processed_draw.z_depth;
     }
 
-    processed_draws.push_back(std::move(processed_draw));
+    processed_draws.push_back(processed_draw);
 }
 
 bool SpriteBatcher::DrawBin::approx_flat() const noexcept
@@ -79,32 +79,39 @@ bool SpriteBatcher::DrawBin::empty() const noexcept
     return processed_draws.empty();
 }
 
-std::vector<SpriteBatcher::ProcessedSpriteDraw> SpriteBatcher::preprocess_draws(
-    const std::vector<SpriteDrawCall>& sprite_draws
+void SpriteBatcher::preprocess_draws(
+    const std::vector<SpriteDrawCall>& sprite_draws_in,
+    std::vector<ProcessedSpriteDraw>& processed_draws_out
 ) const
 {
     SCOPED_EVENT("SpriteBatcher - preprocess draws");
-    std::vector<ProcessedSpriteDraw> processed_draws;
-        processed_draws.reserve(sprite_draws.size());
+    processed_draws_out.clear();
+    processed_draws_out.reserve(sprite_draws_in.size());
 
-    for (const SpriteDrawCall& sprite_draw : sprite_draws)
-        {
-        processed_draws.push_back(preprocess_draw(sprite_draw));
+    for (const SpriteDrawCall& sprite_draw : sprite_draws_in)
+    {
+        processed_draws_out.push_back(preprocess_draw(sprite_draw));
     }
-
-    return processed_draws;
 }
 
-std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const
+void SpriteBatcher::sort_draws(std::vector<ProcessedSpriteDraw>& processed_draws_in_out) const
 {
-    SCOPED_EVENT("SpriteBatcher - bin draws");
+    SCOPED_EVENT("SpriteBatcher - sort draws");
 
-    std::vector<ProcessedSpriteDraw> processed_draws_ordered(std::move(processed_draws));
-    std::sort(std::execution::par_unseq, processed_draws_ordered.begin(), processed_draws_ordered.end(),
+    std::sort(std::execution::par_unseq, processed_draws_in_out.begin(), processed_draws_in_out.end(),
         [](const ProcessedSpriteDraw& x, const ProcessedSpriteDraw& y)
         {
             return x.z_depth < y.z_depth;
         });
+}
+
+void SpriteBatcher::bin_draws(
+    const std::vector<ProcessedSpriteDraw>& processed_draws_in,
+    std::vector<DrawBin>& draw_bins_out
+) const
+{
+    SCOPED_EVENT("SpriteBatcher - bin draws");
+    draw_bins_out.clear();
 
     // Translucent sprites require that bins are broken such that two separate translucent
     // bins never overlap in their z-depth range, but allow a small deviation for floating point errors
@@ -114,9 +121,8 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
     // 2. Multiple bins with approximately flat and equal depth
     std::vector<DrawBin> alpha_bins;
     std::unordered_map<BinKey, DrawBin> opaque_bins;
-    std::vector<DrawBin> draw_bins;
 
-    for (ProcessedSpriteDraw& processed_draw : processed_draws_ordered)
+    for (const ProcessedSpriteDraw& processed_draw : processed_draws_in)
     {
         const bool requires_alpha =
             processed_draw.instance_data.color.w < 0.99f ||
@@ -127,7 +133,7 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
         // Opaque sprites can always be binned together if they have compatible textures
         if (!requires_alpha)
         {
-            opaque_bins[bin_key].add_draw(std::move(processed_draw), bin_key);
+            opaque_bins[bin_key].add_draw(processed_draw, bin_key);
             continue;
         }
 
@@ -135,7 +141,7 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
         if (alpha_bins.empty())
         {
             DrawBin& alpha_bin = alpha_bins.emplace_back();
-            alpha_bin.add_draw(std::move(processed_draw), bin_key);
+            alpha_bin.add_draw(processed_draw, bin_key);
             continue;
         }
 
@@ -147,16 +153,16 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
             if (alpha_bin.key == bin_key)
             {
                 // If it matches then allow it to grow in depth range
-                alpha_bin.add_draw(std::move(processed_draw), bin_key);
+                alpha_bin.add_draw(processed_draw, bin_key);
                 continue;
             }
 
             if (!alpha_bin.approx_flat())
             {
                 // If it doesn't and the bin isn't flat, it needs flushing and create a new bin
-                draw_bins.push_back(std::move(alpha_bin));
+                draw_bins_out.push_back(std::move(alpha_bin));
                 alpha_bin = {};
-                alpha_bin.add_draw(std::move(processed_draw), bin_key);
+                alpha_bin.add_draw(processed_draw, bin_key);
                 continue;
             }
         }
@@ -179,7 +185,7 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
         // Flush all flat bins since the new draw is incompatible
         if (!compatible)
         {
-            draw_bins.append_range(std::move(alpha_bins));
+            draw_bins_out.append_range(std::move(alpha_bins));
             alpha_bins.clear();
             matching_bin = nullptr;
         }
@@ -187,47 +193,45 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
         // Add to the existing bin if we have it
         if (matching_bin)
         {
-            matching_bin->add_draw(std::move(processed_draw), bin_key);
+            matching_bin->add_draw(processed_draw, bin_key);
             continue;
         }
 
         // Create a new bin otherwise
         DrawBin& alpha_bin = alpha_bins.emplace_back();
-        alpha_bin.add_draw(std::move(processed_draw), bin_key);
+        alpha_bin.add_draw(processed_draw, bin_key);
     }
 
-    draw_bins.append_range(std::move(alpha_bins));
+    draw_bins_out.append_range(std::move(alpha_bins));
     for (DrawBin& opaque_bin : opaque_bins | std::views::values)
     {
-        draw_bins.push_back(std::move(opaque_bin));
+        draw_bins_out.push_back(std::move(opaque_bin));
     }
-
-    return draw_bins;
 }
 
-void SpriteBatcher::emit_draws(std::vector<DrawBin>&& draw_bins, std::vector<DrawCall>& draws_out)
+void SpriteBatcher::emit_draws(const std::vector<DrawBin>& draw_bins_in, std::vector<DrawCall>& draws_out)
 {
     SCOPED_EVENT("SpriteBatcher - create draws");
 
-    for (DrawBin& draw_bin : draw_bins)
+    for (const DrawBin& draw_bin : draw_bins_in)
     {
         const bool requires_alpha = std::get<1>(draw_bin.key);
         if (draw_bin.processed_draws.size() == 1)
         {
             draws_out.push_back(
-                emit_simple_draw(std::move(draw_bin.processed_draws[0]), requires_alpha)
+                emit_simple_draw(draw_bin.processed_draws[0], requires_alpha)
             );
         }
         else if (draw_bin.processed_draws.size() > 1)
         {
             draws_out.push_back(
-                emit_instanced_draw(std::move(draw_bin.processed_draws), requires_alpha)
+                emit_instanced_draw(draw_bin.processed_draws, requires_alpha)
             );
         }
     }
 }
 
-DrawCall SpriteBatcher::emit_simple_draw(ProcessedSpriteDraw&& processed_draw, bool requires_alpha)
+DrawCall SpriteBatcher::emit_simple_draw(const ProcessedSpriteDraw& processed_draw, bool requires_alpha)
 {
     const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
     peng::shared_ref<Material> material = get_pooled_material(pool_key);
@@ -245,13 +249,13 @@ DrawCall SpriteBatcher::emit_simple_draw(ProcessedSpriteDraw&& processed_draw, b
 
     return DrawCall{
         .mesh = get_sprite_mesh(),
-        .material = std::move(material),
+        .material = material,
         .order = order,
         .instance_count = 1
     };
 }
 
-DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& processed_draws, bool requires_alpha)
+DrawCall SpriteBatcher::emit_instanced_draw(const std::vector<ProcessedSpriteDraw>& processed_draws, bool requires_alpha)
 {
     const int32_t num_sprites = static_cast<int32_t>(processed_draws.size());
     check(num_sprites > 1);
@@ -266,18 +270,28 @@ DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& p
     std::vector<SpriteInstanceData> instance_data;
     instance_data.reserve(processed_draws.size());
 
+    float avg_depth = 0;
+    auto consume_draw = [&](const ProcessedSpriteDraw& processed_draw)
+    {
+        avg_depth += processed_draw.z_depth;
+        instance_data.push_back(processed_draw.instance_data);
+    };
+
     const bool requires_blend = material->shader()->requires_blending();
     if (requires_blend)
     {
         // Translucent sprites need to be drawn in reverse z-depth order
-        std::ranges::reverse(processed_draws);
+        for (const ProcessedSpriteDraw& processed_draw : processed_draws | std::views::reverse)
+        {
+            consume_draw(processed_draw);
+        }
     }
-
-    float avg_depth = 0;
-    for (const ProcessedSpriteDraw& processed_draw : processed_draws)
+    else
     {
-        avg_depth += processed_draw.z_depth;
-        instance_data.push_back(processed_draw.instance_data);
+        for (const ProcessedSpriteDraw& processed_draw : processed_draws)
+        {
+            consume_draw(processed_draw);
+        }
     }
 
     buffer->upload(instance_data);
@@ -291,7 +305,7 @@ DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& p
 
     return DrawCall{
         .mesh = get_sprite_mesh(),
-        .material = std::move(material),
+        .material = material,
         .order = order,
         .instance_count = num_sprites
     };

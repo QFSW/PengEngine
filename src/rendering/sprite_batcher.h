@@ -71,7 +71,7 @@ namespace rendering
             math::Vector2f depth_range;
             std::vector<ProcessedSpriteDraw> processed_draws;
 
-            void add_draw(ProcessedSpriteDraw&& processed_draw, const BinKey& bin_key);
+            void add_draw(const ProcessedSpriteDraw& processed_draw, const BinKey& bin_key);
 
             [[nodiscard]] bool approx_flat() const noexcept;
             [[nodiscard]] bool approx_overlaps(float z_depth) const noexcept;
@@ -81,24 +81,37 @@ namespace rendering
         };
 
         // Preprocess all of the sprite draw calls
-        [[nodiscard]] std::vector<ProcessedSpriteDraw> preprocess_draws(
-            const std::vector<SpriteDrawCall>& sprite_draws
+        void preprocess_draws(
+            const std::vector<SpriteDrawCall>& sprite_draws_in,
+            std::vector<ProcessedSpriteDraw>& processed_draws_out
+        ) const;
+
+        // Sorts draws by their z-depth
+        void sort_draws(
+            std::vector<ProcessedSpriteDraw>& processed_draws_in_out
         ) const;
 
         // Bins processed draws by {texture, alpha}
         // This way all draws in a bin can be merged into one draw call
-        std::vector<DrawBin> bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const;
+        // Mutates the input for performance reasons
+        void bin_draws(
+            const std::vector<ProcessedSpriteDraw>& processed_draws_in,
+            std::vector<DrawBin>& draw_bins_out
+        ) const;
 
         // Emits draw calls from the binned processed draws
         // Bins with more than one draw will result in a merged instanced draw
-        void emit_draws(std::vector<DrawBin>&& draw_bins, std::vector<DrawCall>& draws_out);
+        void emit_draws(
+            const std::vector<DrawBin>& draw_bins_in,
+            std::vector<DrawCall>& draws_out
+        );
 
         // Emits a draw call when no instancing is used
-        [[nodiscard]] DrawCall emit_simple_draw(ProcessedSpriteDraw&& processed_draw, bool requires_alpha);
+        [[nodiscard]] DrawCall emit_simple_draw(const ProcessedSpriteDraw& processed_draw, bool requires_alpha);
 
         // Emits an instanced draw call when to batch multiple sprites together
         [[nodiscard]] DrawCall emit_instanced_draw(
-            std::vector<ProcessedSpriteDraw>&& processed_draws, bool requires_alpha
+            const std::vector<ProcessedSpriteDraw>& processed_draws, bool requires_alpha
         );
 
         [[nodiscard]] ProcessedSpriteDraw preprocess_draw(const SpriteDrawCall& sprite_draw) const;
@@ -109,5 +122,7 @@ namespace rendering
         peng::shared_ptr<const Mesh> _sprite_mesh;
         std::unordered_map<MaterialPoolKey, MaterialPool> _material_pools;
         ResourcePool<StructuredBuffer<SpriteInstanceData>> _buffer_pool;
+        std::vector<ProcessedSpriteDraw> _processed_draw_buffer;
+        std::vector<DrawBin> _draw_bin_buffer;
     };
 }

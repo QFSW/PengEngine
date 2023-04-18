@@ -41,10 +41,15 @@ void RenderQueue::drain_queues()
     RenderCommand command;
     while (_command_queue.try_dequeue(command))
     {
-        std::visit(functional::overload{
-            [&](DrawCall& x)        { _draw_calls.push_back(std::move(x)); },
-            [&](SpriteDrawCall& x)  { _sprite_draw_calls.push_back(std::move(x)); }
-        }, command);
+        consume_command(command);
     }
+}
+
+void RenderQueue::consume_command(RenderCommand& command)
+{
+    std::visit(functional::overload{
+        [&](DrawCall& x) { _draw_calls.push_back(std::move(x)); },
+        [&](SpriteDrawCall& x) { _sprite_draw_calls.push_back(std::move(x)); }
+    }, command);
 }
 
