@@ -65,3 +65,8 @@ math::Vector2f Sprite::size() const
 {
     return _resolution / _px_per_unit;
 }
+
+TransparencyMode Sprite::transparency() const noexcept
+{
+    return _texture->transparency();
+}

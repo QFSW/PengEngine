@@ -7,6 +7,8 @@
 #include <memory/shared_ref.h>
 #include <math/vector4.h>
 
+#include "transparency_mode.h"
+
 struct Archive;
 
 namespace rendering
@@ -60,16 +62,23 @@ namespace rendering
         [[nodiscard]] const std::string& name() const noexcept;
         [[nodiscard]] GLuint raw() const noexcept;
         [[nodiscard]] math::Vector2i resolution() const noexcept;
-        [[nodiscard]] bool has_alpha() const noexcept;
+        [[nodiscard]] TransparencyMode transparency() const noexcept;
 
     private:
         void verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const;
         void build_from_buffer(const void* texture_data);
 
+        TransparencyMode determine_transparency(
+            int32_t num_channels,
+            const void* texture_data,
+            int32_t num_pixels
+        ) const noexcept;
+
         std::string _name;
         GLuint _tex;
         math::Vector2i _resolution;
         int32_t _num_channels;
+        TransparencyMode _transparency;
         Config _config;
     };
 }

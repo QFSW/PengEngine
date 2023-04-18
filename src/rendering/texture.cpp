@@ -139,10 +139,9 @@ math::Vector2i Texture::resolution() const noexcept
     return _resolution;
 }
 
-// TODO: improve texture loading to discard alpha channel if its not actually used
-bool Texture::has_alpha() const noexcept
+TransparencyMode Texture::transparency() const noexcept
 {
-    return _num_channels == 4;
+    return _transparency;
 }
 
 void Texture::verify_resolution(const math::Vector2i& resolution, int32_t num_pixels) const
@@ -187,9 +186,46 @@ void Texture::build_from_buffer(const void* texture_data)
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(texture_format), _resolution.x, _resolution.y, 0, texture_format, GL_UNSIGNED_BYTE, texture_data);
+    _transparency = determine_transparency(_num_channels, texture_data, _resolution.x * _resolution.y);
 
     if (_config.generate_mipmaps)
     {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
+}
+
+TransparencyMode Texture::determine_transparency(
+    int32_t num_channels,
+    const void* texture_data,
+    int32_t num_pixels
+) const noexcept
+{
+    if (num_channels != 4)
+    {
+        return TransparencyMode::opaque;
+    }
+
+    bool has_transparency = false;
+    const uint8_t* rgba_data = static_cast<const uint8_t*>(texture_data);
+
+    for (int32_t i = 0; i < num_pixels; i++)
+    {
+        const uint8_t alpha = rgba_data[i * 4 + 3];
+
+        // A single translucent pixel means the whole image is translucent
+        if (alpha < 253 && alpha > 2)
+        {
+            return TransparencyMode::translucent;
+        }
+
+        // A single fully transparent pixel means the whole image is at minimum masked
+        if (alpha <= 2)
+        {
+            has_transparency = true;
+        }
+    }
+
+    return has_transparency
+        ? TransparencyMode::masked
+        : TransparencyMode::opaque;
 }

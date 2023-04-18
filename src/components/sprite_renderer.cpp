@@ -59,11 +59,6 @@ void SpriteRenderer::post_create()
 	cache_uniforms(_material_transparent, _cached_uniforms_transparent);
 }
 
-bool SpriteRenderer::has_alpha() const
-{
-	return _color.w < 0.99f || _sprite->texture()->has_alpha();
-}
-
 void SpriteRenderer::cache_uniforms(const peng::shared_ref<rendering::Material>& material, UniformSet& uniform_set)
 {
 	auto get_uniform_location_checked = [&](const std::string& uniform_name, const std::string& required_symbol = "")

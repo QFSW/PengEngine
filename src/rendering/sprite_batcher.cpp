@@ -125,8 +125,8 @@ void SpriteBatcher::bin_draws(
     for (const ProcessedSpriteDraw& processed_draw : processed_draws_in)
     {
         const bool requires_alpha =
-            processed_draw.instance_data.color.w < 0.99f ||
-            processed_draw.texture->has_alpha();
+            processed_draw.instance_data.color.w < 0.999f ||
+            processed_draw.texture->transparency() == TransparencyMode::translucent;
 
         const BinKey bin_key = std::make_tuple(processed_draw.texture, requires_alpha);
 

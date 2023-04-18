@@ -573,6 +573,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\sprite_batcher.h" />
     <ClInclude Include="src\rendering\sprite_draw_call.h" />
     <ClInclude Include="src\rendering\structured_buffer.h" />
+    <ClInclude Include="src\rendering\transparency_mode.h" />
     <ClInclude Include="src\rendering\window_icon.h" />
     <ClInclude Include="src\rendering\material.h" />
     <ClInclude Include="src\rendering\mesh.h" />

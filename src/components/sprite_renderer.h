@@ -24,8 +24,6 @@ namespace components
 		void tick(float delta_time) override;
 		void post_create() override;
 
-		[[nodiscard]] bool has_alpha() const;
-
 		[[nodiscard]] peng::shared_ref<const rendering::Sprite>& sprite() noexcept { return _sprite; }
 		[[nodiscard]] const peng::shared_ref<const rendering::Sprite>& sprite() const noexcept { return _sprite; }
 

@@ -27,6 +27,7 @@ namespace rendering
 
     private:
         void drain_queues();
+        void consume_command(RenderCommand& command);
 
         SpriteBatcher _sprite_batcher;
         std::vector<DrawCall> _draw_calls;

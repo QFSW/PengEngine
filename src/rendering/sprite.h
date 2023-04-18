@@ -3,6 +3,8 @@
 #include <memory/shared_ref.h>
 #include <math/vector2.h>
 
+#include "transparency_mode.h"
+
 struct Archive;
 
 namespace rendering
@@ -27,6 +29,7 @@ namespace rendering
         [[nodiscard]] const math::Vector2i& position() const;
         [[nodiscard]] const math::Vector2i& resolution() const;
         [[nodiscard]] math::Vector2f size() const;
+        [[nodiscard]] TransparencyMode transparency() const noexcept;
 
     private:
         peng::shared_ref<const Texture> _texture;
