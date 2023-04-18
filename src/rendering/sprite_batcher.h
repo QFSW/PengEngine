@@ -24,8 +24,6 @@ namespace rendering
     class SpriteBatcher
     {
     public:
-        SpriteBatcher();
-
         void convert_draws(
             const std::vector<SpriteDrawCall>& sprite_draws_in,
             std::vector<DrawCall>& draws_out
@@ -91,10 +89,8 @@ namespace rendering
         [[nodiscard]] peng::shared_ref<Material> get_pooled_material(const MaterialPoolKey& key);
         [[nodiscard]] peng::shared_ref<StructuredBuffer<SpriteInstanceData>> get_pooled_buffer();
 
-        size_t _buffers_used;
-
         peng::shared_ptr<const Mesh> _sprite_mesh;
         std::unordered_map<MaterialPoolKey, MaterialPool> _material_pools;
-        std::vector<peng::shared_ref<StructuredBuffer<SpriteInstanceData>>> _buffer_pool;
+        ResourcePool<StructuredBuffer<SpriteInstanceData>> _buffer_pool;
     };
 }

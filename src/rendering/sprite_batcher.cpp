@@ -2,6 +2,7 @@
 
 #include <ranges>
 #include <profiling/scoped_event.h>
+#include <utils/strtools.h>
 
 #include "sprite.h"
 #include "texture.h"
@@ -12,10 +13,6 @@
 
 using namespace rendering;
 using namespace math;
-
-SpriteBatcher::SpriteBatcher()
-    : _buffers_used(0)
-{ }
 
 void SpriteBatcher::convert_draws(
     const std::vector<SpriteDrawCall>& sprite_draws_in,
@@ -29,7 +26,7 @@ void SpriteBatcher::convert_draws(
         pool.num_used = 0;
     }
 
-    _buffers_used = 0;
+    _buffer_pool.num_used = 0;
 
     std::vector<ProcessedSpriteDraw> processed_draws = preprocess_draws(sprite_draws_in);
     DrawBins binned_draws = bin_draws(std::move(processed_draws));
@@ -42,7 +39,7 @@ void SpriteBatcher::flush()
     // TODO: would be nicer if we could use the = nullptr syntax
     _sprite_mesh = {};
     _material_pools.clear();
-    _buffer_pool.clear();
+    _buffer_pool.resources.clear();
 }
 
 std::vector<SpriteBatcher::ProcessedSpriteDraw> SpriteBatcher::preprocess_draws(
@@ -106,7 +103,6 @@ DrawCall SpriteBatcher::emit_simple_draw(ProcessedSpriteDraw&& processed_draw, b
     const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
     peng::shared_ref<Material> material = get_pooled_material(pool_key);
 
-
     // TODO: use uniform caches
     material->set_parameter("color_tex", processed_draw.texture);
     material->set_parameter("base_color", processed_draw.instance_data.color);
@@ -144,6 +140,7 @@ DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& p
 
     // TODO: might need to sort instance data by z-depth
     // TODO: not sure how to order instanced draws relative to each other to avoid blending artifacts
+    // TODO: can change binning so that each bin has a depth range and they never overlap
     for (const ProcessedSpriteDraw& processed_draw : processed_draws)
     {
         instance_data.push_back(processed_draw.instance_data);
@@ -243,15 +240,15 @@ peng::shared_ref<Material> SpriteBatcher::get_pooled_material(const MaterialPool
 
 peng::shared_ref<StructuredBuffer<SpriteBatcher::SpriteInstanceData>> SpriteBatcher::get_pooled_buffer()
 {
-    if (_buffers_used == _buffer_pool.size())
+    if (_buffer_pool.num_used == _buffer_pool.resources.size())
     {
-        _buffer_pool.push_back(
+        _buffer_pool.resources.push_back(
             peng::make_shared<StructuredBuffer<SpriteInstanceData>>(
-                strtools::catf("SpriteBatcher[%d]", _buffers_used),
+                strtools::catf("SpriteBatcher[%d]", _buffer_pool.num_used),
                 GL_DYNAMIC_DRAW
             )
         );
     }
 
-    return _buffer_pool[_buffers_used++];
+    return _buffer_pool.resources[_buffer_pool.num_used++];
 }

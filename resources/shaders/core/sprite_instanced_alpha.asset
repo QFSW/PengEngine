@@ -2,6 +2,6 @@
     "name": "Sprite(Instanced|Alpha)",
     "vert": "resources/shaders/core/sprite_instanced.vert",
     "frag": "resources/shaders/core/sprite.frag",
-    "draw_order": 3,
+    "draw_order": 2,
     "blend_mode": 1
 }
