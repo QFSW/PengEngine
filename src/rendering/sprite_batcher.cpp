@@ -1,6 +1,8 @@
 #include "sprite_batcher.h"
 
 #include <ranges>
+#include <execution>
+
 #include <profiling/scoped_event.h>
 #include <utils/strtools.h>
 
@@ -83,10 +85,10 @@ std::vector<SpriteBatcher::ProcessedSpriteDraw> SpriteBatcher::preprocess_draws(
 {
     SCOPED_EVENT("SpriteBatcher - preprocess draws");
     std::vector<ProcessedSpriteDraw> processed_draws;
-    processed_draws.reserve(sprite_draws.size());
+        processed_draws.reserve(sprite_draws.size());
 
     for (const SpriteDrawCall& sprite_draw : sprite_draws)
-    {
+        {
         processed_draws.push_back(preprocess_draw(sprite_draw));
     }
 
@@ -98,7 +100,7 @@ std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<Process
     SCOPED_EVENT("SpriteBatcher - bin draws");
 
     std::vector<ProcessedSpriteDraw> processed_draws_ordered(std::move(processed_draws));
-    std::ranges::sort(processed_draws_ordered,
+    std::sort(std::execution::par_unseq, processed_draws_ordered.begin(), processed_draws_ordered.end(),
         [](const ProcessedSpriteDraw& x, const ProcessedSpriteDraw& y)
         {
             return x.z_depth < y.z_depth;
