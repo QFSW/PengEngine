@@ -28,9 +28,14 @@ DrawCallTree::DrawCallTree(std::vector<DrawCall>&& draw_calls)
         check(draw_call.material);
         check(draw_call.mesh);
 
-        const peng::shared_ref<const Shader> shader = draw_call.material->shader();
-        MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh.to_shared_ref());
-        mesh_draw.draw_calls.push_back(std::move(draw_call));
+        if (draw_call.material->shader()->requires_blending())
+        {
+            add_blended_draw(std::move(draw_call));
+        }
+        else
+        {
+            add_opaque_draw(std::move(draw_call));
+        }
     }
 
     std::ranges::sort(
@@ -88,6 +93,45 @@ void DrawCallTree::execute(RenderQueueStats& stats) const
     }
 
     glBindVertexArray(0);
+}
+
+void DrawCallTree::add_opaque_draw(DrawCall&& draw_call)
+{
+    const peng::shared_ref<const Shader> shader = draw_call.material->shader();
+    MeshDrawTree& mesh_draw = find_add_mesh_draw(shader, draw_call.mesh.to_shared_ref());
+    mesh_draw.draw_calls.push_back(std::move(draw_call));
+}
+
+void DrawCallTree::add_blended_draw(DrawCall&& draw_call)
+{
+    // Only try merging with the last of each tree stage to preserve order
+    auto try_back = []<typename T>(std::vector<T>& vec) -> T*
+    {
+        if (vec.empty())
+        {
+            return nullptr;
+        }
+
+        return &vec.back();
+    };
+
+    ShaderDrawTree* shader_draw = try_back(_shader_draws);
+    if (!shader_draw || shader_draw->shader != draw_call.material->shader())
+    {
+        shader_draw = &_shader_draws.emplace_back(ShaderDrawTree{
+            .shader = draw_call.material->shader()
+        });
+    }
+
+    MeshDrawTree* mesh_draw = try_back(shader_draw->mesh_draws);
+    if (!mesh_draw || mesh_draw->mesh != draw_call.mesh)
+    {
+        mesh_draw = &shader_draw->mesh_draws.emplace_back(MeshDrawTree{
+            .mesh = draw_call.mesh.to_shared_ref()
+        });
+    }
+
+    mesh_draw->draw_calls.push_back(std::move(draw_call));
 }
 
 ShaderDrawTree& DrawCallTree::find_add_shader_draw(const peng::shared_ref<const Shader>& shader)

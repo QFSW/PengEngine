@@ -42,6 +42,12 @@ namespace rendering
         void execute(RenderQueueStats& stats) const;
 
     private:
+        // Adds an opaque draw to the tree, where merging is prioritized over draw order
+        void add_opaque_draw(DrawCall&& draw_call);
+
+        // Adds a blended draw to the tree, where draw order is prioritized over merging
+        void add_blended_draw(DrawCall&& draw_call);
+
         ShaderDrawTree& find_add_shader_draw(const peng::shared_ref<const Shader>& shader);
 
         MeshDrawTree& find_add_mesh_draw(

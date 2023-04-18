@@ -46,6 +46,7 @@ namespace rendering
         struct ProcessedSpriteDraw
         {
             peng::shared_ref<const Texture> texture;
+            float z_depth = 0;
             SpriteInstanceData instance_data;
         };
 
@@ -61,7 +62,23 @@ namespace rendering
         using MaterialPoolKey = std::tuple<bool, bool>;
 
         using BinKey = std::tuple<peng::shared_ptr<const Texture>, bool>;
-        using DrawBins = std::unordered_map<BinKey, std::vector<ProcessedSpriteDraw>>;
+
+        struct DrawBin
+        {
+            DrawBin();
+
+            BinKey key;
+            math::Vector2f depth_range;
+            std::vector<ProcessedSpriteDraw> processed_draws;
+
+            void add_draw(ProcessedSpriteDraw&& processed_draw, const BinKey& bin_key);
+
+            [[nodiscard]] bool approx_flat() const noexcept;
+            [[nodiscard]] bool approx_overlaps(float z_depth) const noexcept;
+            [[nodiscard]] bool empty() const noexcept;
+
+            static constexpr float epsilon = 0.001f;
+        };
 
         // Preprocess all of the sprite draw calls
         [[nodiscard]] std::vector<ProcessedSpriteDraw> preprocess_draws(
@@ -70,11 +87,11 @@ namespace rendering
 
         // Bins processed draws by {texture, alpha}
         // This way all draws in a bin can be merged into one draw call
-        DrawBins bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const;
+        std::vector<DrawBin> bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const;
 
         // Emits draw calls from the binned processed draws
         // Bins with more than one draw will result in a merged instanced draw
-        void emit_draws(DrawBins&& binned_draws, std::vector<DrawCall>& draws_out);
+        void emit_draws(std::vector<DrawBin>&& draw_bins, std::vector<DrawCall>& draws_out);
 
         // Emits a draw call when no instancing is used
         [[nodiscard]] DrawCall emit_simple_draw(ProcessedSpriteDraw&& processed_draw, bool requires_alpha);

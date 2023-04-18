@@ -29,9 +29,9 @@ void SpriteBatcher::convert_draws(
     _buffer_pool.num_used = 0;
 
     std::vector<ProcessedSpriteDraw> processed_draws = preprocess_draws(sprite_draws_in);
-    DrawBins binned_draws = bin_draws(std::move(processed_draws));
+    std::vector<DrawBin> draw_bins = bin_draws(std::move(processed_draws));
 
-    emit_draws(std::move(binned_draws), draws_out);
+    emit_draws(std::move(draw_bins), draws_out);
 }
 
 void SpriteBatcher::flush()
@@ -40,6 +40,41 @@ void SpriteBatcher::flush()
     _sprite_mesh = {};
     _material_pools.clear();
     _buffer_pool.resources.clear();
+}
+
+SpriteBatcher::DrawBin::DrawBin()
+    : depth_range(std::numeric_limits<float>::min(), std::numeric_limits<float>::min())
+{ }
+
+void SpriteBatcher::DrawBin::add_draw(ProcessedSpriteDraw&& processed_draw, const BinKey& bin_key)
+{
+    if (processed_draws.empty())
+    {
+        key = bin_key;
+        depth_range = Vector2f(processed_draw.z_depth, processed_draw.z_depth);
+    }
+    else
+    {
+        depth_range.y = processed_draw.z_depth;
+    }
+
+    processed_draws.push_back(std::move(processed_draw));
+}
+
+bool SpriteBatcher::DrawBin::approx_flat() const noexcept
+{
+    return depth_range.y - depth_range.x < epsilon;
+}
+
+bool SpriteBatcher::DrawBin::approx_overlaps(float z_depth) const noexcept
+{
+    return z_depth - depth_range.x > -epsilon
+        && z_depth - depth_range.y < +epsilon;
+}
+
+bool SpriteBatcher::DrawBin::empty() const noexcept
+{
+    return processed_draws.empty();
 }
 
 std::vector<SpriteBatcher::ProcessedSpriteDraw> SpriteBatcher::preprocess_draws(
@@ -58,41 +93,133 @@ std::vector<SpriteBatcher::ProcessedSpriteDraw> SpriteBatcher::preprocess_draws(
     return processed_draws;
 }
 
-SpriteBatcher::DrawBins SpriteBatcher::bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const
+std::vector<SpriteBatcher::DrawBin> SpriteBatcher::bin_draws(std::vector<ProcessedSpriteDraw>&& processed_draws) const
 {
     SCOPED_EVENT("SpriteBatcher - bin draws");
-    DrawBins binned_draws;
 
-    for (ProcessedSpriteDraw& processed_draw : processed_draws)
+    std::vector<ProcessedSpriteDraw> processed_draws_ordered(std::move(processed_draws));
+    std::ranges::sort(processed_draws_ordered,
+        [](const ProcessedSpriteDraw& x, const ProcessedSpriteDraw& y)
+        {
+            return x.z_depth < y.z_depth;
+        });
+
+    // Translucent sprites require that bins are broken such that two separate translucent
+    // bins never overlap in their z-depth range, but allow a small deviation for floating point errors
+    //
+    // To do this, we only allow 2 scenarios for incomplete alpha bins at any given time:
+    // 1. A single bin of any depth range
+    // 2. Multiple bins with approximately flat and equal depth
+    std::vector<DrawBin> alpha_bins;
+    std::unordered_map<BinKey, DrawBin> opaque_bins;
+    std::vector<DrawBin> draw_bins;
+
+    for (ProcessedSpriteDraw& processed_draw : processed_draws_ordered)
     {
         const bool requires_alpha =
             processed_draw.instance_data.color.w < 0.99f ||
             processed_draw.texture->has_alpha();
 
         const BinKey bin_key = std::make_tuple(processed_draw.texture, requires_alpha);
-        binned_draws[bin_key].push_back(std::move(processed_draw));
+
+        // Opaque sprites can always be binned together if they have compatible textures
+        if (!requires_alpha)
+        {
+            opaque_bins[bin_key].add_draw(std::move(processed_draw), bin_key);
+            continue;
+        }
+
+        // Create an alpha bin if there aren't any
+        if (alpha_bins.empty())
+        {
+            DrawBin& alpha_bin = alpha_bins.emplace_back();
+            alpha_bin.add_draw(std::move(processed_draw), bin_key);
+            continue;
+        }
+
+        // Consider the single bin case separately to multi bin as per (1)
+        if (alpha_bins.size() == 1)
+        {
+            DrawBin& alpha_bin = alpha_bins[0];
+
+            if (alpha_bin.key == bin_key)
+            {
+                // If it matches then allow it to grow in depth range
+                alpha_bin.add_draw(std::move(processed_draw), bin_key);
+                continue;
+            }
+
+            if (!alpha_bin.approx_flat())
+            {
+                // If it doesn't and the bin isn't flat, it needs flushing and create a new bin
+                draw_bins.push_back(std::move(alpha_bin));
+                alpha_bin = {};
+                alpha_bin.add_draw(std::move(processed_draw), bin_key);
+                continue;
+            }
+        }
+
+        // If we have multiple bins now, they must all be flat and the new draw must overlap with all of them
+        // Check that this is true, and if it is, add the draw to the corresponding bin
+        // Otherwise flush all of them and create a new bin
+        bool compatible = true;
+        DrawBin* matching_bin = nullptr;
+
+        for (DrawBin& flat_bin : alpha_bins)
+        {
+            compatible &= flat_bin.approx_overlaps(processed_draw.z_depth);
+            if (flat_bin.key == bin_key)
+            {
+                matching_bin = &flat_bin;
+            }
+        }
+
+        // Flush all flat bins since the new draw is incompatible
+        if (!compatible)
+        {
+            draw_bins.append_range(std::move(alpha_bins));
+            alpha_bins.clear();
+            matching_bin = nullptr;
+        }
+
+        // Add to the existing bin if we have it
+        if (matching_bin)
+        {
+            matching_bin->add_draw(std::move(processed_draw), bin_key);
+            continue;
+        }
+
+        // Create a new bin otherwise
+        DrawBin& alpha_bin = alpha_bins.emplace_back();
+        alpha_bin.add_draw(std::move(processed_draw), bin_key);
     }
 
-    return binned_draws;
+    draw_bins.append_range(std::move(alpha_bins));
+    for (DrawBin& opaque_bin : opaque_bins | std::views::values)
+    {
+        draw_bins.push_back(std::move(opaque_bin));
+    }
+
+    return draw_bins;
 }
 
-void SpriteBatcher::emit_draws(DrawBins&& binned_draws, std::vector<DrawCall>& draws_out)
+void SpriteBatcher::emit_draws(std::vector<DrawBin>&& draw_bins, std::vector<DrawCall>& draws_out)
 {
     SCOPED_EVENT("SpriteBatcher - create draws");
 
-    for (auto& [bin_key, draws] : binned_draws)
+    for (DrawBin& draw_bin : draw_bins)
     {
-        const bool requires_alpha = std::get<1>(bin_key);
-        if (draws.size() == 1)
+        const bool requires_alpha = std::get<1>(draw_bin.key);
+        if (draw_bin.processed_draws.size() == 1)
         {
             draws_out.push_back(
-                emit_simple_draw(std::move(draws[0]), requires_alpha)
+                emit_simple_draw(std::move(draw_bin.processed_draws[0]), requires_alpha)
             );
         }
-        else if (draws.size() > 1)
+        else if (draw_bin.processed_draws.size() > 1)
         {
             draws_out.push_back(
-                emit_instanced_draw(std::move(draws), requires_alpha)
+                emit_instanced_draw(std::move(draw_bin.processed_draws), requires_alpha)
             );
         }
     }
@@ -110,10 +237,9 @@ DrawCall SpriteBatcher::emit_simple_draw(ProcessedSpriteDraw&& processed_draw, b
     material->set_parameter("tex_scale", processed_draw.instance_data.tex_scale);
     material->set_parameter("tex_offset", processed_draw.instance_data.tex_offset);
 
-    const float z_depth = processed_draw.instance_data.mvp_matrix.get_translation().z;
     const float order = material->shader()->requires_blending()
-        ? -z_depth
-        : +z_depth;
+        ? -processed_draw.z_depth
+        : +processed_draw.z_depth;
 
     return DrawCall{
         .mesh = get_sprite_mesh(),
@@ -138,11 +264,17 @@ DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& p
     std::vector<SpriteInstanceData> instance_data;
     instance_data.reserve(processed_draws.size());
 
-    // TODO: might need to sort instance data by z-depth
-    // TODO: not sure how to order instanced draws relative to each other to avoid blending artifacts
-    // TODO: can change binning so that each bin has a depth range and they never overlap
+    const bool requires_blend = material->shader()->requires_blending();
+    if (requires_blend)
+    {
+        // Translucent sprites need to be drawn in reverse z-depth order
+        std::ranges::reverse(processed_draws);
+    }
+
+    float avg_depth = 0;
     for (const ProcessedSpriteDraw& processed_draw : processed_draws)
     {
+        avg_depth += processed_draw.z_depth;
         instance_data.push_back(processed_draw.instance_data);
     }
 
@@ -150,11 +282,15 @@ DrawCall SpriteBatcher::emit_instanced_draw(std::vector<ProcessedSpriteDraw>&& p
     material->set_parameter("color_tex", processed_draws[0].texture);
     material->set_buffer("sprite_instance_data", buffer);
 
-    // TODO: work out order
+    avg_depth /= static_cast<float>(processed_draws.size());
+    const float order = requires_blend
+        ? -avg_depth
+        : +avg_depth;
+
     return DrawCall{
         .mesh = get_sprite_mesh(),
         .material = std::move(material),
-        .order = 0,
+        .order = order,
         .instance_count = num_sprites
     };
 }
@@ -179,6 +315,7 @@ SpriteBatcher::ProcessedSpriteDraw SpriteBatcher::preprocess_draw(const SpriteDr
 
     return ProcessedSpriteDraw{
         .texture = sprite->texture(),
+        .z_depth = mvp_matrix.get_translation().z,
         .instance_data = SpriteInstanceData{
             .color = sprite_draw.color,
             .mvp_matrix = mvp_matrix,
