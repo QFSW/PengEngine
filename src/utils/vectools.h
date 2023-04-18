@@ -32,4 +32,15 @@ namespace vectools
     {
         return v.size() * sizeof(T);
     }
+
+    template <typename T>
+    T* try_back(std::vector<T>& v)
+    {
+        if (v.empty())
+        {
+            return nullptr;
+        }
+
+        return &v.back();
+    }
 }

@@ -3,6 +3,7 @@
 #include <profiling/scoped_event.h>
 #include <profiling/scoped_gpu_event.h>
 #include <utils/strtools.h>
+#include <utils/vectools.h>
 
 #include "draw_call.h"
 #include "mesh.h"
@@ -44,6 +45,8 @@ DrawCallTree::DrawCallTree(std::vector<DrawCall>&& draw_calls)
         {
             return x.shader->draw_order() < y.shader->draw_order();
         });
+
+    merge_tree();
 }
 
 void DrawCallTree::execute(RenderQueueStats& stats) const
@@ -91,8 +94,6 @@ void DrawCallTree::execute(RenderQueueStats& stats) const
             }
         }
     }
-
-    glBindVertexArray(0);
 }
 
 void DrawCallTree::add_opaque_draw(DrawCall&& draw_call)
@@ -105,17 +106,7 @@ void DrawCallTree::add_opaque_draw(DrawCall&& draw_call)
 void DrawCallTree::add_blended_draw(DrawCall&& draw_call)
 {
     // Only try merging with the last of each tree stage to preserve order
-    auto try_back = []<typename T>(std::vector<T>& vec) -> T*
-    {
-        if (vec.empty())
-        {
-            return nullptr;
-        }
-
-        return &vec.back();
-    };
-
-    ShaderDrawTree* shader_draw = try_back(_shader_draws);
+    ShaderDrawTree* shader_draw = vectools::try_back(_shader_draws);
     if (!shader_draw || shader_draw->shader != draw_call.material->shader())
     {
         shader_draw = &_shader_draws.emplace_back(ShaderDrawTree{
@@ -123,7 +114,7 @@ void DrawCallTree::add_blended_draw(DrawCall&& draw_call)
         });
     }
 
-    MeshDrawTree* mesh_draw = try_back(shader_draw->mesh_draws);
+    MeshDrawTree* mesh_draw = vectools::try_back(shader_draw->mesh_draws);
     if (!mesh_draw || mesh_draw->mesh != draw_call.mesh)
     {
         mesh_draw = &shader_draw->mesh_draws.emplace_back(MeshDrawTree{
@@ -132,6 +123,57 @@ void DrawCallTree::add_blended_draw(DrawCall&& draw_call)
     }
 
     mesh_draw->draw_calls.push_back(std::move(draw_call));
+}
+
+void DrawCallTree::merge_tree()
+{
+    SCOPED_EVENT("DrawCallTree - merge shader draws");
+
+    _shader_draws = merge_shader_draws(std::move(_shader_draws));
+    for (ShaderDrawTree& shader_draw : _shader_draws)
+    {
+        shader_draw.mesh_draws = merge_mesh_draws(std::move(shader_draw.mesh_draws));
+    }
+}
+
+std::vector<ShaderDrawTree> DrawCallTree::merge_shader_draws(std::vector<ShaderDrawTree>&& shader_draws) const
+{
+    std::vector<ShaderDrawTree> merged_draws;
+
+    for (ShaderDrawTree& shader_draw : shader_draws)
+    {
+        ShaderDrawTree* current = vectools::try_back(merged_draws);
+        if (current && current->shader == shader_draw.shader)
+        {
+            current->mesh_draws.append_range(std::move(shader_draw.mesh_draws));
+        }
+        else
+        {
+            merged_draws.push_back(std::move(shader_draw));
+        }
+    }
+
+    return merged_draws;
+}
+
+std::vector<MeshDrawTree> DrawCallTree::merge_mesh_draws(std::vector<MeshDrawTree>&& mesh_draws) const
+{
+    std::vector<MeshDrawTree> merged_draws;
+
+    for (MeshDrawTree& mesh_draw : mesh_draws)
+    {
+        MeshDrawTree* current = vectools::try_back(merged_draws);
+        if (current && current->mesh == mesh_draw.mesh)
+        {
+            current->draw_calls.append_range(std::move(mesh_draw.draw_calls));
+        }
+        else
+        {
+            merged_draws.push_back(std::move(mesh_draw));
+        }
+    }
+
+    return merged_draws;
 }
 
 ShaderDrawTree& DrawCallTree::find_add_shader_draw(const peng::shared_ref<const Shader>& shader)

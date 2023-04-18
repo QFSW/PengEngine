@@ -77,7 +77,7 @@ namespace rendering
             [[nodiscard]] bool approx_overlaps(float z_depth) const noexcept;
             [[nodiscard]] bool empty() const noexcept;
 
-            static constexpr float epsilon = 0.001f;
+            static constexpr float epsilon = 0.00001f;
         };
 
         // Preprocess all of the sprite draw calls

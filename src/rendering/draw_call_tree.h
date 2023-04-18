@@ -48,6 +48,15 @@ namespace rendering
         // Adds a blended draw to the tree, where draw order is prioritized over merging
         void add_blended_draw(DrawCall&& draw_call);
 
+        // Merges the current tree to minimize subtrees
+        void merge_tree();
+
+        // Merges adjacent shader draws in the tree
+        std::vector<ShaderDrawTree> merge_shader_draws(std::vector<ShaderDrawTree>&& shader_draws) const;
+
+        // Merges adjacent mesh draws in the tree
+        std::vector<MeshDrawTree> merge_mesh_draws(std::vector<MeshDrawTree>&& mesh_draws) const;
+
         ShaderDrawTree& find_add_shader_draw(const peng::shared_ref<const Shader>& shader);
 
         MeshDrawTree& find_add_mesh_draw(
@@ -56,7 +65,6 @@ namespace rendering
         );
 
         std::vector<ShaderDrawTree> _shader_draws;
-
         std::unordered_map<peng::shared_ref<const Shader>, size_t> _shader_draw_indices;
 
         // Maps from a (shader, mesh) key to a (shader_draw index, mesh_draw sub index) value
