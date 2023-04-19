@@ -300,15 +300,13 @@ namespace math
 
         for (uint8_t col = 0; col < ColsB; col++)
         {
-            for (uint8_t row = 0; row < Rows; row++)
+            for (uint8_t row = 0; row < Cols; row++)
             {
-                T num = 0;
-                for (uint8_t i = 0; i < Cols; i++)
+                const T e = rhs.get(row, col);
+                for (uint8_t i = 0; i < Rows; i++)
                 {
-                    num += lhs.get(row, i) * rhs.get(i, col);
+                    result.get(i, col) += e * lhs.get(i, row);
                 }
-
-                result.get(row, col) = num;
             }
         }
 
