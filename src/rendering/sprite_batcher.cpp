@@ -45,38 +45,48 @@ void SpriteBatcher::flush()
 }
 
 SpriteBatcher::DrawBin::DrawBin()
-    : depth_range(std::numeric_limits<float>::min(), std::numeric_limits<float>::min())
+    : _depth_range(std::numeric_limits<float>::min(), std::numeric_limits<float>::min())
 { }
 
 void SpriteBatcher::DrawBin::add_draw(const ProcessedSpriteDraw& processed_draw, const BinKey& bin_key)
 {
-    if (processed_draws.empty())
+    if (_instance_data.empty())
     {
         key = bin_key;
-        depth_range = Vector2f(processed_draw.z_depth, processed_draw.z_depth);
+        _depth_range = Vector2f(processed_draw.z_depth, processed_draw.z_depth);
     }
     else
     {
-        depth_range.y = processed_draw.z_depth;
+        _depth_range.y = processed_draw.z_depth;
     }
 
-    processed_draws.push_back(processed_draw);
+    _instance_data.push_back(processed_draw.instance_data);
+}
+
+const std::vector<SpriteBatcher::SpriteInstanceData>& SpriteBatcher::DrawBin::instance_data() const noexcept
+{
+    return _instance_data;
+}
+
+float SpriteBatcher::DrawBin::avg_depth() const noexcept
+{
+    return (_depth_range.x + _depth_range.y) / 2;
 }
 
 bool SpriteBatcher::DrawBin::approx_flat() const noexcept
 {
-    return depth_range.y - depth_range.x < epsilon;
+    return _depth_range.y - _depth_range.x < epsilon;
 }
 
 bool SpriteBatcher::DrawBin::approx_overlaps(float z_depth) const noexcept
 {
-    return z_depth - depth_range.x > -epsilon
-        && z_depth - depth_range.y < +epsilon;
+    return z_depth - _depth_range.x > -epsilon
+        && z_depth - _depth_range.y < +epsilon;
 }
 
 bool SpriteBatcher::DrawBin::empty() const noexcept
 {
-    return processed_draws.empty();
+    return _instance_data.empty();
 }
 
 void SpriteBatcher::preprocess_draws(
@@ -215,37 +225,36 @@ void SpriteBatcher::emit_draws(const std::vector<DrawBin>& draw_bins_in, std::ve
 
     for (const DrawBin& draw_bin : draw_bins_in)
     {
-        const bool requires_alpha = std::get<1>(draw_bin.key);
-        if (draw_bin.processed_draws.size() == 1)
+        if (draw_bin.instance_data().size() == 1)
         {
-            draws_out.push_back(
-                emit_simple_draw(draw_bin.processed_draws[0], requires_alpha)
-            );
+            draws_out.push_back(emit_simple_draw(draw_bin));
         }
-        else if (draw_bin.processed_draws.size() > 1)
+        else if (draw_bin.instance_data().size() > 1)
         {
-            draws_out.push_back(
-                emit_instanced_draw(draw_bin.processed_draws, requires_alpha)
-            );
+            draws_out.push_back(emit_instanced_draw(draw_bin));
         }
     }
 }
 
-DrawCall SpriteBatcher::emit_simple_draw(const ProcessedSpriteDraw& processed_draw, bool requires_alpha)
+DrawCall SpriteBatcher::emit_simple_draw(const DrawBin& draw_bin)
 {
+    const peng::shared_ref<const Texture> texture = std::get<0>(draw_bin.key).to_shared_ref();
+    const bool requires_alpha = std::get<1>(draw_bin.key);
+    const SpriteInstanceData& instance_data = draw_bin.instance_data()[0];
+
     const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
     peng::shared_ref<Material> material = get_pooled_material(pool_key);
 
     // TODO: use uniform caches
-    material->set_parameter("color_tex", processed_draw.texture);
-    material->set_parameter("base_color", processed_draw.instance_data.color);
-    material->set_parameter("mvp_matrix", processed_draw.instance_data.mvp_matrix);
-    material->set_parameter("tex_scale", processed_draw.instance_data.tex_scale);
-    material->set_parameter("tex_offset", processed_draw.instance_data.tex_offset);
+    material->set_parameter("color_tex", texture);
+    material->set_parameter("base_color", instance_data.color);
+    material->set_parameter("mvp_matrix", instance_data.mvp_matrix);
+    material->set_parameter("tex_scale", instance_data.tex_scale);
+    material->set_parameter("tex_offset", instance_data.tex_offset);
 
     const float order = material->shader()->requires_blending()
-        ? -processed_draw.z_depth
-        : +processed_draw.z_depth;
+        ? -draw_bin.avg_depth()
+        : +draw_bin.avg_depth();
 
     return DrawCall{
         .mesh = get_sprite_mesh(),
@@ -255,53 +264,41 @@ DrawCall SpriteBatcher::emit_simple_draw(const ProcessedSpriteDraw& processed_dr
     };
 }
 
-DrawCall SpriteBatcher::emit_instanced_draw(const std::vector<ProcessedSpriteDraw>& processed_draws, bool requires_alpha)
+DrawCall SpriteBatcher::emit_instanced_draw(const DrawBin& draw_bin)
 {
-    const int32_t num_sprites = static_cast<int32_t>(processed_draws.size());
-    check(num_sprites > 1);
+    const int32_t num_sprites = static_cast<int32_t>(draw_bin.instance_data().size());
 
     SCOPED_EVENT("SpriteBatcher - emit instanced draw", strtools::catf_temp("%d sprites", num_sprites));
+    check(num_sprites > 1);
+
+    const peng::shared_ref<const Texture> texture = std::get<0>(draw_bin.key).to_shared_ref();
+    const bool requires_alpha = std::get<1>(draw_bin.key);
 
     const MaterialPoolKey pool_key = std::make_tuple(true, requires_alpha);
 
     peng::shared_ref<Material> material = get_pooled_material(pool_key);
     peng::shared_ref<StructuredBuffer<SpriteInstanceData>> buffer = get_pooled_buffer();
 
-    std::vector<SpriteInstanceData> instance_data;
-    instance_data.reserve(processed_draws.size());
-
-    float avg_depth = 0;
-    auto consume_draw = [&](const ProcessedSpriteDraw& processed_draw)
-    {
-        avg_depth += processed_draw.z_depth;
-        instance_data.push_back(processed_draw.instance_data);
-    };
-
     const bool requires_blend = material->shader()->requires_blending();
     if (requires_blend)
     {
         // Translucent sprites need to be drawn in reverse z-depth order
-        for (const ProcessedSpriteDraw& processed_draw : processed_draws | std::views::reverse)
-        {
-            consume_draw(processed_draw);
-        }
+        std::vector<SpriteInstanceData> reversed_instance_data(draw_bin.instance_data());
+        std::ranges::reverse(reversed_instance_data);
+
+        buffer->upload(reversed_instance_data);
     }
     else
     {
-        for (const ProcessedSpriteDraw& processed_draw : processed_draws)
-        {
-            consume_draw(processed_draw);
-        }
+        buffer->upload(draw_bin.instance_data());
     }
 
-    buffer->upload(instance_data);
-    material->set_parameter("color_tex", processed_draws[0].texture);
+    material->set_parameter("color_tex", texture);
     material->set_buffer("sprite_instance_data", buffer);
 
-    avg_depth /= static_cast<float>(processed_draws.size());
     const float order = requires_blend
-        ? -avg_depth
-        : +avg_depth;
+        ? -draw_bin.avg_depth()
+        : +draw_bin.avg_depth();
 
     return DrawCall{
         .mesh = get_sprite_mesh(),

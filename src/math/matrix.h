@@ -298,9 +298,9 @@ namespace math
     {
         Matrix<T, Rows, ColsB> result;
 
-        for (uint8_t row = 0; row < Rows; row++)
+        for (uint8_t col = 0; col < ColsB; col++)
         {
-            for (uint8_t col = 0; col < ColsB; col++)
+            for (uint8_t row = 0; row < Rows; row++)
             {
                 T num = 0;
                 for (uint8_t i = 0; i < Cols; i++)

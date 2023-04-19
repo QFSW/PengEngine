@@ -63,19 +63,24 @@ namespace rendering
 
         using BinKey = std::tuple<peng::shared_ptr<const Texture>, bool>;
 
-        struct DrawBin
+        class DrawBin
         {
+        public:
             DrawBin();
 
-            BinKey key;
-            math::Vector2f depth_range;
-            std::vector<ProcessedSpriteDraw> processed_draws;
-
             void add_draw(const ProcessedSpriteDraw& processed_draw, const BinKey& bin_key);
+            [[nodiscard]] const std::vector<SpriteInstanceData>& instance_data() const noexcept;
 
+            [[nodiscard]] float avg_depth() const noexcept;
             [[nodiscard]] bool approx_flat() const noexcept;
             [[nodiscard]] bool approx_overlaps(float z_depth) const noexcept;
             [[nodiscard]] bool empty() const noexcept;
+
+            BinKey key;
+
+        private:
+            math::Vector2f _depth_range;
+            std::vector<SpriteInstanceData> _instance_data;
 
             static constexpr float epsilon = 0.00001f;
         };
@@ -107,12 +112,10 @@ namespace rendering
         );
 
         // Emits a draw call when no instancing is used
-        [[nodiscard]] DrawCall emit_simple_draw(const ProcessedSpriteDraw& processed_draw, bool requires_alpha);
+        [[nodiscard]] DrawCall emit_simple_draw(const DrawBin& draw_bin);
 
         // Emits an instanced draw call when to batch multiple sprites together
-        [[nodiscard]] DrawCall emit_instanced_draw(
-            const std::vector<ProcessedSpriteDraw>& processed_draws, bool requires_alpha
-        );
+        [[nodiscard]] DrawCall emit_instanced_draw(const DrawBin& draw_bin);
 
         [[nodiscard]] ProcessedSpriteDraw preprocess_draw(const SpriteDrawCall& sprite_draw) const;
         [[nodiscard]] peng::shared_ref<const Mesh> get_sprite_mesh();
