@@ -19,9 +19,15 @@ namespace math
 		Matrix4x4(const Matrix<T, 4, 4>& m);
 		explicit Matrix4x4(const std::array<T, 16>& elements);
 
+		// Returns a scaled copied of the matrix
+		// Equivalent to but faster than 'from_scale(scale) * m'
 		[[nodiscard]] Matrix4x4 scaled(const Vector3<T>& scale) const noexcept;
+
+		// Returns a translated copied of the matrix
+		// Equivalent to but faster than 'from_translation(scale) * m'
 		[[nodiscard]] Matrix4x4 translated(const Vector3<T>& translation) const noexcept;
 
+		// Returns a rotated copied of the matrix
 		[[nodiscard]] Matrix4x4<F> rotated(const Vector3<F>& rotation) const noexcept;
 		[[nodiscard]] Matrix4x4<F> rotated(const Quaternion<F>& rotation) const noexcept;
 
