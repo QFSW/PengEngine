@@ -13,3 +13,6 @@ Requires Visual Studio 2022 to compile
 Follow the [devlog](https://qfsw.itch.io/peng-engine/devlog) on itch.io
 
 _more details coming soon_
+
+1. [Build Configurations](docs/build-configs.md)
+2. [Third Party Libraries](docs/third-party.md)
