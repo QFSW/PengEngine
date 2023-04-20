@@ -1,6 +1,6 @@
 # Manual additions
 # Disable libs from contributing to language breakdown
-src/libs/* linguist-vendored
+src/libs/** linguist-vendored
 
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
