@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <filesystem>
 
 #include <core/logger.h>
 #include <memory/shared_ptr.h>
@@ -81,6 +82,13 @@ peng::shared_ref<T> Asset<T>::load_mutable()
         Archive archive;
         archive.path = _path;
         archive.json_def = nlohmann::json::parse(file);
+
+        {
+            namespace fs = std::filesystem;
+            archive.name = archive.read_or<std::string>(
+                "name", fs::path(_path).filename().string()
+            );
+        }
 
         peng::shared_ref<T> loaded = T::load_asset(archive);
         existing = loaded;

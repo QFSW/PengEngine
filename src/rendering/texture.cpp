@@ -97,7 +97,6 @@ Texture::~Texture()
 
 peng::shared_ref<Texture> Texture::load_asset(const Archive& archive)
 {
-    const std::string name = archive.read<std::string>("name");
     const std::string texture_path = archive.read<std::string>("texture");
 
     // TODO: support parsing named items and not just raw decimal literals
@@ -108,7 +107,7 @@ peng::shared_ref<Texture> Texture::load_asset(const Archive& archive)
     archive.try_read("max_filter", config.max_filter);
     archive.try_read("generate_mipmaps", config.generate_mipmaps);
 
-    return peng::make_shared<Texture>(name, texture_path, config);
+    return peng::make_shared<Texture>(archive.name, texture_path, config);
 }
 
 void Texture::bind(GLint slot) const

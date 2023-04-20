@@ -121,11 +121,10 @@ Shader::~Shader()
 
 peng::shared_ref<Shader> Shader::load_asset(const Archive& archive)
 {
-    const std::string name = archive.read<std::string>("name");
     const std::string vert = archive.read<std::string>("vert");
     const std::string frag = archive.read<std::string>("frag");
 
-    peng::shared_ref<Shader> shader = peng::make_shared<Shader>(name, vert, frag);
+    peng::shared_ref<Shader> shader = peng::make_shared<Shader>(archive.name, vert, frag);
     shader->draw_order() = archive.read_or("draw_order", 0);
     shader->blend_mode() = static_cast<BlendMode>(archive.read_or("blend_mode", 0));
 

@@ -40,10 +40,9 @@ WindowIcon::~WindowIcon()
 
 peng::shared_ref<WindowIcon> WindowIcon::load_asset(const Archive& archive)
 {
-    const std::string name = archive.read<std::string>("name");
     const std::string texture_path = archive.read<std::string>("texture");
 
-    return peng::make_shared<WindowIcon>(name, texture_path);
+    return peng::make_shared<WindowIcon>(archive.name, texture_path);
 }
 
 void WindowIcon::use() const

@@ -8,6 +8,9 @@
 // Data archive used for serializing/deserializing items
 struct Archive
 {
+    // The name of the item represented by this archive
+    std::string name;
+
     // The path to the archive on disk, if any
     std::string path;
 
