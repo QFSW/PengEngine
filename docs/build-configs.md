@@ -2,6 +2,16 @@
 
 Peng Engine comes with several different build configurations for different purposes.
 
+|                        | Debug | Development | Release | Master |
+|------------------------|:-----:|:-----------:|:-------:|:------:|
+| Debug OpenGL Context   | ✅    | ❌          | ❌      | ❌    |
+| Debug Standard Library | ✅    | ❌          | ❌      | ❌    |
+| Unoptimized Code       | ✅    | ❌          | ❌      | ❌    |
+| Assertions             | ✅    | ✅          | ❌      | ❌    |
+| Logging                | ✅    | ✅          | ✅      | ❌    |
+| Profiling Support      | ✅    | ✅          | ✅      | ❌    |
+| Console                | ✅    | ✅          | ✅      | ❌    |
+
 ## Debug
 
 Debug builds should be used when developing new rendering features or when debugging difficult issues.
