@@ -13,6 +13,8 @@
 
 class Component;
 
+// TODO: using weak_ptr for entity handle has bad -> performance due to lock
+//       investigate alternative solutions
 class Entity :
     public ITickable,
     public Serializable,

@@ -11,6 +11,7 @@ struct GLFWwindow;
 namespace rendering
 {
 	// TODO: make _active checking part of base Subsystem
+	// TODO: add borderless fullscreen mode support
     class WindowSubsystem final : public Subsystem
     {
         DECLARE_SUBSYSTEM(WindowSubsystem)

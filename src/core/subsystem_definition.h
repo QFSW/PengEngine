@@ -6,3 +6,4 @@ public: \
     { \
         return Subsystem::get<SubsystemType>(); \
     } \
+private: \
