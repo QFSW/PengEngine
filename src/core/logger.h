@@ -19,8 +19,6 @@ enum class LogSeverity
 };
 
 // TODO: automatically enable virtual terminal to get colors on standard windows terminal
-// TODO: automatically dump logs to a file as well as the terminal
-// TODO: timestamp logs
 class Logger : public utils::Singleton<Logger>
 {
 	friend Singleton;

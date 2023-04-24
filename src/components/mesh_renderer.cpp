@@ -34,7 +34,7 @@ MeshRenderer::MeshRenderer(
 	, _material(std::move(material))
 {
     // TODO: serialize _mesh
-	// TODO: serailize _material
+	// TODO: serialize _material
 }
 
 MeshRenderer::MeshRenderer(

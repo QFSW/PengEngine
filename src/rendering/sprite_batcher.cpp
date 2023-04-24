@@ -313,9 +313,13 @@ SpriteBatcher::ProcessedSpriteDraw SpriteBatcher::preprocess_draw(const SpriteDr
     const peng::shared_ref<const Sprite>& sprite = sprite_draw.sprite;
 
     // Determine mvp matrix of sprite with sprite size accounted for
-    const Vector3f sprite_scale = Vector3f(sprite->size(), 1);
-    const Matrix4x4f sprite_matrix = Matrix4x4f::from_scale(sprite_scale);
-    const Matrix4x4f mvp_matrix = sprite_draw.mvp_matrix * sprite_matrix;
+    Matrix4x4f mvp_matrix = sprite_draw.mvp_matrix;
+    if (sprite->size() != Vector2f::one())
+    {
+        const Vector3f sprite_scale = Vector3f(sprite->size(), 1);
+        const Matrix4x4f sprite_matrix = Matrix4x4f::from_scale(sprite_scale);
+        mvp_matrix = mvp_matrix * sprite_matrix;
+    }
 
     // Calculate texture coordinates of sprite
     // Texture coordinates have an inverted y compared to the pixel position

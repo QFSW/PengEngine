@@ -70,10 +70,13 @@ namespace rendering
             // TODO: make the growth policy less prone to thrashing
             release_ssbo();
 
-            glGenBuffers(1, &_ssbo);
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
-            glObjectLabel(GL_BUFFER, _ssbo, -1, _name.c_str());
-            glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(T), data.data(), _usage);
+            {
+                SCOPED_EVENT("StructuredBuffer - allocate", _name.c_str());
+                glGenBuffers(1, &_ssbo);
+                glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
+                glObjectLabel(GL_BUFFER, _ssbo, -1, _name.c_str());
+                glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(T), data.data(), _usage);
+            }
 
             _size = data.size();
             _capacity = _size;
