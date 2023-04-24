@@ -387,9 +387,11 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\audio\audio_clip.cpp" />
+    <ClCompile Include="src\audio\audio_decoder.cpp" />
     <ClCompile Include="src\audio\audio_pool.cpp" />
     <ClCompile Include="src\audio\audio_source.cpp" />
     <ClCompile Include="src\audio\audio_subsystem.cpp" />
+    <ClCompile Include="src\audio\raw_audio_data.cpp" />
     <ClCompile Include="src\components\box_collider_2d.cpp" />
     <ClCompile Include="src\components\collider_2d.cpp" />
     <ClCompile Include="src\components\fly_cam_controller.cpp" />
@@ -472,9 +474,11 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
   <ItemGroup>
     <ClInclude Include="..\..\..\Downloads\json.hpp" />
     <ClInclude Include="src\audio\audio_clip.h" />
+    <ClInclude Include="src\audio\audio_decoder.h" />
     <ClInclude Include="src\audio\audio_pool.h" />
     <ClInclude Include="src\audio\audio_source.h" />
     <ClInclude Include="src\audio\audio_subsystem.h" />
+    <ClInclude Include="src\audio\raw_audio_data.h" />
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\components\box_collider_2d.h" />
     <ClInclude Include="src\components\collider_2d.h" />
