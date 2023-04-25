@@ -20,6 +20,8 @@ enum class EntityState
 
 class Entity;
 
+// TODO: need to rethink entity life cycles so that creation/destruction happens atomically on earliest frame
+//		 rework when creations/destructions are flushed, what entities should be ticked when etc.
 class EntitySubsystem final : public Subsystem
 {
 	DECLARE_SUBSYSTEM(EntitySubsystem)

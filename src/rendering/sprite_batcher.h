@@ -21,7 +21,6 @@ namespace rendering
 
     // Converts a set of sprite draw calls into regular draw calls
     // Where possible, batches sprites together into instanced draws
-    // TODO: something in the rendering pipeline seems to have a frame of delay
     class SpriteBatcher
     {
     public:
