@@ -12,7 +12,7 @@ namespace audio
     class AudioPool
     {
     public:
-        void play(const peng::shared_ref<AudioClip>& clip);
+        void play(const peng::shared_ref<const AudioClip>& clip);
 
     private:
         peng::shared_ref<AudioSource> get_free_source();

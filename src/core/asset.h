@@ -23,6 +23,7 @@ class IAsset
 public:
     [[nodiscard]] virtual bool loaded() const noexcept = 0;
     [[nodiscard]] virtual bool exists() const noexcept = 0;
+    [[nodiscard]] virtual bool empty() const noexcept = 0;
     [[nodiscard]] virtual const std::string& path() const noexcept = 0;
 };
 
@@ -39,6 +40,7 @@ public:
     [[nodiscard]] peng::shared_ref<const T> load();
     [[nodiscard]] bool loaded() const noexcept override;
     [[nodiscard]] bool exists() const noexcept override;
+    [[nodiscard]] bool empty() const noexcept override;
     [[nodiscard]] const std::string& path() const noexcept override;
 
 private:
@@ -116,6 +118,12 @@ bool Asset<T>::exists() const noexcept
 }
 
 template <CAsset T>
+bool Asset<T>::empty() const noexcept
+{
+    return _path.empty();
+}
+
+template <CAsset T>
 const std::string& Asset<T>::path() const noexcept
 {
     return _path;
@@ -156,6 +164,39 @@ namespace peng
     template <CAsset T>
     void from_json(const nlohmann::json& j, shared_ref<T>& out)
     {
+        check(j.is_string());
+        Asset<T> asset(j.get<std::string>());
+        out = asset.load_mutable();
+    }
+
+    template <CAsset T>
+    void to_json(nlohmann::json&, const shared_ptr<const T>&)
+    {
+        // TODO: implement serialization
+        check(false);
+    }
+
+    template <CAsset T>
+    void from_json(const nlohmann::json& j, shared_ptr<const T>& out)
+    {
+        if (j.is_null())
+        {
+            out = {};
+        }
+
+        check(j.is_string());
+        Asset<T> asset(j.get<std::string>());
+        out = asset.load();
+    }
+
+    template <CAsset T>
+    void from_json(const nlohmann::json& j, shared_ptr<T>& out)
+    {
+        if (j.is_null())
+        {
+            out = {};
+        }
+
         check(j.is_string());
         Asset<T> asset(j.get<std::string>());
         out = asset.load_mutable();

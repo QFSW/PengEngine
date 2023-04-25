@@ -2,7 +2,7 @@
 
 using namespace audio;
 
-void AudioPool::play(const peng::shared_ref<AudioClip>& clip)
+void AudioPool::play(const peng::shared_ref<const AudioClip>& clip)
 {
     get_free_source()->play(clip);
 }

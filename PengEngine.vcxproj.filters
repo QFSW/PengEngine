@@ -728,6 +728,11 @@
     <None Include="resources\shaders\core\sprite.vert" />
     <None Include="resources\shaders\core\sprite.asset" />
     <None Include="resources\shaders\core\sprite_alpha.asset" />
+    <None Include="resources\audio\demo\goal.asset" />
+    <None Include="resources\audio\demo\bounce_paddle.asset" />
+    <None Include="resources\audio\demo\bounce_wall.asset" />
+    <None Include="resources\audio\core\menu_click.asset" />
+    <None Include="resources\audio\core\menu_select.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

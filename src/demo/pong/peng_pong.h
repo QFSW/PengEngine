@@ -17,7 +17,7 @@ namespace demo::pong
 		DECLARE_ENTITY(PengPong);
 
 	public:
-		using Entity::Entity;
+		PengPong();
 
 		void post_create() override;
 		void tick(float delta_time) override;
@@ -29,8 +29,7 @@ namespace demo::pong
 		    playing,
 			paused
 		};
-
-		void load_resources();
+		
 		void build_camera();
 		void build_main_menu();
 		void build_world();
@@ -43,11 +42,8 @@ namespace demo::pong
 		peng::weak_ptr<Entity> _world_root;
 		peng::weak_ptr<PauseMenu> _pause_root;
 		peng::weak_ptr<Entity> _menu_root;
-		peng::shared_ptr<audio::AudioClip> _bounce_wall_sfx;
-		peng::shared_ptr<audio::AudioClip> _bounce_paddle_sfx;
-		peng::shared_ptr<audio::AudioClip> _goal_sfx;
-		peng::shared_ptr<audio::AudioClip> _menu_select_sfx;
-		peng::shared_ptr<audio::AudioClip> _menu_click_sfx;
+		peng::shared_ptr<const audio::AudioClip> _menu_select_sfx;
+		peng::shared_ptr<const audio::AudioClip> _menu_click_sfx;
 		audio::AudioPool _audio_pool;
 
 		static constexpr float ortho_size = 20;

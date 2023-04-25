@@ -617,6 +617,11 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\scene\scene_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\audio\core\menu_click.asset" />
+    <None Include="resources\audio\core\menu_select.asset" />
+    <None Include="resources\audio\demo\bounce_paddle.asset" />
+    <None Include="resources\audio\demo\bounce_wall.asset" />
+    <None Include="resources\audio\demo\goal.asset" />
     <None Include="resources\scenes\demo\pong.json" />
     <None Include="resources\shaders\core\fallback.asset" />
     <None Include="resources\shaders\core\phong.asset" />

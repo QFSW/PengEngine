@@ -1,17 +1,17 @@
 #include "peng_pong.h"
 
 #include <core/asset.h>
+#include <core/serialized_member.h>
 #include <core/logger.h>
 #include <core/peng_engine.h>
+#include <audio/audio_clip.h>
 #include <profiling/scoped_event.h>
 #include <entities/camera.h>
 #include <components/sprite_renderer.h>
 #include <components/text_renderer.h>
 #include <components/box_collider_2d.h>
-#include <rendering/texture.h>
 #include <rendering/window_subsystem.h>
 #include <input/input_subsystem.h>
-#include <audio/audio_clip.h>
 
 #include "ball.h"
 #include "goal.h"
@@ -27,6 +27,13 @@ using namespace components;
 using namespace input;
 using namespace math;
 
+PengPong::PengPong()
+    : Entity("PengPong")
+{
+	SERIALIZED_MEMBER(_menu_select_sfx);
+	SERIALIZED_MEMBER(_menu_click_sfx);
+}
+
 void PengPong::post_create()
 {
 	Entity::post_create();
@@ -37,7 +44,6 @@ void PengPong::post_create()
 	PengEngine::get().set_max_delta_time(50.0);
 	WindowSubsystem::get().set_window_name("Peng Pong");
 
-	load_resources();
 	build_camera();
 	build_main_menu();
 
@@ -75,17 +81,6 @@ void PengPong::tick(float delta_time)
 			quit();
 		}
 	}
-}
-
-void PengPong::load_resources()
-{
-	SCOPED_EVENT("PengPong - load resources");
-	
-	_bounce_wall_sfx	= peng::make_shared<audio::AudioClip>("Bounce Wall",	1,		200, 0.6f);
-	_bounce_paddle_sfx	= peng::make_shared<audio::AudioClip>("Bounce Paddle",	1,		250, 0.5f);
-	_goal_sfx			= peng::make_shared<audio::AudioClip>("Goal",			1.5f,	400, 0.4f);
-	_menu_select_sfx	= peng::make_shared<audio::AudioClip>("MenuSelect",		0.3f,	600, 0.1f);
-	_menu_click_sfx		= peng::make_shared<audio::AudioClip>("MenuClick",		0.28f,	700, 0.07f);
 }
 
 void PengPong::build_camera()
@@ -129,9 +124,6 @@ void PengPong::build_world()
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
 	peng::weak_ptr<Ball> ball = _world_root->create_child<Ball>();
-	ball->bounce_wall_sfx = _bounce_wall_sfx;
-    ball->bounce_paddle_sfx = _bounce_paddle_sfx;
-	ball->goal_sfx = _goal_sfx;
 
 	peng::weak_ptr<Paddle> paddle_1 = _world_root->create_child<Paddle>("Paddle1");
 	paddle_1->input_axis.positive = KeyCode::w;
@@ -217,12 +209,18 @@ void PengPong::pause()
 
 		_pause_root->on_selection_change().subscribe([weak_this = weak_this()]
 		{
-		    weak_this->_audio_pool.play(weak_this->_menu_select_sfx.to_shared_ref());
+			if (weak_this->_menu_select_sfx)
+			{
+				weak_this->_audio_pool.play(weak_this->_menu_select_sfx.to_shared_ref());
+			}
 		});
 
 		_pause_root->on_selection_click().subscribe([weak_this = weak_this()]
 		{
-		    weak_this->_audio_pool.play(weak_this->_menu_click_sfx.to_shared_ref());
+			if (weak_this->_menu_click_sfx)
+			{
+				weak_this->_audio_pool.play(weak_this->_menu_click_sfx.to_shared_ref());
+			}
 		});
 
 		_pause_root->on_resume().subscribe([weak_this = weak_this()]

@@ -1,11 +1,13 @@
 {
-  "name": "PengPong",
-  "entities": [
-    {
-      "type": "demo::pong::PengPong"
-    },
-    {
-      "type": "demo::DebugEntity"
-    }
-  ]
+    "name": "PengPong",
+    "entities": [
+        {
+            "type": "demo::pong::PengPong",
+            "menu_select_sfx": "resources/audio/core/menu_select.asset",
+            "menu_click_sfx": "resources/audio/core/menu_click.asset"
+        },
+        {
+            "type": "demo::DebugEntity"
+        }
+    ]
 }

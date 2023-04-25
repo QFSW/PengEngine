@@ -1,5 +1,8 @@
 #include "ball.h"
 
+#include <audio/audio_clip.h>
+#include <core/serialized_member.h>
+#include <core/asset.h>
 #include <components/sprite_renderer.h>
 #include <components/rigid_body_2d.h>
 #include <components/box_collider_2d.h>
@@ -13,12 +16,18 @@ IMPLEMENT_ENTITY(demo::pong::Ball);
 
 using namespace demo::pong;
 using namespace components;
+using namespace audio;
 using namespace math;
 
 Ball::Ball()
 	: Entity("Ball")
 	, _speed(50)
 {
+	SERIALIZED_MEMBER(_speed);
+	SERIALIZED_MEMBER(_bounce_wall_sfx);
+	SERIALIZED_MEMBER(_bounce_paddle_sfx);
+	SERIALIZED_MEMBER(_goal_sfx);
+
 	add_component<RigidBody2D>();
 	add_component<SpriteRenderer>();
 
@@ -32,6 +41,26 @@ Ball::Ball()
 
 	_local_transform.scale = Vector3f(1, 1, 1);
 	respawn();
+}
+
+void Ball::post_create()
+{
+    Entity::post_create();
+
+	if (!_bounce_wall_sfx)
+	{
+		_bounce_wall_sfx = Asset<AudioClip>("resources/audio/demo/bounce_wall.asset").load();
+	}
+
+	if (!_bounce_paddle_sfx)
+	{
+		_bounce_paddle_sfx = Asset<AudioClip>("resources/audio/demo/bounce_paddle.asset").load();
+	}
+
+	if (!_goal_sfx)
+	{
+		_goal_sfx = Asset<AudioClip>("resources/audio/demo/goal.asset").load();
+	}
 }
 
 void Ball::respawn()
@@ -54,9 +83,9 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 	{
 		// If it's a goal, increment score and respawn
 		goal->associated_paddle()->score_point();
-		if (goal_sfx)
+		if (_goal_sfx)
 		{
-			_audio_pool.play(goal_sfx.to_shared_ref());
+			_audio_pool.play(_goal_sfx.to_shared_ref());
 		}
 
 		respawn();
@@ -74,9 +103,9 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 		}
 
 		get_component<RigidBody2D>()->velocity = dir * _speed;
-		if (bounce_paddle_sfx)
+		if (_bounce_paddle_sfx)
 		{
-			_audio_pool.play(bounce_paddle_sfx.to_shared_ref());
+			_audio_pool.play(_bounce_paddle_sfx.to_shared_ref());
 		}
 	}
 	else
@@ -92,9 +121,9 @@ void Ball::handle_collision(peng::weak_ptr<Collider2D> collider)
 		);
 
 		get_component<RigidBody2D>()->velocity *= reflector;
-		if (bounce_wall_sfx)
+		if (_bounce_wall_sfx)
 		{
-			_audio_pool.play(bounce_wall_sfx.to_shared_ref());
+			_audio_pool.play(_bounce_wall_sfx.to_shared_ref());
 		}
 	}
 }

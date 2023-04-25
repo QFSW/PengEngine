@@ -3,17 +3,22 @@
 #include <string>
 
 #include <AL/al.h>
+#include <memory/shared_ref.h>
+
+struct Archive;
 
 namespace audio
 {
-    // TODO: move out sin generation into a clip builder
-    // TODO: doesn't seem to work with length < 1
-    // TODO: weird blip/noise towards the end of the sound
+    struct RawAudioData;
+
     class AudioClip
     {
     public:
-        explicit AudioClip(const std::string& name, float length, float frequency, float amplitude);
+        AudioClip(const std::string& name, const RawAudioData& raw_audio);
+        AudioClip(const std::string& name, const std::string& audio_path);
         ~AudioClip();
+
+        static peng::shared_ref<AudioClip> load_asset(const Archive& archive);
 
         [[nodiscard]] ALuint raw() const noexcept { return _clip; }
 
