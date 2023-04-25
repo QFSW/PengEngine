@@ -6,7 +6,7 @@ namespace audio
 {
     class AudioClip;
 
-    // TODO: multiple sounds at once doesn't seem to work very well
+    // TODO: playing a sound usually incorrectly cuts off an existing sound
     // TODO: need a max pool size and to manage that accordingly
     // TODO: should probably be a singleton eventually
     class AudioPool

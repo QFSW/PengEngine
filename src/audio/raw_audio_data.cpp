@@ -6,13 +6,13 @@ using namespace audio;
 
 void RawAudioData::check_valid() const
 {
+    check(!corrupt);
+    check(format() != AL_INVALID_ENUM);
+
     check(num_channels > 0);
     check(sample_rate > 0);
     check(bits_per_sample > 0);
     check(bits_per_sample % 8 == 0);
-
-    check(!corrupt);
-    check(format() != AL_INVALID_ENUM);
 }
 
 ALenum RawAudioData::format() const noexcept
