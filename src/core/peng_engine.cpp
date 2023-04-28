@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include <utils/timing.h>
+#include <memory/gc.h>
 #include <rendering/render_queue.h>
 #include <rendering/window_subsystem.h>
 #include <audio/audio_subsystem.h>
@@ -132,6 +133,7 @@ void PengEngine::tick()
 	tick_main();
 	tick_render();
 
+	memory::GC::get().tick();
 	rendering::WindowSubsystem::get().finalize_frame(_target_frametime);
 
 	_frame_number++;

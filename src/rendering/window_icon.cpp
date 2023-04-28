@@ -4,8 +4,8 @@
 
 #include <core/archive.h>
 #include <core/logger.h>
+#include <memory/gc.h>
 #include <utils/strtools.h>
-#include <libs/nlohmann/json.hpp>
 #include <profiling/scoped_event.h>
 
 #pragma warning( push, 0 )
@@ -42,7 +42,7 @@ peng::shared_ref<WindowIcon> WindowIcon::load_asset(const Archive& archive)
 {
     const std::string texture_path = archive.read<std::string>("texture");
 
-    return peng::make_shared<WindowIcon>(archive.name, texture_path);
+    return memory::GC::alloc<WindowIcon>(archive.name, texture_path);
 }
 
 void WindowIcon::use() const

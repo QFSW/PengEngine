@@ -4,6 +4,7 @@
 
 #include <core/archive.h>
 #include <core/logger.h>
+#include <memory/gc.h>
 #include <utils/strtools.h>
 #include <libs/nlohmann/json.hpp>
 #include <profiling/scoped_event.h>
@@ -107,7 +108,7 @@ peng::shared_ref<Texture> Texture::load_asset(const Archive& archive)
     archive.try_read("max_filter", config.max_filter);
     archive.try_read("generate_mipmaps", config.generate_mipmaps);
 
-    return peng::make_shared<Texture>(archive.name, texture_path, config);
+    return memory::GC::alloc<Texture>(archive.name, texture_path, config);
 }
 
 void Texture::bind(GLint slot) const

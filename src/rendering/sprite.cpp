@@ -1,6 +1,7 @@
 #include "sprite.h"
 
 #include <core/asset.h>
+#include <memory/gc.h>
 
 #include "texture.h"
 
@@ -38,7 +39,7 @@ peng::shared_ref<Sprite> Sprite::load_asset(const Archive& archive)
     const Vector2i position = archive.read_or("position", Vector2i::zero());
     const Vector2i resolution = archive.read_or("resolution", texture->resolution());
 
-    return peng::make_shared<Sprite>(texture, px_per_unit, position, resolution);
+    return memory::GC::alloc<Sprite>(texture, px_per_unit, position, resolution);
 }
 
 peng::shared_ref<const Texture> Sprite::texture() const noexcept

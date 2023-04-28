@@ -2,6 +2,7 @@
 
 #include <core/logger.h>
 #include <core/archive.h>
+#include <memory/gc.h>
 #include <profiling/scoped_event.h>
 
 #include "audio_decoder.h"
@@ -38,5 +39,5 @@ AudioClip::~AudioClip()
 peng::shared_ref<AudioClip> AudioClip::load_asset(const Archive& archive)
 {
     const std::string audio_path = archive.read<std::string>("audio");
-    return peng::make_shared<AudioClip>(archive.name, audio_path);
+    return memory::GC::alloc<AudioClip>(archive.name, audio_path);
 }

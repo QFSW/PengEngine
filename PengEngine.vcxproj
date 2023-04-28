@@ -436,6 +436,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\math\plane.cpp" />
     <ClCompile Include="src\math\ray.cpp" />
     <ClCompile Include="src\math\transform.cpp" />
+    <ClCompile Include="src\memory\gc.cpp" />
     <ClCompile Include="src\physics\aabb.cpp" />
     <ClCompile Include="src\physics\aabb.h" />
     <ClCompile Include="src\physics\layer.cpp" />
@@ -554,6 +555,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\math\vector2.h" />
     <ClInclude Include="src\math\vector3.h" />
     <ClInclude Include="src\math\vector4.h" />
+    <ClInclude Include="src\memory\gc.h" />
     <ClInclude Include="src\memory\shared_ptr.h" />
     <ClInclude Include="src\memory\shared_ref.h" />
     <ClInclude Include="src\memory\weak_ptr.h" />

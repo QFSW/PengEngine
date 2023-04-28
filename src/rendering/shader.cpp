@@ -6,6 +6,7 @@
 #include <core/asset.h>
 #include <utils/utils.h>
 #include <utils/io.h>
+#include <memory/gc.h>
 #include <profiling/scoped_event.h>
 
 #include "shader_compiler.h"
@@ -124,7 +125,7 @@ peng::shared_ref<Shader> Shader::load_asset(const Archive& archive)
     const std::string vert = archive.read<std::string>("vert");
     const std::string frag = archive.read<std::string>("frag");
 
-    peng::shared_ref<Shader> shader = peng::make_shared<Shader>(archive.name, vert, frag);
+    peng::shared_ref<Shader> shader = memory::GC::alloc<Shader>(archive.name, vert, frag);
     shader->draw_order() = archive.read_or("draw_order", 0);
     shader->blend_mode() = static_cast<BlendMode>(archive.read_or("blend_mode", 0));
 
