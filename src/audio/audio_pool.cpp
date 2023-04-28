@@ -10,14 +10,13 @@ void AudioPool::play(const peng::shared_ref<const AudioClip>& clip)
 peng::shared_ref<AudioSource> AudioPool::get_free_source()
 {
     // Promote busy sources to free sources first
-    for (size_t i = 0; i < _busy_sources.size(); i++)
+    for (int32_t i = static_cast<int32_t>(_busy_sources.size() - 1); i >= 0; i--)
     {
         peng::shared_ptr<AudioSource> busy_source = _busy_sources[i];
         if (!busy_source->is_playing())
         {
             _free_sources.push_back(busy_source);
-            _busy_sources.erase(_busy_sources.end() - 1);
-            i--;
+            _busy_sources.erase(_busy_sources.begin() + i);
         }
     }
 
