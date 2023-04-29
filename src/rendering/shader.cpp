@@ -93,7 +93,7 @@ Shader::Shader(
         glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
         _uniforms.resize(num_uniforms);
-        for (GLint location = 0; location < num_uniforms; location++)
+        for (GLint i = 0; i < num_uniforms; i++)
         {
             constexpr int32_t buf_size = 512;
             char name_buf[buf_size];
@@ -101,13 +101,18 @@ Shader::Shader(
             GLint size;
             GLenum type;
 
-            glGetActiveUniform(_program, location, buf_size, &name_length, &size, &type, name_buf);
+            glGetActiveUniform(_program, i, buf_size, &name_length, &size, &type, name_buf);
+            const GLint location = glGetUniformLocation(_program, name_buf);
 
-            Uniform& uniform = _uniforms[location];
-            uniform.location = location;
-            uniform.name = name_buf;
-            uniform.type = type;
-            uniform.default_value = read_uniform(uniform);
+            // If a uniform has a location of -1 it's a non user uniform like the built in gl_ uniforms
+            if (location != -1)
+            {
+                Uniform& uniform = _uniforms[location];
+                uniform.location = location;
+                uniform.name = name_buf;
+                uniform.type = type;
+                uniform.default_value = read_uniform(uniform);
+            }
         }
     }
 }
