@@ -63,13 +63,14 @@ public:
 
 private:
 	void tick_entities(float delta_time);
+	void flush_pending_actions();
 	void flush_pending_adds();
 	void flush_pending_kills();
 
 	[[nodiscard]] std::string build_entity_hierarchy(const std::vector<peng::weak_ptr<Entity>>& root_entities) const;
 
 	template <typename F>
-	void for_each_entity(bool parallel, F&& invocable);
+	void for_each_tickable(bool parallel, const std::vector<peng::shared_ref<ITickable>>& tickables, F&& invocable);
 
 	void build_entity_hierarchy(
 		const std::vector<peng::weak_ptr<Entity>>& root_entities,

@@ -47,9 +47,8 @@ void EntitySubsystem::tick(float delta_time)
 {
 	SCOPED_EVENT("EntitySubsystem - tick");
 
-	flush_pending_adds();
+	flush_pending_actions();
 	tick_entities(delta_time);
-	flush_pending_kills();
 }
 
 void EntitySubsystem::register_entity(const peng::shared_ref<Entity>& entity)
@@ -155,6 +154,8 @@ void EntitySubsystem::dump_hierarchy() const
 
 void EntitySubsystem::tick_entities(float delta_time)
 {
+	std::vector<peng::shared_ref<ITickable>> tickables;
+
 	for (size_t i = 0; i < _tick_groups.size(); i++)
 	{
 		const TickGroup tick_group = _tick_groups[i];
@@ -164,30 +165,41 @@ void EntitySubsystem::tick_entities(float delta_time)
 			_pre_tick_entity_group.invoke(tick_group);
 		}
 
+		// Gather tickables for the current group
+		for (const peng::shared_ref<Entity>& entity : _entities)
+		{
+			if (entity->active_in_hierarchy())
+			{
+				if (entity->tick_group() == tick_group)
+				{
+					tickables.emplace_back(entity);
+				}
+
+				for (const peng::shared_ref<Component>& component : entity->components())
+				{
+					if (component->tick_group() == tick_group)
+					{
+						tickables.emplace_back(component);
+					}
+				}
+			}
+		}
+
 		{
 			SCOPED_EVENT("EntitySubsystem - ticking entity group", _tick_group_names[i].c_str());
 
-			for_each_entity(
+			for_each_tickable(
 				is_parallel_tick_group(tick_group),
-				[&](const peng::shared_ref<Entity>& entity)
+				tickables,
+				[&](const peng::shared_ref<ITickable>& tickable)
 				{
-					if (entity->active_in_hierarchy())
-					{
-						if (entity->tick_group() == tick_group)
-						{
-							entity->tick(delta_time);
-						}
-
-						for (const peng::shared_ref<Component>& component : entity->components())
-						{
-							if (component->tick_group() == tick_group)
-							{
-								component->tick(delta_time);
-							}
-						}
-					}
+					tickable->tick(delta_time);
 				});
 		}
+
+		// Flush pending lifecycle updates (creation/destruction) after each group
+		tickables.clear();
+		flush_pending_actions();
 
 		{
 			SCOPED_EVENT("EntitySubsystem - post tick entity group", _tick_group_names[i].c_str());
@@ -196,23 +208,27 @@ void EntitySubsystem::tick_entities(float delta_time)
 	}
 }
 
+void EntitySubsystem::flush_pending_actions()
+{
+	flush_pending_adds();
+	flush_pending_kills();
+}
+
 template <typename F>
-void EntitySubsystem::for_each_entity(bool parallel, F&& invocable)
+void EntitySubsystem::for_each_tickable(bool parallel, const std::vector<peng::shared_ref<ITickable>>& tickables, F&& invocable)
 {
 	if (parallel)
 	{
-		std::for_each(std::execution::par, _entities.begin(), _entities.end(), std::move(invocable));
+		std::for_each(std::execution::par, tickables.begin(), tickables.end(), std::move(invocable));
 	}
 	else
 	{
-		std::for_each(std::execution::seq, _entities.begin(), _entities.end(), std::move(invocable));
+		std::for_each(std::execution::seq, tickables.begin(), tickables.end(), std::move(invocable));
 	}
 }
 
 void EntitySubsystem::flush_pending_adds()
 {
-	SCOPED_EVENT("EntitySubsystem - flush pending adds");
-
 	const std::vector staged_adds(std::move(_pending_adds));
 
 	for (const peng::shared_ref<Entity>& entity : staged_adds)
@@ -228,8 +244,6 @@ void EntitySubsystem::flush_pending_adds()
 
 void EntitySubsystem::flush_pending_kills()
 {
-	SCOPED_EVENT("EntitySubsystem - flush pending kills");
-
 	auto kill_in_buffer = [&](std::vector<peng::shared_ref<Entity>>& entities, bool exists_yet)
 	{
 		for (int32_t entity_index = static_cast<int32_t>(entities.size() - 1); entity_index >= 0; entity_index--)
