@@ -45,7 +45,6 @@ WindowSubsystem::~WindowSubsystem()
 	}
 }
 
-#ifndef NO_LOGGING
 static void APIENTRY handle_gl_debug_output(
 	GLenum, GLenum type, GLuint id, GLenum /*severity*/, GLsizei /*length*/, const char* message, const void* /*userParam*/
 )
@@ -98,7 +97,6 @@ static void APIENTRY handle_gl_debug_output(
 	    }
 	}
 }
-#endif
 
 void WindowSubsystem::start()
 {
