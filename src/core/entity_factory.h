@@ -7,6 +7,7 @@
 #include "reflection_database.h"
 #include "entity_subsystem.h"
 
+struct Archive;
 class Entity;
 
 class EntityFactory : public utils::Singleton<EntityFactory>
@@ -17,11 +18,18 @@ public:
 	template <std::derived_from<Entity> T>
 	void register_entity();
 
-	// NOLINT(modernize-use-nodiscard)
-	peng::weak_ptr<Entity> create_entity(
-		peng::shared_ref<const ReflectedType> entity_type,
+	// Creates an entity with the given type and name
+	// Returns nullptr if the entity could not be created because
+	// it has no viable constructors
+	peng::weak_ptr<Entity> create_entity(// NOLINT(modernize-use-nodiscard)
+		const peng::shared_ref<const ReflectedType>& entity_type,
 		const std::string& entity_name = ""
 	) const;
+
+	// Loads an entity from the provided archive
+	// Creates a new entity with the correct components and serialized members
+	// Returns nullptr if the load failed
+	peng::weak_ptr<Entity> load_entity(const Archive& archive);
 
 private:
 	struct EntityConstructorSet
@@ -29,6 +37,9 @@ private:
 		bool has_default = false;
 		bool has_named = false;
 	};
+
+	// Loads components from the entity archive onto the entity
+	void load_components(const Archive& entity_archive, const peng::weak_ptr<Entity>& entity);
 
 	ItemFactory<peng::weak_ptr<Entity>> _default_factory;
 	ItemFactory<peng::weak_ptr<Entity>, const std::string&> _named_factory;

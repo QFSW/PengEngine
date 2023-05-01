@@ -62,7 +62,6 @@ Asset<T>::Asset(std::string&& path)
     : _path(path)
 { }
 
-// TODO: add a GC allocator that assets are allocated through to avoid thrashing
 template <CAsset T>
 peng::shared_ref<T> Asset<T>::load_mutable()
 {

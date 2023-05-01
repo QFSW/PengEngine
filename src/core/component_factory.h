@@ -17,11 +17,17 @@ public:
 	template <std::derived_from<Component> T>
 	void register_component();
 
-	// NOLINT(modernize-use-nodiscard)
-	peng::weak_ptr<Component> create_component(
+	// Creates a component of the given type
+	// Never returns nullptr
+	peng::weak_ptr<Component> create_component(// NOLINT(modernize-use-nodiscard)
 		const peng::shared_ref<const ReflectedType>& component_type,
 		const peng::weak_ptr<Entity>& entity
 	) const;
+
+	// Loads a component from the provided archive
+	// Creates a new component with the correct serialized members
+	// Returns nullptr if the load failed
+	peng::weak_ptr<Component> load_component(const Archive& archive, const peng::weak_ptr<Entity>& entity);
 
 private:
 	ItemFactory<peng::weak_ptr<Component>, const peng::weak_ptr<Entity>&> _factory;
