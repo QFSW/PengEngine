@@ -8,6 +8,9 @@
 // Data archive used for serializing/deserializing items
 struct Archive
 {
+    // Creates an archive from a file on disk
+    static Archive from_disk(const std::string& path);
+
     // The name of the item represented by this archive
     std::string name;
 

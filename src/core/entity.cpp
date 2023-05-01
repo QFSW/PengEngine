@@ -127,6 +127,19 @@ void Entity::destroy()
 	EntitySubsystem::get().destroy_entity(weak_this());
 }
 
+peng::weak_ptr<Entity> Entity::load_entity(const Archive& archive)
+{
+	return EntityFactory::get().load_entity(archive);
+}
+
+peng::weak_ptr<Entity> Entity::load_child(const Archive& archive, EntityRelationship relationship)
+{
+	peng::weak_ptr<Entity> entity = load_entity(archive);
+	add_child(entity, relationship);
+
+	return entity;
+}
+
 peng::weak_ptr<Component> Entity::get_component(const peng::shared_ref<const ReflectedType>& component_type)
 {
 	for (const peng::shared_ref<Component>& component : _components)

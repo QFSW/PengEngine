@@ -65,6 +65,9 @@ public:
 	requires std::constructible_from<T>
 	peng::weak_ptr<T> require_component();
 
+	peng::weak_ptr<Entity> load_entity(const Archive& archive);
+	peng::weak_ptr<Entity> load_child(const Archive& archive, EntityRelationship relationship = EntityRelationship::full);
+
 	[[nodiscard]] peng::weak_ptr<Component> get_component(const peng::shared_ref<const ReflectedType>& component_type);
 	[[nodiscard]] peng::weak_ptr<Component> get_component_in_children(const peng::shared_ref<const ReflectedType>& component_type);
 

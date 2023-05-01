@@ -22,8 +22,6 @@ namespace demo::pong
 	public:
 		Ball();
 
-		void post_create() override;
-
 	private:
 		void respawn();
 		void handle_collision(peng::weak_ptr<components::Collider2D> collider);

@@ -43,26 +43,6 @@ Ball::Ball()
 	respawn();
 }
 
-void Ball::post_create()
-{
-    Entity::post_create();
-
-	if (!_bounce_wall_sfx)
-	{
-		_bounce_wall_sfx = Asset<AudioClip>("resources/audio/demo/bounce_wall.asset").load();
-	}
-
-	if (!_bounce_paddle_sfx)
-	{
-		_bounce_paddle_sfx = Asset<AudioClip>("resources/audio/demo/bounce_paddle.asset").load();
-	}
-
-	if (!_goal_sfx)
-	{
-		_goal_sfx = Asset<AudioClip>("resources/audio/demo/goal.asset").load();
-	}
-}
-
 void Ball::respawn()
 {
 	const float angle = rand_range(-1, 1);

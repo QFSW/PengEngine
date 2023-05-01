@@ -270,6 +270,9 @@
     <ClCompile Include="src\memory\gc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\archive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -739,6 +742,7 @@
     <None Include="resources\audio\demo\bounce_wall.asset" />
     <None Include="resources\audio\core\menu_click.asset" />
     <None Include="resources\audio\core\menu_select.asset" />
+    <None Include="resources\entities\demo\pong\ball.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

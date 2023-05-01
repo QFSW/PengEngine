@@ -1,0 +1,6 @@
+{
+    "type": "demo::pong::Ball",
+	"bounce_wall_sfx": "resources/audio/demo/bounce_wall.asset",
+	"bounce_paddle_sfx": "resources/audio/demo/bounce_paddle.asset",
+	"goal_sfx": "resources/audio/demo/goal.asset"
+}

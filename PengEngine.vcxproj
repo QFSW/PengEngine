@@ -400,6 +400,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\components\rigid_body_2d.cpp" />
     <ClCompile Include="src\components\sprite_renderer.cpp" />
     <ClCompile Include="src\components\text_renderer.cpp" />
+    <ClCompile Include="src\core\archive.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\component_factory.cpp" />
     <ClCompile Include="src\core\entity_factory.cpp" />
@@ -624,6 +625,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="resources\audio\demo\bounce_paddle.asset" />
     <None Include="resources\audio\demo\bounce_wall.asset" />
     <None Include="resources\audio\demo\goal.asset" />
+    <None Include="resources\entities\demo\pong\ball.asset" />
     <None Include="resources\scenes\demo\pong.json" />
     <None Include="resources\shaders\core\fallback.asset" />
     <None Include="resources\shaders\core\phong.asset" />

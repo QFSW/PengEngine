@@ -1,8 +1,5 @@
 #pragma once
 
-#include <fstream>
-#include <filesystem>
-
 #include <core/logger.h>
 #include <memory/shared_ptr.h>
 #include <memory/weak_ptr.h>
@@ -76,20 +73,8 @@ peng::shared_ref<T> Asset<T>::load_mutable()
         SCOPED_EVENT("Loading asset", _path.c_str());
         Logger::log("Loading asset '%s'", _path.c_str());
 
-        // TODO: add better error handling
-        std::ifstream file(_path);
         check(exists());
-
-        Archive archive;
-        archive.path = _path;
-        archive.json_def = nlohmann::json::parse(file);
-
-        {
-            namespace fs = std::filesystem;
-            archive.name = archive.read_or<std::string>(
-                "name", fs::path(_path).filename().string()
-            );
-        }
+        Archive archive = Archive::from_disk(_path);
 
         peng::shared_ref<T> loaded = T::load_asset(archive);
         existing = loaded;

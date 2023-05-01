@@ -123,7 +123,9 @@ void PengPong::build_world()
 	const float ortho_width = ortho_size * WindowSubsystem::get().aspect_ratio();
 	const float paddle_delta_x = ortho_width - paddle_margin;
 
-	peng::weak_ptr<Ball> ball = _world_root->create_child<Ball>();
+	peng::weak_ptr<Entity> ball = _world_root->load_child(
+		Archive::from_disk("resources/entities/demo/pong/ball.asset")
+	);
 
 	peng::weak_ptr<Paddle> paddle_1 = _world_root->create_child<Paddle>("Paddle1");
 	paddle_1->input_axis.positive = KeyCode::w;
