@@ -210,8 +210,8 @@ void EntitySubsystem::tick_entities(float delta_time)
 
 void EntitySubsystem::flush_pending_actions()
 {
-	flush_pending_adds();
 	flush_pending_kills();
+	flush_pending_adds();
 }
 
 template <typename F>

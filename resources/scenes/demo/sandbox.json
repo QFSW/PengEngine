@@ -1,12 +1,8 @@
 {
     "name": "Sandbox",
     "entities": [
-        {
-            "type": "demo::DemoController"
-        },
-        {
-            "type": "demo::DebugEntity"
-        },
+        "demo::DemoController",
+        "demo::DebugEntity",
         {
             "type": "entities::SpotLight",
             "transform": {

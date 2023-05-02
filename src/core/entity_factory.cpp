@@ -51,7 +51,23 @@ peng::weak_ptr<Entity> EntityFactory::create_entity(
 
 peng::weak_ptr<Entity> EntityFactory::load_entity(const Archive& archive)
 {
-	const std::string entity_type = archive.read_or<std::string>("type");
+	const bool inline_def = archive.json_def.is_string();
+
+	if (!(inline_def || archive.json_def.is_object()))
+	{
+		Logger::error(
+			"Could not load entity '%s' as it is not a entity typename or definition",
+			archive.json_def.dump().c_str()
+		);
+
+		return {};
+	}
+
+	const std::string entity_type =
+		inline_def
+		? archive.json_def.get<std::string>()
+		: archive.read_or<std::string>("type");
+
 	if (entity_type.empty())
 	{
 		Logger::error(
@@ -75,8 +91,12 @@ peng::weak_ptr<Entity> EntityFactory::load_entity(const Archive& archive)
 
     peng::weak_ptr<Entity> entity = create_entity(reflected_type.to_shared_ref(), archive.name);
 
-	entity->deserialize(archive);
-	load_components(archive, entity);
+	if (!inline_def)
+	{
+		entity->deserialize(archive);
+		load_components(archive, entity);
+		load_entity_children(archive, entity);
+	}
 
 	return entity;
 }
@@ -97,6 +117,31 @@ void EntityFactory::load_components(const Archive& entity_archive, const peng::w
 			component_archive.json_def = component_def;
 
 			ComponentFactory::get().load_component(component_archive, entity);
+		}
+	}
+}
+
+void EntityFactory::load_entity_children(const Archive& entity_archive, const peng::weak_ptr<Entity>& entity)
+{
+	if (const auto it = entity_archive.json_def.find("children"); it != entity_archive.json_def.end())
+	{
+		if (!it->is_array())
+		{
+			Logger::error("The 'children' entry in the entity '%s' was not an array", entity->name().c_str());
+			return;
+		}
+
+		for (const auto& child_def : *it)
+		{
+			Archive child_archive;
+			child_archive.json_def = child_def;
+			child_archive.name = child_archive.read_or<std::string>("name");
+
+            if (const peng::weak_ptr<Entity> child = load_entity(child_archive))
+			{
+				// TODO: support serialized parent relationships other than full
+				child->set_parent(entity);
+			}
 		}
 	}
 }

@@ -57,6 +57,7 @@ void SceneLoader::load_entities(const nlohmann::json& world_def)
         {
             Archive archive;
             archive.json_def = entity_def;
+            archive.name = archive.read_or<std::string>("name");
 
             EntityFactory::get().load_entity(archive);
         }

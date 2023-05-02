@@ -48,7 +48,12 @@ void Archive::write(const char* key, const T& in)
 template <typename T>
 T Archive::read_or(const char* key, const T& default_val) const
 {
-    return json_def.value(key, default_val);
+    if (json_def.is_object())
+    {
+        return json_def.value(key, default_val);
+    }
+
+    return default_val;
 }
 
 template <typename T>

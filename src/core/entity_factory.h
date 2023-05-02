@@ -41,6 +41,9 @@ private:
 	// Loads components from the entity archive onto the entity
 	void load_components(const Archive& entity_archive, const peng::weak_ptr<Entity>& entity);
 
+	// Loads child entities onto the entity
+	void load_entity_children(const Archive& entity_archive, const peng::weak_ptr<Entity>& entity);
+
 	ItemFactory<peng::weak_ptr<Entity>> _default_factory;
 	ItemFactory<peng::weak_ptr<Entity>, const std::string&> _named_factory;
 	std::unordered_map<peng::shared_ref<const ReflectedType>, EntityConstructorSet> _type_to_constructor_set;

@@ -145,7 +145,7 @@ void PengPong::build_world()
 
 	peng::weak_ptr<Entity> score_2 = _world_root->create_child<Entity>("Score2");
 	peng::weak_ptr<TextRenderer> score_2_text = score_2->add_component<TextRenderer>();
-	score_2->local_transform().scale = Vector3f::one() * 5;
+	score_2->local_transform().scale = Vector3f::one() * digit_size;
 	score_2->local_transform().position = Vector3f(digit_size * 2, ortho_size * 0.75f, 5);
 	score_2_text->set_text("0");
 
@@ -161,12 +161,12 @@ void PengPong::build_world()
 		});
 
 	peng::weak_ptr<Entity> barrier_top = _world_root->create_child<Entity>("BarrierTop");
-	barrier_top->add_component<components::BoxCollider2D>();
+	barrier_top->add_component<BoxCollider2D>();
 	barrier_top->local_transform().position = Vector3f(0, ortho_size + 2, 0);
 	barrier_top->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
 	peng::weak_ptr<Entity> barrier_bottom = _world_root->create_child<Entity>("BarrierBottom");
-	barrier_bottom->add_component<components::BoxCollider2D>();
+	barrier_bottom->add_component<BoxCollider2D>();
 	barrier_bottom->local_transform().position = Vector3f(0, -ortho_size - 2, 0);
 	barrier_bottom->local_transform().scale = Vector3f(ortho_width * 3, 3, 1);
 
