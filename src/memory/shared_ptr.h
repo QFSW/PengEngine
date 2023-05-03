@@ -44,6 +44,12 @@ namespace peng
             return *this;
         }
 
+        shared_ptr& operator=(std::nullptr_t)
+        {
+            _ptr = nullptr;
+            return *this;
+        }
+
         [[nodiscard]] T* get() const noexcept
         {
             return _ptr.get();

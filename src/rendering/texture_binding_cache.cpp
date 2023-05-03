@@ -58,7 +58,7 @@ void TextureBindingCache::unbind_all()
         {
             _free_slots.push_back(i);
             _texture_slots[i]->unbind(i);
-            _texture_slots[i] = {};
+            _texture_slots[i] = nullptr;
         }
     }
 }

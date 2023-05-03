@@ -34,7 +34,7 @@ void AudioSource::stop()
     alSourceStop(_source);
 
     _state = AL_STOPPED;
-    _current_clip = {};
+    _current_clip = nullptr;
 }
 
 bool AudioSource::is_playing()
@@ -49,6 +49,6 @@ void AudioSource::update_state()
 
     if (_state != AL_PLAYING)
     {
-        _current_clip = {};
+        _current_clip = nullptr;
     }
 }

@@ -165,7 +165,7 @@ namespace peng
     {
         if (j.is_null())
         {
-            out = {};
+            out = nullptr;
         }
 
         check(j.is_string());
@@ -178,7 +178,7 @@ namespace peng
     {
         if (j.is_null())
         {
-            out = {};
+            out = nullptr;
         }
 
         check(j.is_string());

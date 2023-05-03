@@ -50,6 +50,12 @@ namespace peng
             return *this;
         }
 
+        weak_ptr& operator=(std::nullptr_t)
+        {
+            _ptr = nullptr;
+            return *this;
+        }
+
         [[nodiscard]] shared_ptr<T> lock() const noexcept
         {
             return shared_ptr<T>(_ptr.lock());

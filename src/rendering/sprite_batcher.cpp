@@ -38,8 +38,7 @@ void SpriteBatcher::convert_draws(
 
 void SpriteBatcher::flush()
 {
-    // TODO: would be nicer if we could use the = nullptr syntax
-    _sprite_mesh = {};
+    _sprite_mesh = nullptr;
     _material_pools.clear();
     _buffer_pool.resources.clear();
 }
