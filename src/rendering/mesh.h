@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
-#include <vector>
-
 #include <GL/glew.h>
 
+#include <memory/shared_ref.h>
+
 #include "raw_mesh_data.h"
+
+struct Archive;
 
 namespace rendering
 {
@@ -15,10 +17,13 @@ namespace rendering
     public:
         Mesh(std::string&& name, RawMeshData&& raw_data);
         Mesh(const std::string& name, const RawMeshData& raw_data);
+        Mesh(const std::string& name, const std::string& mesh_path);
 
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
         ~Mesh();
+
+        static peng::shared_ref<Mesh> load_asset(const Archive& archive);
 
         // Renders the mesh
         // A shader/material must already be in use before calling this

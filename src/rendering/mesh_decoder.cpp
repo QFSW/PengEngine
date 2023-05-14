@@ -124,13 +124,13 @@ RawMeshData MeshDecoder::load_obj(const std::string& path)
                 line_number, line.c_str()
             );
 
-            Vector3u triangle;
+            uint32_t triangle[3];
             for (uint8_t i = 0; i < 3; i++)
             {
-                const std::string& token = tokens[1 + i];
+                const std::string& vertex_token = tokens[1 + i];
                 uint32_t vertex_index;
 
-                if (const auto it = vertex_cache.find(token); it != vertex_cache.end())
+                if (const auto it = vertex_cache.find(vertex_token); it != vertex_cache.end())
                 {
                     vertex_index = it->second;
                 }
@@ -139,52 +139,53 @@ RawMeshData MeshDecoder::load_obj(const std::string& path)
                     // Decode token
                     static thread_local std::vector<std::string> inner_tokens;
                     inner_tokens.clear();
-                    strtools::split(token, '/', std::back_inserter(inner_tokens));
+                    strtools::split(vertex_token, '/', std::back_inserter(inner_tokens));
 
                     DECODE_CHECK(inner_tokens.size() == 3,
                         "Invalid OBJ file - vertex '%s' does not use the v/vt/vn format\n%d: %s",
-                        line_number, token.c_str(), line.c_str()
+                        line_number, vertex_token.c_str(), line.c_str()
                     );
 
+                    // OBJ files use 1 indexing instead of 0 indexing
                     const uint32_t position_index = std::stoi(inner_tokens[0]);
                     const uint32_t tex_coord_index = std::stoi(inner_tokens[1]);
                     const uint32_t normal_index = std::stoi(inner_tokens[2]);
 
-                    if (!(position_index < vertex_positions.size()))
-                    {
-                        Logger::error("Invalid OBJ file - vertex '%s' has invalid position index %d\n%d: %s", token.c_str(), position_index, line_number, line.c_str()); return RawMeshData::corrupt_data();
-                    } do {} while (0);
-
-                    DECODE_CHECK(tex_coord_index < uv_coords.size(),
-                        "Invalid OBJ file - vertex '%s' has invalid tex coord index %d\n%d: %s",
-                        token.c_str(), tex_coord_index, line_number, line.c_str()
+                    DECODE_CHECK(position_index <= vertex_positions.size(),
+                        "Invalid OBJ file - vertex '%s' has invalid position index %d\n%d: %s",
+                        vertex_token.c_str(), position_index, line_number, line.c_str()
                     );
 
-                    DECODE_CHECK(normal_index < vertex_normals.size(),
+                    DECODE_CHECK(tex_coord_index <= uv_coords.size(),
+                        "Invalid OBJ file - vertex '%s' has invalid tex coord index %d\n%d: %s",
+                        vertex_token.c_str(), tex_coord_index, line_number, line.c_str()
+                    );
+
+                    DECODE_CHECK(normal_index <= vertex_normals.size(),
                         "Invalid OBJ file - vertex '%s' has invalid normal index %d\n%d: %s",
-                        token.c_str(), normal_index, line_number, line.c_str()
+                        vertex_token.c_str(), normal_index, line_number, line.c_str()
                     );
 
                     const Vertex vertex(
-                        vertex_positions[position_index],
-                        vertex_normals[normal_index],
-                        uv_coords[tex_coord_index]
+                        vertex_positions[position_index - 1],
+                        vertex_normals[normal_index - 1],
+                        uv_coords[tex_coord_index - 1]
                     );
 
-                    vertex_index = vertex_cache[token] = static_cast<uint32_t>(raw_data.vertices.size());
+                    vertex_index = static_cast<uint32_t>(raw_data.vertices.size());
+                    vertex_cache[vertex_token] = vertex_index;
+
                     raw_data.vertices.push_back(vertex);
                 }
 
-                switch (i)
-                {
-                    case 0: triangle.x = vertex_index; break;
-                    case 1: triangle.y = vertex_index; break;
-                    case 2: triangle.z = vertex_index; break;
-                    default: break;
-                }
-
-                raw_data.triangles.push_back(triangle);
+                triangle[i] = vertex_index;
             }
+
+            raw_data.triangles.emplace_back(
+                triangle[0],
+                triangle[1],
+                triangle[2]
+            );
         }
     }
 

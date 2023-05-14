@@ -1,13 +1,16 @@
 #include "mesh_renderer.h"
 
+#include <core/logger.h>
+#include <core/asset.h>
+#include <core/serialized_member.h>
 #include <entities/camera.h>
 #include <entities/point_light.h>
 #include <entities/spot_light.h>
 #include <entities/directional_light.h>
+#include <rendering/mesh.h>
 #include <rendering/primitives.h>
 #include <rendering/material.h>
 #include <rendering/render_queue.h>
-#include <core/logger.h>
 #include <utils/utils.h>
 #include <math/math.h>
 
@@ -33,7 +36,7 @@ MeshRenderer::MeshRenderer(
 	, _mesh(std::move(mesh))
 	, _material(std::move(material))
 {
-    // TODO: serialize _mesh
+	SERIALIZED_MEMBER(_mesh);
 	// TODO: serialize _material
 }
 

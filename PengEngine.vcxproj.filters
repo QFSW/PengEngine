@@ -755,6 +755,7 @@
     <None Include="resources\audio\core\menu_click.asset" />
     <None Include="resources\audio\core\menu_select.asset" />
     <None Include="resources\entities\demo\pong\ball.asset" />
+    <None Include="resources\meshes\demo\suzanne.asset" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\core\entity.natvis" />

@@ -17,7 +17,6 @@
 #include "goal.h"
 #include "paddle.h"
 #include "pause_menu.h"
-#include "rendering/mesh_decoder.h"
 
 IMPLEMENT_ENTITY(demo::pong::PengPong);
 
@@ -47,8 +46,6 @@ void PengPong::post_create()
 
 	build_camera();
 	build_main_menu();
-
-	MeshDecoder::load_file("resources/meshes/demo/suzanne.obj");
 
 	Logger::success("PengPong started");
 }

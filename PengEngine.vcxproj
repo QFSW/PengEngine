@@ -630,6 +630,7 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <None Include="resources\audio\demo\bounce_wall.asset" />
     <None Include="resources\audio\demo\goal.asset" />
     <None Include="resources\entities\demo\pong\ball.asset" />
+    <None Include="resources\meshes\demo\suzanne.asset" />
     <None Include="resources\scenes\demo\pong.json" />
     <None Include="resources\shaders\core\fallback.asset" />
     <None Include="resources\shaders\core\phong.asset" />

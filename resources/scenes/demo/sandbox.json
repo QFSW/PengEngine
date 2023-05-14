@@ -30,6 +30,26 @@
             ]
         },
         {
+            "type": "Entity",
+            "name": "Suzanne",
+            "transform": {
+                "position": {
+                    "x": -30,
+                    "y": -3,
+                    "z": 3
+                },
+                "rotation": {
+                    "y": 180
+                }
+            },
+            "components": [
+                {
+                    "type": "components::MeshRenderer",
+                    "mesh": "resources/meshes/demo/suzanne.asset"
+                }
+            ]
+        },
+        {
             "type": "entities::Camera",
             "transform": {
                 "position": {

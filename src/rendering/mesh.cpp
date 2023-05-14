@@ -2,10 +2,13 @@
 
 #include <utils/utils.h>
 #include <utils/check.h>
-#include <utils/strtools.h>
 #include <utils/vectools.h>
+#include <core/archive.h>
 #include <core/logger.h>
+#include <memory/gc.h>
 #include <profiling/scoped_event.h>
+
+#include "mesh_decoder.h"
 
 using namespace rendering;
 using namespace math;
@@ -53,6 +56,13 @@ Mesh::Mesh(const std::string& name, const RawMeshData& raw_data)
     )
 { }
 
+Mesh::Mesh(const std::string& name, const std::string& mesh_path)
+    : Mesh(
+        name,
+        MeshDecoder::load_file(mesh_path)
+    )
+{ }
+
 Mesh::~Mesh()
 {
     SCOPED_EVENT("Destroying mesh", _name.c_str());
@@ -61,6 +71,12 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &_vbo);
     glDeleteBuffers(1, &_ebo);
     glDeleteVertexArrays(1, &_vao);
+}
+
+peng::shared_ref<Mesh> Mesh::load_asset(const Archive& archive)
+{
+    const std::string mesh_path = archive.read<std::string>("mesh");
+    return memory::GC::alloc<Mesh>(archive.name, mesh_path);
 }
 
 void Mesh::render() const
