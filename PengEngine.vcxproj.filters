@@ -273,6 +273,12 @@
     <ClCompile Include="src\core\archive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\raw_mesh_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\mesh_decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\peng_engine.h">
@@ -705,6 +711,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\memory\gc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\mesh_decoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\raw_mesh_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

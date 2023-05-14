@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include "vertex.h"
+#include "raw_mesh_data.h"
 
 namespace rendering
 {
@@ -13,17 +13,8 @@ namespace rendering
     class Mesh
     {
     public:
-        Mesh(
-            std::string&& name,
-            std::vector<Vertex>&& vertices,
-            std::vector<math::Vector3u>&& indices
-        );
-
-        Mesh(
-            const std::string& name,
-            const std::vector<Vertex>& vertices,
-            const std::vector<math::Vector3u>& indices
-        );
+        Mesh(std::string&& name, RawMeshData&& raw_data);
+        Mesh(const std::string& name, const RawMeshData& raw_data);
 
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
@@ -43,9 +34,7 @@ namespace rendering
 
     private:
         std::string _name;
-        std::vector<Vertex> _vertex_buffer;
-        std::vector<math::Vector3u> _index_buffer;
-
+        RawMeshData _raw_data;
         GLuint _num_indices;
 
         GLuint _ebo;

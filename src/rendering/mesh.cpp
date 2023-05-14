@@ -10,18 +10,14 @@
 using namespace rendering;
 using namespace math;
 
-Mesh::Mesh(
-    std::string&& name,
-    std::vector<Vertex>&& vertices,
-    std::vector<Vector3u>&& indices
-)
+Mesh::Mesh(std::string&& name, RawMeshData&& raw_data)
     : _name(std::move(name))
-    , _vertex_buffer(std::move(vertices))
-    , _index_buffer(std::move(indices))
-    , _num_indices(static_cast<GLuint>(_index_buffer.size() * 3))
+    , _raw_data(std::move(raw_data))
+    , _num_indices(static_cast<GLuint>(_raw_data.triangles.size() * 3))
 {
     SCOPED_EVENT("Building mesh", _name.c_str());
     Logger::log("Building mesh '%s'", _name.c_str());
+    check(_raw_data.check_valid());
 
     glGenBuffers(1, &_vbo);
     glGenBuffers(1, &_ebo);
@@ -31,10 +27,10 @@ Mesh::Mesh(
     glObjectLabel(GL_VERTEX_ARRAY, _vao, -1, _name.c_str());
 
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-    glBufferData(GL_ARRAY_BUFFER, vectools::buffer_size(_vertex_buffer), _vertex_buffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vectools::buffer_size(_raw_data.vertices), _raw_data.vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, vectools::buffer_size(_index_buffer), _index_buffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, vectools::buffer_size(_raw_data.triangles), _raw_data.triangles.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
@@ -49,15 +45,10 @@ Mesh::Mesh(
     glEnableVertexAttribArray(3);
 }
 
-Mesh::Mesh(
-    const std::string& name,
-    const std::vector<Vertex>& vertices,
-    const std::vector<Vector3u>& indices
-)
+Mesh::Mesh(const std::string& name, const RawMeshData& raw_data)
     : Mesh(
         utils::copy(name),
-        utils::copy(vertices),
-        utils::copy(indices)
+        utils::copy(raw_data)
     )
 { }
 
@@ -106,6 +97,6 @@ const std::string& Mesh::name() const noexcept
 
 int32_t Mesh::num_triangles() const noexcept
 {
-    return static_cast<int32_t>(_index_buffer.size());
+    return static_cast<int32_t>(_raw_data.triangles.size());
 }
 

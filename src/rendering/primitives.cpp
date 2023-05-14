@@ -24,8 +24,8 @@ peng::shared_ref<const Mesh> Primitives::cube()
         return strong_cube.to_shared_ref();
     }
 
-    const std::vector<Vertex> vertices =
-    {
+    RawMeshData raw_data;
+    raw_data.vertices = {
         Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 0)),
         Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 0)),
         Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 1)),
@@ -57,8 +57,7 @@ peng::shared_ref<const Mesh> Primitives::cube()
         Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, -1, 0), Vector2f(0, 0)),
     };
 
-    const std::vector<Vector3u> indices =
-    {
+    raw_data.triangles = {
         Vector3u(0, 1, 3),
         Vector3u(3, 1, 2),
 
@@ -79,7 +78,7 @@ peng::shared_ref<const Mesh> Primitives::cube()
     };
 
     peng::shared_ref<Mesh> cube = peng::make_shared<Mesh>(
-        "Cube", vertices, indices
+        "Cube", std::move(raw_data)
     );
 
     weak_cube = cube;
@@ -94,8 +93,8 @@ peng::shared_ref<const Mesh> Primitives::cube_uv()
         return strong_cube.to_shared_ref();
     }
 
-    const std::vector<Vertex> vertices =
-    {
+    RawMeshData raw_data;
+    raw_data.vertices = {
         Vertex(Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(1, 1) / Vector2f(4, 3)),
         Vertex(Vector3f(0.5f, -0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 1) / Vector2f(4, 3)),
         Vertex(Vector3f(0.5f, 0.5f, -0.5f), Vector3f(0, 0, -1), Vector2f(0, 2) / Vector2f(4, 3)),
@@ -127,8 +126,7 @@ peng::shared_ref<const Mesh> Primitives::cube_uv()
         Vertex(Vector3f(-0.5f, -0.5f, 0.5f), Vector3f(0, -1, 0), Vector2f(1, 1) / Vector2f(4, 3)),
     };
 
-    const std::vector<Vector3u> indices =
-    {
+    raw_data.triangles = {
         Vector3u(0, 1, 3),
         Vector3u(3, 1, 2),
 
@@ -149,7 +147,7 @@ peng::shared_ref<const Mesh> Primitives::cube_uv()
     };
 
     peng::shared_ref<Mesh> cube = peng::make_shared<Mesh>(
-        "Cube UV", vertices, indices
+        "Cube UV", std::move(raw_data)
     );
 
     weak_cube = cube;
@@ -164,22 +162,21 @@ peng::shared_ref<const Mesh> Primitives::quad()
         return strong_quad.to_shared_ref();
     }
 
-    const std::vector<Vertex> vertices =
-    {
+    RawMeshData raw_data;
+    raw_data.vertices = {
         Vertex(Vector3f(-1, -1, 0) / 2, Vector3f(0, 0, 1), Vector2f(0, 0)),
         Vertex(Vector3f(1, -1, 0) / 2, Vector3f(0, 0, 1), Vector2f(1, 0)),
         Vertex(Vector3f(1, 1, 0) / 2, Vector3f(0, 0, 1), Vector2f(1, 1)),
         Vertex(Vector3f(-1, 1, 0) / 2, Vector3f(0, 0, 1), Vector2f(0, 1)),
     };
 
-    const std::vector<Vector3u> indices =
-    {
+    raw_data.triangles = {
         Vector3u(0, 1, 3),
         Vector3u(3, 1, 2),
     };
 
     peng::shared_ref<Mesh> quad = peng::make_shared<Mesh>(
-        "Quad", vertices, indices
+        "Quad", std::move(raw_data)
     );
 
     weak_quad = quad;
@@ -194,22 +191,21 @@ peng::shared_ref<const Mesh> Primitives::fullscreen_quad()
         return strong_quad.to_shared_ref();
     }
 
-    const std::vector<Vertex> vertices =
-    {
+    RawMeshData raw_data;
+    raw_data.vertices = {
         Vertex(Vector3f(-1, -1, 0), Vector3f(0, 0, 1), Vector2f(0, 0)),
         Vertex(Vector3f(1, -1, 0), Vector3f(0, 0, 1), Vector2f(1, 0)),
         Vertex(Vector3f(1, 1, 0), Vector3f(0, 0, 1), Vector2f(1, 1)),
         Vertex(Vector3f(-1, 1, 0), Vector3f(0, 0, 1), Vector2f(0, 1)),
     };
 
-    const std::vector<Vector3u> indices =
-    {
+    raw_data.triangles = {
         Vector3u(0, 1, 3),
         Vector3u(3, 1, 2),
     };
 
     peng::shared_ref<Mesh> quad = peng::make_shared<Mesh>(
-        "Fullscreen Quad", vertices, indices
+        "Fullscreen Quad", std::move(raw_data)
     );
 
     weak_quad = quad;
@@ -284,17 +280,18 @@ peng::shared_ref<const Mesh> Primitives::icosphere(uint32_t order)
     }
 
     constexpr float radius = 0.5f;
-    std::vector<Vertex> vertices = icosahedron_vertices(radius);
-    std::vector<Vector3u> indices = icosahedron_indices();
+    RawMeshData raw_data;
+    raw_data.vertices = icosahedron_vertices(radius);
+    raw_data.triangles = icosahedron_indices();
 
     for (uint32_t level = 0; level < order; level++)
     {
-        auto [vertices_s, indices_s] = subdivide(vertices, indices);
-        vertices = std::move(vertices_s);
-        indices = std::move(indices_s);
+        auto [vertices_s, indices_s] = subdivide(raw_data.vertices, raw_data.triangles);
+        raw_data.vertices = std::move(vertices_s);
+        raw_data.triangles = std::move(indices_s);
     }
 
-    for (Vertex& vertex : vertices)
+    for (Vertex& vertex : raw_data.vertices)
     {
         const Vector3f dir = vertex.position.normalized_unsafe();
         constexpr float inv_tau = std::numbers::inv_pi_v<float> / 2;
@@ -310,7 +307,7 @@ peng::shared_ref<const Mesh> Primitives::icosphere(uint32_t order)
     // TODO: add a mesh seam to fix weird texture coordinates
 
     peng::shared_ref<Mesh> icosphere = peng::make_shared<Mesh>(
-        strtools::catf("Icosphere(%d)", order), vertices, indices
+        strtools::catf("Icosphere(%d)", order), std::move(raw_data)
     );
 
     weak_icospheres[order] = icosphere;

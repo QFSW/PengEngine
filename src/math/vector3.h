@@ -100,6 +100,8 @@ namespace math
         Vector3 operator*(const T& scalar) const;
         Vector3 operator/(const T& scalar) const;
 
+        // TODO: add array indexing operator to vector types
+
         static constexpr Vector3 cross(const Vector3& a, const Vector3& b);
 
         static constexpr Vector3 zero() { return Vector3(0, 0, 0); }

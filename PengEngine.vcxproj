@@ -450,7 +450,9 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClCompile Include="src\rendering\frame_buffer.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
+    <ClCompile Include="src\rendering\mesh_decoder.cpp" />
     <ClCompile Include="src\rendering\primitives.cpp" />
+    <ClCompile Include="src\rendering\raw_mesh_data.cpp" />
     <ClCompile Include="src\rendering\render_queue.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\rendering\shader_compiler.cpp" />
@@ -574,6 +576,8 @@ xcopy /y /d /s $(SolutionDir)resources $(OutDir)\resources\</Command>
     <ClInclude Include="src\rendering\draw_call.h" />
     <ClInclude Include="src\rendering\draw_call_tree.h" />
     <ClInclude Include="src\rendering\frame_buffer.h" />
+    <ClInclude Include="src\rendering\mesh_decoder.h" />
+    <ClInclude Include="src\rendering\raw_mesh_data.h" />
     <ClInclude Include="src\rendering\render_command.h" />
     <ClInclude Include="src\rendering\render_queue_stats.h" />
     <ClInclude Include="src\rendering\shader_buffer.h" />

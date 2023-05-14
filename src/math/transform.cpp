@@ -1,5 +1,7 @@
 #include "transform.h"
 
+#include "math.h"
+
 using namespace math;
 
 Transform::Transform()
@@ -42,8 +44,8 @@ Vector3f Transform::local_up() const noexcept
 
 Vector3f Transform::local_forwards() const noexcept
 {
-    const float pitch_rads = rotation.x * std::numbers::pi_v<float> / 180;
-    const float yaw_rads = rotation.y * std::numbers::pi_v<float> / 180;
+    const float pitch_rads = degs_to_rads(rotation.x);
+    const float yaw_rads = degs_to_rads(rotation.y);
 
     return Vector3f(
         std::sin(yaw_rads) * std::cos(pitch_rads),
