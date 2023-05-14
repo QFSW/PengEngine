@@ -17,7 +17,8 @@ Mesh::Mesh(std::string&& name, RawMeshData&& raw_data)
 {
     SCOPED_EVENT("Building mesh", _name.c_str());
     Logger::log("Building mesh '%s'", _name.c_str());
-    check(_raw_data.check_valid());
+
+    _raw_data.check_valid();
 
     glGenBuffers(1, &_vbo);
     glGenBuffers(1, &_ebo);
