@@ -20,7 +20,7 @@ namespace math
         Vector2(T x, T y);
 
         template <number U>
-        requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+        requires std::convertible_to<U, T> && (!losslessly_convertible_to<U, T>)
         explicit Vector2(const Vector2<U>& other);
 
         template <number U>
@@ -92,7 +92,7 @@ namespace math
 
     template <number T>
     template <number U>
-    requires std::convertible_to<U, T> && !losslessly_convertible_to<U, T>
+    requires std::convertible_to<U, T> && (!losslessly_convertible_to<U, T>)
     Vector2<T>::Vector2(const Vector2<U>& other)
         : x(static_cast<T>(other.x))
         , y(static_cast<T>(other.y))
