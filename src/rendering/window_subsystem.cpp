@@ -131,7 +131,13 @@ void WindowSubsystem::start()
 
 	if (!_window)
 	{
-		throw std::logic_error("GLFW window creation failed");
+		const char* err_msg;
+		int err_code = glfwGetError(&err_msg);
+
+		throw std::logic_error(strtools::catf(
+			"GLFW window creation failed (%d) - %s",
+			err_code, err_msg
+		));
 	}
 
 	glfwGetFramebufferSize(_window, &_resolution.x, &_resolution.y);
