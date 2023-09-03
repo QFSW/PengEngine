@@ -135,7 +135,7 @@ void WindowSubsystem::start()
 		int err_code = glfwGetError(&err_msg);
 
 		throw std::logic_error(strtools::catf(
-			"GLFW window creation failed (%d) - %s",
+			"GLFW window creation failed [%x] - %s",
 			err_code, err_msg
 		));
 	}
