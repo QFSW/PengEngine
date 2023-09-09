@@ -92,7 +92,7 @@ Shader::Shader(
         GLint num_uniforms;
         glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
-        _uniforms.resize(num_uniforms);
+        _uniforms.reserve(num_uniforms);
         for (GLint i = 0; i < num_uniforms; i++)
         {
             constexpr int32_t buf_size = 512;
@@ -107,11 +107,13 @@ Shader::Shader(
             // If a uniform has a location of -1 it's a non user uniform like the built in gl_ uniforms
             if (location != -1)
             {
-                Uniform& uniform = _uniforms[location];
+                Uniform uniform;
                 uniform.location = location;
                 uniform.name = name_buf;
                 uniform.type = type;
                 uniform.default_value = read_uniform(uniform);
+
+                _uniforms.push_back(std::move(uniform));
             }
         }
     }
