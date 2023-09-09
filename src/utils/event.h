@@ -44,15 +44,15 @@ namespace utils
     class Event : public EventInterface<Args...>
     {
     public:
-        using invocable = EventInterface<Args...>::invocable;
-        using named_listener = EventInterface<Args...>::named_listener;
+        using invocable = typename EventInterface<Args...>::invocable;
+        using named_listener = typename EventInterface<Args...>::named_listener;
 
         void invoke(Args...args);
         void operator()(Args...args);
     };
 
     template <typename...Args>
-    EventInterface<Args...>::listener_handle EventInterface<Args...>::subscribe(invocable&& listener, const std::string& name)
+    typename EventInterface<Args...>::listener_handle EventInterface<Args...>::subscribe(invocable&& listener, const std::string& name)
     {
         listener_handle handle = get_new_handle();
         subscribe(std::move(listener), name, handle);
@@ -128,7 +128,7 @@ namespace utils
     }
 
     template <typename...Args>
-    EventInterface<Args...>::listener_handle EventInterface<Args...>::get_new_handle()
+    typename EventInterface<Args...>::listener_handle EventInterface<Args...>::get_new_handle()
     {
         return _next_handle++;
     }

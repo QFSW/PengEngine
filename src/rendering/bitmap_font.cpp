@@ -19,7 +19,7 @@ BitmapFont::BitmapFont(
     , _pixel_perfect(pixel_perfect)
 {
     check(validate_sprite(_fallback_sprite));
-    for (auto& sprite : _char_map | std::views::values)
+    for (auto& [_, sprite] : _char_map)
     {
         check(validate_sprite(sprite));
     }
