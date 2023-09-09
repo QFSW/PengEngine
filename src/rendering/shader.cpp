@@ -325,140 +325,140 @@ std::optional<Shader::Parameter> Shader::read_uniform(const Uniform& uniform) co
         case GL_INT:
         {
             int32_t value;
-            glGetnUniformiv(_program, uniform.location, sizeof(value), &value);
+            glGetUniformiv(_program, uniform.location, &value);
 
             return value;
         }
         case GL_UNSIGNED_INT:
         {
             uint32_t value;
-            glGetnUniformuiv(_program, uniform.location, sizeof(value), &value);
+            glGetUniformuiv(_program, uniform.location, &value);
 
             return value;
         }
         case GL_FLOAT:
         {
             float value;
-            glGetnUniformfv(_program, uniform.location, sizeof(value), &value);
+            glGetUniformfv(_program, uniform.location, &value);
 
             return value;
         }
         case GL_DOUBLE:
         {
             double value;
-            glGetnUniformdv(_program, uniform.location, sizeof(value), &value);
+            glGetUniformdv(_program, uniform.location, &value);
 
             return value;
         }
         case GL_INT_VEC2:
         {
             int32_t value[2];
-            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformiv(_program, uniform.location, value);
 
             return Vector2i(value[0], value[1]);
         }
         case GL_UNSIGNED_INT_VEC2:
         {
             uint32_t value[2];
-            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformuiv(_program, uniform.location, value);
 
             return Vector2u(value[0], value[1]);
         }
         case GL_FLOAT_VEC2:
         {
             float value[2];
-            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            glGetUniformfv(_program, uniform.location, value);
 
             return Vector2f(value[0], value[1]);
         }
         case GL_DOUBLE_VEC2:
         {
             double value[2];
-            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            glGetUniformdv(_program, uniform.location, value);
 
             return Vector2d(value[0], value[1]);
         }
         case GL_INT_VEC3:
         {
             int32_t value[3];
-            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformiv(_program, uniform.location, value);
 
             return Vector3i(value[0], value[1], value[2]);
         }
         case GL_UNSIGNED_INT_VEC3:
         {
             uint32_t value[3];
-            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformuiv(_program, uniform.location, value);
 
             return Vector3u(value[0], value[1], value[2]);
         }
         case GL_FLOAT_VEC3:
         {
             float value[3];
-            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            glGetUniformfv(_program, uniform.location, value);
 
             return Vector3f(value[0], value[1], value[2]);
         }
         case GL_DOUBLE_VEC3:
         {
             double value[3];
-            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            glGetUniformdv(_program, uniform.location, value);
 
             return Vector3d(value[0], value[1], value[2]);
         }
         case GL_INT_VEC4:
         {
             int32_t value[4];
-            glGetnUniformiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformiv(_program, uniform.location, value);
 
             return Vector4i(value[0], value[1], value[2], value[3]);
         }
         case GL_UNSIGNED_INT_VEC4:
         {
             uint32_t value[4];
-            glGetnUniformuiv(_program, uniform.location, sizeof(value), value);
+            glGetUniformuiv(_program, uniform.location, value);
 
             return Vector4u(value[0], value[1], value[2], value[3]);
         }
         case GL_FLOAT_VEC4:
         {
             float value[4];
-            glGetnUniformfv(_program, uniform.location, sizeof(value), value);
+            glGetUniformfv(_program, uniform.location, value);
 
             return Vector4f(value[0], value[1], value[2], value[3]);
         }
         case GL_DOUBLE_VEC4:
         {
             double value[4];
-            glGetnUniformdv(_program, uniform.location, sizeof(value), value);
+            glGetUniformdv(_program, uniform.location, value);
 
             return Vector4d(value[0], value[1], value[2], value[3]);
         }
         case GL_FLOAT_MAT3:
         {
             std::array<float, 9> value;
-            glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
+            glGetUniformfv(_program, uniform.location, value.data());
 
             return Matrix3x3f(value);
         }
         case GL_DOUBLE_MAT3:
         {
             std::array<double, 9> value;
-            glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+            glGetUniformdv(_program, uniform.location, value.data());
 
             return Matrix3x3d(value);
         }
         case GL_FLOAT_MAT4:
         {
             std::array<float, 16> value;
-            glGetnUniformfv(_program, uniform.location, sizeof(value), value.data());
+            glGetUniformfv(_program, uniform.location, value.data());
 
             return Matrix4x4f(value);
         }
         case GL_DOUBLE_MAT4:
         {
             std::array<double, 16> value;
-            glGetnUniformdv(_program, uniform.location, sizeof(value), value.data());
+            glGetUniformdv(_program, uniform.location, value.data());
 
             return Matrix4x4d(value);
         }
