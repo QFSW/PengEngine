@@ -1,5 +1,7 @@
 #include "timing.h"
 
+#include <thread>
+
 namespace timing
 {
     void sleep_for_precise(duration_ms duration)
