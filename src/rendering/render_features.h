@@ -9,10 +9,11 @@ namespace rendering
 {
     enum RenderFeatures
     {
-        None = 0,
-        Buffer = 1 << 0,
-        ObjectLabel = 1 << 1,
-        DebugGroup = 1 << 2,
+        buffer = 1 << 0,
+        object_label = 1 << 1,
+        debug_group = 1 << 2,
+
+        none = 0,
     };
 
     ENUM_FLAGS(RenderFeatures)

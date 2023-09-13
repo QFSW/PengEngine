@@ -11,7 +11,7 @@ using namespace rendering;
 
 ScopedGPUEvent::ScopedGPUEvent(const char* name)
 {
-    if (RenderFeatureSet::get().has_render_features(RenderFeatures::DebugGroup))
+    if (RenderFeatureSet::get().has_render_features(RenderFeatures::debug_group))
     {
         glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, name);
     }
@@ -19,7 +19,7 @@ ScopedGPUEvent::ScopedGPUEvent(const char* name)
 
 ScopedGPUEvent::~ScopedGPUEvent()
 {
-    if (RenderFeatureSet::get().has_render_features(RenderFeatures::DebugGroup))
+    if (RenderFeatureSet::get().has_render_features(RenderFeatures::debug_group))
     {
         glPopDebugGroup();
     }
