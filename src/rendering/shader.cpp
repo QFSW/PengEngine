@@ -70,8 +70,8 @@ Shader::Shader(
 
     {
         namespace fs = std::filesystem;
-        object_label(GL_SHADER, vert_shader, -1, fs::path(vert_shader_path).filename().string().c_str());
-        object_label(GL_SHADER, frag_shader, -1, fs::path(frag_shader_path).filename().string().c_str());
+        glObjectLabelWrapped(GL_SHADER, vert_shader, -1, fs::path(vert_shader_path).filename().string().c_str());
+        glObjectLabelWrapped(GL_SHADER, frag_shader, -1, fs::path(frag_shader_path).filename().string().c_str());
     }
 
     Logger::log("Linking shader program");
@@ -81,7 +81,7 @@ Shader::Shader(
     glLinkProgram(_program);
     _broken |= !validate_shader_link(_program);
 
-    object_label(GL_PROGRAM, _program, -1, _name.c_str());
+    glObjectLabelWrapped(GL_PROGRAM, _program, -1, _name.c_str());
 
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);
