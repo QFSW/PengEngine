@@ -19,6 +19,7 @@
 extern "C" {
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
+#include "render_features.h"
 
 using namespace rendering;
 
@@ -117,13 +118,13 @@ void WindowSubsystem::start()
 
 #ifdef PLATFORM_MAC
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	RenderFeatures render_features = RenderFeatures::None;
+	RenderFeatures render_features = RenderFeatures::none;
 #else
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	RenderFeatures render_features =
-		RenderFeatures::Buffer |
-		RenderFeatures::ObjectLabel |
-		RenderFeatures::DebugGroup;
+		RenderFeatures::buffer |
+		RenderFeatures::object_label |
+		RenderFeatures::debug_group;
 #endif
 
 #ifdef PENG_DEBUG

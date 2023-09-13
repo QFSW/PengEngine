@@ -9,6 +9,7 @@
 #include <profiling/scoped_event.h>
 
 #include "mesh_decoder.h"
+#include "gl_wrapper.h"
 
 using namespace rendering;
 using namespace math;
@@ -28,7 +29,7 @@ Mesh::Mesh(std::string&& name, RawMeshData&& raw_data)
     glGenVertexArrays(1, &_vao);
 
     glBindVertexArray(_vao);
-    glObjectLabel(GL_VERTEX_ARRAY, _vao, -1, _name.c_str());
+    object_label(GL_VERTEX_ARRAY, _vao, -1, _name.c_str());
 
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, vectools::buffer_size(_raw_data.vertices), _raw_data.vertices.data(), GL_STATIC_DRAW);
