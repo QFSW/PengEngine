@@ -120,7 +120,10 @@ void WindowSubsystem::start()
 	RenderFeatures render_features = RenderFeatures::None;
 #else
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	RenderFeatures render_features = RenderFeatures::Buffer | RenderFeatures::ObjectLabel;
+	RenderFeatures render_features =
+		RenderFeatures::Buffer |
+		RenderFeatures::ObjectLabel |
+		RenderFeatures::DebugGroup;
 #endif
 
 #ifdef PENG_DEBUG

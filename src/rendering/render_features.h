@@ -11,7 +11,8 @@ namespace rendering
     {
         None = 0,
         Buffer = 1 << 0,
-        ObjectLabel = 1 << 1
+        ObjectLabel = 1 << 1,
+        DebugGroup = 1 << 2,
     };
 
     ENUM_FLAGS(RenderFeatures)

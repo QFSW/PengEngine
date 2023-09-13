@@ -4,16 +4,25 @@
 
 #include <GL/glew.h>
 
+#include <rendering/render_features.h>
+
 using namespace profiling;
+using namespace rendering;
 
 ScopedGPUEvent::ScopedGPUEvent(const char* name)
 {
-    glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, name);
+    if (RenderFeatureSet::get().has_render_features(RenderFeatures::DebugGroup))
+    {
+        glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, name);
+    }
 }
 
 ScopedGPUEvent::~ScopedGPUEvent()
 {
-    glPopDebugGroup();
+    if (RenderFeatureSet::get().has_render_features(RenderFeatures::DebugGroup))
+    {
+        glPopDebugGroup();
+    }
 }
 
 #endif
