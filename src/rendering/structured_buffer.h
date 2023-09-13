@@ -75,7 +75,7 @@ namespace rendering
                 SCOPED_EVENT("StructuredBuffer - allocate", _name.c_str());
                 glGenBuffers(1, &_ssbo);
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, _ssbo);
-                object_label(GL_BUFFER, _ssbo, -1, _name.c_str());
+                glObjectLabelWrapped(GL_BUFFER, _ssbo, -1, _name.c_str());
                 glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(T), data.data(), _usage);
             }
 
