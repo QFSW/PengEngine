@@ -112,9 +112,16 @@ void WindowSubsystem::start()
 	}
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+#ifdef PLATFORM_MAC
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	RenderFeatures render_features = RenderFeatures::None;
+#else
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	RenderFeatures render_features = RenderFeatures::Buffer | RenderFeatures::ObjectLabel;
+#endif
 
 #ifdef PENG_DEBUG
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, Logger::enabled());
@@ -140,10 +147,12 @@ void WindowSubsystem::start()
 		));
 	}
 
+	RenderFeatureSet::get().set_render_features(render_features);
 	glfwGetFramebufferSize(_window, &_resolution.x, &_resolution.y);
 	glfwMakeContextCurrent(_window);
 
 	Logger::log("OpenGL context created - %s", glGetString(GL_VERSION));
+	Logger::log("Render features present - 0x%x", render_features);
 	Logger::log("GPU selected - %s (%s)",
 		strtools::trim(reinterpret_cast<const char*>(glGetString(GL_RENDERER))).c_str(),
 		strtools::trim(reinterpret_cast<const char*>(glGetString(GL_VENDOR))).c_str()
