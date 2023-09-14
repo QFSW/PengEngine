@@ -36,13 +36,13 @@ protected:
 
 private:
     static std::vector<std::unique_ptr<Subsystem>> _subsystems;
-    static std::unordered_map<const type_info*, size_t> _subsystem_map;
+    static std::unordered_map<const std::type_info*, size_t> _subsystem_map;
 };
 
 template <std::derived_from<Subsystem> T>
 void Subsystem::load()
 {
-    const type_info* id = &typeid(T);
+    const std::type_info* id = &typeid(T);
     check(!_subsystem_map.contains(id));
 
     _subsystem_map[id] = _subsystems.size();
@@ -52,7 +52,7 @@ void Subsystem::load()
 template <std::derived_from<Subsystem> T>
 T& Subsystem::get()
 {
-    const type_info* id = &typeid(T);
+    const std::type_info* id = &typeid(T);
     check(_subsystem_map.contains(id));
 
     return static_cast<T&>(*_subsystems[_subsystem_map[id]]);

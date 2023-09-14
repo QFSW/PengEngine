@@ -5,7 +5,7 @@
 #include <profiling/scoped_event.h>
 
 std::vector<std::unique_ptr<Subsystem>> Subsystem::_subsystems;
-std::unordered_map<const type_info*, size_t> Subsystem::_subsystem_map;
+std::unordered_map<const std::type_info*, size_t> Subsystem::_subsystem_map;
 
 void Subsystem::start_all()
 {
