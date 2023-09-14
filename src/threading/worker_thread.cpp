@@ -1,8 +1,6 @@
 #include "worker_thread.h"
 
-#pragma warning( push, 0 )
-#include <windows.h>
-#pragma warning( pop )
+#include "utils.h"
 
 using namespace threading;
 
@@ -12,12 +10,7 @@ WorkerThread::WorkerThread(std::string&& thread_name)
     , _num_pending_jobs(0)
 {
     _worker = std::make_unique<std::thread>([this, name = std::move(thread_name)] {
-        if (GetProcAddress(GetModuleHandle(L"kernel32.dll"), "SetThreadDescription"))
-        {
-            const std::wstring w_name = std::wstring(name.begin(), name.end());
-            SetThreadDescription(GetCurrentThread(), w_name.c_str());
-        }
-
+        set_current_thread_name(name);
         worker_routine();
     });
 }
