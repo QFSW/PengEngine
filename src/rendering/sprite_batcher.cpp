@@ -31,9 +31,16 @@ void SpriteBatcher::convert_draws(
     _buffer_pool.num_used = 0;
 
     preprocess_draws(sprite_draws_in, _processed_draw_buffer);
-    sort_draws(_processed_draw_buffer);
-    bin_draws(_processed_draw_buffer, _draw_bin_buffer);
-    emit_draws(_draw_bin_buffer, draws_out);
+    if (RenderFeatureSet::get().has_render_features(RenderFeatures::buffer))
+    {
+        sort_draws(_processed_draw_buffer);
+        bin_draws(_processed_draw_buffer, _draw_bin_buffer);
+        emit_draws(_draw_bin_buffer, draws_out);
+    }
+    else
+    {
+        emit_draws(_processed_draw_buffer, draws_out);
+    }
 }
 
 void SpriteBatcher::flush()
@@ -133,21 +140,17 @@ void SpriteBatcher::bin_draws(
 
     for (const ProcessedSpriteDraw& processed_draw : processed_draws_in)
     {
-        const bool requires_alpha =
-            processed_draw.instance_data.color.w < 0.999f ||
-            processed_draw.texture->transparency() == TransparencyMode::translucent;
-
-        const BinKey bin_key = std::make_tuple(processed_draw.texture, requires_alpha);
+        const BinKey bin_key = std::make_tuple(processed_draw.texture, processed_draw.requires_alpha);
 
         // Opaque sprites can always be binned together if they have compatible textures
-        if (!requires_alpha)
+        if (!processed_draw.requires_alpha)
         {
             opaque_bins[bin_key].add_draw(processed_draw, bin_key);
             continue;
         }
 
         // Create an alpha bin if there aren't any
-        if (alpha_bins.empty())
+        if (true || alpha_bins.empty())
         {
             DrawBin& alpha_bin = alpha_bins.emplace_back();
             alpha_bin.add_draw(processed_draw, bin_key);
@@ -235,21 +238,27 @@ void SpriteBatcher::emit_draws(const std::vector<DrawBin>& draw_bins_in, std::ve
     }
 }
 
+void SpriteBatcher::emit_draws(const std::vector<ProcessedSpriteDraw>& processed_draws_in, std::vector<DrawCall>& draws_out)
+{
+    SCOPED_EVENT("SpriteBatcher - create draws");
+
+    for (const ProcessedSpriteDraw& processed_draw : processed_draws_in)
+    {
+        draws_out.push_back(emit_simple_draw(processed_draw));
+    }
+}
+
 DrawCall SpriteBatcher::emit_simple_draw(const DrawBin& draw_bin)
 {
     const peng::shared_ref<const Texture> texture = std::get<0>(draw_bin.key).to_shared_ref();
     const bool requires_alpha = std::get<1>(draw_bin.key);
+
+    check(draw_bin.instance_data().size() == 1);
     const SpriteInstanceData& instance_data = draw_bin.instance_data()[0];
 
-    const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
-    peng::shared_ref<Material> material = get_pooled_material(pool_key);
-
-    // TODO: use uniform caches
-    material->set_parameter("color_tex", texture);
-    material->set_parameter("base_color", instance_data.color);
-    material->set_parameter("mvp_matrix", instance_data.mvp_matrix);
-    material->set_parameter("tex_scale", instance_data.tex_scale);
-    material->set_parameter("tex_offset", instance_data.tex_offset);
+    peng::shared_ref<Material> material = prepare_material_for_simple_draw(
+        instance_data, requires_alpha, texture
+    );
 
     const float order = material->shader()->requires_blending()
         ? -draw_bin.avg_depth()
@@ -261,6 +270,42 @@ DrawCall SpriteBatcher::emit_simple_draw(const DrawBin& draw_bin)
         .order = order,
         .instance_count = 1
     };
+}
+
+DrawCall SpriteBatcher::emit_simple_draw(const ProcessedSpriteDraw& processed_draw)
+{
+    peng::shared_ref<Material> material = prepare_material_for_simple_draw(
+        processed_draw.instance_data, processed_draw.requires_alpha, processed_draw.texture
+    );
+
+    const float order = material->shader()->requires_blending()
+        ? -processed_draw.z_depth
+        : +processed_draw.z_depth;
+
+    return DrawCall{
+        .mesh = get_sprite_mesh(),
+        .material = material,
+        .order = order,
+        .instance_count = 1
+    };
+}
+
+peng::shared_ref<Material> SpriteBatcher::prepare_material_for_simple_draw(
+    const SpriteInstanceData& instance_data, bool requires_alpha,
+    const peng::shared_ref<const Texture>& texture
+)
+{
+    const MaterialPoolKey pool_key = std::make_tuple(false, requires_alpha);
+    peng::shared_ref<Material> material = get_pooled_material(pool_key);
+
+    // TODO: use uniform caches
+    material->set_parameter("color_tex", texture);
+    material->set_parameter("base_color", instance_data.color);
+    material->set_parameter("mvp_matrix", instance_data.mvp_matrix);
+    material->set_parameter("tex_scale", instance_data.tex_scale);
+    material->set_parameter("tex_offset", instance_data.tex_offset);
+
+    return material;
 }
 
 DrawCall SpriteBatcher::emit_instanced_draw(const DrawBin& draw_bin)
@@ -329,9 +374,14 @@ SpriteBatcher::ProcessedSpriteDraw SpriteBatcher::preprocess_draw(const SpriteDr
     const Vector2f tex_scale = Vector2f(sprite->resolution()) / texture_res;
     const Vector2f tex_offset = Vector2f(pos_corrected) / texture_res;
 
+    const bool requires_alpha =
+        sprite_draw.color.w < 0.999f ||
+        sprite->texture()->transparency() == TransparencyMode::translucent;
+
     return ProcessedSpriteDraw{
         .texture = sprite->texture(),
         .z_depth = mvp_matrix.get_translation().z,
+        .requires_alpha = requires_alpha,
         .instance_data = SpriteInstanceData{
             .color = sprite_draw.color,
             .mvp_matrix = mvp_matrix,
