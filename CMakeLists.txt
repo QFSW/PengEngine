@@ -3,11 +3,16 @@ set(CMAKE_CXX_STANDARD 23)
 
 project(PengEngine)
 
+# PENG_DEBUG config
 add_compile_options(-g3 -fsanitize=address)
 add_link_options(-fsanitize=address)
-
 add_compile_definitions(PENG_DEBUG)
-add_compile_definitions(ARCH_ARM64 PLATFORM_MAC)
+
+if (WIN32)
+    add_compile_definitions(ARCH_AMD64 PLATFORM_WIN)
+elseif (APPLE)
+    add_compile_definitions(ARCH_ARM64 PLATFORM_MAC)
+endif()
 
 add_executable(PengEngine)
 
