@@ -123,7 +123,13 @@ tm Logger::time_now_info() const
 {
 	const time_t time_now = time(nullptr);
 	tm time_info = {};
+
+	// localtime_s/r have different signatures in MSVC vs ISO C11
+#ifdef PLATFORM_WIN
 	localtime_s(&time_info, &time_now);
+#else
+	localtime_r(&time_now, &time_info);
+#endif
 
 	return time_info;
 }
