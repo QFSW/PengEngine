@@ -47,6 +47,7 @@ namespace rendering
         {
             peng::shared_ref<const Texture> texture;
             float z_depth = 0;
+            bool requires_alpha = false;
             SpriteInstanceData instance_data;
         };
 
@@ -111,8 +112,21 @@ namespace rendering
             std::vector<DrawCall>& draws_out
         );
 
+        // Emits draw calls from processed sprite draws
+        // No instancing or merging will be performed
+        void emit_draws(
+            const std::vector<ProcessedSpriteDraw>& processed_draws_in,
+            std::vector<DrawCall>& draws_out
+        );
+
         // Emits a draw call when no instancing is used
         [[nodiscard]] DrawCall emit_simple_draw(const DrawBin& draw_bin);
+        [[nodiscard]] DrawCall emit_simple_draw(const ProcessedSpriteDraw& processed_draw);
+
+        [[nodiscard]] peng::shared_ref<Material> prepare_material_for_simple_draw(
+            const SpriteInstanceData& instance_data, bool requires_alpha,
+            const peng::shared_ref<const Texture>& texture
+        );
 
         // Emits an instanced draw call when to batch multiple sprites together
         [[nodiscard]] DrawCall emit_instanced_draw(const DrawBin& draw_bin);
