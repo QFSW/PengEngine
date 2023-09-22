@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WIN
+
 #include <libs/superluminal/PerformanceAPI_capi.h>
 
 #include "profiler.h"
@@ -25,3 +27,4 @@ namespace profiling
         PerformanceAPI_Functions _functions;
     };
 }
+#endif

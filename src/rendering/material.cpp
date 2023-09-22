@@ -109,8 +109,10 @@ void Material::apply_uniforms()
     _num_bound_textures = 0;
     for (const auto& [location, parameter] : _set_parameters)
     {
+        // Clang doesn't support lambda capturing a structured binding
+        const GLint loc = location;
         std::visit(functional::overload{
-            [&](const auto& x) { apply_parameter(location, x); }
+            [&](const auto& x) { apply_parameter(loc, x); }
         }, parameter);
     }
 }
