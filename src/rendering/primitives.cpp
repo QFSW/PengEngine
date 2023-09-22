@@ -435,9 +435,16 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
     }
 
     Asset<Texture> font_texture("resources/textures/core/peng_font.asset");
+    
+    const SpriteSheet::Config sheet_config = {
+        .px_per_unit = 9,
+        .cell_size = Vector2i::one() * 9,
+        .cell_padding = Vector2i(0, 1),
+        .cell_count = 12 * 12
+    };
 
     std::vector<peng::shared_ref<const Sprite>> sprites = SpriteSheet::slice_grid(
-        font_texture.load(), 9, Vector2i::one() * 9, 12 * 12
+        font_texture.load(), sheet_config
     );
 
     int32_t num_chars = 0;

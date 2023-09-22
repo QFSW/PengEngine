@@ -13,12 +13,19 @@ namespace rendering
     class SpriteSheet
     {
     public:
-        // TODO: support padding
+        struct Config
+        {
+            float px_per_unit;
+            math::Vector2i cell_size;
+            math::Vector2i cell_padding;
+            int32_t cell_count;
+        };
+
         [[nodiscard]] static std::vector<peng::shared_ref<const Sprite>> slice_grid(
-            const peng::shared_ref<const Texture>& texture,
-            float px_per_unit,
-            const math::Vector2i& cell_size,
-            int32_t cell_count
+            const peng::shared_ref<const Texture>& texture, const Config& config
         );
+
+    private:
+        [[nodiscard]] static int get_cell_count_1d(int row_length, int cell_length, int cell_padding);
     };
 }
