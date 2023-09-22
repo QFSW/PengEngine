@@ -2,10 +2,20 @@
 
 #include <stdexcept>
 
+#ifdef PLATFORM_WIN
+
 #pragma warning( push, 0 )
 #define NOMINMAX
 #include <windows.h>
 #pragma warning( pop )
+
+// Causes the NVIDIA GPU to be used over integrated graphics on dual GPU systems (such as laptops)
+// https://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
+#endif
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -14,11 +24,6 @@
 #include <profiling/scoped_event.h>
 #include <profiling/scoped_gpu_event.h>
 
-// Causes the NVIDIA GPU to be used over integrated graphics on dual GPU systems (such as laptops)
-// https://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
-extern "C" {
-	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-}
 #include "render_features.h"
 
 using namespace rendering;

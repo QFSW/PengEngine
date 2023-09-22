@@ -1,3 +1,5 @@
+#ifdef PLATFORM_WIN
+
 #include "superluminal_profiler.h"
 
 #pragma warning( push, 0 )
@@ -52,3 +54,5 @@ void SuperluminalProfiler::end_event()
         _functions.EndEvent();
     }
 }
+
+#endif
