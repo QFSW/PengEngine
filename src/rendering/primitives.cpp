@@ -435,19 +435,16 @@ peng::shared_ref<const BitmapFont> Primitives::peng_font()
     }
 
     Asset<Texture> font_texture("resources/textures/core/peng_font.asset");
-    
-    const SpriteSheet::Config sheet_config = {
+    const SpriteSheet sprite_sheet(SpriteSheet::Config{
+        .texture = font_texture.load(),
         .px_per_unit = 9,
         .cell_size = Vector2i::one() * 9,
         .cell_padding = Vector2i(0, 1),
         .cell_count = 12 * 12
-    };
-
-    std::vector<peng::shared_ref<const Sprite>> sprites = SpriteSheet::slice_grid(
-        font_texture.load(), sheet_config
-    );
+    });
 
     int32_t num_chars = 0;
+    const std::vector<peng::shared_ref<const Sprite>> sprites = sprite_sheet.sprites();
     std::unordered_map<char, peng::shared_ptr<const Sprite>> char_map;
 
     // Numbers
