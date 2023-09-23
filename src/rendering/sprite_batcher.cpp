@@ -1,11 +1,11 @@
 #include "sprite_batcher.h"
 
 #include <ranges>
-#include <execution>
 
 #include <profiling/scoped_event.h>
 #include <utils/strtools.h>
 #include <utils/vectools.h>
+#include <utils/execution.h>
 
 #include "sprite.h"
 #include "texture.h"
@@ -115,7 +115,7 @@ void SpriteBatcher::sort_draws(std::vector<ProcessedSpriteDraw>& processed_draws
 {
     SCOPED_EVENT("SpriteBatcher - sort draws");
 
-    std::sort(std::execution::par_unseq, processed_draws_in_out.begin(), processed_draws_in_out.end(),
+    std::sort(EXEC_PAR_UNSEQ processed_draws_in_out.begin(), processed_draws_in_out.end(),
         [](const ProcessedSpriteDraw& x, const ProcessedSpriteDraw& y)
         {
             return x.z_depth < y.z_depth;
