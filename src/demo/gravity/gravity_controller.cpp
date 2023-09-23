@@ -1,7 +1,6 @@
 #include "gravity_controller.h"
 
 #include <algorithm>
-#include <execution>
 
 #include <core/peng_engine.h>
 #include <profiling/scoped_event.h>
@@ -11,6 +10,7 @@
 #include <rendering/primitives.h>
 #include <rendering/window_subsystem.h>
 #include <math/math.h>
+#include <utils/execution.h>
 
 IMPLEMENT_ENTITY(demo::gravity::GravityController);
 
@@ -27,7 +27,7 @@ void GravityController::post_create()
 	PengEngine::get().set_max_delta_time(50.0);
 	WindowSubsystem::get().set_window_name("PengEngine - Gravity Demo");
 
-	create_rock_field(500, 5, 2);
+	create_rock_field(1000, 5, 2);
 	create_rock_field(100, 10, 4);
 
 	peng::shared_ref<const Texture> skybox_texture = peng::make_shared<Texture>("skybox",
@@ -62,7 +62,7 @@ void GravityController::tick(float delta_time)
 		SCOPED_EVENT("GravityController - apply attraction");
 
 		std::for_each(
-			std::execution::par_unseq, rock_ptrs.begin(), rock_ptrs.end(),
+			EXEC_PAR_UNSEQ rock_ptrs.begin(), rock_ptrs.end(),
 			[&](Rock* rock1) {
 				for (Rock* rock2 : rock_ptrs)
 				{

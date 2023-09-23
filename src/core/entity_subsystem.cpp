@@ -1,8 +1,8 @@
 ﻿#include "entity_subsystem.h"
 
-#include <execution>
 #include <algorithm>
 #include <utils/vectools.h>
+#include <utils/execution.h>
 #include <profiling/scoped_event.h>
 
 #include "entity.h"
@@ -219,11 +219,11 @@ void EntitySubsystem::for_each_tickable(bool parallel, const std::vector<peng::s
 {
 	if (parallel)
 	{
-		std::for_each(std::execution::par, tickables.begin(), tickables.end(), std::move(invocable));
+		std::for_each(EXEC_PAR tickables.begin(), tickables.end(), std::move(invocable));
 	}
 	else
 	{
-		std::for_each(std::execution::seq, tickables.begin(), tickables.end(), std::move(invocable));
+		std::for_each(EXEC_SEQ tickables.begin(), tickables.end(), std::move(invocable));
 	}
 }
 
