@@ -22,11 +22,15 @@ PengEngine::PengEngine()
     , _time_scale(1)
 	, _frame_number(0)
 	, _last_frametime(_target_frametime)
+	, _frametime_smoothing_window(100)
+	, _previous_frametimes_total()
 {
 	Subsystem::load<rendering::WindowSubsystem>();
 	Subsystem::load<audio::AudioSubsystem>();
 	Subsystem::load<input::InputSubsystem>();
 	Subsystem::load<EntitySubsystem>();
+
+	_previous_frametimes.reserve(_frametime_smoothing_window);
 }
 
 void PengEngine::run()
@@ -35,9 +39,9 @@ void PengEngine::run()
 
 	while (!shutting_down())
 	{
-		_last_frametime = static_cast<float>(timing::measure_ms([this] {
+		record_frametime(static_cast<float>(timing::measure_ms([this] {
 			tick();
-		}));
+		})));
 	}
 
 	Logger::log("PengEngine shutting down...");
@@ -99,6 +103,11 @@ int32_t PengEngine::frame_number() const noexcept
 float PengEngine::last_frametime() const noexcept
 {
 	return _last_frametime;
+}
+
+float PengEngine::last_frametime_smoothed() const noexcept
+{
+	return _previous_frametimes_total / _frametime_smoothing_window;
 }
 
 void PengEngine::start()
@@ -179,4 +188,20 @@ void PengEngine::tick_render()
 #endif
 
 	rendering::RenderQueue::get().execute();
+}
+
+void PengEngine::record_frametime(float frametime)
+{
+	_last_frametime = frametime;
+
+	// Pop oldest frametime if we're at window capacity
+	if (_previous_frametimes.size() == _frametime_smoothing_window)
+	{
+		_previous_frametimes_total -= _previous_frametimes[0];
+		_previous_frametimes.erase(_previous_frametimes.begin());
+	}
+
+	// Push new frametime
+	_previous_frametimes_total += _last_frametime;
+	_previous_frametimes.push_back(_last_frametime);
 }
