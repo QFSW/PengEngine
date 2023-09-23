@@ -145,7 +145,7 @@ std::vector<ShaderDrawTree> DrawCallTree::merge_shader_draws(std::vector<ShaderD
         ShaderDrawTree* current = vectools::try_back(merged_draws);
         if (current && current->shader == shader_draw.shader)
         {
-            current->mesh_draws.append_range(std::move(shader_draw.mesh_draws));
+            vectools::concat_back(current->mesh_draws, std::move(shader_draw.mesh_draws));
         }
         else
         {
@@ -165,7 +165,7 @@ std::vector<MeshDrawTree> DrawCallTree::merge_mesh_draws(std::vector<MeshDrawTre
         MeshDrawTree* current = vectools::try_back(merged_draws);
         if (current && current->mesh == mesh_draw.mesh)
         {
-            current->draw_calls.append_range(std::move(mesh_draw.draw_calls));
+            vectools::concat_back(current->draw_calls, std::move(mesh_draw.draw_calls));
         }
         else
         {

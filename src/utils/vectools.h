@@ -43,4 +43,14 @@ namespace vectools
 
         return &v.back();
     }
+
+    template <std::move_constructible T>
+    void concat_back(std::vector<T>& v1, std::vector<T>&& v2)
+    {
+        v1.insert(
+            v1.end(),
+            std::make_move_iterator(v2.begin()),
+            std::make_move_iterator(v2.end())
+        );
+    }
 }
