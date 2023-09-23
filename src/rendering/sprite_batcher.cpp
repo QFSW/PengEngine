@@ -5,6 +5,7 @@
 
 #include <profiling/scoped_event.h>
 #include <utils/strtools.h>
+#include <utils/vectools.h>
 
 #include "sprite.h"
 #include "texture.h"
@@ -23,7 +24,7 @@ void SpriteBatcher::convert_draws(
 {
     SCOPED_EVENT("SpriteBatcher - convert draws", strtools::catf_temp("%d sprites", sprite_draws_in.size()));
 
-    for (MaterialPool& pool : _material_pools | std::views::values)
+    for (auto& [_, pool] : _material_pools)
     {
         pool.num_used = 0;
     }
@@ -150,7 +151,7 @@ void SpriteBatcher::bin_draws(
         }
 
         // Create an alpha bin if there aren't any
-        if (true || alpha_bins.empty())
+        if (alpha_bins.empty())
         {
             DrawBin& alpha_bin = alpha_bins.emplace_back();
             alpha_bin.add_draw(processed_draw, bin_key);
@@ -197,7 +198,7 @@ void SpriteBatcher::bin_draws(
         // Flush all flat bins since the new draw is incompatible
         if (!compatible)
         {
-            draw_bins_out.append_range(std::move(alpha_bins));
+            vectools::concat_back(draw_bins_out, std::move(alpha_bins));
             alpha_bins.clear();
             matching_bin = nullptr;
         }
@@ -214,8 +215,9 @@ void SpriteBatcher::bin_draws(
         alpha_bin.add_draw(processed_draw, bin_key);
     }
 
-    draw_bins_out.append_range(std::move(alpha_bins));
-    for (DrawBin& opaque_bin : opaque_bins | std::views::values)
+    // Flush all remaining bins
+    vectools::concat_back(draw_bins_out, std::move(alpha_bins));
+    for (auto& [_, opaque_bin] : opaque_bins)
     {
         draw_bins_out.push_back(std::move(opaque_bin));
     }
@@ -422,11 +424,13 @@ peng::shared_ref<Material> SpriteBatcher::get_pooled_material(const MaterialPool
 
                 if (key == std::make_tuple(true, false))
                 {
+                    check(RenderFeatureSet::get().has_render_features(RenderFeatures::buffer));
                     return Primitives::sprite_instanced_shader();
                 }
 
                 if (key == std::make_tuple(true, true))
                 {
+                    check(RenderFeatureSet::get().has_render_features(RenderFeatures::buffer));
                     return Primitives::sprite_instanced_alpha_shader();
                 }
 
