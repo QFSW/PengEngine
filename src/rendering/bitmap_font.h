@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <unordered_map>
 
 #include <memory/shared_ptr.h>
