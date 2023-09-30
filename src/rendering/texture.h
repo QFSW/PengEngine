@@ -13,18 +13,20 @@ struct Archive;
 
 namespace rendering
 {
+    struct TextureConfig
+    {
+        GLint wrap_x = GL_REPEAT;
+        GLint wrap_y = GL_REPEAT;
+        GLint min_filter = GL_LINEAR_MIPMAP_LINEAR;
+        GLint max_filter = GL_LINEAR;
+
+        bool generate_mipmaps = true;
+    };
+
     class Texture
     {
     public:
-        struct Config
-        {
-            GLint wrap_x = GL_REPEAT;
-            GLint wrap_y = GL_REPEAT;
-            GLint min_filter = GL_LINEAR_MIPMAP_LINEAR;
-            GLint max_filter = GL_LINEAR;
-
-            bool generate_mipmaps = true;
-        };
+        using Config = TextureConfig;
 
         Texture(const std::string& name, const std::string& texture_path, const Config& config = {});
 
