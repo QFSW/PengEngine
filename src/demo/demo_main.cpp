@@ -10,7 +10,9 @@
 #include <entities/debug/bootloader.h>
 
 #ifndef NO_PROFILING
+#ifdef PLATFORM_WIN
 #include <profiling/superluminal_profiler.h>
+#endif
 #endif
 
 namespace demo
@@ -18,7 +20,9 @@ namespace demo
     int demo_main()
     {
 #ifndef NO_PROFILING
+#ifdef PLATFORM_WIN
             profiling::ProfilerManager::get().load_profiler<profiling::SuperluminalProfiler>();
+#endif
 #endif
 
         PengEngine::get().on_engine_initialized().subscribe_once([]
