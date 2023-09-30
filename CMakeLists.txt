@@ -1,18 +1,39 @@
 cmake_minimum_required(VERSION 3.12)
 set(CMAKE_CXX_STANDARD 23)
 
+if(CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_CONFIGURATION_TYPES "Debug; Development; Release; Master")
+  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "" FORCE)
+endif()
+
 project(PengEngine)
 
-# PENG_DEBUG config
-add_compile_options(-g3 -fsanitize=address)
-add_link_options(-fsanitize=address)
-add_compile_definitions(PENG_DEBUG)
+# Setup the different build configurations
+add_compile_definitions("$<$<CONFIG:Debug>:         PENG_DEBUG>")
+add_compile_definitions("$<$<CONFIG:Development>:   PENG_DEVELOPMENT>")
+add_compile_definitions("$<$<CONFIG:Release>:       PENG_RELEASE;   NO_CHECKS>")
+add_compile_definitions("$<$<CONFIG:Master>:        PENG_MASTER;    NO_CHECKS; NO_LOGGING; NO_PROFILING>")
 
+# Per platform defines, compiler options etc.
 if (WIN32)
     add_compile_definitions(ARCH_AMD64 PLATFORM_WIN)
+    add_compile_options(/W4)
+
+    set(OPTIMIZATION_FLAG "/O3")
+
 elseif (APPLE)
     add_compile_definitions(ARCH_ARM64 PLATFORM_MAC)
+    # add_compile_options(-Wextra)
+
+    set(OPTIMIZATION_FLAG "-o3")
+    set(DEBUG_FLAG "-g")
 endif()
+
+# Apply compiler flags per build
+add_compile_options("$<$<CONFIG:Debug>:${DEBUG_FLAG}>")
+add_compile_options("$<$<CONFIG:Development>:${OPTIMIZATION_FLAG}>")
+add_compile_options("$<$<CONFIG:Release>:${OPTIMIZATION_FLAG}>")
+add_compile_options("$<$<CONFIG:Master>:${OPTIMIZATION_FLAG}>")
 
 add_executable(PengEngine)
 
