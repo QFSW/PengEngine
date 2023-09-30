@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <memory>
+#include <vector>
 #include <unordered_map>
 
 #include <utils/check.h>
