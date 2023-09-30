@@ -1,5 +1,8 @@
 #include "sprite_sheet.h"
 
+#include <core/asset.h>
+#include <memory/gc.h>
+
 #include "texture.h"
 #include "sprite.h"
 
@@ -42,6 +45,22 @@ SpriteSheet::SpriteSheet(const Config& config)
         cursor.x = 0;
         cursor.y += config.cell_size.y + config.cell_padding.y;
     }
+}
+
+peng::shared_ref<SpriteSheet> SpriteSheet::load_asset(const Archive& archive)
+{
+    Asset<Texture> texture_asset(archive.read<std::string>("texture"));
+
+    Config config {
+        .texture = texture_asset.load()
+    };
+
+    archive.try_read("px_per_unit", config.px_per_unit);
+    archive.try_read("cell_size", config.cell_size);
+    archive.try_read("cell_padding", config.cell_padding);
+    archive.try_read("cell_count", config.cell_count);
+
+    return memory::GC::alloc<SpriteSheet>(config);
 }
 
 int SpriteSheet::get_cell_count_1d(int row_length, int cell_length, int cell_padding)

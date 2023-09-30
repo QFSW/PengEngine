@@ -5,6 +5,8 @@
 #include <memory/shared_ref.h>
 #include <math/vector2.h>
 
+class Archive;
+
 namespace rendering
 {
     class Sprite;
@@ -23,6 +25,8 @@ namespace rendering
         };
 
         SpriteSheet(const Config& config);
+
+        static peng::shared_ref<SpriteSheet> load_asset(const Archive& archive);
 
         [[nodiscard]] const std::vector<peng::shared_ref<const Sprite>>& sprites() const noexcept { return _sprites; }
 
