@@ -1,0 +1,19 @@
+buildType:
+  default: development
+  choices:
+    debug:
+      short: Debug
+      long: Unoptimized build with all debugging features enabled.
+      buildType: Debug
+    development:
+      short: Development
+      long: Optimized build without the debug OpenGL context or standard library.
+      buildType: Development
+    release:
+      short: Release
+      long: Optimized build with all assertions removed.
+      buildType: Release
+    master:
+      short: Master
+      long: Optimized build without assertions, profiling support, logging etc.
+      buildType: Master
