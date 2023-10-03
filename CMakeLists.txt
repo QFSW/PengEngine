@@ -9,10 +9,13 @@ endif()
 project(PengEngine)
 
 # Setup the different build configurations
-add_compile_definitions("$<$<CONFIG:Debug>:         PENG_DEBUG>")
+add_compile_definitions("$<$<CONFIG:Debug>:         PENG_DEBUGø>")
 add_compile_definitions("$<$<CONFIG:Development>:   PENG_DEVELOPMENT>")
 add_compile_definitions("$<$<CONFIG:Release>:       PENG_RELEASE;   NO_CHECKS>")
 add_compile_definitions("$<$<CONFIG:Master>:        PENG_MASTER;    NO_CHECKS; NO_LOGGING; NO_PROFILING>")
+
+# Set output directory
+set(BUILD_OUTPUT ${PROJECT_SOURCE_DIR}/bin/$<CONFIGURATION>)
 
 # Per platform defines, compiler options etc.
 if (WIN32)
@@ -37,7 +40,7 @@ add_compile_options("$<$<CONFIG:Master>:${OPTIMIZATION_FLAG}>")
 
 add_executable(PengEngine)
 
-set_target_properties(PengEngine PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set_target_properties(PengEngine PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${BUILD_OUTPUT})
 
 include_directories(AFTER SYSTEM 
     "src"
@@ -68,3 +71,9 @@ target_link_libraries(PengEngine glfw ${GLFW_LIBRARIES})
 # OpenAL
 find_package(OpenAL REQUIRED)
 target_link_libraries(PengEngine OpenAL::OpenAL)
+
+add_custom_command(TARGET PengEngine POST_BUILD 
+  COMMAND "${CMAKE_COMMAND}" -E copy_directory 
+    ${CMAKE_SOURCE_DIR}/resources
+     ${BUILD_OUTPUT}/resources
+  COMMENT "Copying resources to output directory")
