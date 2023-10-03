@@ -73,7 +73,9 @@ find_package(OpenAL REQUIRED)
 target_link_libraries(PengEngine OpenAL::OpenAL)
 
 add_custom_command(TARGET PengEngine POST_BUILD 
-  COMMAND "${CMAKE_COMMAND}" -E copy_directory 
-    ${CMAKE_SOURCE_DIR}/resources
-     ${BUILD_OUTPUT}/resources
-  COMMENT "Copying resources to output directory")
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory 
+        ${CMAKE_SOURCE_DIR}/resources
+        ${BUILD_OUTPUT}/resources
+    DEPENDS
+        ${CMAKE_SOURCE_DIR}/resources
+    COMMENT "Copying resources to output directory")
