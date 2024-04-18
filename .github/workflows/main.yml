@@ -17,4 +17,4 @@ jobs:
         
 
     - name: Build app for release
-      run: msbuild /p:configuration=Debug /p:PreferredToolArchitecture=x64 PengEngine.sln
+      run: msbuild /p:configuration=Debug /t:rebuild /verbosity:diag PengEngine.sln
