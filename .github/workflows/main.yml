@@ -1,0 +1,19 @@
+name: Compile PengEngine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    name: build on wondows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        vs-version: '[17.3)'
+
+    - name: Build app for release
+      run: msbuild PengEngine.vcxproj /p:configuration=master /p:PreferredToolArchitecture=x64
