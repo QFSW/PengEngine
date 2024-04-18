@@ -17,4 +17,4 @@ jobs:
         
 
     - name: Build app for release
-      run: msbuild /p:configuration=Release /t:rebuild PengEngine.sln #/verbosity:diag
+      run: msbuild /p:configuration=Master /t:rebuild PengEngine.sln #/verbosity:diag
