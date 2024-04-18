@@ -17,4 +17,4 @@ jobs:
         
 
     - name: Build app for release
-      run: msbuild PengEngine.vcxproj /p:configuration=Debug /p:PreferredToolArchitecture=x64
+      run: msbuild /p:configuration=Debug /p:PreferredToolArchitecture=x64 PengEngine.sln
