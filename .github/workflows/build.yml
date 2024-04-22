@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  windows:
+  build:
     strategy:
       matrix:
         configuration: [Master] #, Release, Development, Debug]
@@ -36,8 +36,8 @@ jobs:
       uses: thedoctor0/zip-release@0.7.5
       with:
         type: 'zip'
-        filename: $archive_name
-        directory: $binary_path
+        filename: "$archive_name"
+        directory: "$binary_path"
 
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
