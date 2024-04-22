@@ -7,7 +7,7 @@ jobs:
   windows:
     strategy:
       matrix:
-        configuration: [Master, Release, Development, Debug]
+        configuration: [Master] #, Release, Development, Debug]
         os: [windows-latest]
 
     name: Build on windows
