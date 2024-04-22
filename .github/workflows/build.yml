@@ -1,0 +1,25 @@
+name: Compile PengEngine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    strategy:
+      matrix:
+        configuration: [Master, Release, Development, Debug]
+        os: [windows-latest]
+
+    name: Build on windows
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
+        
+
+    - name: Build app for release
+      run: msbuild /p:configuration=${{ matrix.configuration }} /t:rebuild PengEngine.sln
