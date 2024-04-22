@@ -1,4 +1,4 @@
-name: Compile PengEngine
+name: Deploy PengEngine
 
 on:
   workflow_dispatch:
@@ -10,6 +10,9 @@ jobs:
         configuration: [Master] #, Release, Development, Debug]
         os: [windows-latest]
 
+    env:
+      binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
+      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-tag'
     name: Build on windows
     runs-on: ${{ matrix.os }}
     steps:
@@ -20,6 +23,24 @@ jobs:
       with:
         msbuild-architecture: x64
         
-
     - name: Build app for release
       run: msbuild /p:configuration=${{ matrix.configuration }} /t:rebuild PengEngine.sln
+
+    # - name: Archive artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ${{ matrix.configuration }}
+    #     path: $binary_path
+    #     retention-days: 1
+    - name: Zip the project
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: $archive_name
+        directory: $binary_path
+
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: $archive_name
+        token: ${{ secrets.API_TOKEN }}
