@@ -39,11 +39,9 @@ jobs:
         filename: "${{ env.archive_name }}"
         path: "${{ env.binary_path }}"
 
-    - run: dir
-
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ${{ env.binary_path }}*
+        artifacts: "*.zip"
         tag: "${{ env.archive_name }}"
         token: ${{ secrets.API_TOKEN }}
