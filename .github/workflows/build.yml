@@ -11,7 +11,7 @@ jobs:
         os: [windows-latest]
 
     env:
-      binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
+      binary_path: D:\a\PengEngine\PengEngine\\build\x64\${{ matrix.configuration }}\
       archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-tag'
     name: Build on windows
     runs-on: ${{ matrix.os }}
