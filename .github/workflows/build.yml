@@ -37,7 +37,7 @@ jobs:
       with:
         type: 'zip'
         filename: "$env:archive_name"
-        directory: "$env:$binary_path"
+        directory: "$env:binary_path"
 
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
