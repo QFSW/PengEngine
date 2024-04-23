@@ -13,7 +13,7 @@ jobs:
 
     env:
       binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
-      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}'
+      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}.zip'
     name: Build on windows
     runs-on: ${{ matrix.os }}
     steps:
@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.archive_name }}
-        path: "${{ env.archive_name }}"
+        path: "*.zip"
         overwrite: true
         retention-days: 1
 
