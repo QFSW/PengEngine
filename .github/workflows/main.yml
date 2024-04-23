@@ -13,7 +13,7 @@ jobs:
 
     env:
       binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
-      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}.zip'
+      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}'
     name: Build on windows
     runs-on: ${{ matrix.os }}
     steps:
@@ -31,13 +31,13 @@ jobs:
       uses: thedoctor0/zip-release@0.7.5
       with:
         type: 'zip'
-        filename: "${{ env.archive_name }}"
+        filename: "${{ env.archive_name }}.zip"
         path: "${{ env.binary_path }}"
 
     - name: Cache artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.archive_name }}
+        name: "${{ env.archive_name }}"
         path: "*.zip"
         overwrite: true
         retention-days: 1
