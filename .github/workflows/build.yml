@@ -37,10 +37,10 @@ jobs:
       with:
         type: 'zip'
         filename: "${{ env.archive_name }}"
-        path: "${{ binary_path }}"
+        path: "${{ env.binary_path }}"
 
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
       with:
-        artifacts: "${{ archive_name }}"
+        artifacts: "${{ env.archive_name }}"
         token: ${{ secrets.API_TOKEN }}
