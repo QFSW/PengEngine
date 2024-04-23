@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [Master] #, Release, Development, Debug]
+        configuration: [Master, Release, Development, Debug]
         os: [windows-latest]
 
     env:
