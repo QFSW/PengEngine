@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.archive_name }}
-        path: "${{ env.archive_name }}.zip"
+        path: "${{ env.archive_name }}"
         overwrite: true
         retention-days: 1
 
