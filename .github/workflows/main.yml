@@ -55,3 +55,4 @@ jobs:
       with:
         artifacts: "*.zip"
         token: ${{ secrets.API_TOKEN }}
+        allowUpdates: true
