@@ -42,6 +42,6 @@ jobs:
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "*.exe, resourses"
+        artifacts: ${{ env.binary_path }}*
         tag: "${{ env.archive_name }}"
         token: ${{ secrets.API_TOKEN }}
