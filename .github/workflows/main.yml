@@ -1,8 +1,9 @@
 name: Deploy PengEngine
 
 on:
-  workflow_dispatch:
-
+  push:
+    tags:
+      - '**'    
 jobs:
   build:
     strategy:
@@ -12,7 +13,7 @@ jobs:
 
     env:
       binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
-      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-tag'
+      archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}'
     name: Build on windows
     runs-on: ${{ matrix.os }}
     steps:
@@ -26,12 +27,6 @@ jobs:
     - name: Build app for release
       run: msbuild /p:configuration=${{ matrix.configuration }} /t:rebuild PengEngine.sln
 
-    # - name: Archive artifacts
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ${{ matrix.configuration }}
-    #     path: $binary_path
-    #     retention-days: 1
     - name: Zip the project
       uses: thedoctor0/zip-release@0.7.5
       with:
@@ -39,6 +34,21 @@ jobs:
         filename: "${{ env.archive_name }}"
         path: "${{ env.binary_path }}"
 
+    - name: Cache artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.archive_name }}
+        path: "${{ env.archive_name }}.zip"
+        overwrite: true
+        retention-days: 1
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+    - name: Display structure of downloaded files
+      run: ls -R
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
