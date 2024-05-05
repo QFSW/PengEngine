@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <unordered_map>
 
 #include <core/logger.h>
 #include <profiling/scoped_event.h>
