@@ -16,3 +16,5 @@ _more details coming soon_
 
 1. [Build Configurations](docs/build-configs.md)
 2. [Third Party Libraries](docs/third-party.md)
+
+Thanks to [@redshift0345](https://github.com/redshift0345) for setting up automated builds!
