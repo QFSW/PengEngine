@@ -1,9 +1,8 @@
 name: Deploy PengEngine
 
-on:
-  push:
-    tags:
-      - '**'    
+on: [push]
+    # tags:
+    #   - '**'    
 jobs:
   build:
     strategy:
@@ -44,6 +43,7 @@ jobs:
 
   release:
     needs: build
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v4
