@@ -1,6 +1,8 @@
 #pragma once
 
 #include <concepts>
+#include <cstdint>
+
 
 namespace math
 {
