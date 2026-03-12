@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <numbers>
+#include <cstdlib>
 
 float math::randf()
 {
