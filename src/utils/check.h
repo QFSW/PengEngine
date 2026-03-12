@@ -10,15 +10,15 @@
 #if defined(PLATFORM_WIN)
 
 #include <intrin.h>
-#define __break() __debugbreak()
+#define PENG_BREAK() __debugbreak()
 
 #elif defined(PLATFORM_MAC)
 
-#define __break() __builtin_debugtrap()
+#define PENG_BREAK() __builtin_debugtrap()
 
 #else
 
-#define __break() ((void)0)
+#define PENG_BREAK() ((void)0)
 
 #endif
 
@@ -31,7 +31,7 @@
         if (!(expression)) [[unlikely]]                                                          \
         {                                                                                        \
             Logger::error("Assertion failed: " __FILE__ "(" TO_STR(__LINE__) "): " #expression); \
-            __break();                                                                           \
+            PENG_BREAK();                                                                           \
         }                                                                                        \
     }                                                                                            \
     while (0)
