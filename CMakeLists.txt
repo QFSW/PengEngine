@@ -65,8 +65,8 @@ find_package(GLEW REQUIRED)
 target_link_libraries(PengEngine GLEW::GLEW)
 
 # GLFW
-add_subdirectory("src/libs/glfw")
-target_link_libraries(PengEngine glfw ${GLFW_LIBRARIES})
+find_package(GLFW3 REQUIRED)
+target_link_libraries(PengEngine glfw)
 
 # OpenAL
 find_package(OpenAL REQUIRED)
