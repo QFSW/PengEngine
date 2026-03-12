@@ -9,6 +9,9 @@ CMakeCache.txt
 *.cmake
 MakeFile
 
+# GLFW (managed by CMake/find_package)
+src/libs/glfw/
+
 # VSCode
 .vscode/
 
