@@ -102,6 +102,8 @@ InputSubsystem::InputSubsystem()
 void InputSubsystem::start()
 {
 	_window = rendering::WindowSubsystem::get().window_handle();
+	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GLFW_TRUE);
+	glfwSetInputMode(_window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
 }
 
 void InputSubsystem::shutdown()
