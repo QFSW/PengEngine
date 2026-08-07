@@ -2,6 +2,7 @@
 
 #include <ranges>
 
+#include <memory/gc.h>
 #include <profiling/scoped_event.h>
 
 std::vector<std::unique_ptr<Subsystem>> Subsystem::_subsystems;
@@ -21,6 +22,7 @@ void Subsystem::shutdown_all()
     SCOPED_EVENT("Shutting down subsystems");
     for (const auto& subsystem : _subsystems | std::views::reverse)
     {
+        memory::GC::get().flush();
         subsystem->shutdown();
     }
 }

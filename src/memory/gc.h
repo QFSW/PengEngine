@@ -18,6 +18,9 @@ namespace memory
 
         void tick();
 
+        // Forces all dead objects to be deleted
+        void flush();
+
     private:
         struct Tracker
         {

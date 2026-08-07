@@ -11,6 +11,31 @@ void GC::tick()
     free_garbage();
 }
 
+void GC::flush()
+{
+    SCOPED_EVENT("GC - flush");
+    while (true)
+    {
+        for (int32_t i = static_cast<int32_t>(_tracked_objects.size()) - 1; i >= 0; i--)
+        {
+            Tracker& tracker = _tracked_objects[i];
+            if (tracker.dead())
+            {
+                _garbage.push_back(std::move(tracker));
+                _tracked_objects.erase(_tracked_objects.begin() + i);
+            }
+        }
+
+        // Freeing garbage can create more garbage so keep going until nothing new dies
+        if (_garbage.empty())
+        {
+            break;
+        }
+
+        free_garbage();
+    }
+}
+
 bool GC::Tracker::dead() const noexcept
 {
     return object.use_count() == 1;
