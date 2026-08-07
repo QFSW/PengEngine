@@ -10,7 +10,6 @@ namespace rendering
 
 namespace entities
 {
-	// TODO: Work out why there are ugly seams on some parts of the skybox
 	class Skybox final : public Entity
 	{
 		DECLARE_ENTITY(Skybox);

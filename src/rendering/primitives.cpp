@@ -146,6 +146,24 @@ peng::shared_ref<const Mesh> Primitives::cube_uv()
         Vector3u(23, 21, 22),
     };
 
+    // Inset each face's UVs slightly so that filtering doesn't bleed across atlas cells
+    constexpr float uv_inset = 0.001f;
+    for (size_t face_start = 0; face_start < raw_data.vertices.size(); face_start += 4)
+    {
+        Vector2f centre = Vector2f::zero();
+        for (size_t i = 0; i < 4; i++)
+        {
+            centre += raw_data.vertices[face_start + i].tex_coord / 4;
+        }
+
+        for (size_t i = 0; i < 4; i++)
+        {
+            Vector2f& tex_coord = raw_data.vertices[face_start + i].tex_coord;
+            tex_coord.x += tex_coord.x < centre.x ? uv_inset : -uv_inset;
+            tex_coord.y += tex_coord.y < centre.y ? uv_inset : -uv_inset;
+        }
+    }
+
     peng::shared_ref<Mesh> cube = peng::make_shared<Mesh>(
         "Cube UV", std::move(raw_data)
     );
