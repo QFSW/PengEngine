@@ -26,7 +26,7 @@ set(BUILD_OUTPUT ${PROJECT_SOURCE_DIR}/bin/$<CONFIGURATION>)
 # Per platform defines, compiler options etc.
 if (WIN32)
     add_compile_definitions(ARCH_AMD64 PLATFORM_WIN UNICODE _UNICODE)
-    add_compile_options(/W4)
+    add_compile_options(/W4 /MP)
 
     set(OPTIMIZATION_FLAG "/O2")
 
