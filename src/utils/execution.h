@@ -11,7 +11,9 @@
 
 #else
 
-#define EXEC_SEQ       std::execution::seq, 
+#include <execution>
+
+#define EXEC_SEQ       std::execution::seq,
 #define EXEC_PAR       std::execution::par, 
 #define EXEC_PAR_UNSEQ std::execution::par_unseq, 
 

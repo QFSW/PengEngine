@@ -31,7 +31,7 @@
         if (!(expression)) [[unlikely]]                                                          \
         {                                                                                        \
             Logger::error("Assertion failed: " __FILE__ "(" TO_STR(__LINE__) "): " #expression); \
-            PENG_BREAK();                                                                           \
+            PENG_BREAK();                                                                        \
         }                                                                                        \
     }                                                                                            \
     while (0)

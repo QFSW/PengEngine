@@ -1,5 +1,3 @@
-#include <thread>
-
 #include "timing.h"
 
 #include <thread>

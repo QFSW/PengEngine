@@ -23,7 +23,7 @@ jobs:
       run: .\setup-windows.bat
 
     - name: Build app for release
-      run: cmake --build build/cmake --config ${{ matrix.configuration }}
+      run: cmake --build build --config ${{ matrix.configuration }}
 
     - name: Zip the project
       uses: thedoctor0/zip-release@0.7.5
