@@ -8,6 +8,7 @@
 CMakeCache.txt
 *.cmake
 MakeFile
+/bin/
 
 # GLFW (managed by CMake/find_package)
 src/libs/glfw/

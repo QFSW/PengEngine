@@ -12,20 +12,18 @@ jobs:
         os: [windows-latest]
 
     env:
-      binary_path: D:\a\PengEngine\PengEngine\\out\x64\${{ matrix.configuration }}\
+      binary_path: ${{ github.workspace }}\bin\${{ matrix.configuration }}\
       archive_name: '${{ github.event.repository.name }}-${{ matrix.configuration }}-${{ github.ref_name }}'
     name: Build on windows
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
-      with:
-        msbuild-architecture: x64
-        
+    - name: Configure
+      run: .\setup-windows.bat
+
     - name: Build app for release
-      run: msbuild /p:configuration=${{ matrix.configuration }} /t:rebuild PengEngine.sln
+      run: cmake --build build/cmake --config ${{ matrix.configuration }}
 
     - name: Zip the project
       uses: thedoctor0/zip-release@0.7.5

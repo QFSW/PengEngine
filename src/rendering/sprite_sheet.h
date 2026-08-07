@@ -5,7 +5,7 @@
 #include <memory/shared_ref.h>
 #include <math/vector2.h>
 
-class Archive;
+struct Archive;
 
 namespace rendering
 {
